@@ -17,7 +17,7 @@
 package org.gwt4e.mvp4g.client;
 
 
-import com.google.web.bindery.event.shared.SimpleEventBus;
+import org.gwt4e.event.shared.SimpleEventBus;
 
 import javax.inject.Inject;
 

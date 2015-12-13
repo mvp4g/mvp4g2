@@ -21,6 +21,7 @@ package org.gwt4e.mvp4g.client;
  */
 public interface Mvp4gEventBus {
 
+  // TODO durch eigenen EventBus ersetzen
 //  SimpleEventBus getInternalEventBus();
 //
 //  void setInternalEventBus(SimpleEventBus internalEventBus);
