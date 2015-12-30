@@ -1,7 +1,5 @@
 package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
-import java.lang.Override;
-import java.lang.String;
 import org.gwt4e.event.shared.Mvp4gEvent;
 
 public class TwoEventMvp4gEvent extends Mvp4gEvent<TwoEventMvp4gEventHandler> {
