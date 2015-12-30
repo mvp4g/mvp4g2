@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.client;
+package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
-/**
- * <p>Marks a event bus as Mvp4gEventBus.</p>
- */
-public interface Mvp4gEventBus {
+import org.gwt4e.event.shared.Mvp4gEventHandler;
 
-  // TODO durch eigenen EventBus ersetzen
-//  SimpleEventBus getInternalEventBus();
-//
-//  void setInternalEventBus(SimpleEventBus internalEventBus);
-
+public interface TwoEventMvp4gEventHandler extends Mvp4gEventHandler {
+  void onTwoEvent(TwoEventMvp4gEvent event);
 }

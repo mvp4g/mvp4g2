@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus;
+package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
-import org.gwt4e.mvp4g.client.annotations.EventBus;
+import org.gwt4e.event.shared.Mvp4gEventHandler;
 
-@EventBus
-public interface NoMvp4g2EventBusInterface {
+public interface ThreeEventMvp4gEventHandler extends Mvp4gEventHandler {
+  void onThreeEvent(ThreeEventMvp4gEvent event);
 }

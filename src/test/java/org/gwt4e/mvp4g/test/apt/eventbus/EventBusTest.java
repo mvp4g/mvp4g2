@@ -21,6 +21,8 @@ import com.google.testing.compile.JavaFileObjects;
 import org.gwt4e.mvp4g.processor.EventBusProcessor;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
@@ -31,7 +33,7 @@ public class EventBusTest {
   /**
    * <p>Test:
    * <br>
-   * EventBus is not an Interface.
+   * Mvp4gEventBus is not an Interface.
    * <br><br>
    * Expected result:
    * <br>
@@ -48,29 +50,10 @@ public class EventBusTest {
   }
 
   /**
+   * /**
    * <p>Test:
    * <br>
-   * Implementing Mvp4gEventBus interface.
-   * <br><br>
-   * Expected result:
-   * <br>
-   * error message: NoMvp4g2EventBusInterface: org.gwt4e.mvp4g.client.annotations.EventBus applied on a type that doesn't implement org.gwt4e.mvp4g.client.Mvp4gEventBus; ignoring
-   * </p>
-   */
-  @Test
-  public void NoMvp4g2EventBusInterfaceTest() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/NoMvp4g2EventBusInterface.java"))
-          .processedWith(new EventBusProcessor())
-          .failsToCompile()
-          .withErrorContaining("NoMvp4g2EventBusInterface: org.gwt4e.mvp4g.client.annotations.EventBus applied on a type that doesn't implement org.gwt4e.mvp4g.client.Mvp4gEventBus; ignoring");
-  }
-
-  /**
-  /**
-   * <p>Test:
-   * <br>
-   * Event bus with no events
+   * Mvp4gEvent bus with no events
    * <br><br>
    * Expected result:
    * <br>
@@ -87,9 +70,10 @@ public class EventBusTest {
   }
 
   /**
+   * /**
    * <p>Test:
    * <br>
-   * Event bus with no events
+   * Mvp4gEvent bus with an events that has a return value
    * <br><br>
    * Expected result:
    * <br>
@@ -97,11 +81,90 @@ public class EventBusTest {
    * </p>
    */
   @Test
-  public void EventBusWithOneEventsTest() {
+  public void EventBusWithAndReturnValue() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithOneEvents.java"))
+          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEventAndReturnValue.java"))
           .processedWith(new EventBusProcessor())
-          .compilesWithoutError();
+          .failsToCompile()
+          .withErrorContaining("applied on a method");
   }
 
+  /**
+   * <p>Test:
+   * <br>
+   * Mvp4gEvent bus with one events
+   * <br><br>
+   * Expected result:
+   * <br>
+   * error message:
+   * </p>
+   */
+  @Test
+  public void EventBusWithSameEventNames() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithSameEventNames.java"))
+          .processedWith(new EventBusProcessor())
+          .failsToCompile()
+          .withErrorContaining("is already used. Please choose another name. (It is not possible to work with same event-name and different signatures.");
+  }
+
+  /**
+   * <p>Test:
+   * <br>
+   * Mvp4gEvent bus with one events
+   * <br><br>
+   * Expected result:
+   * <br>
+   * error message:
+   * </p>
+   */
+  @Test
+  public void EventBusWithOneEventTest() {
+    JavaFileObject eventBusObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithOneEvent/expectedResults/EventBusWithOneEventImpl.java");
+    JavaFileObject eventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithOneEvent/expectedResults/OneEventMvp4gEventHandler.java");
+    JavaFileObject eventObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithOneEvent/expectedResults/OneEventMvp4gEvent.java");
+
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithOneEvent/EventBusWithOneEvent.java"))
+          .processedWith(new EventBusProcessor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(eventHandlerObject,
+                            eventObject,
+                            eventBusObject);
+  }
+
+  /**
+   * <p>Test:
+   * <br>
+   * Mvp4gEvent bus with one events
+   * <br><br>
+   * Expected result:
+   * <br>
+   * error message:
+   * </p>
+   */
+  @Test
+  public void EventBusWithEventsTest() {
+    JavaFileObject eventBusObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/EventBusWithEventsImpl.java");
+    JavaFileObject oneEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/OneEventMvp4gEventHandler.java");
+    JavaFileObject oneEventObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/OneEventMvp4gEvent.java");
+    JavaFileObject twoEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/TwoEventMvp4gEventHandler.java");
+    JavaFileObject twoEventObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/TwoEventMvp4gEvent.java");
+    JavaFileObject threeEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/ThreeEventMvp4gEventHandler.java");
+    JavaFileObject threEveentObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/ThreeEventMvp4gEvent.java");
+
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/EventBusWithEvents.java"))
+          .processedWith(new EventBusProcessor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(eventBusObject,
+                            oneEventHandlerObject,
+                            oneEventObject,
+                            twoEventHandlerObject,
+                            twoEventObject,
+                            threeEventHandlerObject,
+                            threEveentObject);
+  }
 }

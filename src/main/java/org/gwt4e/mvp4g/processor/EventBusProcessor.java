@@ -46,17 +46,17 @@ public class EventBusProcessor
     Types    types    = processingEnv.getTypeUtils();
     Elements elements = processingEnv.getElementUtils();
 
-    EventBusProcessorContext context = new EventBusProcessorContext();
+    EventBusProcessorContext eventBusProcessorContext = new EventBusProcessorContext();
 
     return ImmutableList.of(new EventProcessingStep(messager,
                                                     filer,
                                                     types,
                                                     elements,
-                                                    context),
+                                                    eventBusProcessorContext),
                             new EventBusProcessingStep(messager,
                                                        filer,
                                                        types,
                                                        elements,
-                                                       context));
+                                                       eventBusProcessorContext));
   }
 }

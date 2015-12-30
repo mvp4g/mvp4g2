@@ -20,6 +20,7 @@ import org.gwt4e.mvp4g.processor.context.EventBusContext;
 import org.gwt4e.mvp4g.processor.context.EventContext;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class EventBusProcessorContext {
@@ -62,5 +63,20 @@ public class EventBusProcessorContext {
     generatorContextEventMap.get(eventBusName)
                             .put(eventName,
                                  context);
+  }
+
+  /**
+   * Method checks weather the eventname is unique or not.
+   * <br>
+   * This is a requirement because based on the event name a
+   * MVP4GEvent will be generated.
+   *
+   * @param eventName name of the event
+   * @return
+   */
+  public boolean isEventNameUnique(String eventName) {
+    Iterator<String> eventBusNames = generatorContextEventMap.keySet().iterator();
+
+    return true;
   }
 }

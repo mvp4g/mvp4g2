@@ -17,10 +17,9 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
-import org.gwt4e.mvp4g.processor.ProcessorContext;
-import org.gwt4e.mvp4g.processor.Utils;
 import org.gwt4e.mvp4g.client.annotations.Event;
 import org.gwt4e.mvp4g.processor.Constants;
+import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
@@ -74,7 +73,16 @@ public class EventContext
       return null;
     }
 
-    TypeElement enclosingType = (TypeElement) element.getEnclosingElement();
+    if (!((ExecutableElement) element).getReturnType().toString().equals("void")) {
+      messager.printMessage(Diagnostic.Kind.ERROR,
+                            String.format("%s applied on a method %s that's return type is %s but should be \"void\"",
+                                          Event.class.getCanonicalName(),
+                                          element.toString(),
+                                          ((ExecutableElement) element).getReturnType().toString()));
+      return null;
+    }
+
+   TypeElement enclosingType = (TypeElement) element.getEnclosingElement();
 
     return new EventContext(messager,
                             types,

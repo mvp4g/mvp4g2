@@ -17,9 +17,6 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
-import org.gwt4e.mvp4g.client.Mvp4gEventBus;
-import org.gwt4e.mvp4g.client.annotations.EventBus;
-import org.gwt4e.mvp4g.processor.ProcessorContext;
 import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
@@ -78,19 +75,6 @@ public class EventBusContext
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s applied on a type that's not an interface; ignoring",
                                           ((TypeElement) element).getQualifiedName()));
-      return null;
-    }
-
-    TypeElement eventBusType = Utils.requireType(elements,
-                                                 Mvp4gEventBus.class);
-
-    if (!types.isSubtype(element.asType(),
-                         eventBusType.asType())) {
-      messager.printMessage(Diagnostic.Kind.ERROR,
-                            String.format("%s: %s applied on a type that doesn't implement %s; ignoring",
-                                          ((TypeElement) element).getQualifiedName(),
-                                          EventBus.class.getCanonicalName(),
-                                          Mvp4gEventBus.class.getCanonicalName()));
       return null;
     }
 

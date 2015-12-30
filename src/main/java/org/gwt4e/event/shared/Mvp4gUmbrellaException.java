@@ -24,7 +24,8 @@ import java.util.Set;
  * together. Typically thrown after a loop, with all of the exceptions thrown during
  * that loop, but delayed so that the loop finishes executing.
  */
-public class UmbrellaException
+@SuppressWarnings("serial")
+public class Mvp4gUmbrellaException
   extends RuntimeException {
 
   // Visible for testing
@@ -37,7 +38,7 @@ public class UmbrellaException
    */
   private Set<Throwable> causes;
 
-  public UmbrellaException(Set<Throwable> causes) {
+  public Mvp4gUmbrellaException(Set<Throwable> causes) {
     super(makeMessage(causes),
           makeCause(causes));
     this.causes = causes;
@@ -75,7 +76,7 @@ public class UmbrellaException
   /**
    * Required for serialization.
    */
-  protected UmbrellaException() {
+  protected Mvp4gUmbrellaException() {
     // Can't delegate to the other constructor or GWT RPC gets cranky
     super(MULTIPLE);
     this.causes = Collections.<Throwable>emptySet();

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.processor;
+package org.gwt4e.mvp4g.test.apt.eventbus;
 
-/**
- * <p>Constants needed to generate the events and the event bus.</p>
- */
-public class Constants {
+import java.lang.Override;
+import org.gwt4e.mvp4g.client.AbstractEventBus;
+import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.OneEventMvp4gEvent;
 
-  /* postfix of the event-classes */
-  public final static String EVENT_CLASS_POSTFIX = "Mvp4gEvent";
-  /* postfix of the eventhandler-classes */
-  public final static String EVENTHANDER_CLASS_POSTFIX = "Handler";
-
+public class EventBusWithOneEventImpl extends AbstractEventBus implements EventBusWithOneEvent {
+  @Override
+  public final void oneEvent() {
+    this.internalEventBus.fireEvent(new OneEventMvp4gEvent());
+  }
 }

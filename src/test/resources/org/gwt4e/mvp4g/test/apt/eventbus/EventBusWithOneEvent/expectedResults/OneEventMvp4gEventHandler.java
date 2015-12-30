@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.processor;
+package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
-/**
- * <p>Constants needed to generate the events and the event bus.</p>
- */
-public class Constants {
+import org.gwt4e.event.shared.Mvp4gEventHandler;
 
-  /* postfix of the event-classes */
-  public final static String EVENT_CLASS_POSTFIX = "Mvp4gEvent";
-  /* postfix of the eventhandler-classes */
-  public final static String EVENTHANDER_CLASS_POSTFIX = "Handler";
-
+public interface OneEventMvp4gEventHandler extends Mvp4gEventHandler {
+  void onOneEvent(OneEventMvp4gEvent event);
 }
