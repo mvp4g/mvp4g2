@@ -16,10 +16,8 @@
 
 package org.gwt4e.mvp4g.client.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
  * <p>This annotation can be used to annotate methods of an interfaces that extends
@@ -76,9 +74,8 @@ import java.lang.annotation.Target;
  *
  * @author Frank Hossfeld
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Event {
+@Retention(RetentionPolicy.CLASS)
+public @interface Application {
 //
 //  //default name that developers are unlikely to enter to know when method name should be used
 //  public static final String DEFAULT_NAME = "#%!|&";

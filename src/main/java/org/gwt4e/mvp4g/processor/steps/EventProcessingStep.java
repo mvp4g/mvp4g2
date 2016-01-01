@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.squareup.javapoet.*;
 import org.gwt4e.event.shared.Mvp4gEvent;
 import org.gwt4e.event.shared.Mvp4gEventHandler;
 import org.gwt4e.mvp4g.client.annotations.Event;
-import org.gwt4e.mvp4g.processor.EventBusProcessorContext;
+import org.gwt4e.mvp4g.processor.Mvp4gProcessorContext;
 import org.gwt4e.mvp4g.processor.Utils;
 import org.gwt4e.mvp4g.processor.context.EventContext;
 
@@ -48,7 +48,7 @@ public class EventProcessingStep
   private final Types    types;
   private final Elements elements;
 
-  private EventBusProcessorContext eventBusProcessorContext;
+  private Mvp4gProcessorContext mvp4gProcessorContext;
 
 //------------------------------------------------------------------------------
 
@@ -56,13 +56,13 @@ public class EventProcessingStep
                              Filer filer,
                              Types types,
                              Elements elements,
-                             EventBusProcessorContext eventBusProcessorContext) {
+                             Mvp4gProcessorContext mvp4gProcessorContext) {
     this.messager = messager;
     this.filer = filer;
     this.types = types;
     this.elements = elements;
 
-    this.eventBusProcessorContext = eventBusProcessorContext;
+    this.mvp4gProcessorContext = mvp4gProcessorContext;
   }
 
 //------------------------------------------------------------------------------
@@ -78,11 +78,11 @@ public class EventProcessingStep
                                  .toString();
 
       // check if an event with the same name already exits!
-      Set<String> eventBusNames = eventBusProcessorContext.getEventContextMap()
-                                                          .keySet();
+      Set<String> eventBusNames = mvp4gProcessorContext.getEventContextMap()
+                                                       .keySet();
       for (String ebName : eventBusNames) {
-        Set<String> eventNames = ((Map<String, EventContext>) eventBusProcessorContext.getEventContextMap()
-                                                                                      .get(ebName)).keySet();
+        Set<String> eventNames = ((Map<String, EventContext>) mvp4gProcessorContext.getEventContextMap()
+                                                                                   .get(ebName)).keySet();
         for (String eName : eventNames) {
           if (element.getSimpleName().toString().equals(eName)) {
             messager.printMessage(Diagnostic.Kind.ERROR,
@@ -106,10 +106,10 @@ public class EventProcessingStep
         // generate Mvp4gEvent
         generate(eventContext);
         // save eventContext
-        this.eventBusProcessorContext.put(eventBusName,
-                                          element.getSimpleName()
+        this.mvp4gProcessorContext.put(eventBusName,
+                                       element.getSimpleName()
                                                  .toString(),
-                                          eventContext);
+                                       eventContext);
 
       } catch (IOException ioe) {
         StringWriter sw = new StringWriter();

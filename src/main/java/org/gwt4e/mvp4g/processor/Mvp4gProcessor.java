@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 @AutoService(Processor.class)
-public class EventBusProcessor
+public class Mvp4gProcessor
   extends BasicAnnotationProcessor {
 
   @Override
@@ -46,17 +46,17 @@ public class EventBusProcessor
     Types    types    = processingEnv.getTypeUtils();
     Elements elements = processingEnv.getElementUtils();
 
-    EventBusProcessorContext eventBusProcessorContext = new EventBusProcessorContext();
+    Mvp4gProcessorContext mvp4gProcessorContext = new Mvp4gProcessorContext();
 
     return ImmutableList.of(new EventProcessingStep(messager,
                                                     filer,
                                                     types,
                                                     elements,
-                                                    eventBusProcessorContext),
+                                                    mvp4gProcessorContext),
                             new EventBusProcessingStep(messager,
                                                        filer,
                                                        types,
                                                        elements,
-                                                       eventBusProcessorContext));
+                                                       mvp4gProcessorContext));
   }
 }

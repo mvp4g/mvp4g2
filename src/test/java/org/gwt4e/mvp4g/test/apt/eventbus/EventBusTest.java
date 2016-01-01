@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.gwt4e.mvp4g.test.apt.eventbus;
 
 
 import com.google.testing.compile.JavaFileObjects;
-import org.gwt4e.mvp4g.processor.EventBusProcessor;
+import org.gwt4e.mvp4g.processor.Mvp4gProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -44,7 +44,7 @@ public class EventBusTest {
   public void EventBusIsNotAnInterfaceTest() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusIsNotAnInterface.java"))
-          .processedWith(new EventBusProcessor())
+          .processedWith(new Mvp4gProcessor())
           .failsToCompile()
           .withErrorContaining("EventBusIsNotAnInterface applied on a type that's not an interface; ignoring");
   }
@@ -64,7 +64,7 @@ public class EventBusTest {
   public void EventBusWithNoEventsTest() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithNoEvents.java"))
-          .processedWith(new EventBusProcessor())
+          .processedWith(new Mvp4gProcessor())
           .failsToCompile()
           .withErrorContaining("EventBusWithNoEvents has no events defined");
   }
@@ -84,7 +84,7 @@ public class EventBusTest {
   public void EventBusWithAndReturnValue() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEventAndReturnValue.java"))
-          .processedWith(new EventBusProcessor())
+          .processedWith(new Mvp4gProcessor())
           .failsToCompile()
           .withErrorContaining("applied on a method");
   }
@@ -103,7 +103,7 @@ public class EventBusTest {
   public void EventBusWithSameEventNames() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithSameEventNames.java"))
-          .processedWith(new EventBusProcessor())
+          .processedWith(new Mvp4gProcessor())
           .failsToCompile()
           .withErrorContaining("is already used. Please choose another name. (It is not possible to work with same event-name and different signatures.");
   }
@@ -126,7 +126,7 @@ public class EventBusTest {
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithOneEvent/EventBusWithOneEvent.java"))
-          .processedWith(new EventBusProcessor())
+          .processedWith(new Mvp4gProcessor())
           .compilesWithoutError()
           .and()
           .generatesSources(eventHandlerObject,
@@ -156,7 +156,7 @@ public class EventBusTest {
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/EventBusWithEvents.java"))
-          .processedWith(new EventBusProcessor())
+          .processedWith(new Mvp4gProcessor())
           .compilesWithoutError()
           .and()
           .generatesSources(eventBusObject,

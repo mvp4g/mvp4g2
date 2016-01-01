@@ -1,5 +1,7 @@
 package org.gwt4e.mvp4g.test.apt.eventbus;
 
+import java.lang.Override;
+import java.lang.String;
 import org.gwt4e.mvp4g.client.AbstractEventBus;
 import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.OneEventMvp4gEvent;
 import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.ThreeEventMvp4gEvent;

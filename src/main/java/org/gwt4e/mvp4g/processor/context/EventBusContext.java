@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,15 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
+import org.gwt4e.mvp4g.client.EventBus;
 import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -71,10 +74,29 @@ public class EventBusContext
                                        Elements elements,
                                        Element element) {
 
+    // msut be an interface
     if (element.getKind() != ElementKind.INTERFACE) {
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s applied on a type that's not an interface; ignoring",
                                           ((TypeElement) element).getQualifiedName()));
+      return null;
+    }
+
+    // Should extend org.gwt4e.mvp4g.client.EventBus
+    boolean foundSuperInterface = false;
+    for (TypeMirror superType : types.directSupertypes(element.asType())) {
+      DeclaredType declaredType = (DeclaredType) superType;
+      Element superTypeElement = declaredType.asElement();
+      if (superTypeElement.getSimpleName().toString().equals(ClassName.get(EventBus.class))) {
+        foundSuperInterface = true;
+        break;
+      }
+    }
+    if (!foundSuperInterface) {
+      messager.printMessage(Diagnostic.Kind.ERROR,
+                            String.format("%s does not extend %s",
+                                          ((TypeElement) element).getQualifiedName(),
+                                          EventBus.class.getName().toString()));
       return null;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
  */
 
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

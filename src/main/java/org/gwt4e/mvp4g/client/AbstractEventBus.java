@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import javax.inject.Inject;
 
 /**
  * <p>Core implementation of a MVP4G,2 event bus. This class contains methods
- * an variables that that are not generated.</p>
+ * and variables that that are not generated.</p>
  */
-public abstract class AbstractEventBus {
+public abstract class AbstractEventBus{
 
   /* the GWT eventBus of the Application */
   @Inject

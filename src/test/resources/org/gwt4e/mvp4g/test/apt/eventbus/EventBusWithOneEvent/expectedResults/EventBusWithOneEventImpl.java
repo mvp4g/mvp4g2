@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.gwt4e.mvp4g.test.apt.eventbus;
 
+import java.lang.Override;
 import org.gwt4e.mvp4g.client.AbstractEventBus;
 import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.OneEventMvp4gEvent;
 

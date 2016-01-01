@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import org.gwt4e.mvp4g.client.AbstractEventBus;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
-import org.gwt4e.mvp4g.processor.EventBusProcessorContext;
+import org.gwt4e.mvp4g.processor.Mvp4gProcessorContext;
 import org.gwt4e.mvp4g.processor.context.EventBusContext;
 import org.gwt4e.mvp4g.processor.context.EventContext;
 
@@ -52,7 +52,7 @@ public class EventBusProcessingStep
   private final Types    types;
   private final Elements elements;
 
-  private EventBusProcessorContext eventBusProcessorContext;
+  private Mvp4gProcessorContext mvp4gProcessorContext;
 
 //------------------------------------------------------------------------------
 
@@ -60,13 +60,13 @@ public class EventBusProcessingStep
                                 Filer filer,
                                 Types types,
                                 Elements elements,
-                                EventBusProcessorContext eventBusProcessorContext) {
+                                Mvp4gProcessorContext mvp4gProcessorContext) {
     this.messager = messager;
     this.filer = filer;
     this.types = types;
     this.elements = elements;
 
-    this.eventBusProcessorContext = eventBusProcessorContext;
+    this.mvp4gProcessorContext = mvp4gProcessorContext;
   }
 
 //------------------------------------------------------------------------------
@@ -86,20 +86,20 @@ public class EventBusProcessingStep
       if (eventBusContext == null) {
         return; // error message already emitted
       }
-      if (this.eventBusProcessorContext.getEventContextMap() == null ||
-          this.eventBusProcessorContext.getEventContextMap()
-                                       .size() == 0 ||
-          this.eventBusProcessorContext.getEventContextMap()
-                                       .get(eventBusContext.getClassName())
-                                       .size() == 0) {
+      if (this.mvp4gProcessorContext.getEventContextMap() == null ||
+          this.mvp4gProcessorContext.getEventContextMap()
+                                    .size() == 0 ||
+          this.mvp4gProcessorContext.getEventContextMap()
+                                    .get(eventBusContext.getClassName())
+                                    .size() == 0) {
         messager.printMessage(Diagnostic.Kind.ERROR,
                               String.format("%s has no events defined",
                                             eventBusContext.getClassName()));
         return;
       }
 
-      this.eventBusProcessorContext.getEventBusContextMap()
-                                   .put((ClassName.get((TypeElement) element)
+      this.mvp4gProcessorContext.getEventBusContextMap()
+                                .put((ClassName.get((TypeElement) element)
                                                   .toString()
                                         ),
                                         eventBusContext);
@@ -129,9 +129,9 @@ public class EventBusProcessingStep
                                         .superclass(AbstractEventBus.class)
                                         .addSuperinterface(ClassName.get(context.getInterfaceType()));
 
-    for (EventContext contextEvent : this.eventBusProcessorContext.getEventContextMap()
-                                                                  .get(context.getClassName())
-                                                                  .values()) {
+    for (EventContext contextEvent : this.mvp4gProcessorContext.getEventContextMap()
+                                                               .get(context.getClassName())
+                                                               .values()) {
       typeSpec.addMethod(createEventMethod(contextEvent));
     }
 

@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.processor;
+package org.gwt4e.mvp4g.client;
 
 /**
- * <p>Constants needed to generate the events and the event bus.</p>
+ * The EventBus-Interface marks an interface, that will work
+ * with the MVP4G2-Framework
  */
-public class Constants {
-
-  /* postfix of the event-classes */
-  public final static String EVENT_CLASS_POSTFIX = "Mvp4gEvent";
-  /* postfix of the eventhandler-classes */
-  public final static String EVENTHANDER_CLASS_POSTFIX = "Handler";
-
+public interface EventBus {
 }
