@@ -32,9 +32,11 @@
 
 package org.gwt4e.mvp4g.test.apt.eventbus;
 
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
 
 @EventBus
-public interface EventBusWithNoEvents {
+public interface EventBusWithNoEvents
+  extends Mvp4gEventBus {
 
 }

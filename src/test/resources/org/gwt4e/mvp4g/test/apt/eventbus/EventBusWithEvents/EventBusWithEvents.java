@@ -64,11 +64,13 @@
 
 package org.gwt4e.mvp4g.test.apt.eventbus;
 
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
 import org.gwt4e.mvp4g.client.annotations.Event;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
 
 @EventBus
-public interface EventBusWithEvents {
+public interface EventBusWithEvents
+  extends Mvp4gEventBus {
 
   @Event
   void oneEvent();

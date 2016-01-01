@@ -25,7 +25,7 @@ import javax.inject.Inject;
  * <p>Core implementation of a MVP4G,2 event bus. This class contains methods
  * and variables that that are not generated.</p>
  */
-public abstract class AbstractEventBus{
+public abstract class AbstractMvp4gEventBus {
 
   /* the GWT eventBus of the Application */
   @Inject
@@ -33,7 +33,7 @@ public abstract class AbstractEventBus{
 
 //------------------------------------------------------------------------------
 
-  protected AbstractEventBus() {
+  protected AbstractMvp4gEventBus() {
     super();
   }
 

@@ -17,7 +17,7 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
-import org.gwt4e.mvp4g.client.EventBus;
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
 import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
@@ -82,12 +82,10 @@ public class EventBusContext
       return null;
     }
 
-    // Should extend org.gwt4e.mvp4g.client.EventBus
+    // Should extend org.gwt4e.mvp4g.client.Mvp4gEventBus
     boolean foundSuperInterface = false;
     for (TypeMirror superType : types.directSupertypes(element.asType())) {
-      DeclaredType declaredType = (DeclaredType) superType;
-      Element superTypeElement = declaredType.asElement();
-      if (superTypeElement.getSimpleName().toString().equals(ClassName.get(EventBus.class))) {
+      if (((DeclaredType) superType).asElement().toString().equals(ClassName.get(Mvp4gEventBus.class).toString())) {
         foundSuperInterface = true;
         break;
       }
@@ -96,7 +94,7 @@ public class EventBusContext
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s does not extend %s",
                                           ((TypeElement) element).getQualifiedName(),
-                                          EventBus.class.getName().toString()));
+                                          Mvp4gEventBus.class.getName().toString()));
       return null;
     }
 

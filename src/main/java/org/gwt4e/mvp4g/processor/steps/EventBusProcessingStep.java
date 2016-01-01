@@ -22,7 +22,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-import org.gwt4e.mvp4g.client.AbstractEventBus;
+import org.gwt4e.mvp4g.client.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
 import org.gwt4e.mvp4g.processor.Mvp4gProcessorContext;
 import org.gwt4e.mvp4g.processor.context.EventBusContext;
@@ -126,7 +126,7 @@ public class EventBusProcessingStep
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(context.getImplName())
                                         .addOriginatingElement(context.getInterfaceType())
                                         .addModifiers(Modifier.PUBLIC)
-                                        .superclass(AbstractEventBus.class)
+                                        .superclass(AbstractMvp4gEventBus.class)
                                         .addSuperinterface(ClassName.get(context.getInterfaceType()));
 
     for (EventContext contextEvent : this.mvp4gProcessorContext.getEventContextMap()
