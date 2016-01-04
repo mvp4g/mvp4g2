@@ -30,47 +30,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.processor.context;
+package org.gwt4e.mvp4g.test.apt.application;
 
-import javax.annotation.processing.Messager;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
+import org.gwt4e.mvp4g.client.annotations.Application;
 
-/**
- * <p>Processor context classes are containing information we will need
- * to generate the code. Getting the information is done inside fo the classes.
- * <br><br>
- * Contains base stuff of a processor.</p>
- */
-public class ProcessorContext {
-
-  final Messager messager;
-  final Types    types;
-  final Elements elements;
-
-//------------------------------------------------------------------------------
-
-  public ProcessorContext(Messager messager,
-                          Types types,
-                          Elements elements) {
-    super();
-
-    this.messager = messager;
-    this.types = types;
-    this.elements = elements;
-  }
-
-//------------------------------------------------------------------------------
-
-  public Messager getMessager() {
-    return messager;
-  }
-
-  public Types getTypes() {
-    return types;
-  }
-
-  public Elements getElements() {
-    return elements;
-  }
+@Application(modules = ApplicationIsNotAnInterfaceModule.class)
+public class ApplicationIsNotAnInterface {
 }

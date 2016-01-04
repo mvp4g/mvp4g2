@@ -17,8 +17,8 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
-import org.gwt4e.mvp4g.client.Mvp4gEventBus;
-import org.gwt4e.mvp4g.client.annotations.EventBus;
+import org.gwt4e.mvp4g.client.Mvp4gModule;
+import org.gwt4e.mvp4g.client.annotations.Module;
 import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
@@ -30,13 +30,12 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * <p>Processor context for generating teh event bus.</p>
+ * <p>Processor context for generating events.</p>
+ * <br><br>
  */
-public class EventBusContext
+public class ModuleContext
   extends AbstractProcessorContext {
 
   private TypeElement interfaceType;
@@ -45,17 +44,15 @@ public class EventBusContext
   private String className;
   private String implName;
 
-  private Map<String, EventContext> eventProcessorContextMap;
+  private Element element;
 
-//------------------------------------------------------------------------------
-
-  public EventBusContext(Messager messager,
-                         Types types,
-                         Elements elements,
-                         TypeElement interfaceType,
-                         String packageName,
-                         String className,
-                         String implName) {
+  ModuleContext(Messager messager,
+                Types types,
+                Elements elements,
+                TypeElement interfaceType,
+                String packageName,
+                String className,
+                String implName) {
     super(messager,
           types,
           elements);
@@ -64,30 +61,28 @@ public class EventBusContext
     this.packageName = packageName;
     this.className = className;
     this.implName = implName;
-
-    this.eventProcessorContextMap = new HashMap<>();
   }
 
-//------------------------------------------------------------------------------
-
-  public static EventBusContext create(Messager messager,
-                                       Types types,
-                                       Elements elements,
-                                       Element element) {
-
+  public static ModuleContext create(Messager messager,
+                                     Types types,
+                                     Elements elements,
+                                     Element element) {
     // msut be an interface
     if (element.getKind() != ElementKind.INTERFACE) {
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s applied on a type %s that's not an interface; ignoring",
-                                          EventBus.class.getSimpleName(),
+                                          Module.class.getSimpleName(),
                                           ((TypeElement) element).getQualifiedName()));
       return null;
     }
 
-    // Should extend org.gwt4e.mvp4g.client.Mvp4gInternalEventBus
+    // Should extend org.gwt4e.mvp4g.client.Mvp4gApplication
     boolean foundSuperInterface = false;
     for (TypeMirror superType : types.directSupertypes(element.asType())) {
-      if (((DeclaredType) superType).asElement().toString().equals(ClassName.get(Mvp4gEventBus.class).toString())) {
+      if (((DeclaredType) superType).asElement()
+                                    .toString()
+                                    .equals(ClassName.get(Mvp4gModule.class)
+                                                     .toString())) {
         foundSuperInterface = true;
         break;
       }
@@ -96,7 +91,8 @@ public class EventBusContext
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s does not extend %s",
                                           ((TypeElement) element).getQualifiedName(),
-                                          Mvp4gEventBus.class.getName().toString()));
+                                          Mvp4gModule.class.getName()
+                                                                .toString()));
       return null;
     }
 
@@ -105,24 +101,16 @@ public class EventBusContext
     String implName = ClassName.get((TypeElement) element)
                                .simpleName() + "Impl";
 
-    return new EventBusContext(messager,
-                               types,
-                               elements,
-                               interfaceType,
-                               Utils.getEventPackage(element),
-                               Utils.getEventPackage(element) + "." + interfaceName.simpleName(),
-                               implName);
+    return new ModuleContext(messager,
+                             types,
+                             elements,
+                             interfaceType,
+                             Utils.getEventPackage(element),
+                                  Utils.getEventPackage(element) + "." + interfaceName.simpleName(),
+                             implName);
   }
 
 //------------------------------------------------------------------------------
-
-  public String getPackageName() {
-    return packageName;
-  }
-
-  public String getClassName() {
-    return className;
-  }
 
   public String getImplName() {
     return implName;
@@ -130,5 +118,9 @@ public class EventBusContext
 
   public TypeElement getInterfaceType() {
     return interfaceType;
+  }
+
+  public String getPackageName() {
+    return packageName;
   }
 }

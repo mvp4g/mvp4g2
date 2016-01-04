@@ -17,7 +17,7 @@
 package org.gwt4e.mvp4g.client;
 
 /**
- * The Mvp4gEventBus-Interface marks an interface, that will work
+ * The Mvp4gInternalEventBus-Interface marks an interface, that will work
  * with the MVP4G2-Framework
  */
 public interface Mvp4gEventBus {

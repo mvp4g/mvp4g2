@@ -14,23 +14,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus;
+package org.gwt4e.mvp4g.client;
 
-import org.gwt4e.mvp4g.client.Mvp4gEventBus;
-import org.gwt4e.mvp4g.client.annotations.Event;
-import org.gwt4e.mvp4g.client.annotations.EventBus;
-
-@EventBus
-public interface EventBusWithEvents
-  extends Mvp4gEventBus {
-
-  @Event
-  void oneEvent();
-
-  @Event
-  void twoEvent(String arg0);
-
-  @Event
-  void threeEvent(String arg0, String arg1);
-
+/**
+ * Created by hoss on 04.01.16.
+ */
+public interface Mvp4gModule {
 }

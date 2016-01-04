@@ -16,53 +16,71 @@
 
 package org.gwt4e.mvp4g.processor;
 
+import org.gwt4e.mvp4g.processor.context.ApplicationContext;
 import org.gwt4e.mvp4g.processor.context.EventBusContext;
 import org.gwt4e.mvp4g.processor.context.EventContext;
+import org.gwt4e.mvp4g.processor.context.ModuleContext;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Mvp4gProcessorContext {
+public class ProcessorContext {
 
+  /* applicaiton context */
+  private ApplicationContext                     applicationContext;
+  /* module context */
+  private Map<String, ModuleContext>             moduleContext;
   /* map of annotated eventBus */
-  private Map<String, EventBusContext>           generatorContextEventBusMap;
+  private Map<String, EventBusContext>           eventBusContextMap;
   /* map of annotated events */
-  private Map<String, Map<String, EventContext>> generatorContextEventMap;
+  private Map<String, Map<String, EventContext>> eventContextMap;
 
-//------------------------------------------------------------------------------
-
-  Mvp4gProcessorContext() {
+  ProcessorContext() {
     super();
-
-    generatorContextEventMap = new HashMap<>();
-    generatorContextEventBusMap = new HashMap<>();
+    moduleContext = new HashMap<>();
+    eventContextMap = new HashMap<>();
+    eventBusContextMap = new HashMap<>();
   }
 
-//------------------------------------------------------------------------------
-
   public Map<String, EventBusContext> getEventBusContextMap() {
-    return generatorContextEventBusMap;
+    return eventBusContextMap;
   }
 
   public Map<String, EventContext> getEventContextMap(String eventBusName) {
-    return this.generatorContextEventMap.get(eventBusName);
+    return this.eventContextMap.get(eventBusName);
   }
 
   public Map<String, Map<String, EventContext>> getEventContextMap() {
-    return generatorContextEventMap;
+    return eventContextMap;
   }
 
   public void put(String eventBusName,
                   String eventName,
                   EventContext context) {
-    if (!generatorContextEventMap.containsKey(eventBusName)) {
-      generatorContextEventMap.put(eventBusName,
-                                   new HashMap<String, EventContext>());
+    if (!eventContextMap.containsKey(eventBusName)) {
+      eventContextMap.put(eventBusName,
+                          new HashMap<String, EventContext>());
     }
-    generatorContextEventMap.get(eventBusName)
-                            .put(eventName,
-                                 context);
+    eventContextMap.get(eventBusName)
+                   .put(eventName,
+                        context);
+  }
+
+  public void put(String moduleName,
+                  ModuleContext context) {
+    if (!moduleContext.containsKey(moduleName)) {
+      moduleContext.put(moduleName,
+                        context);
+    }
+  }
+
+  public ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
+
+  public void setApplicationContext(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
   }
 
   /**
@@ -75,7 +93,8 @@ public class Mvp4gProcessorContext {
    * @return
    */
   public boolean isEventNameUnique(String eventName) {
-    Iterator<String> eventBusNames = generatorContextEventMap.keySet().iterator();
+    Iterator<String> eventBusNames = eventContextMap.keySet()
+                                                    .iterator();
 
     return true;
   }

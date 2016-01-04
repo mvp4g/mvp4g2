@@ -35,7 +35,7 @@ import javax.tools.Diagnostic;
  * <br><br>
  */
 public class EventContext
-  extends ProcessorContext {
+  extends AbstractProcessorContext {
 
   private String packageNameEvents;
 

@@ -17,9 +17,7 @@
 package org.gwt4e.mvp4g.client;
 
 
-import org.gwt4e.event.shared.SimpleMvp4gEventBus;
-
-import javax.inject.Inject;
+import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
 
 /**
  * <p>Core implementation of a MVP4G,2 event bus. This class contains methods
@@ -28,24 +26,25 @@ import javax.inject.Inject;
 public abstract class AbstractMvp4gEventBus {
 
   /* the GWT eventBus of the Application */
-  @Inject
-  protected SimpleMvp4gEventBus internalEventBus;
+  SimpleMvp4gInternalEventBus eventBus;
 
 //------------------------------------------------------------------------------
 
-  protected AbstractMvp4gEventBus() {
+  AbstractMvp4gEventBus(SimpleMvp4gInternalEventBus eventBus) {
     super();
+
+    this.eventBus = eventBus;
   }
 
 //------------------------------------------------------------------------------
 
 //  @Override
-//  public SimpleMvp4gEventBus getInternalEventBus() {
+//  public SimpleMvp4gInternalEventBus getInternalEventBus() {
 //    return internalEventBus;
 //  }
 //
 //  @Override
-//  public void setInternalEventBus(SimpleMvp4gEventBus internalEventBus) {
+//  public void setInternalEventBus(SimpleMvp4gInternalEventBus internalEventBus) {
 //    this.internalEventBus = internalEventBus;
 //  }
 }

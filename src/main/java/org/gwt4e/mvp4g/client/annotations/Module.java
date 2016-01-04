@@ -16,16 +16,21 @@
 
 package org.gwt4e.mvp4g.client.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
- * <p>This annotation can be used to annotate methods of an interfaces that extends
- * <code>Mvp4gInternalEventBus</code> and is annotated with <code>Mvp4gInternalEventBus</code> in
- * order to define event.
- * <br><br><br><br><br><br><br><br><br><br><br><br>
+ * <p>This annotation is used to annotate <code>Mvp4gApplication</code>.
+ * This annotation defines the Mvp4g application.
+ * <br><br>
+ * The annotation has the following attributes:
+ * <ul>
+ *   <li>applicationType: defines the application type. The default value is ApplicationType.GWT.</li>
+ *   <li>modules: defines the modules of the application. You have at least one module.</li>
+ * </ul>
+ *
+ *
+ *   <br><br><br><br><br><br><br><br><br><br>
  *</p>
  *
  *
@@ -77,8 +82,7 @@ import java.lang.annotation.Target;
  * @author Frank Hossfeld
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Event {
+public @interface Module {
 //
 //  //default name that developers are unlikely to enter to know when method name should be used
 //  public static final String DEFAULT_NAME = "#%!|&";
@@ -141,5 +145,4 @@ public @interface Event {
 //
 //  class NoBroadcast {
 //  }
-
 }

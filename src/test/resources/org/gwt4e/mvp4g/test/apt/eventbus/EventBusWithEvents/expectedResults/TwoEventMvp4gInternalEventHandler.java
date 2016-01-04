@@ -16,8 +16,8 @@
 
 package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
-import org.gwt4e.event.shared.Mvp4gEventHandler;
+import org.gwt4e.event.shared.Mvp4gInternalEventHandler;
 
-public interface OneEventMvp4gEventHandler extends Mvp4gEventHandler {
-  void onOneEvent(OneEventMvp4gEvent event);
+public interface TwoEventMvp4gInternalEventHandler extends Mvp4gInternalEventHandler {
+  void onTwoEvent(TwoEventMvp4gInternalEvent event);
 }

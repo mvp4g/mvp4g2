@@ -22,7 +22,7 @@ package org.gwt4e.mvp4g.processor;
 public class Constants {
 
   /* postfix of the event-classes */
-  public final static String EVENT_CLASS_POSTFIX = "Mvp4gEvent";
+  public final static String EVENT_CLASS_POSTFIX = "Mvp4gInternalEvent";
   /* postfix of the eventhandler-classes */
   public final static String EVENTHANDER_CLASS_POSTFIX = "Handler";
 

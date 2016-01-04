@@ -24,7 +24,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import org.gwt4e.mvp4g.client.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
-import org.gwt4e.mvp4g.processor.Mvp4gProcessorContext;
+import org.gwt4e.mvp4g.processor.ProcessorContext;
 import org.gwt4e.mvp4g.processor.context.EventBusContext;
 import org.gwt4e.mvp4g.processor.context.EventContext;
 
@@ -52,7 +52,7 @@ public class EventBusProcessingStep
   private final Types    types;
   private final Elements elements;
 
-  private Mvp4gProcessorContext mvp4gProcessorContext;
+  private ProcessorContext processorContext;
 
 //------------------------------------------------------------------------------
 
@@ -60,13 +60,13 @@ public class EventBusProcessingStep
                                 Filer filer,
                                 Types types,
                                 Elements elements,
-                                Mvp4gProcessorContext mvp4gProcessorContext) {
+                                ProcessorContext processorContext) {
     this.messager = messager;
     this.filer = filer;
     this.types = types;
     this.elements = elements;
 
-    this.mvp4gProcessorContext = mvp4gProcessorContext;
+    this.processorContext = processorContext;
   }
 
 //------------------------------------------------------------------------------
@@ -86,20 +86,20 @@ public class EventBusProcessingStep
       if (eventBusContext == null) {
         return; // error message already emitted
       }
-      if (this.mvp4gProcessorContext.getEventContextMap() == null ||
-          this.mvp4gProcessorContext.getEventContextMap()
-                                    .size() == 0 ||
-          this.mvp4gProcessorContext.getEventContextMap()
-                                    .get(eventBusContext.getClassName())
-                                    .size() == 0) {
+      if (this.processorContext.getEventContextMap() == null ||
+          this.processorContext.getEventContextMap()
+                               .size() == 0 ||
+          this.processorContext.getEventContextMap()
+                               .get(eventBusContext.getClassName())
+                               .size() == 0) {
         messager.printMessage(Diagnostic.Kind.ERROR,
                               String.format("%s has no events defined",
                                             eventBusContext.getClassName()));
         return;
       }
 
-      this.mvp4gProcessorContext.getEventBusContextMap()
-                                .put((ClassName.get((TypeElement) element)
+      this.processorContext.getEventBusContextMap()
+                           .put((ClassName.get((TypeElement) element)
                                                   .toString()
                                         ),
                                         eventBusContext);
@@ -129,9 +129,9 @@ public class EventBusProcessingStep
                                         .superclass(AbstractMvp4gEventBus.class)
                                         .addSuperinterface(ClassName.get(context.getInterfaceType()));
 
-    for (EventContext contextEvent : this.mvp4gProcessorContext.getEventContextMap()
-                                                               .get(context.getClassName())
-                                                               .values()) {
+    for (EventContext contextEvent : this.processorContext.getEventContextMap()
+                                                          .get(context.getClassName())
+                                                          .values()) {
       typeSpec.addMethod(createEventMethod(contextEvent));
     }
 

@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus;
+package org.gwt4e.event.shared;
 
-import org.gwt4e.mvp4g.client.Mvp4gEventBus;
-import org.gwt4e.mvp4g.client.annotations.Event;
-import org.gwt4e.mvp4g.client.annotations.EventBus;
-
-@EventBus
-public interface EventBusWithEvents
-  extends Mvp4gEventBus {
-
-  @Event
-  void oneEvent();
-
-  @Event
-  void twoEvent(String arg0);
-
-  @Event
-  void threeEvent(String arg0, String arg1);
+/**
+ * Marker interface for event handlers. All stock GWT Widget and dom event
+ * handlers extend {@link Mvp4gInternalEventHandler}.
+ */
+public interface Mvp4gInternalEventHandler {
 
 }

@@ -25,7 +25,7 @@ import java.util.Set;
  * that loop, but delayed so that the loop finishes executing.
  */
 @SuppressWarnings("serial")
-public class Mvp4gUmbrellaException
+public class Mvp4gInternalUmbrellaException
   extends RuntimeException {
 
   // Visible for testing
@@ -38,7 +38,7 @@ public class Mvp4gUmbrellaException
    */
   private Set<Throwable> causes;
 
-  public Mvp4gUmbrellaException(Set<Throwable> causes) {
+  public Mvp4gInternalUmbrellaException(Set<Throwable> causes) {
     super(makeMessage(causes),
           makeCause(causes));
     this.causes = causes;
@@ -76,7 +76,7 @@ public class Mvp4gUmbrellaException
   /**
    * Required for serialization.
    */
-  protected Mvp4gUmbrellaException() {
+  protected Mvp4gInternalUmbrellaException() {
     // Can't delegate to the other constructor or GWT RPC gets cranky
     super(MULTIPLE);
     this.causes = Collections.<Throwable>emptySet();

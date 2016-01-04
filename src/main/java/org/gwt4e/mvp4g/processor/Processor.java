@@ -19,19 +19,22 @@ package org.gwt4e.mvp4g.processor;
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableList;
+import org.gwt4e.mvp4g.processor.steps.ApplicationProcessingStep;
 import org.gwt4e.mvp4g.processor.steps.EventBusProcessingStep;
 import org.gwt4e.mvp4g.processor.steps.EventProcessingStep;
+import org.gwt4e.mvp4g.processor.steps.ModuleProcessingStep;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
-import javax.annotation.processing.Processor;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
-@AutoService(Processor.class)
-public class Mvp4gProcessor
+@AutoService(javax.annotation.processing.Processor.class)
+public class Processor
   extends BasicAnnotationProcessor {
+
+  private ProcessorContext processorContext = new ProcessorContext();
 
   @Override
   public SourceVersion getSupportedSourceVersion() {
@@ -40,23 +43,44 @@ public class Mvp4gProcessor
 
   @Override
   protected Iterable<? extends ProcessingStep> initSteps() {
-
     Messager messager = processingEnv.getMessager();
-    Filer    filer    = processingEnv.getFiler();
-    Types    types    = processingEnv.getTypeUtils();
+    Filer filer = processingEnv.getFiler();
+    Types types = processingEnv.getTypeUtils();
     Elements elements = processingEnv.getElementUtils();
 
-    Mvp4gProcessorContext mvp4gProcessorContext = new Mvp4gProcessorContext();
 
     return ImmutableList.of(new EventProcessingStep(messager,
                                                     filer,
                                                     types,
                                                     elements,
-                                                    mvp4gProcessorContext),
+                                                    processorContext),
                             new EventBusProcessingStep(messager,
                                                        filer,
                                                        types,
                                                        elements,
-                                                       mvp4gProcessorContext));
+                                                       processorContext),
+                            new ModuleProcessingStep(messager,
+                                                     filer,
+                                                     types,
+                                                     elements,
+                                                     processorContext),
+                            new ApplicationProcessingStep(messager,
+                                                          filer,
+                                                          types,
+                                                          elements,
+                                                          processorContext));
+  }
+
+  @Override
+  protected void postProcess() {
+
+    System.out.println("postPrcess");
+    // TODO generate code
+//    try {
+//      injectBindingRegistry.generateSourcesForRequiredBindings(
+//        factoryGenerator, membersInjectorGenerator);
+//    } catch (SourceFileGenerationException e) {
+//      e.printMessageTo(processingEnv.getMessager());
+//    }
   }
 }

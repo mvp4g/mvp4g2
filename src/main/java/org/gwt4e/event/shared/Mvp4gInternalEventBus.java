@@ -36,29 +36,29 @@ package org.gwt4e.event.shared;
  * interested parties. Eases decoupling by allowing objects to interact
  * without having direct dependencies upon one another, and without
  * requiring event sources to deal with maintaining handler lists.
- * There will typically be one Mvp4gEventBus per application, broadcasting
+ * There will typically be one Mvp4gInternalEventBus per application, broadcasting
  * events that may be of general interest.
  *
- * @see SimpleMvp4gEventBus
+ * @see SimpleMvp4gInternalEventBus
  */
-public abstract class Mvp4gEventBus {
+public abstract class Mvp4gInternalEventBus {
 
   /**
    * Invokes {@code event.dispatch} with {@code handler}. <p> Protected
-   * to allow Mvp4gEventBus implementations in different packages to dispatch
+   * to allow Mvp4gInternalEventBus implementations in different packages to dispatch
    * events even though the {@code event.dispatch} method is protected.
    */
-  protected static <H> void dispatchEvent(Mvp4gEvent<H> event,
+  protected static <H> void dispatchEvent(Mvp4gInternalEvent<H> event,
                                           H handler) {
     event.dispatch(handler);
   }
 
   /**
    * Sets {@code source} as the source of {@code event}. <p> Protected to
-   * allow Mvp4gEventBus implementations in different packages to set an event
+   * allow Mvp4gInternalEventBus implementations in different packages to set an event
    * source even though the {@code event.setSource} method is protected.
    */
-  protected static void setSourceOfEvent(Mvp4gEvent<?> event,
+  protected static void setSourceOfEvent(Mvp4gInternalEvent<?> event,
                                          Object source) {
     event.setSource(source);
   }
@@ -74,12 +74,12 @@ public abstract class Mvp4gEventBus {
    * @param handler the handler
    * @return the handler registration, can be stored in order to remove the handler later
    */
-  public abstract <H> Mvp4gHandlerRegistration addHandler(Mvp4gEvent.Type<H> type,
-                                                          H handler);
+  public abstract <H> Mvp4gInternalHandlerRegistration addHandler(Mvp4gInternalEvent.Type<H> type,
+                                                                  H handler);
 
   /**
    * Adds a handler to receive events of this type from the given source. <p> It is
-   * rare to call this method directly. More typically a {@link Mvp4gEvent} subclass will
+   * rare to call this method directly. More typically a {@link Mvp4gInternalEvent} subclass will
    * provide a static <code>register</code> method, or a widget will accept handlers
    * directly.
    *
@@ -89,30 +89,30 @@ public abstract class Mvp4gEventBus {
    * @param handler the handler
    * @return the handler registration, can be stored in order to remove the handler later
    */
-  public abstract <H> Mvp4gHandlerRegistration addHandlerToSource(Mvp4gEvent.Type<H> type,
-                                                                  Object source,
-                                                                  H handler);
+  public abstract <H> Mvp4gInternalHandlerRegistration addHandlerToSource(Mvp4gInternalEvent.Type<H> type,
+                                                                          Object source,
+                                                                          H handler);
 
   /**
    * Fires the event from no source. Only unfiltered handlers will receive it. <p>
-   * Any exceptions thrown by handlers will be bundled into a {@link Mvp4gUmbrellaException}
+   * Any exceptions thrown by handlers will be bundled into a {@link Mvp4gInternalUmbrellaException}
    * and then re-thrown after all handlers have completed. An exception thrown by a
    * handler will not prevent other handlers from executing.
    *
    * @param event the event to fire
-   * @throws Mvp4gUmbrellaException wrapping exceptions thrown by handlers
+   * @throws Mvp4gInternalUmbrellaException wrapping exceptions thrown by handlers
    */
-  public abstract void fireEvent(Mvp4gEvent<?> event);
+  public abstract void fireEvent(Mvp4gInternalEvent<?> event);
 
   /**
    * Fires the given event to the handlers listening to the event's type. <p> Any exceptions
-   * thrown by handlers will be bundled into a {@link Mvp4gUmbrellaException} and then re-thrown
+   * thrown by handlers will be bundled into a {@link Mvp4gInternalUmbrellaException} and then re-thrown
    * after all handlers have completed. An exception thrown by a handler will not prevent
    * other handlers from executing.
    *
    * @param event the event to fire
-   * @throws Mvp4gUmbrellaException wrapping exceptions thrown by handlers
+   * @throws Mvp4gInternalUmbrellaException wrapping exceptions thrown by handlers
    */
-  public abstract void fireEventFromSource(Mvp4gEvent<?> event,
+  public abstract void fireEventFromSource(Mvp4gInternalEvent<?> event,
                                            Object source);
 }

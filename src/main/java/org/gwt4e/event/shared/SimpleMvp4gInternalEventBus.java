@@ -18,38 +18,38 @@ package org.gwt4e.event.shared;
 import java.util.*;
 
 /**
- * Basic implementation of {@link Mvp4gEventBus}.
+ * Basic implementation of {@link Mvp4gInternalEventBus}.
  */
-public class SimpleMvp4gEventBus
-  extends Mvp4gEventBus {
+public class SimpleMvp4gInternalEventBus
+  extends Mvp4gInternalEventBus {
 
   /**
    * Map of event type to map of event source to list of their handlers.
    */
-  private final Map<Mvp4gEvent.Type<?>, Map<Object, List<?>>> map         = new HashMap<Mvp4gEvent.Type<?>, Map<Object, List<?>>>();
-  private       int                                           firingDepth = 0;
+  private final Map<Mvp4gInternalEvent.Type<?>, Map<Object, List<?>>> map         = new HashMap<Mvp4gInternalEvent.Type<?>, Map<Object, List<?>>>();
+  private       int                                                   firingDepth = 0;
 
   /**
    * Add and remove operations received during dispatch.
    */
   private List<Command> deferredDeltas;
 
-  public SimpleMvp4gEventBus() {
+  public SimpleMvp4gInternalEventBus() {
     super();
   }
 
   @Override
-  public <H> Mvp4gHandlerRegistration addHandler(Mvp4gEvent.Type<H> type,
-                                                 H handler) {
+  public <H> Mvp4gInternalHandlerRegistration addHandler(Mvp4gInternalEvent.Type<H> type,
+                                                         H handler) {
     return doAdd(type,
                  null,
                  handler);
   }
 
   @Override
-  public <H> Mvp4gHandlerRegistration addHandlerToSource(final Mvp4gEvent.Type<H> type,
-                                                         final Object source,
-                                                         final H handler) {
+  public <H> Mvp4gInternalHandlerRegistration addHandlerToSource(final Mvp4gInternalEvent.Type<H> type,
+                                                                 final Object source,
+                                                                 final H handler) {
     if (source == null) {
       throw new NullPointerException("Cannot add a handler with a null source");
     }
@@ -60,12 +60,12 @@ public class SimpleMvp4gEventBus
   }
 
   @Override
-  public void fireEvent(Mvp4gEvent<?> event) {
+  public void fireEvent(Mvp4gInternalEvent<?> event) {
     doFire(event, null);
   }
 
   @Override
-  public void fireEventFromSource(Mvp4gEvent<?> event,
+  public void fireEventFromSource(Mvp4gInternalEvent<?> event,
                                   Object source) {
     if (source == null) {
       throw new NullPointerException("Cannot fire from a null source");
@@ -75,7 +75,7 @@ public class SimpleMvp4gEventBus
   }
 
 
-  private <H> void doFire(Mvp4gEvent<H> event,
+  private <H> void doFire(Mvp4gInternalEvent<H> event,
                           Object source) {
     if (event == null) {
       throw new NullPointerException("Cannot fire null event");
@@ -107,7 +107,7 @@ public class SimpleMvp4gEventBus
       }
 
       if (causes != null) {
-        throw new Mvp4gUmbrellaException(causes);
+        throw new Mvp4gInternalUmbrellaException(causes);
       }
     } finally {
       firingDepth--;
@@ -117,7 +117,7 @@ public class SimpleMvp4gEventBus
     }
   }
 
-  private <H> List<H> getDispatchList(Mvp4gEvent.Type<H> type,
+  private <H> List<H> getDispatchList(Mvp4gInternalEvent.Type<H> type,
                                       Object source) {
     List<H> directHandlers = getHandlerList(type,
                                             source);
@@ -145,7 +145,7 @@ public class SimpleMvp4gEventBus
     }
   }
 
-  private <H> List<H> getHandlerList(Mvp4gEvent.Type<H> type,
+  private <H> List<H> getHandlerList(Mvp4gInternalEvent.Type<H> type,
                                      Object source) {
     Map<Object, List<?>> sourceMap = map.get(type);
     if (sourceMap == null) {
@@ -161,9 +161,9 @@ public class SimpleMvp4gEventBus
     return handlers;
   }
 
-  private <H> Mvp4gHandlerRegistration doAdd(final Mvp4gEvent.Type<H> type,
-                                             final Object source,
-                                             final H handler) {
+  private <H> Mvp4gInternalHandlerRegistration doAdd(final Mvp4gInternalEvent.Type<H> type,
+                                                     final Object source,
+                                                     final H handler) {
     if (type == null) {
       throw new NullPointerException("Cannot add a handler with a null type");
     }
@@ -181,7 +181,7 @@ public class SimpleMvp4gEventBus
                handler);
     }
 
-    return new Mvp4gHandlerRegistration() {
+    return new Mvp4gInternalHandlerRegistration() {
       public void removeHandler() {
         doRemoveNow(type,
                     source,
@@ -190,7 +190,7 @@ public class SimpleMvp4gEventBus
     };
   }
 
-  private <H> void doAddNow(Mvp4gEvent.Type<H> type,
+  private <H> void doAddNow(Mvp4gInternalEvent.Type<H> type,
                             Object source,
                             H handler) {
     List<H> l = ensureHandlerList(type,
@@ -198,7 +198,7 @@ public class SimpleMvp4gEventBus
     l.add(handler);
   }
 
-  private <H> void enqueueAdd(final Mvp4gEvent.Type<H> type,
+  private <H> void enqueueAdd(final Mvp4gInternalEvent.Type<H> type,
                               final Object source,
                               final H handler) {
     defer(new Command() {
@@ -210,7 +210,7 @@ public class SimpleMvp4gEventBus
     });
   }
 
-  private <H> void enqueueRemove(final Mvp4gEvent.Type<H> type,
+  private <H> void enqueueRemove(final Mvp4gInternalEvent.Type<H> type,
                                  final Object source,
                                  final H handler) {
     defer(new Command() {
@@ -229,7 +229,7 @@ public class SimpleMvp4gEventBus
     deferredDeltas.add(command);
   }
 
-  private <H> void doRemoveNow(Mvp4gEvent.Type<H> type,
+  private <H> void doRemoveNow(Mvp4gInternalEvent.Type<H> type,
                                Object source,
                                H handler) {
     List<H> l = getHandlerList(type,
@@ -243,7 +243,7 @@ public class SimpleMvp4gEventBus
     }
   }
 
-  private void prune(Mvp4gEvent.Type<?> type,
+  private void prune(Mvp4gInternalEvent.Type<?> type,
                      Object source) {
     Map<Object, List<?>> sourceMap = map.get(type);
 
@@ -257,7 +257,7 @@ public class SimpleMvp4gEventBus
     }
   }
 
-  private <H> List<H> ensureHandlerList(Mvp4gEvent.Type<H> type,
+  private <H> List<H> ensureHandlerList(Mvp4gInternalEvent.Type<H> type,
                                         Object source) {
     Map<Object, List<?>> sourceMap = map.get(type);
     if (sourceMap == null) {

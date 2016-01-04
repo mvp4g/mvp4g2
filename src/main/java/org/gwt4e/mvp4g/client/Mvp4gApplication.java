@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
+package org.gwt4e.mvp4g.client;
 
-import org.gwt4e.event.shared.Mvp4gEventHandler;
+import com.google.gwt.user.client.ui.HasWidgets;
 
-public interface OneEventMvp4gEventHandler extends Mvp4gEventHandler {
-  void onOneEvent(OneEventMvp4gEvent event);
+/**
+ * Marks as class mvp4g application.
+ */
+public interface Mvp4gApplication {
+
+  void run(HasWidgets.ForIsWidget viewPort);
+
 }

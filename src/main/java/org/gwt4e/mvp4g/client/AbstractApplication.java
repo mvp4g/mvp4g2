@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus;
+package org.gwt4e.mvp4g.client;
 
-import org.gwt4e.mvp4g.client.Mvp4gEventBus;
-import org.gwt4e.mvp4g.client.annotations.Event;
-import org.gwt4e.mvp4g.client.annotations.EventBus;
+import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
 
-@EventBus
-public interface EventBusWithEvents
-  extends Mvp4gEventBus {
+/**
+ * Created by hoss on 01.01.16.
+ */
+public abstract class AbstractApplication
+  implements Mvp4gApplication {
 
-  @Event
-  void oneEvent();
+  protected SimpleMvp4gInternalEventBus eventBus;
 
-  @Event
-  void twoEvent(String arg0);
+  public AbstractApplication() {
+    this.eventBus = new SimpleMvp4gInternalEventBus();
+  }
 
-  @Event
-  void threeEvent(String arg0, String arg1);
-
+  public SimpleMvp4gInternalEventBus getEventBus() {
+    return eventBus;
+  }
 }

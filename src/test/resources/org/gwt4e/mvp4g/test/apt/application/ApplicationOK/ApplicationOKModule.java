@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
+package org.gwt4e.mvp4g.test.apt.application.ApplicationOK;
 
-import java.lang.Override;
-import org.gwt4e.event.shared.Mvp4gEvent;
+import org.gwt4e.mvp4g.client.Mvp4gModule;
+import org.gwt4e.mvp4g.client.annotations.Module;
 
-public class OneEventMvp4gEvent extends Mvp4gEvent<OneEventMvp4gEventHandler> {
-  public static Mvp4gEvent.Type TYPE = new Mvp4gEvent.Type<OneEventMvp4gEventHandler>();
+@Module
+public interface ApplicationOKModule
+  extends Mvp4gModule {
 
-  public OneEventMvp4gEvent() {
-  }
-
-  @Override
-  public Mvp4gEvent.Type<OneEventMvp4gEventHandler> getAssociatedType() {
-    return TYPE;
-  }
-
-  @Override
-  protected void dispatch(OneEventMvp4gEventHandler handler) {
-    handler.onOneEvent(this);
-  }
 }

@@ -16,14 +16,23 @@
 
 package org.gwt4e.mvp4g.client.annotations;
 
+import org.gwt4e.mvp4g.client.Mvp4gModule;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * <p>This annotation can be used to annotate methods of an interfaces that extends
- * <code>Mvp4gEventBus</code> and is annotated with <code>Mvp4gEventBus</code> in
- * order to define event.
- * <br><br><br><br><br><br><br><br><br><br><br><br>
+ * <p>This annotation is used to annotate <code>Mvp4gApplication</code>.
+ * This annotation defines the Mvp4g application.
+ * <br><br>
+ * The annotation has the following attributes:
+ * <ul>
+ *   <li>applicationType: defines the application type. The default value is ApplicationType.GWT.</li>
+ *   <li>modules: defines the modules of the application. You have at least one module.</li>
+ * </ul>
+ *
+ *
+ *   <br><br><br><br><br><br><br><br><br><br>
  *</p>
  *
  *
@@ -40,7 +49,7 @@ import java.lang.annotation.RetentionPolicy;
  * <li> bindNames: instead of using their classes, you can define binds thanks to their name. Not recommended.
  * <li>modulesToLoad: child modules that should be loaded if necessary and to which the event should
  * be forwarded. Child modules to which the event is forwarded must be one of the child modules of
- * the <code>Mvp4gEventBus</code> interface's module (ie one of the modules defined inside
+ * the <code>Mvp4gInternalEventBus</code> interface's module (ie one of the modules defined inside
  * <code>ChildModules</code> annotation). If object(s) are associated to the event, they will also
  * be forwarded. An event can be forwarded to zero to several child modules.</li>
  * <li>forwardToParent: if true, event will be forwarded to the parent module. In this case, the
@@ -74,17 +83,21 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Frank Hossfeld
  */
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Application {
+
+  ApplicationType applicationType() default ApplicationType.GWT;
+
+  Class<? extends Mvp4gModule>[] modules();
 //
 //  //default name that developers are unlikely to enter to know when method name should be used
 //  public static final String DEFAULT_NAME = "#%!|&";
 //
-//  Class<? extends EventHandlerInterface<? extends Mvp4gEventBus>>[] handlers() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] handlers() default {};
 //
 //  String[] handlerNames() default {};
 //
-//  Class<? extends EventHandlerInterface<? extends Mvp4gEventBus>>[] bind() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] bind() default {};
 //
 //  String[] bindNames() default {};
 //
@@ -98,11 +111,11 @@ public @interface Application {
 //
 //  Class<? extends HistoryConverter<?>> historyConverter() default NoHistoryConverter.class;
 //
-//  Class<? extends EventHandlerInterface<? extends Mvp4gEventBus>>[] activate() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] activate() default {};
 //
 //  String[] activateNames() default {};
 //
-//  Class<? extends EventHandlerInterface<? extends Mvp4gEventBus>>[] deactivate() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] deactivate() default {};
 //
 //  String[] deactivateNames() default {};
 //
@@ -114,12 +127,12 @@ public @interface Application {
 
 //  Class<?>[] broadcastTo();
 
-//  Class<? extends EventHandlerInterface<? extends Mvp4gEventBus>>[] generate() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] generate() default {};
 //
 //  String[] generateNames() default {};
 //
 //  class NoHistoryConverter
-//    implements HistoryConverter<Mvp4gEventBus> {
+//    implements HistoryConverter<Mvp4gInternalEventBus> {
 //
 //    private NoHistoryConverter() {
 //      //to prevent this class to be used
@@ -127,7 +140,7 @@ public @interface Application {
 //
 //    public void convertFromToken(String historyName,
 //                                 String param,
-//                                 Mvp4gEventBus eventBus) {
+//                                 Mvp4gInternalEventBus eventBus) {
 //    }
 //
 //    public boolean isCrawlable() {
@@ -139,4 +152,7 @@ public @interface Application {
 //  class NoBroadcast {
 //  }
 
+  enum ApplicationType {
+    GWT
+  }
 }

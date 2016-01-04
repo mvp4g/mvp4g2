@@ -18,12 +18,11 @@ package org.gwt4e.mvp4g.test.apt.eventbus;
 
 import java.lang.Override;
 import org.gwt4e.mvp4g.client.AbstractMvp4gEventBus;
-import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.OneEventMvp4gEvent;
+import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.OneEventMvp4gInternalEvent;
 
-public class EventBusWithOneEventImpl extends AbstractMvp4gEventBus
-  implements EventBusWithOneEvent {
+public class EventBusWithOneEventImpl extends AbstractMvp4gEventBus implements EventBusWithOneEvent {
   @Override
   public final void oneEvent() {
-    this.internalEventBus.fireEvent(new OneEventMvp4gEvent());
+    this.internalEventBus.fireEvent(new OneEventMvp4gInternalEvent());
   }
 }

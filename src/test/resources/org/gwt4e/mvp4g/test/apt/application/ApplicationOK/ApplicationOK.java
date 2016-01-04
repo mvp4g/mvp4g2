@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus;
+package org.gwt4e.mvp4g.test.apt.application.ApplicationOK;
 
-import org.gwt4e.mvp4g.client.Mvp4gEventBus;
-import org.gwt4e.mvp4g.client.annotations.Event;
-import org.gwt4e.mvp4g.client.annotations.EventBus;
+import org.gwt4e.mvp4g.client.Mvp4gApplication;
+import org.gwt4e.mvp4g.client.annotations.Application;
 
-@EventBus
-public interface EventBusWithEvents
-  extends Mvp4gEventBus {
-
-  @Event
-  void oneEvent();
-
-  @Event
-  void twoEvent(String arg0);
-
-  @Event
-  void threeEvent(String arg0, String arg1);
+@Application(modules = {ApplicationOKModule.class})
+public interface ApplicationOK
+  extends Mvp4gApplication {
 
 }

@@ -19,10 +19,10 @@ package org.gwt4e.mvp4g.processor.steps;
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
-import org.gwt4e.event.shared.Mvp4gEvent;
-import org.gwt4e.event.shared.Mvp4gEventHandler;
+import org.gwt4e.event.shared.Mvp4gInternalEvent;
+import org.gwt4e.event.shared.Mvp4gInternalEventHandler;
 import org.gwt4e.mvp4g.client.annotations.Event;
-import org.gwt4e.mvp4g.processor.Mvp4gProcessorContext;
+import org.gwt4e.mvp4g.processor.ProcessorContext;
 import org.gwt4e.mvp4g.processor.Utils;
 import org.gwt4e.mvp4g.processor.context.EventContext;
 
@@ -48,7 +48,7 @@ public class EventProcessingStep
   private final Types    types;
   private final Elements elements;
 
-  private Mvp4gProcessorContext mvp4gProcessorContext;
+  private ProcessorContext processorContext;
 
 //------------------------------------------------------------------------------
 
@@ -56,13 +56,13 @@ public class EventProcessingStep
                              Filer filer,
                              Types types,
                              Elements elements,
-                             Mvp4gProcessorContext mvp4gProcessorContext) {
+                             ProcessorContext processorContext) {
     this.messager = messager;
     this.filer = filer;
     this.types = types;
     this.elements = elements;
 
-    this.mvp4gProcessorContext = mvp4gProcessorContext;
+    this.processorContext = processorContext;
   }
 
 //------------------------------------------------------------------------------
@@ -78,11 +78,11 @@ public class EventProcessingStep
                                  .toString();
 
       // check if an event with the same name already exits!
-      Set<String> eventBusNames = mvp4gProcessorContext.getEventContextMap()
-                                                       .keySet();
+      Set<String> eventBusNames = processorContext.getEventContextMap()
+                                                  .keySet();
       for (String ebName : eventBusNames) {
-        Set<String> eventNames = ((Map<String, EventContext>) mvp4gProcessorContext.getEventContextMap()
-                                                                                   .get(ebName)).keySet();
+        Set<String> eventNames = ((Map<String, EventContext>) processorContext.getEventContextMap()
+                                                                              .get(ebName)).keySet();
         for (String eName : eventNames) {
           if (element.getSimpleName().toString().equals(eName)) {
             messager.printMessage(Diagnostic.Kind.ERROR,
@@ -98,18 +98,18 @@ public class EventProcessingStep
                                                       types,
                                                       elements,
                                                       element);
-      System.out.println("Processing Mvp4gEvent: " + element.getSimpleName());
+      System.out.println("Processing Mvp4gInternalEvent: " + element.getSimpleName());
       if (eventContext == null) {
         return; // error message already emitted
       }
       try {
-        // generate Mvp4gEvent
+        // generate Mvp4gInternalEvent
         generate(eventContext);
         // save eventContext
-        this.mvp4gProcessorContext.put(eventBusName,
-                                       element.getSimpleName()
+        this.processorContext.put(eventBusName,
+                                  element.getSimpleName()
                                                  .toString(),
-                                       eventContext);
+                                  eventContext);
 
       } catch (IOException ioe) {
         StringWriter sw = new StringWriter();
@@ -142,7 +142,7 @@ public class EventProcessingStep
                                                                     "event");
 
     TypeSpec.Builder typeSpec = TypeSpec.interfaceBuilder(context.getEventHandlerClassName())
-                                        .addSuperinterface(Mvp4gEventHandler.class)
+                                        .addSuperinterface(Mvp4gInternalEventHandler.class)
                                         .addModifiers(Modifier.PUBLIC)
                                         .addMethod(eventHandlerMethod.build());
 
@@ -161,19 +161,19 @@ public class EventProcessingStep
   private void generateEvent(EventContext context)
     throws IOException {
 
-    FieldSpec type = FieldSpec.builder(Mvp4gEvent.Type.class,
+    FieldSpec type = FieldSpec.builder(Mvp4gInternalEvent.Type.class,
                                        "TYPE")
                               .addModifiers(Modifier.PUBLIC,
                                             Modifier.STATIC)
                               .initializer("new $T<$T>()",
-                                           Mvp4gEvent.Type.class,
+                                           Mvp4gInternalEvent.Type.class,
                                            ClassName.get(context.getPackageNameEvents(),
                                                          context.getEventHandlerClassName()))
                               .build();
 
 
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(context.getEventClassName())
-                                        .superclass(ParameterizedTypeName.get(ClassName.get(Mvp4gEvent.class),
+                                        .superclass(ParameterizedTypeName.get(ClassName.get(Mvp4gInternalEvent.class),
                                                                               ClassName.get(context.getPackageNameEvents(),
                                                                                             context.getEventHandlerClassName())))
                                         .addModifiers(Modifier.PUBLIC)
@@ -238,7 +238,7 @@ public class EventProcessingStep
     MethodSpec.Builder methodGetAssociatedType = MethodSpec.methodBuilder("getAssociatedType")
                                                            .addAnnotation(Override.class)
                                                            .addModifiers(Modifier.PUBLIC)
-                                                           .returns(ParameterizedTypeName.get(ClassName.get(Mvp4gEvent.Type.class),
+                                                           .returns(ParameterizedTypeName.get(ClassName.get(Mvp4gInternalEvent.Type.class),
                                                                                               ClassName.get(context.getPackageNameEvents(),
                                                                                                             context.getEventHandlerClassName())))
                                                            .addStatement("return $N",

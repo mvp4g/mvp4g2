@@ -2,16 +2,16 @@ package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
 import java.lang.Override;
 import java.lang.String;
-import org.gwt4e.event.shared.Mvp4gEvent;
+import org.gwt4e.event.shared.Mvp4gInternalEvent;
 
-public class ThreeEventMvp4gEvent extends Mvp4gEvent<ThreeEventMvp4gEventHandler> {
-  public static Mvp4gEvent.Type TYPE = new Mvp4gEvent.Type<ThreeEventMvp4gEventHandler>();
+public class ThreeEventMvp4gInternalEvent extends Mvp4gInternalEvent<ThreeEventMvp4gInternalEventHandler> {
+  public static Mvp4gInternalEvent.Type TYPE = new Mvp4gInternalEvent.Type<ThreeEventMvp4gInternalEventHandler>();
 
   private String arg0;
 
   private String arg1;
 
-  public ThreeEventMvp4gEvent(String arg0, String arg1) {
+  public ThreeEventMvp4gInternalEvent(String arg0, String arg1) {
     this.arg0 = arg0;
     this.arg1 = arg1;
   }
@@ -33,12 +33,12 @@ public class ThreeEventMvp4gEvent extends Mvp4gEvent<ThreeEventMvp4gEventHandler
   }
 
   @Override
-  public Mvp4gEvent.Type<ThreeEventMvp4gEventHandler> getAssociatedType() {
+  public Mvp4gInternalEvent.Type<ThreeEventMvp4gInternalEventHandler> getAssociatedType() {
     return TYPE;
   }
 
   @Override
-  protected void dispatch(ThreeEventMvp4gEventHandler handler) {
+  protected void dispatch(ThreeEventMvp4gInternalEventHandler handler) {
     handler.onThreeEvent(this);
   }
 }

@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.event.shared;
+package org.gwt4e.mvp4g.test.apt.eventbus.generated.events;
 
-/**
- * Marker interface for event handlers. All stock GWT Widget and dom event
- * handlers extend {@link Mvp4gEventHandler}.
- */
-public interface Mvp4gEventHandler {
+import org.gwt4e.event.shared.Mvp4gInternalEventHandler;
 
+public interface OneEventMvp4gInternalEventHandler extends Mvp4gInternalEventHandler {
+  void onOneEvent(OneEventMvp4gInternalEvent event);
 }

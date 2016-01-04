@@ -16,22 +16,22 @@
 package org.gwt4e.event.shared;
 
 /**
- * Base Mvp4gEvent object.
+ * Base Mvp4gInternalEvent object.
  *
  * @param <H> interface implemented by handlers of this kind of event
  */
-public abstract class Mvp4gEvent<H> {
+public abstract class Mvp4gInternalEvent<H> {
   private Object source;
 
   /**
    * Constructor.
    */
-  protected Mvp4gEvent() {
+  protected Mvp4gInternalEvent() {
   }
 
   /**
    * Returns the {@link Type} used to register this event, allowing an
-   * {@link Mvp4gEventBus} to find handlers of the appropriate class.
+   * {@link Mvp4gInternalEventBus} to find handlers of the appropriate class.
    *
    * @return the type
    */
@@ -40,11 +40,11 @@ public abstract class Mvp4gEvent<H> {
   /**
    * Returns the source for this event. The type and meaning of the
    * source is arbitrary, and is most useful as a secondary key for
-   * handler registration. (See {@link Mvp4gEventBus#addHandlerToSource},
+   * handler registration. (See {@link Mvp4gInternalEventBus#addHandlerToSource},
    * which allows a handler to register for events of a particular
    * type, tied to a particular source.) <p> Note that the source is
    * actually set at dispatch time, e.g. via {@link
-   * Mvp4gEventBus#fireEventFromSource(Mvp4gEvent, Object)}.
+   * Mvp4gInternalEventBus#fireEventFromSource(Mvp4gInternalEvent, Object)}.
    *
    * @return object representing the source of this event
    */
@@ -54,11 +54,11 @@ public abstract class Mvp4gEvent<H> {
 
   /**
    * Set the source that triggered this event. Intended to be called
-   * by the {@link Mvp4gEventBus} during dispatch.
+   * by the {@link Mvp4gInternalEventBus} during dispatch.
    *
    * @param source the source of this event.
-   * @see Mvp4gEventBus#fireEventFromSource(Mvp4gEvent, Object)
-   * @see Mvp4gEventBus#setSourceOfEvent(Mvp4gEvent, Object)
+   * @see Mvp4gInternalEventBus#fireEventFromSource(Mvp4gInternalEvent, Object)
+   * @see Mvp4gInternalEventBus#setSourceOfEvent(Mvp4gInternalEvent, Object)
    */
   protected void setSource(Object source) {
     this.source = source;
@@ -68,7 +68,7 @@ public abstract class Mvp4gEvent<H> {
    * This is a method used primarily for debugging. It gives a string
    * representation of the event details. This does not override the
    * toString method because the compiler cannot always optimize
-   * toString out correctly. Mvp4gEvent types should override as desired.
+   * toString out correctly. Mvp4gInternalEvent types should override as desired.
    *
    * @return a string representing the event's specifics.
    */
@@ -81,15 +81,15 @@ public abstract class Mvp4gEvent<H> {
 
   /**
    * Implemented by subclasses to to invoke their handlers in a type safe
-   * manner. Intended to be called by {@link Mvp4gEventBus#fireEvent(Mvp4gEvent)} or
-   * {@link Mvp4gEventBus#fireEventFromSource(Mvp4gEvent, Object)}.
+   * manner. Intended to be called by {@link Mvp4gInternalEventBus#fireEvent(Mvp4gInternalEvent)} or
+   * {@link Mvp4gInternalEventBus#fireEventFromSource(Mvp4gInternalEvent, Object)}.
    *
    * @param handler handler
-   * @see Mvp4gEventBus#dispatchEvent(Mvp4gEvent, Object)
+   * @see Mvp4gInternalEventBus#dispatchEvent(Mvp4gInternalEvent, Object)
    */
   protected abstract void dispatch(H handler);  /**
    * The toString() for abstract event is overridden to avoid accidently
-   * including class literals in the compiled output. Use {@link Mvp4gEvent}
+   * including class literals in the compiled output. Use {@link Mvp4gInternalEvent}
    * #toDebugString to get more information about the event.
    */
   @Override
@@ -98,7 +98,7 @@ public abstract class Mvp4gEvent<H> {
   }
 
   /**
-   * Type class used to register events with an {@link Mvp4gEventBus}.
+   * Type class used to register events with an {@link Mvp4gInternalEventBus}.
    *
    * @param <H> handler type
    */
@@ -120,7 +120,7 @@ public abstract class Mvp4gEvent<H> {
 
     @Override
     public String toString() {
-      return "Mvp4gEvent type";
+      return "Mvp4gInternalEvent type";
     }
   }
 }

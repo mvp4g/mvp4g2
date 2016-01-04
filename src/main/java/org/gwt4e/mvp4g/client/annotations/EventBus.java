@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * <p>This annotation indicates that the annotated interface should be used to define
  * a event bus of the Application. This annotation can be used only on interfaces
- * that extends <code>Mvp4gEventBus</code>.<br>
+ * that extends <code>Mvp4gInternalEventBus</code>.<br>
  * <br><br><br><br><br>
  *</p>
  *
