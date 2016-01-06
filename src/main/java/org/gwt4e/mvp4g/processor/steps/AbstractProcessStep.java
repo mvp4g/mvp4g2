@@ -70,4 +70,14 @@ public abstract class AbstractProcessStep {
                           sw.toString());
   }
 
+  void createWarningMessage(String errorMessage) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    pw.println(errorMessage);
+    pw.close();
+    messager.printMessage(Diagnostic.Kind.WARNING,
+                          sw.toString());
+
+  }
+
 }

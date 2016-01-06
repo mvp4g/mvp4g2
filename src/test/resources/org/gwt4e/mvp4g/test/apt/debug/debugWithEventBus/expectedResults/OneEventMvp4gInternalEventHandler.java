@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.application.ApplicationOK;
+package org.gwt4e.mvp4g.test.apt.debugWithEventBus.generated.events;
 
-import org.gwt4e.mvp4g.client.Mvp4gModule;
-import org.gwt4e.mvp4g.client.annotations.Module;
+import org.gwt4e.event.shared.Mvp4gInternalEventHandler;
 
-@Module(eventBus = ApplicationOKEventbus.class)
-public interface ApplicationOKModule
-  extends Mvp4gModule {
-
+public interface OneEventMvp4gInternalEventHandler extends Mvp4gInternalEventHandler {
+  void onOneEvent(OneEventMvp4gInternalEvent event);
 }

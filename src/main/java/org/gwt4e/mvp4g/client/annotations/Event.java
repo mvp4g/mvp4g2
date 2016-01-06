@@ -25,6 +25,11 @@ import java.lang.annotation.Target;
  * <p>This annotation can be used to annotate methods of an interfaces that extends
  * <code>Mvp4gInternalEventBus</code> and is annotated with <code>Mvp4gInternalEventBus</code> in
  * order to define event.
+ * The annotation has the following attributes:
+ * <ul>
+ * <li>scope: defines the range of an event. Using the Scope.Module the event is only consumed by
+ * presenters of the module</li>
+ * </ul>
  * <br><br><br><br><br><br><br><br><br><br><br><br>
  *</p>
  *
@@ -79,6 +84,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Event {
+
+  Scope scope() default Scope.Application;
+
 //
 //  //default name that developers are unlikely to enter to know when method name should be used
 //  public static final String DEFAULT_NAME = "#%!|&";
@@ -142,4 +150,7 @@ public @interface Event {
 //  class NoBroadcast {
 //  }
 
+  enum Scope {
+    Application, Module
+  }
 }

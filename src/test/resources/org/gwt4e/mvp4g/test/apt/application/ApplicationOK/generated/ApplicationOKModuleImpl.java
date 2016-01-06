@@ -17,7 +17,7 @@
 package org.gwt4e.mvp4g.test.apt.application.ApplicationOK.generated;
 
 import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
-import org.gwt4e.mvp4g.client.AbstractMvp4gModule;
+import org.gwt4e.mvp4g.client.module.AbstractMvp4gModule;
 
 public class ApplicationOKModuleImpl extends AbstractMvp4gModule {
 

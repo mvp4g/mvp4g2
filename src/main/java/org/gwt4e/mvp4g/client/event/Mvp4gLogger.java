@@ -31,7 +31,7 @@
  */
 
 /*
- * Copyright (C) 2016 Frank Hossfeld
+ * Copyright (C) 2015 Pierre-Laurent Coirier, Frank Hossfeld.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,13 +44,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-
-package org.gwt4e.mvp4g.client;
+package org.gwt4e.mvp4g.client.event;
 
 /**
- * The Mvp4gInternalEventBus-Interface marks an interface, that will work
- * with the MVP4G2-Framework
+ * Interface that defines a logger used for events logging.
+ *
+ * @author plcoirier
  */
-public interface Mvp4gEventBus {
+public interface Mvp4gLogger {
+
+  /**
+   * Add a log
+   *
+   * @param message message to log
+   * @param depth   depth of the log
+   */
+  public void log(String message,
+                  int depth);
+
 }

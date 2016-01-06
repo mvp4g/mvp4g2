@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.client;
+package org.gwt4e.mvp4g.test.apt;
 
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.mvp4g.test.apt.application.ApplicationTest;
+import org.gwt4e.mvp4g.test.apt.debug.DebugTest;
+import org.gwt4e.mvp4g.test.apt.eventbus.EventBusTest;
+import org.gwt4e.mvp4g.test.apt.module.ModuleTest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-/**
- * Created by hoss on 04.01.16.
- */
-public abstract class AbstractMvp4gModule {
-
-  SimpleMvp4gInternalEventBus eventBus;
-
-  public AbstractMvp4gModule(SimpleMvp4gInternalEventBus eventBus) {
-    this.eventBus = eventBus;
-  }
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+                      ApplicationTest.class,
+                      DebugTest.class,
+                      EventBusTest.class,
+                      ModuleTest.class
+})
+public class AllTests {
 }

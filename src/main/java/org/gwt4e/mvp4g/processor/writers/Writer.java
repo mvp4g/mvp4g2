@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.application.ApplicationOK;
+package org.gwt4e.mvp4g.processor.writers;
 
-import org.gwt4e.mvp4g.client.Mvp4gModule;
-import org.gwt4e.mvp4g.client.annotations.Module;
+import java.io.IOException;
 
-@Module(eventBus = ApplicationOKEventbus.class)
-public interface ApplicationOKModule
-  extends Mvp4gModule {
+/**
+ * Created by hoss on 05.01.16.
+ */
+public interface Writer {
+
+  void write() throws IOException;
 
 }

@@ -17,6 +17,7 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
 import org.gwt4e.mvp4g.client.Mvp4gModule;
 import org.gwt4e.mvp4g.client.annotations.Module;
 import org.gwt4e.mvp4g.processor.Utils;
@@ -25,7 +26,7 @@ import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -44,7 +45,8 @@ public class ModuleContext
   private String className;
   private String implName;
 
-  private Element element;
+  private Element    element;
+  private TypeMirror moduleEventBus;
 
   ModuleContext(Messager messager,
                 Types types,
@@ -61,6 +63,13 @@ public class ModuleContext
     this.packageName = packageName;
     this.className = className;
     this.implName = implName;
+
+    Module moduleAnnotation = interfaceType.getAnnotation(Module.class);
+    try{
+      Class<? extends Mvp4gEventBus> moduleEventBusClass = moduleAnnotation.eventBus();
+    } catch (MirroredTypeException e) {
+      moduleEventBus = e.getTypeMirror();
+    }
   }
 
   public static ModuleContext create(Messager messager,
@@ -77,22 +86,12 @@ public class ModuleContext
     }
 
     // Should extend org.gwt4e.mvp4g.client.Mvp4gApplication
-    boolean foundSuperInterface = false;
-    for (TypeMirror superType : types.directSupertypes(element.asType())) {
-      if (((DeclaredType) superType).asElement()
-                                    .toString()
-                                    .equals(ClassName.get(Mvp4gModule.class)
-                                                     .toString())) {
-        foundSuperInterface = true;
-        break;
-      }
-    }
-    if (!foundSuperInterface) {
+    if (!Utils.isExtending(types, element, Mvp4gModule.class)) {
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s does not extend %s",
                                           ((TypeElement) element).getQualifiedName(),
                                           Mvp4gModule.class.getName()
-                                                                .toString()));
+                                                           .toString()));
       return null;
     }
 
@@ -106,7 +105,7 @@ public class ModuleContext
                              elements,
                              interfaceType,
                              Utils.getEventPackage(element),
-                                  Utils.getEventPackage(element) + "." + interfaceName.simpleName(),
+                             Utils.getEventPackage(element) + "." + interfaceName.simpleName(),
                              implName);
   }
 
@@ -118,6 +117,10 @@ public class ModuleContext
 
   public TypeElement getInterfaceType() {
     return interfaceType;
+  }
+
+  public TypeMirror getModuleEventBus() {
+    return moduleEventBus;
   }
 
   public String getPackageName() {

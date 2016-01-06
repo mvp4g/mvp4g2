@@ -22,7 +22,7 @@ import org.gwt4e.mvp4g.client.annotations.Module;
 /**
  * Created by hoss on 04.01.16.
  */
-@Module
+@Module(eventBus = ModuleOKEventBus.class)
 public interface ModuleOKModule
   extends Mvp4gModule {
 }

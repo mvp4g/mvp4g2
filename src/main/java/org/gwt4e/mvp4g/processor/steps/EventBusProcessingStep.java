@@ -19,58 +19,38 @@ package org.gwt4e.mvp4g.processor.steps;
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
-import org.gwt4e.mvp4g.client.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
 import org.gwt4e.mvp4g.processor.ProcessorContext;
 import org.gwt4e.mvp4g.processor.context.EventBusContext;
-import org.gwt4e.mvp4g.processor.context.EventContext;
+import org.gwt4e.mvp4g.processor.writers.EventBusWriter;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Set;
 
 public class EventBusProcessingStep
+  extends AbstractProcessStep
   implements ProcessingStep {
-
-  private final Messager messager;
-  private final Filer    filer;
-  private final Types    types;
-  private final Elements elements;
-
-  private ProcessorContext processorContext;
-
-//------------------------------------------------------------------------------
 
   public EventBusProcessingStep(Messager messager,
                                 Filer filer,
                                 Types types,
                                 Elements elements,
                                 ProcessorContext processorContext) {
-    this.messager = messager;
-    this.filer = filer;
-    this.types = types;
-    this.elements = elements;
-
-    this.processorContext = processorContext;
+    super(types,
+          messager,
+          filer,
+          elements,
+          processorContext);
   }
-
-//------------------------------------------------------------------------------
-
 
   public Set<? extends Class<? extends Annotation>> annotations() {
     return Collections.singleton(EventBus.class);
@@ -86,100 +66,37 @@ public class EventBusProcessingStep
       if (eventBusContext == null) {
         return; // error message already emitted
       }
-      if (this.processorContext.getEventContextMap() == null ||
-          this.processorContext.getEventContextMap()
-                               .size() == 0 ||
-          this.processorContext.getEventContextMap()
-                               .get(eventBusContext.getClassName())
-                               .size() == 0) {
-        messager.printMessage(Diagnostic.Kind.ERROR,
+      if (processorContext.getEventContextMap() == null ||
+          processorContext.getEventContextMap()
+                          .size() == 0 ||
+          processorContext.getEventContextMap()
+                          .get(eventBusContext.getClassName())
+                          .size() == 0) {
+        messager.printMessage(Diagnostic.Kind.WARNING,
                               String.format("%s has no events defined",
                                             eventBusContext.getClassName()));
-        return;
       }
 
       this.processorContext.getEventBusContextMap()
                            .put((ClassName.get((TypeElement) element)
-                                                  .toString()
-                                        ),
-                                        eventBusContext);
+                                          .toString()
+                                ),
+                                eventBusContext);
       try {
-        generate(eventBusContext);
+        EventBusWriter writer = EventBusWriter.builder()
+                                              .messenger(super.messager)
+                                              .context(super.processorContext)
+                                              .elements(super.elements)
+                                              .filer(super.filer)
+                                              .types(super.types)
+                                              .eventBusContext(eventBusContext)
+                                              .build();
+        writer.write();
       } catch (IOException ioe) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        pw.println("Error generating source file for type " + eventBusContext.getInterfaceType()
-                                                                             .getQualifiedName());
-        ioe.printStackTrace(pw);
-        pw.close();
-        messager.printMessage(Diagnostic.Kind.ERROR,
-                              sw.toString());
+        createErrorMessage("Error generating source file for type " + eventBusContext.getInterfaceType()
+                                                                             .getQualifiedName(),
+                           ioe);
       }
     }
-  }
-
-//------------------------------------------------------------------------------
-
-  private void generate(EventBusContext context)
-    throws IOException {
-
-    TypeSpec.Builder typeSpec = TypeSpec.classBuilder(context.getImplName())
-                                        .addOriginatingElement(context.getInterfaceType())
-                                        .addModifiers(Modifier.PUBLIC)
-                                        .superclass(AbstractMvp4gEventBus.class)
-                                        .addSuperinterface(ClassName.get(context.getInterfaceType()));
-
-    for (EventContext contextEvent : this.processorContext.getEventContextMap()
-                                                          .get(context.getClassName())
-                                                          .values()) {
-      typeSpec.addMethod(createEventMethod(contextEvent));
-    }
-
-    JavaFile.builder(context.getPackageName(),
-                     typeSpec.build())
-            .build()
-            .writeTo(filer);
-
-    System.out.println(JavaFile.builder(context.getPackageName(),
-                                        typeSpec.build())
-                               .build()
-                               .toString());
-  }
-
-  private MethodSpec createEventMethod(EventContext contextEvent) {
-    MethodSpec.Builder method = MethodSpec.methodBuilder(contextEvent.getMethodName())
-                                          .addAnnotation(Override.class)
-                                          .addModifiers(Modifier.PUBLIC,
-                                                        Modifier.FINAL)
-                                          .returns(void.class);
-    // method head
-    for (VariableElement parameter : contextEvent.getMethod()
-                                                 .getParameters()) {
-      method.addParameter(ClassName.get(parameter.asType()),
-                          parameter.getSimpleName()
-                                   .toString());
-    }
-
-    method.addCode("this.internalEventBus.fireEvent(new $T(",
-                   ClassName.get(contextEvent.getPackageNameEvents(),
-                                 contextEvent.getEventClassName()));
-    for (int i = 0; i < contextEvent.getMethod()
-                                    .getParameters()
-                                    .size(); i++) {
-      VariableElement parameter = contextEvent.getMethod()
-                                              .getParameters()
-                                              .get(i);
-      method.addCode("$N",
-                     parameter.getSimpleName()
-                              .toString());
-      if (i < contextEvent.getMethod()
-                          .getParameters()
-                          .size() - 1) {
-        method.addCode(", ");
-      }
-    }
-    method.addCode("));\n");
-
-    return method.build();
   }
 }

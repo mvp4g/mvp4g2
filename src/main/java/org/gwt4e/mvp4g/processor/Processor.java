@@ -19,10 +19,7 @@ package org.gwt4e.mvp4g.processor;
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableList;
-import org.gwt4e.mvp4g.processor.steps.ApplicationProcessingStep;
-import org.gwt4e.mvp4g.processor.steps.EventBusProcessingStep;
-import org.gwt4e.mvp4g.processor.steps.EventProcessingStep;
-import org.gwt4e.mvp4g.processor.steps.ModuleProcessingStep;
+import org.gwt4e.mvp4g.processor.steps.*;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -48,8 +45,12 @@ public class Processor
     Types types = processingEnv.getTypeUtils();
     Elements elements = processingEnv.getElementUtils();
 
-
-    return ImmutableList.of(new EventProcessingStep(messager,
+    return ImmutableList.of(new DebugProcessingStep(messager,
+                                                    filer,
+                                                    types,
+                                                    elements,
+                                                    processorContext),
+                            new EventProcessingStep(messager,
                                                     filer,
                                                     types,
                                                     elements,
@@ -73,7 +74,6 @@ public class Processor
 
   @Override
   protected void postProcess() {
-
     System.out.println("postPrcess");
     // TODO generate code
 //    try {

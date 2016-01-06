@@ -4,7 +4,7 @@ import java.lang.Override;
 import java.lang.String;
 import org.gwt4e.event.shared.Mvp4gInternalEvent;
 
-public class TwoEventMvp4gInternalEvent extends Mvp4gInternalEvent<TwoEventMvp4gInternalEventHandler> {
+public final class TwoEventMvp4gInternalEvent extends Mvp4gInternalEvent<TwoEventMvp4gInternalEventHandler> {
   public static Mvp4gInternalEvent.Type TYPE = new Mvp4gInternalEvent.Type<TwoEventMvp4gInternalEventHandler>();
 
   private String arg0;

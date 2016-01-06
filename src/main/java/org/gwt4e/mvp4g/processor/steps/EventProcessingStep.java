@@ -18,55 +18,39 @@ package org.gwt4e.mvp4g.processor.steps;
 
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
 import com.google.common.collect.SetMultimap;
-import com.squareup.javapoet.*;
-import org.gwt4e.event.shared.Mvp4gInternalEvent;
-import org.gwt4e.event.shared.Mvp4gInternalEventHandler;
 import org.gwt4e.mvp4g.client.annotations.Event;
 import org.gwt4e.mvp4g.processor.ProcessorContext;
 import org.gwt4e.mvp4g.processor.Utils;
 import org.gwt4e.mvp4g.processor.context.EventContext;
+import org.gwt4e.mvp4g.processor.writers.EventWriter;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 public class EventProcessingStep
+  extends AbstractProcessStep
   implements ProcessingStep {
-
-  private final Messager messager;
-  private final Filer    filer;
-  private final Types    types;
-  private final Elements elements;
-
-  private ProcessorContext processorContext;
-
-//------------------------------------------------------------------------------
 
   public EventProcessingStep(Messager messager,
                              Filer filer,
                              Types types,
                              Elements elements,
                              ProcessorContext processorContext) {
-    this.messager = messager;
-    this.filer = filer;
-    this.types = types;
-    this.elements = elements;
-
-    this.processorContext = processorContext;
+    super(types,
+          messager,
+          filer,
+          elements,
+          processorContext);
   }
-
-//------------------------------------------------------------------------------
-
   public Set<? extends Class<? extends Annotation>> annotations() {
     return Collections.singleton(Event.class);
   }
@@ -98,163 +82,29 @@ public class EventProcessingStep
                                                       types,
                                                       elements,
                                                       element);
+      // save eventContext
+      this.processorContext.put(eventBusName,
+                                element.getSimpleName()
+                                       .toString(),
+                                eventContext);
       System.out.println("Processing Mvp4gInternalEvent: " + element.getSimpleName());
       if (eventContext == null) {
         return; // error message already emitted
       }
       try {
-        // generate Mvp4gInternalEvent
-        generate(eventContext);
-        // save eventContext
-        this.processorContext.put(eventBusName,
-                                  element.getSimpleName()
-                                                 .toString(),
-                                  eventContext);
-
+        EventWriter writer = EventWriter.builder()
+                                           .messenger(super.messager)
+                                           .context(super.processorContext)
+                                           .elements(super.elements)
+                                           .filer(super.filer)
+                                           .types(super.types)
+                                           .eventContext(eventContext)
+                                           .build();
+        writer.write();
       } catch (IOException ioe) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        pw.println("Error generating source file for type " + eventContext.getEventClassName());
-        ioe.printStackTrace(pw);
-        pw.close();
-        messager.printMessage(Diagnostic.Kind.ERROR,
-                              sw.toString());
+        createErrorMessage("Error generating source file for type " + eventContext.getEventClassName(),
+                           ioe);
       }
     }
-  }
-
-//------------------------------------------------------------------------------
-
-  private void generate(EventContext context)
-    throws IOException {
-    generateEventHandler(context);
-    generateEvent(context);
-  }
-
-  private void generateEventHandler(EventContext context)
-    throws IOException {
-    MethodSpec.Builder eventHandlerMethod = MethodSpec.methodBuilder(context.getEventHandlerMethodName())
-                                                      .addModifiers(Modifier.PUBLIC,
-                                                                    Modifier.ABSTRACT)
-                                                      .returns(void.class)
-                                                      .addParameter(ClassName.get(context.getPackageNameEvents(),
-                                                                                  context.getEventClassName()),
-                                                                    "event");
-
-    TypeSpec.Builder typeSpec = TypeSpec.interfaceBuilder(context.getEventHandlerClassName())
-                                        .addSuperinterface(Mvp4gInternalEventHandler.class)
-                                        .addModifiers(Modifier.PUBLIC)
-                                        .addMethod(eventHandlerMethod.build());
-
-
-    JavaFile.builder(context.getPackageNameEvents(),
-                     typeSpec.build())
-            .build()
-            .writeTo(filer);
-
-    System.out.println(JavaFile.builder(context.getPackageNameEvents(),
-                                        typeSpec.build())
-                               .build()
-                               .toString());
-  }
-
-  private void generateEvent(EventContext context)
-    throws IOException {
-
-    FieldSpec type = FieldSpec.builder(Mvp4gInternalEvent.Type.class,
-                                       "TYPE")
-                              .addModifiers(Modifier.PUBLIC,
-                                            Modifier.STATIC)
-                              .initializer("new $T<$T>()",
-                                           Mvp4gInternalEvent.Type.class,
-                                           ClassName.get(context.getPackageNameEvents(),
-                                                         context.getEventHandlerClassName()))
-                              .build();
-
-
-    TypeSpec.Builder typeSpec = TypeSpec.classBuilder(context.getEventClassName())
-                                        .superclass(ParameterizedTypeName.get(ClassName.get(Mvp4gInternalEvent.class),
-                                                                              ClassName.get(context.getPackageNameEvents(),
-                                                                                            context.getEventHandlerClassName())))
-                                        .addModifiers(Modifier.PUBLIC)
-                                        .addField(type);
-
-    List<FieldSpec> fields = new ArrayList<>();
-    List<MethodSpec> getterMethods = new ArrayList<>();
-    List<MethodSpec> setterMethods = new ArrayList<>();
-    for (VariableElement parameter : context.getMethod()
-                                            .getParameters()) {
-      FieldSpec field = FieldSpec.builder(ClassName.get(parameter.asType()),
-                                          parameter.getSimpleName()
-                                                   .toString())
-                                 .addModifiers(Modifier.PRIVATE)
-                                 .build();
-
-      fields.add(field);
-      getterMethods.add(Utils.createGetter(parameter,
-                                           field));
-      setterMethods.add(Utils.createSetter(parameter,
-                                           field));
-
-      typeSpec.addField(field);
-    }
-
-
-    MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
-                                               .addModifiers(Modifier.PUBLIC);
-    for (VariableElement parameter : context.getMethod()
-                                            .getParameters()) {
-      constructor.addParameter(ClassName.get(parameter.asType()),
-                               parameter.getSimpleName()
-                                        .toString());
-    }
-    for (VariableElement parameter : context.getMethod()
-                                            .getParameters()) {
-      constructor.addStatement("this.$N = $N",
-                               parameter.getSimpleName()
-                                        .toString(),
-                               parameter.getSimpleName()
-                                        .toString());
-    }
-    typeSpec.addMethod(constructor.build());
-
-    for (MethodSpec method : getterMethods) {
-      typeSpec.addMethod(method);
-    }
-    for (MethodSpec method : setterMethods) {
-      typeSpec.addMethod(method);
-    }
-
-    MethodSpec.Builder methodDispatch = MethodSpec.methodBuilder("dispatch")
-                                                  .addAnnotation(Override.class)
-                                                  .addModifiers(Modifier.PROTECTED)
-                                                  .returns(void.class)
-                                                  .addParameter(ClassName.get(context.getPackageNameEvents(),
-                                                                              context.getEventHandlerClassName()),
-                                                                "handler")
-                                                  .addStatement("handler.$L(this)",
-                                                                context.getEventHandlerMethodName());
-
-    MethodSpec.Builder methodGetAssociatedType = MethodSpec.methodBuilder("getAssociatedType")
-                                                           .addAnnotation(Override.class)
-                                                           .addModifiers(Modifier.PUBLIC)
-                                                           .returns(ParameterizedTypeName.get(ClassName.get(Mvp4gInternalEvent.Type.class),
-                                                                                              ClassName.get(context.getPackageNameEvents(),
-                                                                                                            context.getEventHandlerClassName())))
-                                                           .addStatement("return $N",
-                                                                         type);
-    typeSpec.addMethod(methodGetAssociatedType.build())
-            .addMethod(methodDispatch.build());
-
-
-    JavaFile.builder(context.getPackageNameEvents(),
-                     typeSpec.build())
-            .build()
-            .writeTo(filer);
-
-    System.out.println(JavaFile.builder(context.getPackageNameEvents(),
-                                        typeSpec.build())
-                               .build()
-                               .toString());
   }
 }

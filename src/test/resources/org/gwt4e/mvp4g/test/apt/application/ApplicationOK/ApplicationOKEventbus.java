@@ -16,11 +16,21 @@
 
 package org.gwt4e.mvp4g.test.apt.application.ApplicationOK;
 
-import org.gwt4e.mvp4g.client.Mvp4gModule;
-import org.gwt4e.mvp4g.client.annotations.Module;
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
+import org.gwt4e.mvp4g.client.annotations.Event;
+import org.gwt4e.mvp4g.client.annotations.EventBus;
 
-@Module(eventBus = ApplicationOKEventbus.class)
-public interface ApplicationOKModule
-  extends Mvp4gModule {
+@EventBus
+public interface ApplicationOKEventbus
+  extends Mvp4gEventBus {
+
+  @Event
+  void oneEvent();
+
+  @Event
+  void twoEvent(String arg0);
+
+  @Event
+  void threeEvent(String arg0, String arg1);
 
 }

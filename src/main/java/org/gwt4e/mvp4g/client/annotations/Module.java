@@ -16,17 +16,19 @@
 
 package org.gwt4e.mvp4g.client.annotations;
 
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * <p>This annotation is used to annotate <code>Mvp4gApplication</code>.
- * This annotation defines the Mvp4g application.
+ * <p>This annotation is used to annotate <code>Mvp4gModules</code>.
+ * This annotation defines the Mvp4g Module. An application can have several modules.
+ * All Modules use internally one single eventbus.
  * <br><br>
  * The annotation has the following attributes:
  * <ul>
- *   <li>applicationType: defines the application type. The default value is ApplicationType.GWT.</li>
- *   <li>modules: defines the modules of the application. You have at least one module.</li>
+ *   <li>eventBus: defines the eventbus of this module</li>
  * </ul>
  *
  *
@@ -83,6 +85,9 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Module {
+
+  Class<? extends Mvp4gEventBus> eventBus();
+
 //
 //  //default name that developers are unlikely to enter to know when method name should be used
 //  public static final String DEFAULT_NAME = "#%!|&";

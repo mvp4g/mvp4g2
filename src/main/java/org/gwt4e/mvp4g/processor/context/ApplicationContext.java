@@ -26,7 +26,6 @@ import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
@@ -96,17 +95,7 @@ public class ApplicationContext
     }
 
     // Should extend org.gwt4e.mvp4g.client.Mvp4gApplication
-    boolean foundSuperInterface = false;
-    for (TypeMirror superType : types.directSupertypes(element.asType())) {
-      if (((DeclaredType) superType).asElement()
-                                    .toString()
-                                    .equals(ClassName.get(Mvp4gApplication.class)
-                                                     .toString())) {
-        foundSuperInterface = true;
-        break;
-      }
-    }
-    if (!foundSuperInterface) {
+    if (!Utils.isExtending(types, element, Mvp4gApplication.class)) {
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s does not extend %s",
                                           ((TypeElement) element).getQualifiedName(),

@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.client;
+package org.gwt4e.mvp4g.test.apt.module.ModuleOK.generated;
 
 import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.mvp4g.client.event.AbstractMvp4gEventBus;
+import org.gwt4e.mvp4g.test.apt.module.ModuleOK.ModuleOKEventBus;
 
-/**
- * Created by hoss on 01.01.16.
- */
-public abstract class AbstractApplication
-  implements Mvp4gApplication {
-
-  protected SimpleMvp4gInternalEventBus eventBus;
-
-  public AbstractApplication() {
-    this.eventBus = new SimpleMvp4gInternalEventBus();
-  }
-
-  public SimpleMvp4gInternalEventBus getEventBus() {
-    return eventBus;
+public class ModuleOKEventBusImpl extends AbstractMvp4gEventBus implements ModuleOKEventBus {
+  public ModuleOKEventBusImpl(String moduleName, SimpleMvp4gInternalEventBus eventBus) {
+    super(moduleName, eventBus);
   }
 }
