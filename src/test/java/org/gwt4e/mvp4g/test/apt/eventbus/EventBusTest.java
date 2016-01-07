@@ -187,7 +187,7 @@ public class EventBusTest {
   /**
    * <p>Test:
    * <br>
-   * Mvp4gInternalEvent bus with one events
+   * Mvp4gInternalEvent bus with one events and @Debug SIMPLE
    * <br><br>
    * Expected result:
    * <br>
@@ -203,5 +203,26 @@ public class EventBusTest {
           .compilesWithoutError()
           .and()
           .generatesSources(eventBusObject);
+  }
+
+  /**
+   * <p>Test:
+   * <br>
+   * Mvp4gInternalEvent bus with one events and @Debug DETAIL
+   * <br><br>
+   * Expected result:
+   * <br>
+   * error message:
+   * </p>
+   */
+  @Test
+  public void EventBusWithDebugDetailTest() {
+    JavaFileObject eventBusObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/eventBusWithDebugDetail/expectedResults/EventBusWithDebugDetailImpl.java");
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/eventBusWithDebugDetail/EventBusWithDebugDetail.java"))
+          .processedWith(new Processor())
+          .compilesWithoutError();
+//          .and()
+//          .generatesSources(eventBusObject);
   }
 }

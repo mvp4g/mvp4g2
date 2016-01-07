@@ -152,15 +152,28 @@ public class EventBusWriter
   private void writeEventLog(EventContext contextEvent,
                              MethodSpec.Builder method) {
     if (eventBusContext.hasDebug()) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("logger.log(\"MVP4G-Logger: firing event: ")
+        .append(contextEvent.getMethodName());
       if (eventBusContext.getLogLevel()
                          .equals(Debug.LogLevel.SIMPLE)) {
-        method.addStatement("logger.log($S, 1)",
-                            "Firing event: " + contextEvent.getMethodName());
+        sb.append("\"");
       } else {
-        // TODO DEtailed Message
-        method.addStatement("logger.log($S, 1)",
-                            "Firing event: " + contextEvent.getMethodName());
+        if (contextEvent.getMethod()
+                        .getParameters()
+                        .size() > 0) {
+          sb.append(" || param(s): \" + attr0");
+          for (int i = 1; i < contextEvent.getMethod()
+                                          .getParameters()
+                                          .size(); i++) {
+            sb.append(" + \", \" + attr");
+            sb.append(i);
+          }
+        } else {
+          sb.append("\"");
+        }
       }
+      method.addStatement(sb.toString());
     }
   }
 
