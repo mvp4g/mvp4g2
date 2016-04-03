@@ -17,7 +17,7 @@
 package org.gwt4e.mvp4g.processor.writers;
 
 import com.squareup.javapoet.*;
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 import org.gwt4e.mvp4g.client.annotations.Debug;
 import org.gwt4e.mvp4g.client.event.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.processor.ProcessorContext;
@@ -44,13 +44,13 @@ public class EventBusWriter
   private EventBusContext eventBusContext;
 
   private EventBusWriter(Builder builder) {
-    super(builder.types,
-          builder.messager,
-          builder.filer,
-          builder.elements,
-          builder.processorContext);
+    super(Builder.types,
+          Builder.messager,
+          Builder.filer,
+          Builder.elements,
+          Builder.processorContext);
 
-    this.eventBusContext = builder.eventBusContext;
+    this.eventBusContext = Builder.eventBusContext;
   }
 
   public static Builder builder() {
@@ -79,7 +79,7 @@ public class EventBusWriter
     ParameterSpec moduleNameParameter = ParameterSpec.builder(String.class,
                                                               "moduleName")
                                                      .build();
-    ParameterSpec eventBusParameter = ParameterSpec.builder(SimpleMvp4gInternalEventBus.class,
+    ParameterSpec eventBusParameter = ParameterSpec.builder(Mvp4gInternalSimpleEventBus.class,
                                                             "eventBus")
                                                    .build();
     MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
@@ -162,17 +162,15 @@ public class EventBusWriter
         if (contextEvent.getMethod()
                         .getParameters()
                         .size() > 0) {
-          sb.append(" || param(s): \" + attr0");
-          for (int i = 1; i < contextEvent.getMethod()
-                                          .getParameters()
-                                          .size(); i++) {
-            sb.append(" + \", \" + attr");
-            sb.append(i);
+          for (VariableElement parameter : contextEvent.getMethod()
+                                                       .getParameters()) {
+            sb.append(" || param(s): \" + " + parameter.getSimpleName().toString());
           }
         } else {
           sb.append("\"");
         }
       }
+      sb.append(", 0)");
       method.addStatement(sb.toString());
     }
   }

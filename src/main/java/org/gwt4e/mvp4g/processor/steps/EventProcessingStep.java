@@ -17,6 +17,7 @@
 package org.gwt4e.mvp4g.processor.steps;
 
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.SetMultimap;
 import org.gwt4e.mvp4g.client.annotations.Event;
 import org.gwt4e.mvp4g.processor.ProcessorContext;
@@ -33,7 +34,6 @@ import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 
 public class EventProcessingStep
@@ -55,7 +55,7 @@ public class EventProcessingStep
     return Collections.singleton(Event.class);
   }
 
-  public void process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+  public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
     for (Element element : elementsByAnnotation.get(Event.class)) {
       String eventBusName = Utils.findEnclosingTypeElement(element)
                                  .getQualifiedName()
@@ -65,14 +65,15 @@ public class EventProcessingStep
       Set<String> eventBusNames = processorContext.getEventContextMap()
                                                   .keySet();
       for (String ebName : eventBusNames) {
-        Set<String> eventNames = ((Map<String, EventContext>) processorContext.getEventContextMap()
-                                                                              .get(ebName)).keySet();
+        Set<String> eventNames = processorContext.getEventContextMap()
+                                                 .get(ebName)
+                                                 .keySet();
         for (String eName : eventNames) {
           if (element.getSimpleName().toString().equals(eName)) {
             messager.printMessage(Diagnostic.Kind.ERROR,
                                   String.format("Event-name: %s is already used. Please choose another name. (It is not possible to work with same event-name and different signatures.",
                                                 element.getSimpleName().toString()));
-            return;
+            return ImmutableSet.of();
           }
         }
       }
@@ -89,7 +90,7 @@ public class EventProcessingStep
                                 eventContext);
       System.out.println("Processing Mvp4gInternalEvent: " + element.getSimpleName());
       if (eventContext == null) {
-        return; // error message already emitted
+        return ImmutableSet.of(); // error message already emitted
       }
       try {
         EventWriter writer = EventWriter.builder()
@@ -106,5 +107,6 @@ public class EventProcessingStep
                            ioe);
       }
     }
+    return ImmutableSet.of();
   }
 }

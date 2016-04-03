@@ -16,10 +16,11 @@
 
 package org.gwt4e.mvp4g.test.apt.application;
 
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
 import org.gwt4e.mvp4g.client.Mvp4gModule;
 import org.gwt4e.mvp4g.client.annotations.Module;
 
-@Module
+@Module(eventBus = Mvp4gEventBus.class)
 public interface ApplicationIsNotAnInterfaceModule
   extends Mvp4gModule {
 }

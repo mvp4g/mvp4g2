@@ -41,13 +41,13 @@ public class ApplicationWriter
   private ApplicationContext applicationContext;
 
   private ApplicationWriter(Builder builder) {
-    super(builder.types,
-          builder.messager,
-          builder.filer,
-          builder.elements,
-          builder.processorContext);
+    super(Builder.types,
+          Builder.messager,
+          Builder.filer,
+          Builder.elements,
+          Builder.processorContext);
 
-    this.applicationContext = builder.applicationContext;
+    this.applicationContext = Builder.applicationContext;
   }
 
   public static Builder builder() {
@@ -271,7 +271,7 @@ public class ApplicationWriter
 ////    MethodSpec.Builder provideEventBusMethod = MethodSpec.methodBuilder("provideEventBus")
 ////                                                         .addModifiers(Modifier.PUBLIC,
 ////                                                                       Modifier.ABSTRACT)
-////                                                         .returns(SimpleMvp4gInternalEventBus.class);
+////                                                         .returns(Mvp4gInternalSimpleEventBus.class);
 ////    typeSpec.addMethod(provideEventBusMethod.build());
 ////
 ////    JavaFile.builder(context.getPackageName() + ".generated",
@@ -295,9 +295,9 @@ public class ApplicationWriter
 ////    MethodSpec.Builder provideEventBusMethod = MethodSpec.methodBuilder("provideEventBus")
 ////                                                         .addAnnotation(Provides.class)
 ////                                                         .addAnnotation(Singleton.class)
-////                                                         .returns(SimpleMvp4gInternalEventBus.class)
+////                                                         .returns(Mvp4gInternalSimpleEventBus.class)
 ////                                                         .addStatement("return new $N()",
-////                                                                       SimpleMvp4gInternalEventBus.class.getSimpleName());
+////                                                                       Mvp4gInternalSimpleEventBus.class.getSimpleName());
 ////    typeSpec.addMethod(provideEventBusMethod.build());
 ////
 ////    JavaFile.builder(context.getPackageName() + ".generated",
@@ -368,7 +368,7 @@ public class ApplicationWriter
 //////                                                         .addAnnotation(Singleton.class)
 //////                                                         .returns(Mvp4gInternalEventBus.class)
 //////                                                         .addStatement("return new $N()",
-//////                                                                       SimpleMvp4gInternalEventBus.class.getSimpleName());
+//////                                                                       Mvp4gInternalSimpleEventBus.class.getSimpleName());
 //////    typeSpec.addMethod(provideEventBusMethod.build());
 ////
 ////    JavaFile.builder(context.getPackageName() + ".generated",

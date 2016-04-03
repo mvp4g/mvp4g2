@@ -26,7 +26,13 @@ import com.google.gwt.core.client.GWT;
 public class DefaultMvp4gLogger
   implements Mvp4gLogger {
 
-  static final String INDENT = "    ";
+  private static final String INDENT = "    ";
+
+  public void log(String message) {
+    GWT.log(createLog(message,
+                      0),
+            null);
+  }
 
   public void log(String message,
                   int depth) {
@@ -35,8 +41,8 @@ public class DefaultMvp4gLogger
             null);
   }
 
-  String createLog(String message,
-                   int depth) {
+  private String createLog(String message,
+                           int depth) {
     if (depth == 0) {
       return message;
     } else {

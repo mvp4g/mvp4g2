@@ -16,12 +16,12 @@
 
 package org.gwt4e.mvp4g.test.apt.module.ModuleOK.generated;
 
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 import org.gwt4e.mvp4g.client.event.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.test.apt.module.ModuleOK.ModuleOKEventBus;
 
 public class ModuleOKEventBusImpl extends AbstractMvp4gEventBus implements ModuleOKEventBus {
-  public ModuleOKEventBusImpl(String moduleName, SimpleMvp4gInternalEventBus eventBus) {
+  public ModuleOKEventBusImpl(String moduleName, Mvp4gInternalSimpleEventBus eventBus) {
     super(moduleName, eventBus);
   }
 }

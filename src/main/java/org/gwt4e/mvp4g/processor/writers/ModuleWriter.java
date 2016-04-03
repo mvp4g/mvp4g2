@@ -17,7 +17,7 @@
 package org.gwt4e.mvp4g.processor.writers;
 
 import com.squareup.javapoet.*;
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 import org.gwt4e.mvp4g.client.module.AbstractMvp4gModule;
 import org.gwt4e.mvp4g.processor.ProcessorContext;
 import org.gwt4e.mvp4g.processor.context.ModuleContext;
@@ -41,13 +41,13 @@ public class ModuleWriter
   private ModuleContext moduleContext;
 
   private ModuleWriter(Builder builder) {
-    super(builder.types,
-          builder.messager,
-          builder.filer,
-          builder.elements,
-          builder.processorContext);
+    super(Builder.types,
+          Builder.messager,
+          Builder.filer,
+          Builder.elements,
+          Builder.processorContext);
 
-    this.moduleContext = builder.moduleContext;
+    this.moduleContext = Builder.moduleContext;
   }
 
   public static Builder builder() {
@@ -71,7 +71,7 @@ public class ModuleWriter
                                              .build();
     typeSpec.addField(moduleEventBusField);
 
-    ParameterSpec eventBusParameter = ParameterSpec.builder(SimpleMvp4gInternalEventBus.class,
+    ParameterSpec eventBusParameter = ParameterSpec.builder(Mvp4gInternalSimpleEventBus.class,
                                                             "eventBus")
                                                    .build();
     ClassName classNameEventBusImpl = ClassName.get(moduleContext.getPackageName() + ".generated",

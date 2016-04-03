@@ -71,7 +71,7 @@ public class Utils {
 
   public static boolean isExtending(Types types,
                                     Element element,
-                                    Class clazz) {
+                                    Class<?> clazz) {
     for (TypeMirror superType : types.directSupertypes(element.asType())) {
       if (((DeclaredType) superType).asElement()
                                     .toString()
@@ -84,7 +84,7 @@ public class Utils {
   }
 
   public static boolean hasAnnotation(Element element,
-                                      Class annotation) {
+                                      Class<?> annotation) {
     TypeElement enclosingTypeElement = Utils.findEnclosingTypeElement(element);
     List<? extends AnnotationMirror> annotationsList = enclosingTypeElement.getAnnotationMirrors();
     for (int i = 0; i < annotationsList.size(); i++) {
@@ -96,7 +96,7 @@ public class Utils {
   }
 
   public static AnnotationMirror findAnotation(Element element,
-                                        Class annotation) {
+                                        Class<?> annotation) {
     TypeElement enclosingTypeElement = Utils.findEnclosingTypeElement(element);
     List<? extends AnnotationMirror> annotationsList = enclosingTypeElement.getAnnotationMirrors();
     for (int i = 0; i < annotationsList.size(); i++) {

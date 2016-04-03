@@ -39,7 +39,7 @@ package org.gwt4e.event.shared;
  * There will typically be one Mvp4gInternalEventBus per application, broadcasting
  * events that may be of general interest.
  *
- * @see SimpleMvp4gInternalEventBus
+ * @see Mvp4gInternalSimpleEventBus
  */
 public abstract class Mvp4gInternalEventBus {
 

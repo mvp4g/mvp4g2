@@ -33,7 +33,7 @@
 package org.gwt4e.mvp4g.client.event;
 
 
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 
 /**
  * <p>Core implementation of a MVP4G,2 event bus. This class contains methods
@@ -42,19 +42,19 @@ import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
 public abstract class AbstractMvp4gEventBus {
 
   /* the GWT internalEventBus of the Application */
-  final protected SimpleMvp4gInternalEventBus internalEventBus;
+  final protected Mvp4gInternalSimpleEventBus internalEventBus;
   /* name of the module which contains this eventbus */
   final protected String                      moduleName;
 
   public AbstractMvp4gEventBus(String moduleName,
-                               SimpleMvp4gInternalEventBus internalEventBus) {
+                               Mvp4gInternalSimpleEventBus internalEventBus) {
     super();
 
     this.moduleName = moduleName;
     this.internalEventBus = internalEventBus;
   }
 
-//  public SimpleMvp4gInternalEventBus getInternalEventBus() {
+//  public Mvp4gInternalSimpleEventBus getInternalEventBus() {
 //    return internalEventBus;
 //  }
 }

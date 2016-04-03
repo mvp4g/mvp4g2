@@ -31,26 +31,17 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.debug.debugWithEventBus.generated;
+package org.gwt4e.mvp4g.test.apt.eventbus;
 
-import java.lang.Override;
-import java.lang.String;
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
-import org.gwt4e.mvp4g.client.event.AbstractMvp4gEventBus;
-import org.gwt4e.mvp4g.client.event.DefaultMvp4gLogger;
-import org.gwt4e.mvp4g.test.apt.debug.debugWithEventBus.DebugWithEventBus;
-import org.gwt4e.mvp4g.test.apt.debug.debugWithEventBus.generated.events.OneEventMvp4gInternalEvent;
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
+import org.gwt4e.mvp4g.client.annotations.Event;
+import org.gwt4e.mvp4g.client.annotations.EventBus;
 
-public final class DebugWithEventBusImpl extends AbstractMvp4gEventBus implements DebugWithEventBus {
-  private DefaultMvp4gLogger logger;
+@EventBus
+public interface DebugWithEventBus
+  extends Mvp4gEventBus {
 
-  public DebugWithEventBusImpl(String moduleName, SimpleMvp4gInternalEventBus eventBus) {
-    super(moduleName, eventBus);
-  }
+  @Event
+  void oneEvent();
 
-  @Override
-  public void oneEvent() {
-    logger.log("Firing event: oneEvent");
-    this.internalEventBus.fireEvent(new OneEventMvp4gInternalEvent());
-  }
 }

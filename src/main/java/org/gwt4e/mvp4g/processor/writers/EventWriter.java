@@ -33,9 +33,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by hoss on 05.01.16.
- */
 public class EventWriter
   extends AbstractWriter
   implements Writer {
@@ -43,13 +40,13 @@ public class EventWriter
   private EventContext eventContext;
 
   private EventWriter(Builder builder) {
-    super(builder.types,
-          builder.messager,
-          builder.filer,
-          builder.elements,
-          builder.processorContext);
+    super(Builder.types,
+          Builder.messager,
+          Builder.filer,
+          Builder.elements,
+          Builder.processorContext);
 
-    this.eventContext = builder.eventContext;
+    this.eventContext = Builder.eventContext;
   }
 
   public static Builder builder() {

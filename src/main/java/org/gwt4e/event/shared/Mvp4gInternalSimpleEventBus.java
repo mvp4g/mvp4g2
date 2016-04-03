@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * Basic implementation of {@link Mvp4gInternalEventBus}.
  */
-public class SimpleMvp4gInternalEventBus
+public class Mvp4gInternalSimpleEventBus
   extends Mvp4gInternalEventBus {
 
   /**
@@ -34,7 +34,7 @@ public class SimpleMvp4gInternalEventBus
    */
   private List<Command> deferredDeltas;
 
-  public SimpleMvp4gInternalEventBus() {
+  public Mvp4gInternalSimpleEventBus() {
     super();
   }
 

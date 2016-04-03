@@ -55,12 +55,12 @@ public class ApplicationProcessingStep
                            Application.class);
   }
 
-  public void process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+  public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
     // at least there should only one Application annotation!
     if (elementsByAnnotation.get(Application.class)
                             .size() > 1) {
       createErrorMessage("Error generating Application. There should be at least only one interface, that is annotated with @Application.");
-      return;
+      return ImmutableSet.of();
     }
 
     for (Element element : elementsByAnnotation.get(Application.class)) {
@@ -69,7 +69,7 @@ public class ApplicationProcessingStep
                                                                         elements,
                                                                         element);
       if (applicationContext == null) {
-        return; // error message already emitted
+        return ImmutableSet.of(); // error message already emitted
       }
       this.processorContext.setApplicationContext(applicationContext);
       try {
@@ -88,5 +88,6 @@ public class ApplicationProcessingStep
                            ioe);
       }
     }
+    return ImmutableSet.of();
   }
 }

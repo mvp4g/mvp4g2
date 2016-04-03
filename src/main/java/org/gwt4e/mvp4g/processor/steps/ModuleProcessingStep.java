@@ -17,6 +17,7 @@
 package org.gwt4e.mvp4g.processor.steps;
 
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.SetMultimap;
 import org.gwt4e.mvp4g.client.annotations.Module;
 import org.gwt4e.mvp4g.processor.ProcessorContext;
@@ -53,14 +54,14 @@ public class ModuleProcessingStep
     return Collections.singleton(Module.class);
   }
 
-  public void process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+  public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
     for (Element element : elementsByAnnotation.get(Module.class)) {
       ModuleContext moduleContext = ModuleContext.create(messager,
                                                          types,
                                                          elements,
                                                          element);
       if (moduleContext == null) {
-        return; // error message already emitted
+        return ImmutableSet.of(); // error message already emitted
       }
       processorContext.put(element.getSimpleName()
                                   .toString(),
@@ -81,5 +82,6 @@ public class ModuleProcessingStep
                            ioe);
       }
     }
+    return ImmutableSet.of();
   }
 }

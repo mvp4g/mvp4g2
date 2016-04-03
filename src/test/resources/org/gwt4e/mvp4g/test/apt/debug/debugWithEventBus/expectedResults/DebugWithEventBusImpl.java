@@ -34,13 +34,13 @@ package org.gwt4e.mvp4g.test.apt.debugWithEventBus;
 
 import java.lang.Override;
 import java.lang.String;
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 import org.gwt4e.mvp4g.client.event.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.test.apt.debugWithEventBus.generated.events.OneEventMvp4gInternalEvent;
 import org.gwt4e.mvp4g.test.apt.debug.debugWithEventBus.DebugWithEventBus;
 
 public final class DebugWithEventBusImpl extends AbstractMvp4gEventBus implements org.gwt4e.mvp4g.test.apt.debug.debugWithEventBus.generated.DebugWithEventBus {
-  public DebugWithEventBusImpl(String moduleName, SimpleMvp4gInternalEventBus eventBus) {
+  public DebugWithEventBusImpl(String moduleName, Mvp4gInternalSimpleEventBus eventBus) {
     super(moduleName, eventBus);
   }
 

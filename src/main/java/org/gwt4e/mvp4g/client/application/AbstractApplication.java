@@ -32,7 +32,7 @@
 
 package org.gwt4e.mvp4g.client.application;
 
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 import org.gwt4e.mvp4g.client.Mvp4gApplication;
 
 /**
@@ -41,13 +41,13 @@ import org.gwt4e.mvp4g.client.Mvp4gApplication;
 public abstract class AbstractApplication
   implements Mvp4gApplication {
 
-  final protected SimpleMvp4gInternalEventBus internalEventBus;
+  final protected Mvp4gInternalSimpleEventBus internalEventBus;
 
   public AbstractApplication() {
-    this.internalEventBus = new SimpleMvp4gInternalEventBus();
+    this.internalEventBus = new Mvp4gInternalSimpleEventBus();
   }
 
-  public SimpleMvp4gInternalEventBus getInternalEventBus() {
+  public Mvp4gInternalSimpleEventBus getInternalEventBus() {
     return internalEventBus;
   }
 }

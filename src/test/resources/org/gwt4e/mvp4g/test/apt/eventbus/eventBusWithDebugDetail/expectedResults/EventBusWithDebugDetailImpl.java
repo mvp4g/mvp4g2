@@ -18,7 +18,8 @@ package org.gwt4e.mvp4g.test.apt.eventbus.generated;
 
 import java.lang.Override;
 import java.lang.String;
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 import org.gwt4e.mvp4g.client.event.AbstractMvp4gEventBus;
 import org.gwt4e.mvp4g.client.event.DefaultMvp4gLogger;
 import org.gwt4e.mvp4g.test.apt.eventbus.EventBusWithDebugSimple;
@@ -27,7 +28,7 @@ import org.gwt4e.mvp4g.test.apt.eventbus.generated.events.OneEventMvp4gInternalE
 public final class EventBusWithDebugSimpleImpl extends AbstractMvp4gEventBus implements EventBusWithDebugSimple {
   private DefaultMvp4gLogger logger;
 
-  public EventBusWithDebugSimpleImpl(String moduleName, SimpleMvp4gInternalEventBus eventBus) {
+  public EventBusWithDebugSimpleImpl(String moduleName, Mvp4gInternalSimpleEventBus eventBus) {
     super(moduleName, eventBus);
   }
 

@@ -17,6 +17,7 @@
 package org.gwt4e.mvp4g.processor.steps;
 
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.ClassName;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
@@ -56,7 +57,7 @@ public class EventBusProcessingStep
     return Collections.singleton(EventBus.class);
   }
 
-  public void process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+  public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
     for (Element element : elementsByAnnotation.get(EventBus.class)) {
       EventBusContext eventBusContext = EventBusContext.create(messager,
                                                                types,
@@ -64,7 +65,7 @@ public class EventBusProcessingStep
                                                                element);
 
       if (eventBusContext == null) {
-        return; // error message already emitted
+        return ImmutableSet.of(); // error message already emitted
       }
       if (processorContext.getEventContextMap() == null ||
           processorContext.getEventContextMap()
@@ -94,9 +95,10 @@ public class EventBusProcessingStep
         writer.write();
       } catch (IOException ioe) {
         createErrorMessage("Error generating source file for type " + eventBusContext.getInterfaceType()
-                                                                             .getQualifiedName(),
+                                                                                     .getQualifiedName(),
                            ioe);
       }
     }
+    return ImmutableSet.of();
   }
 }

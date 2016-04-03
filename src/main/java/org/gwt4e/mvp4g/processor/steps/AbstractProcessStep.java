@@ -26,9 +26,6 @@ import javax.tools.Diagnostic;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-/**
- * Created by hoss on 04.01.16.
- */
 public abstract class AbstractProcessStep {
 
   protected final Types            types;

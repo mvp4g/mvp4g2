@@ -32,20 +32,20 @@
 
 package org.gwt4e.mvp4g.client.module;
 
-import org.gwt4e.event.shared.SimpleMvp4gInternalEventBus;
+import org.gwt4e.event.shared.Mvp4gInternalSimpleEventBus;
 
 /**
  * Created by hoss on 04.01.16.
  */
 public abstract class AbstractMvp4gModule {
 
-  final protected SimpleMvp4gInternalEventBus internalEventBus;
+  final protected Mvp4gInternalSimpleEventBus internalEventBus;
 
-  public AbstractMvp4gModule(SimpleMvp4gInternalEventBus internalEventBus) {
+  public AbstractMvp4gModule(Mvp4gInternalSimpleEventBus internalEventBus) {
     this.internalEventBus = internalEventBus;
   }
 
-  public SimpleMvp4gInternalEventBus getInternalEventBus() {
+  public Mvp4gInternalSimpleEventBus getInternalEventBus() {
     return internalEventBus;
   }
 }

@@ -56,12 +56,19 @@ package org.gwt4e.mvp4g.client.event;
 public interface Mvp4gLogger {
 
   /**
+   * Add a log with depth zero
+   *
+   * @param message message to log
+   */
+  void log(String message);
+
+  /**
    * Add a log
    *
    * @param message message to log
    * @param depth   depth of the log
    */
-  public void log(String message,
-                  int depth);
+  void log(String message,
+           int depth);
 
 }

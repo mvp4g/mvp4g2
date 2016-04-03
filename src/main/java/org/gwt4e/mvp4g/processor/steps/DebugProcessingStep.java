@@ -17,6 +17,7 @@
 package org.gwt4e.mvp4g.processor.steps;
 
 import com.google.auto.common.BasicAnnotationProcessor.ProcessingStep;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.SetMultimap;
 import org.gwt4e.mvp4g.client.annotations.Debug;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
@@ -54,15 +55,16 @@ public class DebugProcessingStep
     return Collections.singleton(Debug.class);
   }
 
-  public void process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+  public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
     for (Element element : elementsByAnnotation.get(Debug.class)) {
       if (Utils.hasAnnotation(element, EventBus.class)) {
-        return;
+        return ImmutableSet.of();
       }
       messager.printMessage(Diagnostic.Kind.ERROR,
                             String.format("%s is not applied to class which is annotated with %s",
                                           ((TypeElement) element).getQualifiedName(),
                                           EventBus.class.getName()));
     }
+    return ImmutableSet.of();
   }
 }

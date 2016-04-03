@@ -23,10 +23,7 @@ import javax.annotation.processing.Messager;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
-/**
- * Created by hoss on 05.01.16.
- */
-public abstract class AbstractWriter {
+abstract class AbstractWriter {
 
   protected final Types            types;
   protected final Messager         messager;
@@ -34,11 +31,11 @@ public abstract class AbstractWriter {
   protected final Elements         elements;
   protected       ProcessorContext processorContext;
 
-  public AbstractWriter(Types types,
-                        Messager messager,
-                        Filer filer,
-                        Elements elements,
-                        ProcessorContext processorContext) {
+  AbstractWriter(Types types,
+                 Messager messager,
+                 Filer filer,
+                 Elements elements,
+                 ProcessorContext processorContext) {
     this.types = types;
     this.messager = messager;
     this.filer = filer;
