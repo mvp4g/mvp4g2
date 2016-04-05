@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@ import java.util.Set;
  * together. Typically thrown after a loop, with all of the exceptions thrown during
  * that loop, but delayed so that the loop finishes executing.
  */
-public class UmbrellaException
+@SuppressWarnings("serial")
+public class Mvp4gInternalUmbrellaException
   extends RuntimeException {
 
   // Visible for testing
@@ -37,7 +38,7 @@ public class UmbrellaException
    */
   private Set<Throwable> causes;
 
-  public UmbrellaException(Set<Throwable> causes) {
+  public Mvp4gInternalUmbrellaException(Set<Throwable> causes) {
     super(makeMessage(causes),
           makeCause(causes));
     this.causes = causes;
@@ -75,7 +76,7 @@ public class UmbrellaException
   /**
    * Required for serialization.
    */
-  protected UmbrellaException() {
+  protected Mvp4gInternalUmbrellaException() {
     // Can't delegate to the other constructor or GWT RPC gets cranky
     super(MULTIPLE);
     this.causes = Collections.<Throwable>emptySet();

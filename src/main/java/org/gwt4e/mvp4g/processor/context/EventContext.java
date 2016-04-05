@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
-import org.gwt4e.mvp4g.processor.ProcessorContext;
-import org.gwt4e.mvp4g.processor.Utils;
 import org.gwt4e.mvp4g.client.annotations.Event;
 import org.gwt4e.mvp4g.processor.Constants;
+import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
@@ -36,7 +35,7 @@ import javax.tools.Diagnostic;
  * <br><br>
  */
 public class EventContext
-  extends ProcessorContext {
+  extends AbstractProcessorContext {
 
   private String packageNameEvents;
 
@@ -74,7 +73,16 @@ public class EventContext
       return null;
     }
 
-    TypeElement enclosingType = (TypeElement) element.getEnclosingElement();
+    if (!((ExecutableElement) element).getReturnType().toString().equals("void")) {
+      messager.printMessage(Diagnostic.Kind.ERROR,
+                            String.format("%s applied on a method %s that's return type is %s but should be \"void\"",
+                                          Event.class.getCanonicalName(),
+                                          element.toString(),
+                                          ((ExecutableElement) element).getReturnType().toString()));
+      return null;
+    }
+
+   TypeElement enclosingType = (TypeElement) element.getEnclosingElement();
 
     return new EventContext(messager,
                             types,

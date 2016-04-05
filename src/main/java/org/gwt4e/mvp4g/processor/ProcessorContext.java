@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,45 +16,86 @@
 
 package org.gwt4e.mvp4g.processor;
 
-import javax.annotation.processing.Messager;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
+import org.gwt4e.mvp4g.processor.context.ApplicationContext;
+import org.gwt4e.mvp4g.processor.context.EventBusContext;
+import org.gwt4e.mvp4g.processor.context.EventContext;
+import org.gwt4e.mvp4g.processor.context.ModuleContext;
 
-/**
- * <p>Processor context classes are containing information we will need
- * to generate the code. Getting the information is done inside fo the classes.
- * <br><br>
- * Contains base stuff of a processor.</p>
- */
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class ProcessorContext {
 
-  final Messager messager;
-  final Types    types;
-  final Elements elements;
+  /* applicaiton context */
+  private ApplicationContext                     applicationContext;
+  /* module context */
+  private Map<String, ModuleContext>             moduleContext;
+  /* map of annotated eventBus */
+  private Map<String, EventBusContext>           eventBusContextMap;
+  /* map of annotated events */
+  private Map<String, Map<String, EventContext>> eventContextMap;
 
-//------------------------------------------------------------------------------
-
-  public ProcessorContext(Messager messager,
-                          Types types,
-                          Elements elements) {
+  ProcessorContext() {
     super();
-
-    this.messager = messager;
-    this.types = types;
-    this.elements = elements;
+    moduleContext = new HashMap<>();
+    eventContextMap = new HashMap<>();
+    eventBusContextMap = new HashMap<>();
   }
 
-//------------------------------------------------------------------------------
-
-  public Messager getMessager() {
-    return messager;
+  public Map<String, EventBusContext> getEventBusContextMap() {
+    return eventBusContextMap;
   }
 
-  public Types getTypes() {
-    return types;
+  public Map<String, EventContext> getEventContextMap(String eventBusName) {
+    return this.eventContextMap.get(eventBusName);
   }
 
-  public Elements getElements() {
-    return elements;
+  public Map<String, Map<String, EventContext>> getEventContextMap() {
+    return eventContextMap;
+  }
+
+  public void put(String eventBusName,
+                  String eventName,
+                  EventContext context) {
+    if (!eventContextMap.containsKey(eventBusName)) {
+      eventContextMap.put(eventBusName,
+                          new HashMap<String, EventContext>());
+    }
+    eventContextMap.get(eventBusName)
+                   .put(eventName,
+                        context);
+  }
+
+  public void put(String moduleName,
+                  ModuleContext context) {
+    if (!moduleContext.containsKey(moduleName)) {
+      moduleContext.put(moduleName,
+                        context);
+    }
+  }
+
+  public ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
+
+  public void setApplicationContext(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Method checks weather the eventname is unique or not.
+   * <br>
+   * This is a requirement because based on the event name a
+   * MVP4GEvent will be generated.
+   *
+   * @param eventName name of the event
+   * @return
+   */
+  public boolean isEventNameUnique(String eventName) {
+    Iterator<String> eventBusNames = eventContextMap.keySet()
+                                                    .iterator();
+
+    return true;
   }
 }

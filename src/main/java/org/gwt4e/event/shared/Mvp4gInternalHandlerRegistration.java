@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ package org.gwt4e.event.shared;
 
 /**
  * Registration objects returned when an event handler is bound
- * (e.g. via {@link EventBus#addHandler}), used to deregister.
+ * (e.g. via {@link Mvp4gInternalEventBus#addHandler}), used to deregister.
  * <p> A tip: to make a handler deregister itself try something
  * like the following:
  * <code><pre>new MyHandler() {
- *  HandlerRegistration reg = MyEvent.register(eventBus, this);
+ *  Mvp4gInternalHandlerRegistration reg = MyEvent.register(eventBus, this);
  * <p/>
  *  public void onMyThing(MyEvent event) {
  *    {@literal /}* do your thing *{@literal /}
@@ -30,7 +30,7 @@ package org.gwt4e.event.shared;
  * };
  * </pre></code>
  */
-public interface HandlerRegistration {
+public interface Mvp4gInternalHandlerRegistration {
 
   /**
    * Deregisters the handler associated with this registration

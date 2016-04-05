@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * <p>This annotation indicates that the annotated interface should be used to define
  * a event bus of the Application. This annotation can be used only on interfaces
- * that extends <code>Mvp4gEventBus</code>.<br>
+ * that extends <code>Mvp4gInternalEventBus</code>.<br>
  * <br><br><br><br><br>
  *</p>
  *

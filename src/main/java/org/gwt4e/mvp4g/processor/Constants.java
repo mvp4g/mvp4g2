@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ package org.gwt4e.mvp4g.processor;
 public class Constants {
 
   /* postfix of the event-classes */
-  public final static String EVENT_CLASS_POSTFIX = "Mvp4g3Event";
+  public final static String EVENT_CLASS_POSTFIX = "Mvp4gInternalEvent";
   /* postfix of the eventhandler-classes */
   public final static String EVENTHANDER_CLASS_POSTFIX = "Handler";
 

@@ -26,8 +26,6 @@
   <inherits name='com.google.gwt.user.User' />
 
   <!-- Other module inherits                                      -->
-  <inherits name="dagger.Dagger" />
-
   <inherits name="org.gwt4e.event.Event" />
 
   <!-- Specify the app entry point class.                         -->

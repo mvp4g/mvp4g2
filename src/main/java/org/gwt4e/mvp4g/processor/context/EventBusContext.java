@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,17 @@ package org.gwt4e.mvp4g.processor.context;
 
 import com.squareup.javapoet.ClassName;
 import org.gwt4e.mvp4g.client.Mvp4gEventBus;
+import org.gwt4e.mvp4g.client.annotations.Debug;
 import org.gwt4e.mvp4g.client.annotations.EventBus;
-import org.gwt4e.mvp4g.processor.ProcessorContext;
+import org.gwt4e.mvp4g.client.event.Mvp4gLogger;
 import org.gwt4e.mvp4g.processor.Utils;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -36,7 +39,7 @@ import java.util.Map;
  * <p>Processor context for generating teh event bus.</p>
  */
 public class EventBusContext
-  extends ProcessorContext {
+  extends AbstractProcessorContext {
 
   private TypeElement interfaceType;
 
@@ -45,16 +48,20 @@ public class EventBusContext
   private String implName;
 
   private Map<String, EventContext> eventProcessorContextMap;
+  private boolean                   debug;
+  private Debug.LogLevel            logLevel;
+  private TypeMirror                logger;
 
-//------------------------------------------------------------------------------
-
-  public EventBusContext(Messager messager,
-                         Types types,
-                         Elements elements,
-                         TypeElement interfaceType,
-                         String packageName,
-                         String className,
-                         String implName) {
+  private EventBusContext(Messager messager,
+                          Types types,
+                          Elements elements,
+                          TypeElement interfaceType,
+                          String packageName,
+                          String className,
+                          String implName,
+                          boolean debug,
+                          Debug.LogLevel logLevel,
+                          TypeMirror logger) {
     super(messager,
           types,
           elements);
@@ -65,32 +72,34 @@ public class EventBusContext
     this.implName = implName;
 
     this.eventProcessorContextMap = new HashMap<>();
+    this.debug = debug;
+    this.logLevel = logLevel;
+    this.logger = logger;
   }
-
-//------------------------------------------------------------------------------
 
   public static EventBusContext create(Messager messager,
                                        Types types,
                                        Elements elements,
                                        Element element) {
 
+    // msut be an interface
     if (element.getKind() != ElementKind.INTERFACE) {
       messager.printMessage(Diagnostic.Kind.ERROR,
-                            String.format("%s applied on a type that's not an interface; ignoring",
+                            String.format("%s applied on a type %s that's not an interface; ignoring",
+                                          EventBus.class.getSimpleName(),
                                           ((TypeElement) element).getQualifiedName()));
       return null;
     }
 
-    TypeElement eventBusType = Utils.requireType(elements,
-                                                 Mvp4gEventBus.class);
-
-    if (!types.isSubtype(element.asType(),
-                         eventBusType.asType())) {
+    // Should extend org.gwt4e.mvp4g.client.Mvp4gInternalEventBus
+    if (!Utils.isExtending(types,
+                           element,
+                           Mvp4gEventBus.class)) {
       messager.printMessage(Diagnostic.Kind.ERROR,
-                            String.format("%s: %s applied on a type that doesn't implement %s; ignoring",
+                            String.format("%s does not extend %s",
                                           ((TypeElement) element).getQualifiedName(),
-                                          EventBus.class.getCanonicalName(),
-                                          Mvp4gEventBus.class.getCanonicalName()));
+                                          Mvp4gEventBus.class.getName()
+                                                             .toString()));
       return null;
     }
 
@@ -98,6 +107,20 @@ public class EventBusContext
     ClassName interfaceName = ClassName.get(interfaceType);
     String implName = ClassName.get((TypeElement) element)
                                .simpleName() + "Impl";
+    boolean debug = false;
+    Debug.LogLevel logLevel = null;
+    TypeMirror logger = null;
+    if (Utils.hasAnnotation(element,
+                            Debug.class)) {
+      debug = true;
+      Debug debugAnnotion = element.getAnnotation(Debug.class);
+      logLevel = debugAnnotion.logLevel();
+      try {
+        Class<? extends Mvp4gLogger> l = debugAnnotion.logger();
+      } catch (MirroredTypeException e) {
+        logger = e.getTypeMirror();
+      }
+    }
 
     return new EventBusContext(messager,
                                types,
@@ -105,10 +128,11 @@ public class EventBusContext
                                interfaceType,
                                Utils.getEventPackage(element),
                                Utils.getEventPackage(element) + "." + interfaceName.simpleName(),
-                               implName);
+                               implName,
+                               debug,
+                               logLevel,
+                               logger);
   }
-
-//------------------------------------------------------------------------------
 
   public String getPackageName() {
     return packageName;
@@ -124,5 +148,17 @@ public class EventBusContext
 
   public TypeElement getInterfaceType() {
     return interfaceType;
+  }
+
+  public boolean hasDebug() {
+    return debug;
+  }
+
+  public Debug.LogLevel getLogLevel() {
+    return logLevel;
+  }
+
+  public TypeMirror getLogger() {
+    return logger;
   }
 }

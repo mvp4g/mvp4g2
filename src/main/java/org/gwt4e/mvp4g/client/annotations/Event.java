@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,13 @@ import java.lang.annotation.Target;
 
 /**
  * <p>This annotation can be used to annotate methods of an interfaces that extends
- * <code>Mvp4gEventBus</code> and is annotated with <code>EventBus</code> in
+ * <code>Mvp4gInternalEventBus</code> and is annotated with <code>Mvp4gInternalEventBus</code> in
  * order to define event.
+ * The annotation has the following attributes:
+ * <ul>
+ * <li>scope: defines the range of an event. Using the Scope.Module the event is only consumed by
+ * presenters of the module</li>
+ * </ul>
  * <br><br><br><br><br><br><br><br><br><br><br><br>
  *</p>
  *
@@ -42,7 +47,7 @@ import java.lang.annotation.Target;
  * <li> bindNames: instead of using their classes, you can define binds thanks to their name. Not recommended.
  * <li>modulesToLoad: child modules that should be loaded if necessary and to which the event should
  * be forwarded. Child modules to which the event is forwarded must be one of the child modules of
- * the <code>EventBus</code> interface's module (ie one of the modules defined inside
+ * the <code>Mvp4gInternalEventBus</code> interface's module (ie one of the modules defined inside
  * <code>ChildModules</code> annotation). If object(s) are associated to the event, they will also
  * be forwarded. An event can be forwarded to zero to several child modules.</li>
  * <li>forwardToParent: if true, event will be forwarded to the parent module. In this case, the
@@ -79,15 +84,18 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Event {
+
+  Scope scope() default Scope.Application;
+
 //
 //  //default name that developers are unlikely to enter to know when method name should be used
 //  public static final String DEFAULT_NAME = "#%!|&";
 //
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] handlers() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] handlers() default {};
 //
 //  String[] handlerNames() default {};
 //
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] bind() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] bind() default {};
 //
 //  String[] bindNames() default {};
 //
@@ -101,11 +109,11 @@ public @interface Event {
 //
 //  Class<? extends HistoryConverter<?>> historyConverter() default NoHistoryConverter.class;
 //
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] activate() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] activate() default {};
 //
 //  String[] activateNames() default {};
 //
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] deactivate() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] deactivate() default {};
 //
 //  String[] deactivateNames() default {};
 //
@@ -117,12 +125,12 @@ public @interface Event {
 
 //  Class<?>[] broadcastTo();
 
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] generate() default {};
+//  Class<? extends EventHandlerInterface<? extends Mvp4gInternalEventBus>>[] generate() default {};
 //
 //  String[] generateNames() default {};
 //
 //  class NoHistoryConverter
-//    implements HistoryConverter<EventBus> {
+//    implements HistoryConverter<Mvp4gInternalEventBus> {
 //
 //    private NoHistoryConverter() {
 //      //to prevent this class to be used
@@ -130,7 +138,7 @@ public @interface Event {
 //
 //    public void convertFromToken(String historyName,
 //                                 String param,
-//                                 EventBus eventBus) {
+//                                 Mvp4gInternalEventBus eventBus) {
 //    }
 //
 //    public boolean isCrawlable() {
@@ -142,4 +150,7 @@ public @interface Event {
 //  class NoBroadcast {
 //  }
 
+  enum Scope {
+    Application, Module
+  }
 }

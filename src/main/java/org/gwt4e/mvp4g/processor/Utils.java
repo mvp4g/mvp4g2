@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,12 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import java.util.List;
 
 /**
  * <p>Utility class</p>
@@ -41,8 +42,6 @@ public class Utils {
     return method.build();
   }
 
-//------------------------------------------------------------------------------
-
   public static MethodSpec createSetter(VariableElement parameter,
                                         FieldSpec field) {
     MethodSpec.Builder method = MethodSpec.methodBuilder("set" + Utils.capatilize(field.name))
@@ -57,21 +56,55 @@ public class Utils {
     return method.build();
   }
 
-//------------------------------------------------------------------------------
-
   public static String capatilize(String value) {
     return value.substring(0,
                            1)
                 .toUpperCase() + value.substring(1);
   }
 
-//------------------------------------------------------------------------------
-
   public static TypeElement findEnclosingTypeElement(Element e) {
     while (e != null && !(e instanceof TypeElement)) {
       e = e.getEnclosingElement();
     }
     return TypeElement.class.cast(e);
+  }
+
+  public static boolean isExtending(Types types,
+                                    Element element,
+                                    Class<?> clazz) {
+    for (TypeMirror superType : types.directSupertypes(element.asType())) {
+      if (((DeclaredType) superType).asElement()
+                                    .toString()
+                                    .equals(ClassName.get(clazz)
+                                                     .toString())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean hasAnnotation(Element element,
+                                      Class<?> annotation) {
+    TypeElement enclosingTypeElement = Utils.findEnclosingTypeElement(element);
+    List<? extends AnnotationMirror> annotationsList = enclosingTypeElement.getAnnotationMirrors();
+    for (int i = 0; i < annotationsList.size(); i++) {
+      if (annotationsList.get(i).getAnnotationType().toString().equals(annotation.getName())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static AnnotationMirror findAnotation(Element element,
+                                        Class<?> annotation) {
+    TypeElement enclosingTypeElement = Utils.findEnclosingTypeElement(element);
+    List<? extends AnnotationMirror> annotationsList = enclosingTypeElement.getAnnotationMirrors();
+    for (int i = 0; i < annotationsList.size(); i++) {
+      if (annotationsList.get(i).getAnnotationType().toString().equals(annotation.getName())) {
+        return annotationsList.get(i);
+      }
+    }
+    return null;
   }
 
 //------------------------------------------------------------------------------

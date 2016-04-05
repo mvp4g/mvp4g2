@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Frank Hossfeld
+ * Copyright (C) 2016 Frank Hossfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package org.gwt4e.mvp4g.test.apt.eventbus;
+package org.gwt4e.mvp4g.test.apt.module;
 
-import org.gwt4e.mvp4g.client.annotations.EventBus;
+import org.gwt4e.mvp4g.client.Mvp4gEventBus;
+import org.gwt4e.mvp4g.client.Mvp4gModule;
+import org.gwt4e.mvp4g.client.annotations.Module;
 
-@EventBus
-public interface NoMvp4g2EventBusInterface {
+@Module(eventBus = Mvp4gEventBus.class)
+public class ModuleIsNotAnInterface
+  implements Mvp4gModule {
+
 }
