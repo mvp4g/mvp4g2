@@ -18,3 +18,5 @@ jsinteroptest
 /JsInteropTest/gradle
 /mvp4g2/gradle
 gradle
+/gradlew.bat
+/gradlew
