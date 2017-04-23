@@ -1,0 +1,4 @@
+rootProject.name = 'JsInteropTest'
+
+include(':mvp4g2')
+project(':mvp4g2').projectDir = new File(settingsDir, '../mvp4g2')
