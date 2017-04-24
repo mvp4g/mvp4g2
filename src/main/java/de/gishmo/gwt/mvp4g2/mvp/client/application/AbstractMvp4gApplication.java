@@ -1,21 +1,17 @@
-package de.gishmo.gwt.mvp4g2.core.client.application;
+package de.gishmo.gwt.mvp4g2.mvp.client.application;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasWidgets;
-
-import de.gishmo.gwt.mvp4g2.core.client.event.Mvp4gEventBus;
-import de.gishmo.gwt.mvp4g2.core.client.event.Mvp4gSimpleEventBus;
 
 /**
  * @param <E>
  *   type of the eventBus
  */
-public abstract class AbstractApplication
+public abstract class AbstractMvp4gApplication
 //  <E extends Mvp4gEventBus>
-  implements IsApplication {
+  implements Mvp4gApplication {
 
   /* the internal eventBus - do not use it! */
-  private Mvp4gEventBus     internalEventBus;
+//  private Mvp4gEventBus     internalEventBus;
   /* place controller */
 //  private IsPlaceController placeController;
 

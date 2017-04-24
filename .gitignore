@@ -20,3 +20,4 @@ jsinteroptest
 gradle
 /gradlew.bat
 /gradlew
+/.gradle
