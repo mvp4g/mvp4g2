@@ -17,21 +17,22 @@
 
 package de.gishmo.gwt.mvp4g2.module.client;
 
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Window;
-import de.gishmo.gwt.mvp4g2.jsinterop.client.core.events.Event;
-import de.gishmo.gwt.mvp4g2.module.client.event.Mvp4gInterModuleEvent;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
+
+import de.gishmo.gwt.mvp4g2.jsinterop.client.core.events.Event;
+import de.gishmo.gwt.mvp4g2.module.client.event.Mvp4gInterModuleEvent;
+
 //
 public class Mvp4gInterModuleEventBus {
 
   /* Liste der Mvp4gInterModuleEventHandler */
-  private        Map<String, List<Mvp4gInterModuleEventHandler>> mvp4gInterModuleEventHandler;
+  private Map<String, List<Mvp4gInterModuleEventHandler>> mvp4gInterModuleEventHandler;
 
   /**
    * <p>private constructor, creates the HashMap</p>
@@ -70,7 +71,8 @@ public class Mvp4gInterModuleEventBus {
     // event to fire
     Event event = null;
     // since IE9 doesn't support constructor initialization
-    if (Window.Navigator.getUserAgent().contains("MSIE ")) {
+    if (Window.Navigator.getUserAgent()
+                        .contains("MSIE ")) {
 
     } else {
 
