@@ -20,12 +20,4 @@ public @interface DebugId {
    */
   String value();
 
-  /**
-   * <p>Attrbute-Key of the debugId</p>
-   *
-   * @return attribute-key
-   */
-  String attributeName() default "mvp4g2-gebugId";
-
-
 }
