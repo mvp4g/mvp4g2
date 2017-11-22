@@ -20,10 +20,7 @@ package de.gishmo.gwt.mvp4g2.client.eventbus;
 import com.google.gwt.core.client.GWT;
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
-import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
-import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
-import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.client.ui.*;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
 
@@ -57,10 +54,14 @@ public abstract class AbstractEventBus
   protected String                                            shellPresenterCanonialName;
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
+  /* current navigation confirmation handler */
+  private INavigationConfirmation navigationConfirmation;
 
 
   public AbstractEventBus(String shellPresenterCanonialName) {
     super();
+
+    this.navigationConfirmation = null;
 
     this.shellPresenterCanonialName = shellPresenterCanonialName;
 
@@ -203,5 +204,9 @@ public abstract class AbstractEventBus
     if (eventHandlerMetaDataList != null) {
       eventHandlerMetaDataList.remove(metaData);
     }
+  }
+
+  public void setNavigationConfirmation(INavigationConfirmation navigationConfirmation) {
+    this.navigationConfirmation = navigationConfirmation;
   }
 }

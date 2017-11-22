@@ -27,7 +27,7 @@ import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterHandlerRegistration;
+import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
@@ -339,7 +339,7 @@ public class EventBusAnnotationHandler {
                                                                                             WildcardTypeName.subtypeOf(Object.class),
                                                                                             WildcardTypeName.subtypeOf(Object.class)),
                                                                   "presenter")
-                                                    .returns(ClassName.get(PresenterHandlerRegistration.class));
+                                                    .returns(ClassName.get(PresenterRegistration.class));
     // List of already created EventHandler used to avoid a second create ...
     // check if we deal with a presenter
     // Name of the variable , class name
@@ -359,7 +359,7 @@ public class EventBusAnnotationHandler {
                                                                   eventHandlerClassName,
                                                                   metaDataVariableName);
                                     addHandlerMethod.addCode("return new $T() {\n",
-                                                             ClassName.get(PresenterHandlerRegistration.class));
+                                                             ClassName.get(PresenterRegistration.class));
                                     addHandlerMethod.addCode("  @$T\n",
                                                              ClassName.get(Override.class));
                                     addHandlerMethod.addCode("  public void remove() {\n");
