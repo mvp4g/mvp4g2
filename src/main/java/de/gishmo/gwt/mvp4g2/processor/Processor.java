@@ -1,6 +1,13 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
 
+import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.handler.application.ApplicationAnnotationHandler;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.EventBusAnnotationHandler;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventHandler.EventHandlerAnnotationHandler;
@@ -12,12 +19,14 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-@SupportedAnnotationTypes({SupportedAnnotationClassNames.APPLICATION,
-                           SupportedAnnotationClassNames.EVENTBUS,
-                           SupportedAnnotationClassNames.PRESENTER})
+import com.google.auto.service.AutoService;
+
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
+@AutoService(Processor.class)
 public class Processor
   extends AbstractProcessor {
 
@@ -27,6 +36,18 @@ public class Processor
     super();
   }
 
+  @Override
+  public Set<String> getSupportedAnnotationTypes() {
+    Set<String> annotations = new LinkedHashSet<String>();
+    annotations.add(Application.class.getCanonicalName());
+    annotations.add(Debug.class.getCanonicalName());
+    annotations.add(Event.class.getCanonicalName());
+    annotations.add(EventBus.class.getCanonicalName());
+    annotations.add(EventHandler.class.getCanonicalName());
+    annotations.add(Presenter.class.getCanonicalName());
+    annotations.add(Start.class.getCanonicalName());
+    return annotations;
+  }
   @Override
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {
