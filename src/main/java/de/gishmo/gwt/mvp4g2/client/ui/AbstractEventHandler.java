@@ -12,7 +12,6 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   protected boolean binded    = false;
   /* ehather the eventhandler is enable to handle events or not ... */
   protected boolean activated = true;
-
   protected E eventBus;
 
   /**
@@ -112,5 +111,4 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
    */
   public void onBeforeEvent(String eventName) {
   }
-
 }

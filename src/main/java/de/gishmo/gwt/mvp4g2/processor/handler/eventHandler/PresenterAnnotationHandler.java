@@ -16,6 +16,7 @@ import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
 import java.util.Set;
 
+// TODO check, that @Eventhandler is annoted at a class that extends AbstractPresent!
 public class PresenterAnnotationHandler {
 
   private final static String IMPL_NAME = "MetaData";

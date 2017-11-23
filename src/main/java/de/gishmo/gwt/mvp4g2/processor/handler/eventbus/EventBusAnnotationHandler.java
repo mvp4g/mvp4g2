@@ -9,7 +9,8 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventAnnotationMetaDataHandler;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.DebugAnnotationGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventAnnotationMetaDataGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlerRegristrationGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlingMethodGenerator;
 
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.util.Set;
 
 // TODO Start annotation validation!
+// TODO Filter annotation
+// TODO Debug annotation
 public class EventBusAnnotationHandler {
 
   private ProcessorUtils processorUtils;
@@ -70,14 +73,20 @@ public class EventBusAnnotationHandler {
                                                         eventBusTypeElement);
 
       // handling events!
-      EventAnnotationMetaDataHandler.builder()
-                                    .processingEnvironment(this.processingEnvironment)
-                                    .eventBusTypeElement(eventBusTypeElement)
-                                    .typeSpec(typeSpec)
-                                    .build()
-                                    .generate();
-
-
+      DebugAnnotationGenerator.builder()
+                              .roundEnvironment(this.roundEnvironment)
+                              .processingEnvironment(this.processingEnvironment)
+                              .eventBusTypeElement(eventBusTypeElement)
+                              .typeSpec(typeSpec)
+                              .build()
+                              .generate();
+      // handling events!
+      EventAnnotationMetaDataGenerator.builder()
+                                      .processingEnvironment(this.processingEnvironment)
+                                      .eventBusTypeElement(eventBusTypeElement)
+                                      .typeSpec(typeSpec)
+                                      .build()
+                                      .generate();
       // handling eventbus!
       EventHandlerRegristrationGenerator.builder()
                                         .roundEnvironment(this.roundEnvironment)

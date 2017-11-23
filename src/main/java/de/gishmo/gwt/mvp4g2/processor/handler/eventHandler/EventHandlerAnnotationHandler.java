@@ -15,6 +15,7 @@ import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 import java.util.Set;
 
+// TODO check, that @Eventhandler is annoted at a class that extends AbstractEventHandler!
 public class EventHandlerAnnotationHandler {
 
   private final static String IMPL_NAME = "MetaData";

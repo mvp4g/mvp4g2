@@ -19,7 +19,9 @@ package de.gishmo.gwt.mvp4g2.client.eventbus;
 
 import com.google.gwt.core.client.GWT;
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.eventbus.internal.LogToConsole;
 import de.gishmo.gwt.mvp4g2.client.ui.*;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
@@ -29,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO log events to console ....
 @ForInternalUseOnly
 public abstract class AbstractEventBus
   implements IsEventBus {
@@ -54,6 +57,12 @@ public abstract class AbstractEventBus
   protected String                                            shellPresenterCanonialName;
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
+  /* logger */
+  private Mvp4g2Logger logger;
+  /* debug enabled? */
+  private boolean debugEnable = false;
+  /* log level */
+  private Debug.LogLevel          logLevel;
   /* current navigation confirmation handler */
   private INavigationConfirmation navigationConfirmation;
 
@@ -69,9 +78,12 @@ public abstract class AbstractEventBus
     this.presenterHandlerMetaDataMap = new HashMap<>();
     this.eventMetaDataMap = new HashMap<>();
 
+    this.loadDebugConfiguration();
     this.loadEventHandlerMetaData();
     this.loadEventMetaData();
   }
+
+  protected abstract void loadDebugConfiguration();
 
   protected abstract void loadEventHandlerMetaData();
 
@@ -79,7 +91,6 @@ public abstract class AbstractEventBus
 
   protected final void bind(EventMetaData eventMetaData,
                             Object... parameters) {
-    GWT.debugger();
     for (String eventHandlerClassName : eventMetaData.getBindHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandlers = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
       if (eventHandlers != null && eventHandlers.size() != 0) {
@@ -128,7 +139,6 @@ public abstract class AbstractEventBus
   }
 
   protected final void createAndBindView(EventMetaData eventMetaData) {
-    GWT.debugger();
     for (String eventHandlerClassName : eventMetaData.getBindHandlerTypes()) {
       this.doCreateAndBindView(eventHandlerClassName);
     }
@@ -173,6 +183,10 @@ public abstract class AbstractEventBus
     ((IsShell) presenter.getPresenter()).setShell();
   }
 
+  public void setNavigationConfirmation(INavigationConfirmation navigationConfirmation) {
+    this.navigationConfirmation = navigationConfirmation;
+  }
+
   protected EventMetaData getEventMetaData(String eventName) {
     return this.eventMetaDataMap.get(eventName);
   }
@@ -206,7 +220,94 @@ public abstract class AbstractEventBus
     }
   }
 
-  public void setNavigationConfirmation(INavigationConfirmation navigationConfirmation) {
-    this.navigationConfirmation = navigationConfirmation;
+  /**
+   * Get the logger for the applicaiton
+   *
+   * @return logger
+   */
+  public Mvp4g2Logger getLogger() {
+    return logger;
+  }
+
+  /**
+   * Sets the logger
+   *
+   * @param logger logger
+   */
+  public void setLogger(Mvp4g2Logger logger) {
+    this.logger = logger;
+  }
+
+  /**
+   * gets the log level
+   *
+   * @return the selected log level
+   */
+  public Debug.LogLevel getLogLevel() {
+    return logLevel;
+  }
+
+  /**
+   * Set the log level
+   *
+   * @param logLevel the new log level
+   */
+  public void setLogLevel(Debug.LogLevel logLevel) {
+    this.logLevel = logLevel;
+  }
+
+  protected void log(String message,
+                     int depth) {
+    this.logger.log(message,
+                    depth);
+  }
+
+  /**
+   * set the denig state
+   *
+   * @param debugEnable true ->  is enable
+   */
+  public void setDebugEnable(boolean debugEnable) {
+    this.debugEnable = debugEnable;
+  }
+
+  protected void logEvent(String eventName,
+                          Object... parameters) {
+    GWT.debugger();
+    if (debugEnable) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("DEBUG - EventBus -> fire event: >>")
+        .append(eventName);
+      if (parameters.length > 0) {
+        sb.append("<< with parameters: ");
+        for (int i = 0; i < parameters.length; i++) {
+          sb.append(">>");
+          sb.append(parameters[i].toString());
+          if (i < parameters.length - 1) {
+            sb.append("<<, ");
+          } else {
+            sb.append("<<");
+          }
+        }
+        LogToConsole.log(sb.toString());
+      }
+
+    }
+  }
+
+  protected void logHandler(String eventName,
+                            String handlerClassName) {
+    GWT.debugger();
+    if (debugEnable) {
+      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DEBUG - EventBus -> event: >>")
+          .append(eventName)
+          .append("<< handled by: >>")
+          .append(handlerClassName)
+          .append("<<");
+        LogToConsole.log(sb.toString());
+      }
+    }
   }
 }

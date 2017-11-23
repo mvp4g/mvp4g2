@@ -179,6 +179,16 @@ public class EventHandlingMethodGenerator {
     List<String> eventHandlerClasses = this.eventBusUtils.getHandlerElementsAsList(executableElement,
                                                                                    "handlers");
 
+    eventHandlingMethod.addCode("super.logEvent($S",
+                                executableElement.getSimpleName()
+                                                 .toString());
+    for (VariableElement variableElement : executableElement.getParameters()) {
+      eventHandlingMethod.addCode(", $N",
+                                  variableElement.getSimpleName()
+                                                 .toString());
+    }
+    eventHandlingMethod.addCode(");\n");
+
     eventHandlingMethod.addStatement("$T<$T<?>> eventHandlers = null",
                                      ClassName.get(List.class),
                                      ClassName.get(EventHandlerMetaData.class));
@@ -200,6 +210,23 @@ public class EventHandlingMethodGenerator {
                                      true);
     });
     typeSpec.addMethod(eventHandlingMethod.build());
+  }
+
+  private void generateStartEventHandlingMethods() {
+    MethodSpec.Builder startEventHandlingMethod = MethodSpec.methodBuilder("fireStartEvent")
+                                                            .addAnnotation(Override.class)
+                                                            .addModifiers(Modifier.PUBLIC,
+                                                                          Modifier.FINAL);
+    // get all elements annotated with Start
+    List<Element> startEvents = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                          eventBusTypeElement,
+                                                                                          Start.class);
+    // get event meta data from store ...
+    startEventHandlingMethod.addStatement("this.$L()",
+                                          startEvents.get(0)
+                                                     .getSimpleName()
+                                                     .toString());
+    typeSpec.addMethod(startEventHandlingMethod.build());
   }
 
   private void createEventHandlingMethod(MethodSpec.Builder method,
@@ -234,6 +261,11 @@ public class EventHandlingMethodGenerator {
     method.addCode(");\n");
     method.beginControlFlow("if (activated)");
     //      method.beginControlFlow("if (presenterHandlerMetaData.getPresenter().isBinded())");
+    // event handling
+    method.addStatement("super.logHandler($S, $S)",
+                        executableElement.getSimpleName()
+                                         .toString(),
+                        eventHandlerClass);
     method.addStatement("metaData.$N().onBeforeEvent($S)",
                         getHandlerMethodName,
                         executableElement.getSimpleName()
@@ -266,23 +298,6 @@ public class EventHandlingMethodGenerator {
     method.endControlFlow();
     method.endControlFlow();
     method.endControlFlow();
-  }
-
-  private void generateStartEventHandlingMethods() {
-    MethodSpec.Builder startEventHandlingMethod = MethodSpec.methodBuilder("fireStartEvent")
-                                                            .addAnnotation(Override.class)
-                                                            .addModifiers(Modifier.PUBLIC,
-                                                                          Modifier.FINAL);
-    // get all elements annotated with Start
-    List<Element> startEvents = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
-                                                                                          eventBusTypeElement,
-                                                                                          Start.class);
-    // get event meta data from store ...
-    startEventHandlingMethod.addStatement("this.$L()",
-                                          startEvents.get(0)
-                                                     .getSimpleName()
-                                                     .toString());
-    typeSpec.addMethod(startEventHandlingMethod.build());
   }
 
   public static final class Builder {

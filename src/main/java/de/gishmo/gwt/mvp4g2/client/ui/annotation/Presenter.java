@@ -28,8 +28,6 @@ public @interface Presenter {
 
   Presenter.VIEW_CREATION_METHOD viewCreator() default VIEW_CREATION_METHOD.FRAMEWORK;
 
-  // ToDo: add a parameter to indicate that the view is created by the presenter ...
-
   enum VIEW_CREATION_METHOD {
     FRAMEWORK,
     PRESENTER

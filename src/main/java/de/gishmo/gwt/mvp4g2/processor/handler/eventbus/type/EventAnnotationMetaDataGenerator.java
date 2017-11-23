@@ -36,7 +36,7 @@ import java.util.List;
  * <p>The execution context manages all commands.<br>
  * Use run()-method to start execution.</p>
  */
-public class EventAnnotationMetaDataHandler {
+public class EventAnnotationMetaDataGenerator {
 
   private ProcessorUtils processorUtils;
   private EventBusUtils  eventBusUtils;
@@ -45,10 +45,11 @@ public class EventAnnotationMetaDataHandler {
   private TypeSpec.Builder      typeSpec;
   private TypeElement           eventBusTypeElement;
 
-  private EventAnnotationMetaDataHandler() {
+  @SuppressWarnings("unused")
+  private EventAnnotationMetaDataGenerator() {
   }
 
-  private EventAnnotationMetaDataHandler(Builder builder) {
+  private EventAnnotationMetaDataGenerator(Builder builder) {
     this.processingEnvironment = builder.processingEnvironment;
     this.typeSpec = builder.typeSpec;
     this.eventBusTypeElement = builder.eventBusTypeElement;
@@ -123,13 +124,11 @@ public class EventAnnotationMetaDataHandler {
                                                                       variableElement.asType()
                                                                                      .toString()));
     if (handlersFromAnnotation != null) {
-      handlersFromAnnotation.stream()
-                            .forEach((s) -> constructor.addStatement("super.addHandler($S)",
+      handlersFromAnnotation.forEach((s) -> constructor.addStatement("super.addHandler($S)",
                                                                      s));
     }
     if (bindHandlersFromAnnotation != null) {
-      bindHandlersFromAnnotation.stream()
-                                .forEach((s) -> constructor.addStatement("super.addBindHandler($S)",
+      bindHandlersFromAnnotation.forEach((s) -> constructor.addStatement("super.addBindHandler($S)",
                                                                          s));
     }
     typeSpec.addMethod(constructor.build());
@@ -209,8 +208,8 @@ public class EventAnnotationMetaDataHandler {
       return this;
     }
 
-    public EventAnnotationMetaDataHandler build() {
-      return new EventAnnotationMetaDataHandler(this);
+    public EventAnnotationMetaDataGenerator build() {
+      return new EventAnnotationMetaDataGenerator(this);
     }
   }
 }

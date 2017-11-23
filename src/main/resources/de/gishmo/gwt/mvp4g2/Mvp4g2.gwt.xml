@@ -24,5 +24,9 @@
 <module rename-to="Mvp4g2Mail">
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  <inherits name="elemental2.dom.Dom"/>
+
+  <!-- logging property -->
+  <define-configuration-property name="mvp4g2.logging" is-multi-valued="false"/>
 
 </module>
