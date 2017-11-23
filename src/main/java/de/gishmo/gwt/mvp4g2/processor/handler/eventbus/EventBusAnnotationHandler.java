@@ -25,7 +25,6 @@ import java.util.Set;
 
 // TODO Start annotation validation!
 // TODO Filter annotation
-// TODO Debug annotation
 public class EventBusAnnotationHandler {
 
   private ProcessorUtils processorUtils;

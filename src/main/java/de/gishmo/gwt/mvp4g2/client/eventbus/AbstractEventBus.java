@@ -276,7 +276,7 @@ public abstract class AbstractEventBus
     GWT.debugger();
     if (debugEnable) {
       StringBuilder sb = new StringBuilder();
-      sb.append("DEBUG - EventBus -> fire event: >>")
+      sb.append("DEBUG - EventBus -> handling event: >>")
         .append(eventName);
       if (parameters.length > 0) {
         sb.append("<< with parameters: ");
