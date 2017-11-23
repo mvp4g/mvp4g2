@@ -10,6 +10,11 @@ public interface IsEventBus {
    */
   void fireStartEvent();
 
+  /**
+   * Framework m,ethod to set the shell
+   * <br/>
+   * <b>Do not use!</b>
+   */
   void setShell();
 
   /**
@@ -17,7 +22,9 @@ public interface IsEventBus {
    * <br>
    * Using this feature requires setting "multiple = true"  in the
    *
-   * @param presenter instance of the new presenter to add to the eventbus
+   * @param presenter
+   *   instance of the new presenter to add to the eventbus
+   *
    * @return returns a PresenterRegistration to remove the registration!
    */
   PresenterRegistration addHandler(IsPresenter<?, ?> presenter);
@@ -27,7 +34,7 @@ public interface IsEventBus {
    *
    * @param event event to be executed in case the presenter does not interrupt navigation
    */
-//  void confirmNavigation(NavigationEventCommand event);
+  //  void confirmNavigation(NavigationEventCommand event);
 
   /**
    * Set a confirmation that will be called before each navigation event or when history token
@@ -38,6 +45,5 @@ public interface IsEventBus {
    *   presenter which should be called in case of confirmation
    */
   void setNavigationConfirmation(INavigationConfirmation navigationConfirmation);
-
 
 }

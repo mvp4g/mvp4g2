@@ -17,21 +17,25 @@
 
 package de.gishmo.gwt.mvp4g2.client.eventbus;
 
-import com.google.gwt.core.client.GWT;
-import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
-import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
-import de.gishmo.gwt.mvp4g2.client.ui.*;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO log events to console ....
+import com.google.gwt.core.client.GWT;
+
+import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
+import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.ui.INavigationConfirmation;
+import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
+import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
+import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
+
 @ForInternalUseOnly
 public abstract class AbstractEventBus
   implements IsEventBus {
@@ -44,28 +48,23 @@ public abstract class AbstractEventBus
   protected Map<String, List<PresenterHandlerMetaData<?, ?>>> presenterHandlerMetaDataMap;
   /* Map od EventMedaData (key: canonical class name, EventMetaData */
   protected Map<String, EventMetaData>                        eventMetaDataMap;
-  /* Map od EventHandlerMedaData (key: canonical class name, Instance of EventHandler */
-  /* value is list -> think on multiple presenter ... */
-//  protected Map<String, IsEventHandler<? extends IsEventBus>> eventHandlerMap;
-  //  private Map<String, List<EventConsumer>> eventHandlerMap;
-//  /* list of events whith binding presenters */
-//  /* <"event name". ""id of event consumer"> */
-//  private Map<String, List<String>> bindingMap;
-//  /* <"event name". ""id of event consumer"> */
-//  private Map<String, List<String>> eventMap;
   /* presenter which creates the shell */
   protected String                                            shellPresenterCanonialName;
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
-  /* logger */
-  private Mvp4g2Logger logger;
+
   /* debug enabled? */
   private boolean debugEnable = false;
+  /* logger */
+  private Mvp4g2Logger logger;
   /* log level */
   private Debug.LogLevel          logLevel;
+
+  /* Filters enabled */
+  private boolean filtersEnable = false;
+
   /* current navigation confirmation handler */
   private INavigationConfirmation navigationConfirmation;
-
 
   public AbstractEventBus(String shellPresenterCanonialName) {
     super();
@@ -79,11 +78,14 @@ public abstract class AbstractEventBus
     this.eventMetaDataMap = new HashMap<>();
 
     this.loadDebugConfiguration();
+    this.loadFilterConfiguration();
     this.loadEventHandlerMetaData();
     this.loadEventMetaData();
   }
 
   protected abstract void loadDebugConfiguration();
+
+  protected abstract void loadFilterConfiguration();
 
   protected abstract void loadEventHandlerMetaData();
 
@@ -204,8 +206,7 @@ public abstract class AbstractEventBus
     eventHandlerMetaDataList.add(metaData);
   }
 
-  protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> void putPresenterHandlerMetaData(String
-                                                                                                             className,
+  protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> void putPresenterHandlerMetaData(String className,
                                                                                                            PresenterHandlerMetaData<E, V> metaData) {
     List<PresenterHandlerMetaData<?, ?>> presenterHandlerMetaDataList = this.presenterHandlerMetaDataMap.computeIfAbsent(className,
                                                                                                                          k -> new ArrayList<>());
@@ -225,16 +226,17 @@ public abstract class AbstractEventBus
    *
    * @return logger
    */
-  public Mvp4g2Logger getLogger() {
+  protected Mvp4g2Logger getLogger() {
     return logger;
   }
 
   /**
    * Sets the logger
    *
-   * @param logger logger
+   * @param logger
+   *   logger
    */
-  public void setLogger(Mvp4g2Logger logger) {
+  protected void setLogger(Mvp4g2Logger logger) {
     this.logger = logger;
   }
 
@@ -250,9 +252,10 @@ public abstract class AbstractEventBus
   /**
    * Set the log level
    *
-   * @param logLevel the new log level
+   * @param logLevel
+   *   the new log level
    */
-  public void setLogLevel(Debug.LogLevel logLevel) {
+  protected void setLogLevel(Debug.LogLevel logLevel) {
     this.logLevel = logLevel;
   }
 
@@ -263,11 +266,12 @@ public abstract class AbstractEventBus
   }
 
   /**
-   * set the denig state
+   * set the debug state
    *
-   * @param debugEnable true ->  is enable
+   * @param debugEnable
+   *   true ->  is enable
    */
-  public void setDebugEnable(boolean debugEnable) {
+  protected void setDebugEnable(boolean debugEnable) {
     this.debugEnable = debugEnable;
   }
 
@@ -310,4 +314,15 @@ public abstract class AbstractEventBus
       }
     }
   }
+
+  /**
+   * set the filter state
+   *
+   * @param filtersEnable
+   *   true ->  is enable
+   */
+  protected void setFiltersEnable(boolean filtersEnable) {
+    this.filtersEnable = filtersEnable;
+  }
+
 }

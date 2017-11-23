@@ -15,12 +15,8 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import java.io.IOException;
+import java.util.Set;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -28,11 +24,18 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
-import java.io.IOException;
-import java.util.Set;
 
-// TODO check, that @Debug is annoted at a interface that extends IsEventBus!
-public class DebugAnnotationGenerator {
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
+
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+
+// TODO check, that @Filter is annoted at a interface that extends IsEventBus! and other tests ...
+public class FilterAnnotationGenerator {
 
   private ProcessorUtils processorUtils;
   private EventBusUtils  eventBusUtils;
@@ -43,10 +46,10 @@ public class DebugAnnotationGenerator {
   private TypeElement           eventBusTypeElement;
 
   @SuppressWarnings("unused")
-  private DebugAnnotationGenerator() {
+  private FilterAnnotationGenerator() {
   }
 
-  private DebugAnnotationGenerator(Builder builder) {
+  private FilterAnnotationGenerator(Builder builder) {
     this.roundEnvironment = builder.roundEnvironment;
     this.processingEnvironment = builder.processingEnvironment;
     this.typeSpec = builder.typeSpec;
@@ -67,47 +70,47 @@ public class DebugAnnotationGenerator {
   public void generate()
     throws ProcessorException, IOException {
     this.validate();
-    this.generateLoadDebugConfigurationMethod();
+    this.generateLoadFilterConfigurationMethod();
   }
 
   private void validate()
     throws ProcessorException {
-    // get elements annotated with Debug annotation
-    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Debug.class);
-    // at least there should only one Application annotation!
-    if (elementsWithDebugAnnotation.size() > 1) {
-      throw new ProcessorException("There should be at least only one interface, that is annotated with @Debug");
-    }
-    // annotated element has to be a interface
-    for (Element element : elementsWithDebugAnnotation) {
-      if (element instanceof TypeElement) {
-        TypeElement typeElement = (TypeElement) element;
-        if (!typeElement.getKind()
-                        .isInterface()) {
-          throw new ProcessorException("@Debug can only be used with an interface");
-        }
-      }
-    }
+    // get elements annotated with EventBus annotation
+    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
+//    // at least there should only one Application annotation!
+//    if (elementsWithDebugAnnotation.size() > 1) {
+//      throw new ProcessorException("There should be at least only one interface, that is annotated with @Debug");
+//    }
+//    // annotated element has to be a interface
+//    for (Element element : elementsWithDebugAnnotation) {
+//      if (element instanceof TypeElement) {
+//        TypeElement typeElement = (TypeElement) element;
+//        if (!typeElement.getKind()
+//                        .isInterface()) {
+//          throw new ProcessorException("@Debug can only be used with an interface");
+//        }
+//      }
+//    }
   }
 
-  private void generateLoadDebugConfigurationMethod() {
+  private void generateLoadFilterConfigurationMethod() {
     // method msut always be created!
-    MethodSpec.Builder loadDebugConfigurationMethod = MethodSpec.methodBuilder("loadDebugConfiguration")
+    MethodSpec.Builder loadDebugConfigurationMethod = MethodSpec.methodBuilder("loadFilterConfiguration")
                                                                 .addAnnotation(Override.class)
                                                                 .addModifiers(Modifier.PUBLIC);
 
-    // get elements annotated with Debug annotation
-    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Debug.class);
-    if (elementsWithDebugAnnotation.size() == 0) {
+    // get elements annotated with EventBus annotation
+    Set<? extends Element> elementsWithFiltersAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
+    if (elementsWithFiltersAnnotation.size() == 0) {
       loadDebugConfigurationMethod.addStatement("super.setDebugEnable(false)");
     } else {
-      elementsWithDebugAnnotation.forEach(element -> loadDebugConfigurationMethod.addStatement("super.setDebugEnable(true)")
-                                                                                 .addStatement("super.setLogger(new $T())",
-                                                                                               ClassName.get(getLogger(element.getAnnotation(Debug.class))))
-                                                                                 .addStatement("super.setLogLevel($T.LogLevel.$L)",
-                                                                                               ClassName.get(Debug.class),
-                                                                                               element.getAnnotation(Debug.class)
-                                                                                                      .logLevel()));
+//      elementsWithFiltersAnnotation.forEach(element -> loadDebugConfigurationMethod.addStatement("super.setDebugEnable(true)")
+//                                                                                 .addStatement("super.setLogger(new $T())",
+//                                                                                               ClassName.get(getLogger(element.getAnnotation(Debug.class))))
+//                                                                                 .addStatement("super.setLogLevel($T.LogLevel.$L)",
+//                                                                                               ClassName.get(Debug.class),
+//                                                                                               element.getAnnotation(Debug.class)
+//                                                                                                      .logLevel()));
     }
     typeSpec.addMethod(loadDebugConfigurationMethod.build());
   }
@@ -173,8 +176,8 @@ public class DebugAnnotationGenerator {
       return this;
     }
 
-    public DebugAnnotationGenerator build() {
-      return new DebugAnnotationGenerator(this);
+    public FilterAnnotationGenerator build() {
+      return new FilterAnnotationGenerator(this);
     }
   }
 }

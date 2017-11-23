@@ -5,6 +5,7 @@ import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
@@ -44,7 +45,8 @@ public class Processor
     annotations.add(Event.class.getCanonicalName());
     annotations.add(EventBus.class.getCanonicalName());
     annotations.add(EventHandler.class.getCanonicalName());
-    annotations.add(Presenter.class.getCanonicalName());
+    annotations.add(EventHandler.class.getCanonicalName());
+    annotations.add(Filters.class.getCanonicalName());
     annotations.add(Start.class.getCanonicalName());
     return annotations;
   }

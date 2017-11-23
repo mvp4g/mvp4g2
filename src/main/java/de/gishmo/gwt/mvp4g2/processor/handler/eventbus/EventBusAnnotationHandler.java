@@ -13,6 +13,7 @@ import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.DebugAnnotationGener
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventAnnotationMetaDataGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlerRegristrationGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlingMethodGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.FilterAnnotationGenerator;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -22,6 +23,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
 import java.util.Set;
+import java.util.logging.Filter;
 
 // TODO Start annotation validation!
 // TODO Filter annotation
@@ -71,7 +73,7 @@ public class EventBusAnnotationHandler {
       typeSpec = this.createConstructorForEventBusClass(typeSpec,
                                                         eventBusTypeElement);
 
-      // handling events!
+      // handling Debug annotation ...
       DebugAnnotationGenerator.builder()
                               .roundEnvironment(this.roundEnvironment)
                               .processingEnvironment(this.processingEnvironment)
@@ -79,6 +81,14 @@ public class EventBusAnnotationHandler {
                               .typeSpec(typeSpec)
                               .build()
                               .generate();
+      // handling Filter annotation ...
+      FilterAnnotationGenerator.builder()
+                               .roundEnvironment(this.roundEnvironment)
+                               .processingEnvironment(this.processingEnvironment)
+                               .eventBusTypeElement(eventBusTypeElement)
+                               .typeSpec(typeSpec)
+                               .build()
+                               .generate();
       // handling events!
       EventAnnotationMetaDataGenerator.builder()
                                       .processingEnvironment(this.processingEnvironment)
