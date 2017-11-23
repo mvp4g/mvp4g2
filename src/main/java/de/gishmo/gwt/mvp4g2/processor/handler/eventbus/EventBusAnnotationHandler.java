@@ -9,11 +9,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.DebugAnnotationGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventAnnotationMetaDataGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlerRegristrationGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlingMethodGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.FilterAnnotationGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.*;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -23,7 +19,6 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
 import java.util.Set;
-import java.util.logging.Filter;
 
 // TODO Start annotation validation!
 // TODO Filter annotation
@@ -161,9 +156,10 @@ public class EventBusAnnotationHandler {
     TypeElement shellTypeElement = this.getShellTypeElement(eventBusTypeElement.getAnnotation(EventBus.class));
     MethodSpec constructor = MethodSpec.constructorBuilder()
                                        .addModifiers(Modifier.PUBLIC)
-                                       .addStatement("super($S)",
+                                       .addStatement("super($S, $L)",
                                                      shellTypeElement.getQualifiedName()
-                                                                     .toString())
+                                                                     .toString(),
+                                                     eventBusTypeElement.getAnnotation(EventBus.class).historyOnStart())
                                        .build();
     return typeSpec.addMethod(constructor);
   }

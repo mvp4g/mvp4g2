@@ -35,14 +35,14 @@ public @interface EventBus {
 
   Class<? extends IsShell> shell();
 
+  boolean historyOnStart() default false;
+
 //
 //  String startPresenterName() default "";
 //
 //  Class<? extends PresenterInterface<?, ?>> startPresenter();
 //
 //  Class<? extends Mvp4gModule> module() default Mvp4gModule.class;
-//
-//  boolean historyOnStart() default false;
 //
 //  Class<? extends HistoryProxy> historyProxy() default DefaultHistoryProxy.class;
 //

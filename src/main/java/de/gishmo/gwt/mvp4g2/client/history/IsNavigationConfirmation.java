@@ -14,14 +14,14 @@
  * the License.
  */
 
-package de.gishmo.gwt.mvp4g2.client.ui;
+package de.gishmo.gwt.mvp4g2.client.history;
 
 /**
  * Define an interface that allow to confirm or stop a navigation event.
  *
  * @author plcoirier
  */
-public interface INavigationConfirmation {
+public interface IsNavigationConfirmation {
 
   /**
    * Call to stop or confirm a navigation event. To confirm an event, the event's fireEvent method

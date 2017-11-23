@@ -14,7 +14,7 @@
  * the License.
  */
 
-package de.gishmo.gwt.mvp4g2.client.ui;
+package de.gishmo.gwt.mvp4g2.client.history;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 

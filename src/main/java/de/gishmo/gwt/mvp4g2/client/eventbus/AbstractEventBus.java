@@ -17,18 +17,12 @@
 
 package de.gishmo.gwt.mvp4g2.client.eventbus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.core.client.GWT;
-
 import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.INavigationConfirmation;
+import de.gishmo.gwt.mvp4g2.client.history.IsNavigationConfirmation;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
@@ -36,9 +30,17 @@ import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @ForInternalUseOnly
 public abstract class AbstractEventBus
   implements IsEventBus {
+
+  /* Map od EventMedaData (key: canonical class name, EventMetaData */
+  protected Map<String, EventMetaData> eventMetaDataMap;
 
   /* Map od EventHandlerMedaData (key: canonical class name, List<EventHandlerMetaData> */
   /* value is list -> think on multiple presenter ... */
@@ -46,30 +48,28 @@ public abstract class AbstractEventBus
   /* Map od EventHandlerMedaData (key: canonical class name, List<EventHandlerMetaData> */
   /* value is list -> think on multiple presenter ... */
   protected Map<String, List<PresenterHandlerMetaData<?, ?>>> presenterHandlerMetaDataMap;
-  /* Map od EventMedaData (key: canonical class name, EventMetaData */
-  protected Map<String, EventMetaData>                        eventMetaDataMap;
+
   /* presenter which creates the shell */
-  protected String                                            shellPresenterCanonialName;
+  protected String                   shellPresenterCanonialName;
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
-
+  /* current navigation confirmation handler */
+  private   IsNavigationConfirmation navigationConfirmationPresenter;
   /* debug enabled? */
   private boolean debugEnable = false;
   /* logger */
-  private Mvp4g2Logger logger;
+  private Mvp4g2Logger   logger;
   /* log level */
-  private Debug.LogLevel          logLevel;
+  private Debug.LogLevel logLevel;
 
   /* Filters enabled */
   private boolean filtersEnable = false;
 
-  /* current navigation confirmation handler */
-  private INavigationConfirmation navigationConfirmation;
-
-  public AbstractEventBus(String shellPresenterCanonialName) {
+  public AbstractEventBus(String shellPresenterCanonialName,
+                          boolean historyOnStart) {
     super();
 
-    this.navigationConfirmation = null;
+    this.navigationConfirmationPresenter = null;
 
     this.shellPresenterCanonialName = shellPresenterCanonialName;
 
@@ -185,8 +185,8 @@ public abstract class AbstractEventBus
     ((IsShell) presenter.getPresenter()).setShell();
   }
 
-  public void setNavigationConfirmation(INavigationConfirmation navigationConfirmation) {
-    this.navigationConfirmation = navigationConfirmation;
+  public void setNavigationConfirmation(IsNavigationConfirmation navigationConfirmationPresenter) {
+    this.navigationConfirmationPresenter = navigationConfirmationPresenter;
   }
 
   protected EventMetaData getEventMetaData(String eventName) {
@@ -233,8 +233,7 @@ public abstract class AbstractEventBus
   /**
    * Sets the logger
    *
-   * @param logger
-   *   logger
+   * @param logger logger
    */
   protected void setLogger(Mvp4g2Logger logger) {
     this.logger = logger;
@@ -252,8 +251,7 @@ public abstract class AbstractEventBus
   /**
    * Set the log level
    *
-   * @param logLevel
-   *   the new log level
+   * @param logLevel the new log level
    */
   protected void setLogLevel(Debug.LogLevel logLevel) {
     this.logLevel = logLevel;
@@ -268,8 +266,7 @@ public abstract class AbstractEventBus
   /**
    * set the debug state
    *
-   * @param debugEnable
-   *   true ->  is enable
+   * @param debugEnable true ->  is enable
    */
   protected void setDebugEnable(boolean debugEnable) {
     this.debugEnable = debugEnable;
@@ -318,11 +315,19 @@ public abstract class AbstractEventBus
   /**
    * set the filter state
    *
-   * @param filtersEnable
-   *   true ->  is enable
+   * @param filtersEnable true ->  is enable
    */
   protected void setFiltersEnable(boolean filtersEnable) {
     this.filtersEnable = filtersEnable;
   }
 
+
+  // TODO think about it ...
+//  protected void confirmNavigation(NavigationEventCommand event) {
+//    if (this.navigationConfirmationPresenter == null) {
+//      event.fireEvent(false);
+//    } else {
+//      this.navigationConfirmationPresenter.confirm(event);
+//    }
+//  }
 }
