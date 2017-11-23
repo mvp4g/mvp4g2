@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
-import de.gishmo.gwt.mvp4g2.client.eventbus.internal.LogToConsole;
+import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
 import de.gishmo.gwt.mvp4g2.client.ui.*;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
@@ -289,7 +289,7 @@ public abstract class AbstractEventBus
             sb.append("<<");
           }
         }
-        LogToConsole.log(sb.toString());
+        Mvp4g2.log(sb.toString());
       }
 
     }
@@ -306,7 +306,7 @@ public abstract class AbstractEventBus
           .append("<< handled by: >>")
           .append(handlerClassName)
           .append("<<");
-        LogToConsole.log(sb.toString());
+        Mvp4g2.log(sb.toString());
       }
     }
   }
