@@ -2,7 +2,7 @@ package de.gishmo.gwt.mvp4g2.processor;
 
 
 import de.gishmo.gwt.mvp4g2.processor.handler.application.ApplicationAnnotationHandler;
-import de.gishmo.gwt.mvp4g2.processor.handler.event.EventBusAnnotationHandler;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.EventBusAnnotationHandler;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventHandler.EventHandlerAnnotationHandler;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventHandler.PresenterAnnotationHandler;
 
