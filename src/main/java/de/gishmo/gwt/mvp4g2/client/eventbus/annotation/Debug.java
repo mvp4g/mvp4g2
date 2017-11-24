@@ -15,7 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.client.eventbus.annotation;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.DefaultMvp4g2Logger;
+import de.gishmo.gwt.mvp4g2.client.eventbus.internal.DefaultMvp4g2Logger;
 import de.gishmo.gwt.mvp4g2.client.eventbus.Mvp4g2Logger;
 
 import java.lang.annotation.Retention;

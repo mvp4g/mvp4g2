@@ -17,12 +17,12 @@
 
 package de.gishmo.gwt.mvp4g2.client.eventbus;
 
-import com.google.gwt.core.client.GWT;
-import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
+import com.google.gwt.user.client.History;
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.history.IsNavigationConfirmation;
+import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
@@ -36,25 +36,26 @@ import java.util.List;
 import java.util.Map;
 
 @ForInternalUseOnly
-public abstract class AbstractEventBus
+public abstract class AbstractEventBus<E extends IsEventBus>
   implements IsEventBus {
 
+  public static int logDepth = -1;
   /* Map od EventMedaData (key: canonical class name, EventMetaData */
-  protected Map<String, EventMetaData> eventMetaDataMap;
-
+  protected Map<String, EventMetaData<E>>                     eventMetaDataMap;
   /* Map od EventHandlerMedaData (key: canonical class name, List<EventHandlerMetaData> */
   /* value is list -> think on multiple presenter ... */
   protected Map<String, List<EventHandlerMetaData<?>>>        eventHandlerMetaDataMap;
   /* Map od EventHandlerMedaData (key: canonical class name, List<EventHandlerMetaData> */
   /* value is list -> think on multiple presenter ... */
   protected Map<String, List<PresenterHandlerMetaData<?, ?>>> presenterHandlerMetaDataMap;
-
   /* presenter which creates the shell */
-  protected String                   shellPresenterCanonialName;
+  protected String                                            shellPresenterCanonialName;
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
+  /* the place service */
+  protected PlaceService<? extends IsEventBus> placeService;
   /* current navigation confirmation handler */
-  private   IsNavigationConfirmation navigationConfirmationPresenter;
+  private   IsNavigationConfirmation           navigationConfirmationPresenter;
   /* debug enabled? */
   private boolean debugEnable = false;
   /* logger */
@@ -65,11 +66,15 @@ public abstract class AbstractEventBus
   /* Filters enabled */
   private boolean filtersEnable = false;
 
+  /* flag if we have to check history token at the start of the application */
+  private boolean historyOnStart;
+
   public AbstractEventBus(String shellPresenterCanonialName,
                           boolean historyOnStart) {
     super();
 
     this.navigationConfirmationPresenter = null;
+    this.historyOnStart = historyOnStart;
 
     this.shellPresenterCanonialName = shellPresenterCanonialName;
 
@@ -91,7 +96,7 @@ public abstract class AbstractEventBus
 
   protected abstract void loadEventMetaData();
 
-  protected final void bind(EventMetaData eventMetaData,
+  protected final void bind(EventMetaData<E> eventMetaData,
                             Object... parameters) {
     for (String eventHandlerClassName : eventMetaData.getBindHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandlers = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
@@ -140,21 +145,27 @@ public abstract class AbstractEventBus
     }
   }
 
-  protected final void createAndBindView(EventMetaData eventMetaData) {
+  protected final void createAndBindView(EventMetaData<E> eventMetaData) {
     for (String eventHandlerClassName : eventMetaData.getBindHandlerTypes()) {
-      this.doCreateAndBindView(eventHandlerClassName);
+      this.doCreateAndBindView(eventMetaData.getEventName(),
+                               eventHandlerClassName);
     }
     for (String eventHandlerClassName : eventMetaData.getHandlerTypes()) {
-      this.doCreateAndBindView(eventHandlerClassName);
+      this.doCreateAndBindView(eventMetaData.getEventName(),
+                               eventHandlerClassName);
     }
   }
 
-  private void doCreateAndBindView(String eventHandlerClassName) {
+  private void doCreateAndBindView(String eventName,
+                                   String eventHandlerClassName) {
     List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
     if (presenters != null && presenters.size() != 0) {
       for (PresenterHandlerMetaData<?, ?> presenterHandlerMetaData : presenters) {
         if (!presenterHandlerMetaData.getView()
                                      .isBinded()) {
+          this.logHandlerBinding(AbstractEventBus.logDepth,
+                                 eventName,
+                                 eventHandlerClassName);
           presenterHandlerMetaData.getView()
                                   .setBinded(true);
           presenterHandlerMetaData.getView()
@@ -166,7 +177,34 @@ public abstract class AbstractEventBus
     }
   }
 
+  protected void logHandlerBinding(int logDepth,
+                                   String eventName,
+                                   String handlerClassName) {
+    if (debugEnable) {
+      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DEBUG - EventBus -> event: >>")
+          .append(eventName)
+          .append("<< binding handler: >>")
+          .append(handlerClassName)
+          .append("<<");
+        this.log(sb.toString(),
+                 logDepth);
+      }
+    }
+  }
+
+  protected void log(String message,
+                     int depth) {
+    this.logger.log(message,
+                    depth);
+  }
+
   public abstract void fireStartEvent();
+
+  public boolean hasHistoryOnStart() {
+    return historyOnStart;
+  }
 
   public void setShell() {
     // no IsShellPresenter found! ==> error
@@ -181,7 +219,8 @@ public abstract class AbstractEventBus
              .setBinded(true);
     presenter.getPresenter()
              .bind();
-    doCreateAndBindView(this.shellPresenterCanonialName);
+    doCreateAndBindView("start",
+                        this.shellPresenterCanonialName);
     ((IsShell) presenter.getPresenter()).setShell();
   }
 
@@ -189,12 +228,25 @@ public abstract class AbstractEventBus
     this.navigationConfirmationPresenter = navigationConfirmationPresenter;
   }
 
-  protected EventMetaData getEventMetaData(String eventName) {
+  @Override
+  public void setPlaceService(PlaceService<? extends IsEventBus> placeService) {
+    this.placeService = placeService;
+    // now, set up event place service
+    this.setUpPlaceService();
+  }
+
+  private void setUpPlaceService() {
+    for (String eventName : this.eventMetaDataMap.keySet()) {
+      this.placeService.addConverter(this.eventMetaDataMap.get(eventName));
+    }
+  }
+
+  protected EventMetaData<E> getEventMetaData(String eventName) {
     return this.eventMetaDataMap.get(eventName);
   }
 
   protected void putEventMetaData(String eventName,
-                                  EventMetaData metaData) {
+                                  EventMetaData<E> metaData) {
     eventMetaDataMap.put(eventName,
                          metaData);
   }
@@ -257,12 +309,6 @@ public abstract class AbstractEventBus
     this.logLevel = logLevel;
   }
 
-  protected void log(String message,
-                     int depth) {
-    this.logger.log(message,
-                    depth);
-  }
-
   /**
    * set the debug state
    *
@@ -272,9 +318,9 @@ public abstract class AbstractEventBus
     this.debugEnable = debugEnable;
   }
 
-  protected void logEvent(String eventName,
+  protected void logEvent(int logDepth,
+                          String eventName,
                           Object... parameters) {
-    GWT.debugger();
     if (debugEnable) {
       StringBuilder sb = new StringBuilder();
       sb.append("DEBUG - EventBus -> handling event: >>")
@@ -290,15 +336,16 @@ public abstract class AbstractEventBus
             sb.append("<<");
           }
         }
-        Mvp4g2.log(sb.toString());
+        this.log(sb.toString(),
+                 logDepth);
       }
 
     }
   }
 
-  protected void logHandler(String eventName,
+  protected void logHandler(int logDepth,
+                            String eventName,
                             String handlerClassName) {
-    GWT.debugger();
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
         StringBuilder sb = new StringBuilder();
@@ -307,20 +354,11 @@ public abstract class AbstractEventBus
           .append("<< handled by: >>")
           .append(handlerClassName)
           .append("<<");
-        Mvp4g2.log(sb.toString());
+        this.log(sb.toString(),
+                 logDepth);
       }
     }
   }
-
-  /**
-   * set the filter state
-   *
-   * @param filtersEnable true ->  is enable
-   */
-  protected void setFiltersEnable(boolean filtersEnable) {
-    this.filtersEnable = filtersEnable;
-  }
-
 
   // TODO think about it ...
 //  protected void confirmNavigation(NavigationEventCommand event) {
@@ -330,4 +368,18 @@ public abstract class AbstractEventBus
 //      this.navigationConfirmationPresenter.confirm(event);
 //    }
 //  }
+
+  /**
+   * set the filter state
+   *
+   * @param filtersEnable true ->  is enable
+   */
+  protected void setFiltersEnable(boolean filtersEnable) {
+    this.filtersEnable = filtersEnable;
+    History h;
+  }
+
+  public IsNavigationConfirmation getNavigationConfirmationPresenter() {
+    return navigationConfirmationPresenter;
+  }
 }

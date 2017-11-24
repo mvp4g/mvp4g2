@@ -16,6 +16,7 @@
 package de.gishmo.gwt.mvp4g2.client.eventbus.annotation;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 
 import java.lang.annotation.ElementType;
@@ -88,15 +89,44 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Event {
-//
-//  //default name that developers are unlikely to enter to know when method name should be used
-//  public static final String DEFAULT_NAME = "#%!|&";
+
+  //default name that developers are unlikely to enter to know when method name should be used
+  public static final String DEFAULT_NAME = "#%!|&";
+
+  String name() default DEFAULT_NAME;
+
+  Class<? extends IsEventHandler<? extends IsEventBus>>[] bind() default {};
 
   Class<? extends IsEventHandler<? extends IsEventBus>>[] handlers() default {};
 
-//  String[] handlerNames() default {};
+  Class<? extends IsHistoryConverter<? extends IsEventBus>> historyConverter() default NoHistoryConverter.class;
 
-  Class<? extends IsEventHandler<? extends IsEventBus>>[] bind() default {};
+  boolean navigationEvent() default false;
+
+  boolean passive() default false;
+
+  class NoHistoryConverter
+    implements IsHistoryConverter<IsEventBus> {
+
+    private NoHistoryConverter() {
+      //to prevent this class to be used
+    }
+
+    @Override
+    public void convertFromToken(String historyName,
+                                 String param,
+                                 IsEventBus eventBus) {
+    }
+
+    public boolean isCrawlable() {
+      return false;
+    }
+  }
+
+//
+//  String historyConverterName() default "";
+
+//  String[] handlerNames() default {};
 
 //  String[] bindNames() default {};
 //
@@ -105,11 +135,6 @@ public @interface Event {
 //  boolean forwardToParent() default false;
 //
 //  String calledMethod() default "";
-//
-//  String historyConverterName() default "";
-//
-//  Class<? extends HistoryConverter<?>> historyConverter() default NoHistoryConverter.class;
-//
 //  Class<? extends EventHandlerInterface<? extends EventBus>>[] activate() default {};
 //
 //  String[] activateNames() default {};
@@ -117,37 +142,13 @@ public @interface Event {
 //  Class<? extends EventHandlerInterface<? extends EventBus>>[] deactivate() default {};
 //
 //  String[] deactivateNames() default {};
-//
-//  String name() default DEFAULT_NAME;
 
-  boolean navigationEvent() default false;
-
-  boolean passive() default false;
 
 //  Class<?> broadcastTo() default NoBroadcast.class;
 //
 //  Class<? extends EventHandlerInterface<? extends EventBus>>[] generate() default {};
 //
 //  String[] generateNames() default {};
-//
-//  class NoHistoryConverter
-//    implements HistoryConverter<EventBus> {
-//
-//    private NoHistoryConverter() {
-//      //to prevent this class to be used
-//    }
-//
-//    public void convertFromToken(String historyName,
-//                                 String param,
-//                                 EventBus eventBus) {
-//    }
-//
-//    public boolean isCrawlable() {
-//      return false;
-//    }
-//
-//  }
-//
 //  class NoBroadcast {
 //  }
 

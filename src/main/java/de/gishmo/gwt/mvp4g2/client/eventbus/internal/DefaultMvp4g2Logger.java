@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package de.gishmo.gwt.mvp4g2.client.eventbus;
+package de.gishmo.gwt.mvp4g2.client.eventbus.internal;
 
 import com.google.gwt.core.client.GWT;
+import de.gishmo.gwt.mvp4g2.client.eventbus.Mvp4g2Logger;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

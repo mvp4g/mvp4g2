@@ -1,9 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
@@ -143,7 +140,10 @@ public class EventBusAnnotationHandler {
 
   private TypeSpec.Builder createTypeSpecEventBus(TypeElement eventBusTypeElement) {
     return TypeSpec.classBuilder(eventBusTypeElement.getSimpleName() + ProcessorConstants.IMPL_NAME)
-                   .superclass(ClassName.get(AbstractEventBus.class))
+                   .superclass(ParameterizedTypeName.get(ClassName.get(AbstractEventBus.class),
+                                                         ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                                                                       eventBusTypeElement.getSimpleName()
+                                                                                          .toString())))
                    .addModifiers(Modifier.PUBLIC,
                                  Modifier.FINAL)
                    .addSuperinterface(ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
@@ -159,7 +159,8 @@ public class EventBusAnnotationHandler {
                                        .addStatement("super($S, $L)",
                                                      shellTypeElement.getQualifiedName()
                                                                      .toString(),
-                                                     eventBusTypeElement.getAnnotation(EventBus.class).historyOnStart())
+                                                     eventBusTypeElement.getAnnotation(EventBus.class)
+                                                                        .historyOnStart())
                                        .build();
     return typeSpec.addMethod(constructor);
   }

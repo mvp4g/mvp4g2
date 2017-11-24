@@ -1,5 +1,9 @@
 package de.gishmo.gwt.mvp4g2.client.eventbus.internal;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
+import de.gishmo.gwt.mvp4g2.client.history.internal.HistoryMetaData;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,29 +12,42 @@ import java.util.Map;
 /**
  * type of the eventBus
  */
-public abstract class EventMetaData {
+public abstract class EventMetaData<E extends IsEventBus> {
 
-  /* name of the event */
-  private String              eventName;
+  /* historyName of the event */
+  private String                eventName;
+  /* event historyName -> history */
+  private String                historyName;
+  /* history converter meta Data*/
+  private HistoryMetaData       historyMetaData;
+  /* history converter */
+  private IsHistoryConverter<E> historyConverter;
   /* list of the parameter types */
-  private Map<String, String> paraemterTypes;
+  private Map<String, String>   paraemterTypes;
   /* canonical names of the eventhandler to be executed on this event */
-  private List<String>        handlerTypes;
+  private List<String>          handlerTypes;
   /* canonical names of the eventhandler to be executed when bind is set on this event */
   /* will only be executed in case the event is the first time called */
-  private List<String>        bindHandlerTypes;
+  private List<String>          bindHandlerTypes;
   /* flag if event is passive */
-  private boolean             passive;
+  private boolean               passive;
   /* flag if event is navigation event */
-  private boolean             navigationEvent;
+  private boolean               navigationEvent;
 
   public EventMetaData(String eventName,
+                       String historyName,
+                       HistoryMetaData historyMetaData,
+                       IsHistoryConverter<E> historyConverter,
                        boolean passive,
                        boolean navigationEvent) {
+    this.eventName = eventName;
+    this.historyName = historyName;
+    this.historyMetaData = historyMetaData;
+    this.historyConverter = historyConverter;
     this.passive = passive;
     this.navigationEvent = navigationEvent;
 
-    this.eventName = eventName;
+
     this.paraemterTypes = new HashMap<>();
     this.handlerTypes = new ArrayList<>();
     this.bindHandlerTypes = new ArrayList<>();
@@ -72,5 +89,17 @@ public abstract class EventMetaData {
 
   public boolean isNavigationEvent() {
     return navigationEvent;
+  }
+
+  public String getHistoryName() {
+    return historyName;
+  }
+
+  public HistoryMetaData getHistoryMetaData() {
+    return historyMetaData;
+  }
+
+  public IsHistoryConverter<E> getHistoryConverter() {
+    return historyConverter;
   }
 }

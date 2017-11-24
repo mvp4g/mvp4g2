@@ -1,30 +1,24 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
 
+import com.google.auto.service.AutoService;
 import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.*;
+import de.gishmo.gwt.mvp4g2.client.history.annotation.History;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.handler.application.ApplicationAnnotationHandler;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.EventBusAnnotationHandler;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventHandler.EventHandlerAnnotationHandler;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventHandler.PresenterAnnotationHandler;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.EventBusAnnotationHandler;
+import de.gishmo.gwt.mvp4g2.processor.handler.history.HistoryAnnotationHandler;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import com.google.auto.service.AutoService;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
@@ -47,6 +41,7 @@ public class Processor
     annotations.add(EventHandler.class.getCanonicalName());
     annotations.add(EventHandler.class.getCanonicalName());
     annotations.add(Filters.class.getCanonicalName());
+    annotations.add(History.class.getCanonicalName());
     annotations.add(Start.class.getCanonicalName());
     return annotations;
   }
@@ -63,6 +58,12 @@ public class Processor
                                     .roundEnvironment(roundEnv)
                                     .build()
                                     .process();
+        // handling the History annotation
+        HistoryAnnotationHandler.builder()
+                                .processingEnvironment(super.processingEnv)
+                                .roundEnvironment(roundEnv)
+                                .build()
+                                .process();
         // handling the eventBus annotation
         EventBusAnnotationHandler.builder()
                                  .processingEnvironment(super.processingEnv)

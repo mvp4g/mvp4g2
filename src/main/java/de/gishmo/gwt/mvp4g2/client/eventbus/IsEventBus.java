@@ -1,6 +1,7 @@
 package de.gishmo.gwt.mvp4g2.client.eventbus;
 
 import de.gishmo.gwt.mvp4g2.client.history.IsNavigationConfirmation;
+import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 
 public interface IsEventBus {
@@ -9,6 +10,13 @@ public interface IsEventBus {
    * Fires the start event!
    */
   void fireStartEvent();
+
+  /**
+   * History on start?
+   *
+   * @return true -> look for history
+   */
+  boolean hasHistoryOnStart();
 
   /**
    * Framework m,ethod to set the shell
@@ -22,9 +30,7 @@ public interface IsEventBus {
    * <br>
    * Using this feature requires setting "multiple = true"  in the
    *
-   * @param presenter
-   *   instance of the new presenter to add to the eventbus
-   *
+   * @param presenter instance of the new presenter to add to the eventbus
    * @return returns a PresenterRegistration to remove the registration!
    */
   PresenterRegistration addHandler(IsPresenter<?, ?> presenter);
@@ -36,14 +42,18 @@ public interface IsEventBus {
    */
   //  void confirmNavigation(NavigationEventCommand event);
 
+  IsNavigationConfirmation getNavigationConfirmationPresenter();
+
   /**
    * Set a confirmation that will be called before each navigation event or when history token
    * changes. This will set the navigationConfirmationPresenter for the whole application. You can have
    * only one navigationConfirmationPresenter for the whole application.
    *
-   * @param navigationConfirmationPresenter
-   *   presenter which should be called in case of confirmation
+   * @param navigationConfirmationPresenter presenter which should be called in case of confirmation
    */
   void setNavigationConfirmation(IsNavigationConfirmation navigationConfirmationPresenter);
+
+  // interne MEthode nicht benutzen!
+  void setPlaceService(PlaceService<? extends IsEventBus> placeService);
 
 }

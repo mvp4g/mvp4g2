@@ -85,7 +85,7 @@ public class EventBusUtils {
   }
 
   public List<String> getHandlerElementsAsList(ExecutableElement executableElement,
-                                                String attribute) {
+                                               String attribute) {
     Element eventAnnotation = this.processingEnvironment.getElementUtils()
                                                         .getTypeElement(Event.class.getName());
     TypeMirror eventAnnotationAsTypeMirror = eventAnnotation.asType();

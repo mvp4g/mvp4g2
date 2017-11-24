@@ -15,8 +15,12 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 
-import java.io.IOException;
-import java.util.Set;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -24,15 +28,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
-
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
-
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import java.io.IOException;
+import java.util.Set;
 
 // TODO check, that @Filter is annoted at a interface that extends IsEventBus! and other tests ...
 public class FilterAnnotationGenerator {
@@ -102,7 +99,7 @@ public class FilterAnnotationGenerator {
     // get elements annotated with EventBus annotation
     Set<? extends Element> elementsWithFiltersAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
     if (elementsWithFiltersAnnotation.size() == 0) {
-      loadDebugConfigurationMethod.addStatement("super.setDebugEnable(false)");
+      loadDebugConfigurationMethod.addStatement("super.setFiltersEnable(false)");
     } else {
 //      elementsWithFiltersAnnotation.forEach(element -> loadDebugConfigurationMethod.addStatement("super.setDebugEnable(true)")
 //                                                                                 .addStatement("super.setLogger(new $T())",

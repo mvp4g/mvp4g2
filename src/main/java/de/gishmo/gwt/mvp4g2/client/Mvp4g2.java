@@ -1,7 +1,6 @@
 package de.gishmo.gwt.mvp4g2.client;
 
 import elemental2.dom.DomGlobal;
-import jsinterop.base.Js;
 
 public class Mvp4g2 {
 
@@ -12,10 +11,6 @@ public class Mvp4g2 {
         DomGlobal.window.console.log(message);
       }
     }
-  }
-
-  public static void debugger() {
-    Js.debugger();
   }
 
 }

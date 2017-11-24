@@ -16,6 +16,7 @@
 
 package de.gishmo.gwt.mvp4g2.client.history;
 
+import com.google.gwt.core.client.GWT;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 
 /**
@@ -47,6 +48,7 @@ public abstract class NavigationEventCommand {
    *   if true, NavigationConfirmation is removed
    */
   public void fireEvent(boolean removeConfirmation) {
+    GWT.debugger();
     if (removeConfirmation) {
       eventBus.setNavigationConfirmation(null);
     }

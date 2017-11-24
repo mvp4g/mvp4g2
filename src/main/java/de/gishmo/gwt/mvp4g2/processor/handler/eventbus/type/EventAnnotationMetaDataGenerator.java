@@ -15,20 +15,19 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.handler.history.HistoryUtils;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,10 +35,12 @@ import java.util.List;
  * <p>The execution context manages all commands.<br>
  * Use run()-method to start execution.</p>
  */
+// TODO validation
 public class EventAnnotationMetaDataGenerator {
 
   private ProcessorUtils processorUtils;
   private EventBusUtils  eventBusUtils;
+  private HistoryUtils   historyUtils;
 
   private ProcessingEnvironment processingEnvironment;
   private TypeSpec.Builder      typeSpec;
@@ -60,6 +61,9 @@ public class EventAnnotationMetaDataGenerator {
     this.eventBusUtils = EventBusUtils.builder()
                                       .processingEnvironment(this.processingEnvironment)
                                       .build();
+    this.historyUtils = HistoryUtils.builder()
+                                    .processingEnvironment(this.processingEnvironment)
+                                    .build();
   }
 
   public static Builder builder() {
@@ -102,20 +106,44 @@ public class EventAnnotationMetaDataGenerator {
 
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.eventBusUtils.createEventMetaDataClassName(this.eventBusTypeElement,
                                                                                                       executableElement))
-                                        .superclass(ClassName.get(EventMetaData.class))
+                                        .superclass(ParameterizedTypeName.get(ClassName.get(EventMetaData.class),
+                                                                              ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                                                                                            eventBusTypeElement.getSimpleName()
+                                                                                                               .toString())))
                                         .addModifiers(Modifier.PUBLIC,
                                                       Modifier.FINAL);
 
+    // get history converterclass name
+    TypeElement historyConverterTypeElement = getHistoryConverterTypeElement(executableElement.getAnnotation(Event.class));
     // constructor ...
     MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
                                                .addModifiers(Modifier.PUBLIC)
-                                               .addStatement("super($S, $L, $L)",
-                                                             executableElement.getSimpleName()
-                                                                              .toString(),
-                                                             executableElement.getAnnotation(Event.class)
-                                                                              .passive(),
-                                                             executableElement.getAnnotation(Event.class)
-                                                                              .navigationEvent());
+                                               .addCode("super($S, ",
+                                                        executableElement.getSimpleName()
+                                                                         .toString());
+    if (Event.DEFAULT_NAME.equals(executableElement.getAnnotation(Event.class)
+                                                   .name())) {
+      constructor.addCode("null, ");
+    } else {
+      constructor.addCode("$S, ",
+                          executableElement.getAnnotation(Event.class)
+                                           .name());
+    }
+    if (Event.NoHistoryConverter.class.getCanonicalName()
+                                      .equals(historyConverterTypeElement.getQualifiedName()
+                                                                         .toString())) {
+      constructor.addCode("null, null, ");
+    } else {
+      System.out.println(this.historyUtils.createHistoryMetaDataClassName(historyConverterTypeElement));
+      constructor.addCode("new $L(), new $T(), ",
+                          ProcessorUtils.getPackageAsString(historyConverterTypeElement) + "." + this.historyUtils.createHistoryMetaDataClassName(historyConverterTypeElement),
+                          ClassName.get(historyConverterTypeElement));
+    }
+    constructor.addCode("$L, $L);\n",
+                        executableElement.getAnnotation(Event.class)
+                                         .passive(),
+                        executableElement.getAnnotation(Event.class)
+                                         .navigationEvent());
     executableElement.getParameters()
                      .stream()
                      .map(variableElement -> constructor.addStatement("super.addParameterType($S, $S)",
@@ -167,6 +195,16 @@ public class EventAnnotationMetaDataGenerator {
                                          metaDataClassName);
           });
     typeSpec.addMethod(loadEventMethod.build());
+  }
+
+  private TypeElement getHistoryConverterTypeElement(Event eventAnnotation) {
+    try {
+      eventAnnotation.historyConverter();
+    } catch (MirroredTypeException exception) {
+      return (TypeElement) this.processingEnvironment.getTypeUtils()
+                                                     .asElement(exception.getTypeMirror());
+    }
+    return null;
   }
 
   public static final class Builder {

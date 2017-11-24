@@ -1,20 +1,21 @@
 package de.gishmo.gwt.mvp4g2.client.application;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
 
 /**
  * type of the eventBus
  */
 public abstract class AbstractApplication<E extends IsEventBus>
-//  <E extends Mvp4gEventBus>
   implements IsApplication {
 
-  protected E eventBus;
+  /* the eventbus */
+  protected E            eventBus;
+  /* the PlaceService */
+  private   PlaceService<? extends IsEventBus> placeService;
 
   @Override
   public void run() {
-
-    // TODO vorher alles vorbereiten, dass ggfs.
     // execute the loader (if one is present)
     getApplicationLoader().load(() -> onFinishLaoding());
   }
@@ -25,11 +26,10 @@ public abstract class AbstractApplication<E extends IsEventBus>
    * Once the loader did his job, we will continue
    */
   private void onFinishLaoding() {
-
-
-    // the last thing we do, is to add the shell to the viewport
-    eventBus.setShell();
-    // fire start event
-    eventBus.fireStartEvent();
+    // create place service and bind
+    this.placeService = new PlaceService<E>(this.eventBus);
+    this.eventBus.setPlaceService(this.placeService);
+    // start the application
+    placeService.startApplication();
   }
 }
