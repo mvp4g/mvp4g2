@@ -7,9 +7,19 @@ import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 public interface IsEventBus {
 
   /**
-   * Fires the start event!
+   * Fires the Start event!
    */
   void fireStartEvent();
+
+  /**
+   * Fires the InitHistory event
+   */
+  void fireInitHistoryEvent();
+
+  /**
+   * Fires the NotFoundHistory event
+   */
+  void fireNotFoundHistoryEvent();
 
   /**
    * History on start?

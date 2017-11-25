@@ -15,7 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.client.eventbus.internal;
 
-import com.google.gwt.core.client.GWT;
+import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
 import de.gishmo.gwt.mvp4g2.client.eventbus.Mvp4g2Logger;
 
 import java.util.stream.Collectors;
@@ -33,9 +33,8 @@ public class DefaultMvp4g2Logger
 
   public void log(String message,
                   int depth) {
-    GWT.log(createLog(message,
-                      depth),
-            null);
+    Mvp4g2.log(createLog(message,
+                         depth));
   }
 
   String createLog(String message,

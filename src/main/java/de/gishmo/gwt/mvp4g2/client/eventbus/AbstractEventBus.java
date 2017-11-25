@@ -17,7 +17,6 @@
 
 package de.gishmo.gwt.mvp4g2.client.eventbus;
 
-import com.google.gwt.user.client.History;
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
@@ -202,6 +201,10 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
   public abstract void fireStartEvent();
 
+  public abstract void fireInitHistoryEvent();
+
+  public abstract void fireNotFoundHistoryEvent();
+
   public boolean hasHistoryOnStart() {
     return historyOnStart;
   }
@@ -222,6 +225,10 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     doCreateAndBindView("start",
                         this.shellPresenterCanonialName);
     ((IsShell) presenter.getPresenter()).setShell();
+  }
+
+  public IsNavigationConfirmation getNavigationConfirmationPresenter() {
+    return navigationConfirmationPresenter;
   }
 
   public void setNavigationConfirmation(IsNavigationConfirmation navigationConfirmationPresenter) {
@@ -325,21 +332,40 @@ public abstract class AbstractEventBus<E extends IsEventBus>
       StringBuilder sb = new StringBuilder();
       sb.append("DEBUG - EventBus -> handling event: >>")
         .append(eventName);
-      if (parameters.length > 0) {
-        sb.append("<< with parameters: ");
-        for (int i = 0; i < parameters.length; i++) {
-          sb.append(">>");
-          sb.append(parameters[i].toString());
-          if (i < parameters.length - 1) {
-            sb.append("<<, ");
-          } else {
-            sb.append("<<");
-          }
-        }
-        this.log(sb.toString(),
-                 logDepth);
-      }
+      this.prearearametersForLog(sb,
+                                 parameters);
+      this.log(sb.toString(),
+               logDepth);
+    }
+  }
 
+  private void prearearametersForLog(StringBuilder sb,
+                                     Object... parameters) {
+    if (parameters.length > 0) {
+      sb.append("<< with parameters: ");
+      for (int i = 0; i < parameters.length; i++) {
+        sb.append(">>");
+        sb.append(parameters[i] == null ? "null" : parameters[i].toString());
+        if (i < parameters.length - 1) {
+          sb.append("<<, ");
+        } else {
+          sb.append("<<");
+        }
+      }
+    }
+  }
+
+  protected void logAskingForConfirmation(int logDepth,
+                                          String eventName,
+                                          Object... parameters) {
+    if (debugEnable) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("DEBUG - Asking for confirmation: event: >>")
+        .append(eventName);
+      this.prearearametersForLog(sb,
+                                 parameters);
+      this.log(sb.toString(),
+               logDepth);
     }
   }
 
@@ -360,15 +386,6 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     }
   }
 
-  // TODO think about it ...
-//  protected void confirmNavigation(NavigationEventCommand event) {
-//    if (this.navigationConfirmationPresenter == null) {
-//      event.fireEvent(false);
-//    } else {
-//      this.navigationConfirmationPresenter.confirm(event);
-//    }
-//  }
-
   /**
    * set the filter state
    *
@@ -376,10 +393,5 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    */
   protected void setFiltersEnable(boolean filtersEnable) {
     this.filtersEnable = filtersEnable;
-    History h;
-  }
-
-  public IsNavigationConfirmation getNavigationConfirmationPresenter() {
-    return navigationConfirmationPresenter;
   }
 }

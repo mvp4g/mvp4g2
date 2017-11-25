@@ -31,16 +31,14 @@ public interface IsHistoryConverter<E extends IsEventBus> {
    * Convert a token to event's object and trigger the event bus.<br>
    * <br>
    * Specific information can also be retrieved (from a cookie or server for example).
-   *
-   * @param historyName
+   *  @param historyName
    *   event's name
    * @param param
    *   string that was stored in the token, used to retrieve event's object (can be null
    *   if no information was stored in the URI)
    * @param eventBus
-   *   event bus of the application
    */
-  public void convertFromToken(String historyName,
+  void convertFromToken(String historyName,
                                String param,
                                E eventBus);
 
@@ -49,6 +47,6 @@ public interface IsHistoryConverter<E extends IsEventBus> {
    *
    * @return true if crawlable
    */
-  public boolean isCrawlable();
+   boolean isCrawlable();
 
 }

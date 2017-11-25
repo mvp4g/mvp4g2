@@ -134,7 +134,6 @@ public class EventAnnotationMetaDataGenerator {
                                                                          .toString())) {
       constructor.addCode("null, null, ");
     } else {
-      System.out.println(this.historyUtils.createHistoryMetaDataClassName(historyConverterTypeElement));
       constructor.addCode("new $L(), new $T(), ",
                           ProcessorUtils.getPackageAsString(historyConverterTypeElement) + "." + this.historyUtils.createHistoryMetaDataClassName(historyConverterTypeElement),
                           ClassName.get(historyConverterTypeElement));
@@ -165,7 +164,6 @@ public class EventAnnotationMetaDataGenerator {
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());
-    System.out.println(javaFile.toString());
   }
 
   private void generateLoadEventMetaDataMethod() {

@@ -104,8 +104,6 @@ public class HistoryAnnotationHandler {
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());
-
-    System.out.println(javaFile.toString());
   }
 
   public static class Builder {

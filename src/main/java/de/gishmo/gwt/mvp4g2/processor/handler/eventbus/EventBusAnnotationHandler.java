@@ -110,7 +110,6 @@ public class EventBusAnnotationHandler {
                                            typeSpec.build())
                                   .build();
       javaFile.writeTo(this.processingEnvironment.getFiler());
-      System.out.println(javaFile.toString());
     }
   }
 

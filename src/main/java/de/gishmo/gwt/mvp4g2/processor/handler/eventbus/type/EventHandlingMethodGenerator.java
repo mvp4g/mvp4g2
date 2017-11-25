@@ -15,7 +15,6 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 
-import com.google.gwt.core.client.GWT;
 import com.squareup.javapoet.*;
 import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
@@ -23,6 +22,8 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.history.NavigationEventCommand;
 import de.gishmo.gwt.mvp4g2.client.history.annotation.History;
+import de.gishmo.gwt.mvp4g2.client.history.annotation.InitHistory;
+import de.gishmo.gwt.mvp4g2.client.history.annotation.NotFoundHistory;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
@@ -35,6 +36,7 @@ import javax.lang.model.type.MirroredTypeException;
 import java.util.List;
 import java.util.stream.IntStream;
 
+// TODO validierung init event
 public class EventHandlingMethodGenerator {
 
   private final static String EXECUTION_METHOD_PREFIX = "exec";
@@ -86,7 +88,11 @@ public class EventHandlingMethodGenerator {
             this.generateEventHandlingMethodForExecution(executableElement);
           });
     // generate the code for the Start event handling
-    this.generateStartEventHandlingMethods();
+    this.generateStartEventHandlingMethod();
+    // generate InitHistory event Method ...
+    this.generateInitHistoryEventHandlingMethod();
+    // generate NotFoundHistory-event
+    this.generateNotFoundHistoryEventHandlingMethod();
   }
 
   // TODO Validation
@@ -119,9 +125,19 @@ public class EventHandlingMethodGenerator {
                      .forEach(eventHandlingMethod::addParameter);
     if (executableElement.getAnnotation(Event.class)
                          .navigationEvent()) {
+      eventHandlingMethod.addCode("super.logAskingForConfirmation(++$T.logDepth, $S",
+                                  ClassName.get(AbstractEventBus.class),
+                                  executableElement.getSimpleName()
+                                                   .toString());
+      for (VariableElement variableElement : executableElement.getParameters()) {
+        eventHandlingMethod.addCode(", $N",
+                                    variableElement.getSimpleName()
+                                                   .toString());
+      }
+      eventHandlingMethod.addCode(");\n");
       MethodSpec.Builder executeMethod = MethodSpec.methodBuilder("execute")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC);
+                                                   .addAnnotation(Override.class)
+                                                   .addModifiers(Modifier.PUBLIC);
       this.callEventExecMethod(executeMethod,
                                executableElement);
       TypeSpec confirmCommand = TypeSpec.anonymousClassBuilder(CodeBlock.builder()
@@ -196,35 +212,35 @@ public class EventHandlingMethodGenerator {
     // fire events
     List<String> eventHandlerClasses = this.eventBusUtils.getHandlerElementsAsList(executableElement,
                                                                                    "handlers");
-
-
-    eventHandlingMethod.addStatement("$T<$T<?>> eventHandlers = null",
-                                     ClassName.get(List.class),
-                                     ClassName.get(EventHandlerMetaData.class));
-    eventHandlingMethod.addStatement("$T<$T<?, ?>> presenters = null",
-                                     ClassName.get(List.class),
-                                     ClassName.get(PresenterHandlerMetaData.class));
-    eventHandlingMethod.addStatement("boolean executed = false");
-    // start presenter code
-    eventHandlerClasses.forEach(eventHandlerClass -> {
-      eventHandlingMethod.addComment("handling: " + eventHandlerClass);
-      this.createEventHandlingMethod(eventHandlingMethod,
-                                     executableElement,
-                                     eventHandlerClass,
-                                     "eventHandlerMetaDataMap",
-                                     false);
-      this.createEventHandlingMethod(eventHandlingMethod,
-                                     executableElement,
-                                     eventHandlerClass,
-                                     "presenterHandlerMetaDataMap",
-                                     true);
-    });
-    this.createPlaceSericePlaceCall(eventHandlingMethod,
-                                    executableElement);
+    if (eventHandlerClasses != null) {
+      eventHandlingMethod.addStatement("$T<$T<?>> eventHandlers = null",
+                                       ClassName.get(List.class),
+                                       ClassName.get(EventHandlerMetaData.class));
+      eventHandlingMethod.addStatement("$T<$T<?, ?>> presenters = null",
+                                       ClassName.get(List.class),
+                                       ClassName.get(PresenterHandlerMetaData.class));
+      eventHandlingMethod.addStatement("boolean executed = false");
+      // start presenter code
+      eventHandlerClasses.forEach(eventHandlerClass -> {
+        eventHandlingMethod.addComment("handling: " + eventHandlerClass);
+        this.createEventHandlingMethod(eventHandlingMethod,
+                                       executableElement,
+                                       eventHandlerClass,
+                                       "eventHandlerMetaDataMap",
+                                       false);
+        this.createEventHandlingMethod(eventHandlingMethod,
+                                       executableElement,
+                                       eventHandlerClass,
+                                       "presenterHandlerMetaDataMap",
+                                       true);
+      });
+      this.createPlaceSericePlaceCall(eventHandlingMethod,
+                                      executableElement);
+    }
     typeSpec.addMethod(eventHandlingMethod.build());
   }
 
-  private void generateStartEventHandlingMethods() {
+  private void generateStartEventHandlingMethod() {
     MethodSpec.Builder startEventHandlingMethod = MethodSpec.methodBuilder("fireStartEvent")
                                                             .addAnnotation(Override.class)
                                                             .addModifiers(Modifier.PUBLIC,
@@ -233,12 +249,59 @@ public class EventHandlingMethodGenerator {
     List<Element> startEvents = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
                                                                                           eventBusTypeElement,
                                                                                           Start.class);
-    // get event meta data from store ...
-    startEventHandlingMethod.addStatement("this.$L()",
-                                          startEvents.get(0)
-                                                     .getSimpleName()
-                                                     .toString());
+    // @Start annotation is optional ...
+    if (startEvents.size() > 0) {
+      // get event meta data from store ...
+      startEventHandlingMethod.addStatement("this.$L()",
+                                            startEvents.get(0)
+                                                       .getSimpleName()
+                                                       .toString());
+    }
     typeSpec.addMethod(startEventHandlingMethod.build());
+  }
+
+  private void generateInitHistoryEventHandlingMethod() {
+    // get all elements annotated with Start
+    List<Element> initHistoryEvents = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                                eventBusTypeElement,
+                                                                                                InitHistory.class);
+    MethodSpec.Builder initHistoryEventHandlingMethod = MethodSpec.methodBuilder("fireInitHistoryEvent")
+                                                                  .addAnnotation(Override.class)
+                                                                  .addModifiers(Modifier.PUBLIC,
+                                                                                Modifier.FINAL);
+    if (initHistoryEvents.size() > 0) {
+      // get event meta data from store ...
+      initHistoryEventHandlingMethod.addStatement("this.$L()",
+                                                  initHistoryEvents.get(0)
+                                                                   .getSimpleName()
+                                                                   .toString());
+    } else {
+      initHistoryEventHandlingMethod.addStatement("assert false : $S",
+                                                  "no @InitHistory-event defined");
+    }
+    typeSpec.addMethod(initHistoryEventHandlingMethod.build());
+  }
+
+  private void generateNotFoundHistoryEventHandlingMethod() {
+    // get all elements annotated with Start
+    List<Element> notFoundHistoryEvents = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                                    eventBusTypeElement,
+                                                                                                    NotFoundHistory.class);
+    MethodSpec.Builder initHistoryEventHandlingMethod = MethodSpec.methodBuilder("fireNotFoundHistoryEvent")
+                                                                  .addAnnotation(Override.class)
+                                                                  .addModifiers(Modifier.PUBLIC,
+                                                                                Modifier.FINAL);
+    if (notFoundHistoryEvents.size() > 0) {
+      // get event meta data from store ...
+      initHistoryEventHandlingMethod.addStatement("this.$L()",
+                                                  notFoundHistoryEvents.get(0)
+                                                                       .getSimpleName()
+                                                                       .toString());
+    } else {
+      initHistoryEventHandlingMethod.addStatement("assert false : $S",
+                                                  "no @NotFoundHistory-event defined");
+    }
+    typeSpec.addMethod(initHistoryEventHandlingMethod.build());
   }
 
   private void callEventExecMethod(MethodSpec.Builder method,
@@ -326,7 +389,8 @@ public class EventHandlingMethodGenerator {
                                                                       .toString()
                                                                       .substring(1));
     this.createSignatureForEventCall(method,
-                                     executableElement);
+                                     executableElement,
+                                     false);
 //    boolean firstElement = true;
 //    for (VariableElement variableElement : executableElement.getParameters()) {
 //      if (firstElement) {
@@ -348,7 +412,6 @@ public class EventHandlingMethodGenerator {
 
   private void createPlaceSericePlaceCall(MethodSpec.Builder method,
                                           ExecutableElement executableElement) {
-    GWT.debugger();
     TypeElement historyConverterTypeElement = this.getHistoryConverterTypeElement(executableElement.getAnnotation(Event.class));
     String name01 = historyConverterTypeElement.getQualifiedName()
                                                .toString();
@@ -368,7 +431,7 @@ public class EventHandlingMethodGenerator {
                                              .toString());
         break;
       case SIMPLE:
-        method.addCode("super.placeService.place($S, (($L) super.placeService.getHistoryConverter($S)).convertToToken($S, ",
+        method.addCode("super.placeService.place($S, (($L) super.placeService.getHistoryConverter($S)).convertToToken($S",
                        executableElement.getSimpleName()
                                         .toString(),
                        historyConverterTypeElement.getQualifiedName()
@@ -378,7 +441,8 @@ public class EventHandlingMethodGenerator {
                        executableElement.getSimpleName()
                                         .toString());
         this.createSignatureForEventCall(method,
-                                         executableElement);
+                                         executableElement,
+                                         true);
         method.addCode("), false);\n");
         break;
       case DEFAULT:
@@ -395,7 +459,8 @@ public class EventHandlingMethodGenerator {
                                                                           .toString()
                                                                           .substring(1));
         this.createSignatureForEventCall(method,
-                                         executableElement);
+                                         executableElement,
+                                         false);
         method.addCode("), false);\n");
         break;
       default:
@@ -405,18 +470,25 @@ public class EventHandlingMethodGenerator {
   }
 
   private void createSignatureForEventCall(MethodSpec.Builder method,
-                                           ExecutableElement executableElement) {
-    boolean firstElement = true;
-    for (VariableElement variableElement : executableElement.getParameters()) {
-      if (firstElement) {
-        firstElement = false;
-      } else {
-        method.addCode(", ");
-      }
-      method.addCode("$N",
-                     variableElement.getSimpleName()
-                                    .toString());
-    }
+                                           ExecutableElement executableElement,
+                                           boolean leadingComma) {
+    IntStream.range(0,
+                    executableElement.getParameters()
+                                     .size())
+             .forEachOrdered(i -> {
+               if (i != 0) {
+                 method.addCode(", ");
+               } else {
+                 if (leadingComma) {
+                   method.addCode(", ");
+                 }
+               }
+               method.addCode("$N",
+                              executableElement.getParameters()
+                                               .get(i)
+                                               .getSimpleName()
+                                               .toString());
+             });
   }
 
 
