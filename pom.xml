@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.gishmo.gwt</groupId>
+  <artifactId>mvp4g2-parent</artifactId>
+  <version>1.0-alpha-1</version>
+  <packaging>pom</packaging>
+
+  <name>MVP4G 2 parent - Implementation of mvp4g for GWT 2 + 3</name>
+  <description>Model View Presenter with Event Bus For GWT 2 + 3 based on APT</description>
+  <url>https://github.com/mvp4g/mvp4g2</url>
+
+  <modules>
+    <module>mvp4g2</module>
+    <module>mvp4g2-processor</module>
+  </modules>
+
+  <inceptionYear>2017</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:https://github.com/mvp4g/mvp4g2</connection>
+    <developerConnection>scm:git:https://github.com/mvp4g/mvp4g2</developerConnection>
+    <url>scm:git:https://github.com/mvp4g/mvp4g2</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mvp4g/mvp4g2/issues</url>
+  </issueManagement>
+
+  <developers>
+    <developer>
+      <name>Frank Hossfeld</name>
+      <id>frankhossfeld</id>
+      <email>hossfeld@hossfeld-solutions.de</email>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <prerequisites>
+    <maven>3</maven>
+  </prerequisites>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <!--<dependency>-->
+      <!--<groupId>com.google.auto</groupId>-->
+      <!--<artifactId>auto-common</artifactId>-->
+      <!--<version>${autocommon.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>com.google.auto.service</groupId>-->
+      <!--<artifactId>auto-service</artifactId>-->
+      <!--<version>${autoservice.version}</version>-->
+      <!--<optional>true</optional>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>com.google.elemental2</groupId>-->
+      <!--<artifactId>elemental2-dom</artifactId>-->
+      <!--<version>${elemental2.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>com.squareup</groupId>-->
+      <!--<artifactId>javapoet</artifactId>-->
+      <!--<version>${javapoet.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>junit</groupId>-->
+      <!--<artifactId>junit</artifactId>-->
+      <!--<version>4.12</version>-->
+      <!--<scope>test</scope>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>com.google.testing.compile</groupId>-->
+      <!--<artifactId>compile-testing</artifactId>-->
+      <!--<version>0.7</version>-->
+      <!--<scope>test</scope>-->
+    <!--</dependency>-->
+    <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
+    <!--&lt;!&ndash;<groupId>org.mockito</groupId>&ndash;&gt;-->
+    <!--&lt;!&ndash;<artifactId>mockito-core</artifactId>&ndash;&gt;-->
+    <!--&lt;!&ndash;<version>1.10.19</version>&ndash;&gt;-->
+    <!--&lt;!&ndash;<scope>test</scope>&ndash;&gt;-->
+    <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
+  </dependencies>
+
+
+  <build>
+    <plugins>
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-compiler-plugin</artifactId>-->
+        <!--<version>3.6.1</version>-->
+        <!--<configuration>-->
+          <!--<source>${maven.compiler.source}</source>-->
+          <!--<target>${maven.compiler.target}</target>-->
+          <!--<showWarnings>true</showWarnings>-->
+          <!--<showDeprecation>true</showDeprecation>-->
+          <!--<meminitial>128m</meminitial>-->
+          <!--<maxmem>1024m</maxmem>-->
+          <!--<encoding>${project.build.sourceEncoding}</encoding>-->
+          <!--<compilerArgs>-->
+            <!--<compilerArgument>-Xlint:all</compilerArgument>-->
+          <!--</compilerArgs>-->
+        <!--</configuration>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>process-annotations</id>-->
+            <!--<phase>generate-sources</phase>-->
+            <!--<goals>-->
+              <!--<goal>compile</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<proc>only</proc>-->
+              <!--<annotationProcessors>-->
+                <!--<annotationProcessor>com.google.auto.service.processor.AutoServiceProcessor</annotationProcessor>-->
+              <!--</annotationProcessors>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+          <!--<execution>-->
+            <!--<id>default-compile</id> &lt;!&ndash; using an id of default-compile will override the default execution &ndash;&gt;-->
+            <!--<phase>compile</phase>-->
+            <!--<goals>-->
+              <!--<goal>compile</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<compilerArgs>-->
+                <!--<arg>-proc:none</arg>-->
+              <!--</compilerArgs>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
+    </plugins>
+  </build>
+</project>
