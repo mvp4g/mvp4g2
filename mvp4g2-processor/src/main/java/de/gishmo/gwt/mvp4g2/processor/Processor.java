@@ -86,7 +86,6 @@ public class Processor
 
       } catch (Exception e) {
         this.processorUtils.createErrorMessage(e.getMessage());
-        throw new RuntimeException(e);
       }
       return true;
     }

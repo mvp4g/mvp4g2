@@ -98,6 +98,8 @@ public class EventHandlingMethodGenerator {
   // TODO Validation
   private void validateEvent(Element element)
     throws ProcessorException {
+
+
     //    try {
     //      ExecutableElement executableElement = (ExecutableElement) element;
     //    } catch (Exception e) {

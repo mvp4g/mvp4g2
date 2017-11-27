@@ -7,6 +7,7 @@ import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.*;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.validation.StartAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -115,6 +116,16 @@ public class EventBusAnnotationHandler {
 
   private void validateEventBus()
     throws ProcessorException {
+    // create validator instances
+    StartAnnotationValidator startAnnotationValidator = StartAnnotationValidator.builder()
+                                                                                .processingEnvironment(this.processingEnvironment)
+                                                                                .roundEnvironment(this.roundEnvironment)
+                                                                                .build();
+
+
+
+    // TODO
+
     // get elements annotated with EventBus annotation
     Set<? extends Element> elementsWithEventBusAnnotation = this.roundEnvironment.getElementsAnnotatedWith(EventBus.class);
     // at least there should exatly one Application annotation!
@@ -133,8 +144,14 @@ public class EventBusAnnotationHandler {
                         .isInterface()) {
           throw new ProcessorException("@Eventbus can only be used with an interface");
         }
+
+
+        // validate @Start-annotation
+        startAnnotationValidator.validate(typeElement);
       }
     }
+
+
   }
 
   private TypeSpec.Builder createTypeSpecEventBus(TypeElement eventBusTypeElement) {
