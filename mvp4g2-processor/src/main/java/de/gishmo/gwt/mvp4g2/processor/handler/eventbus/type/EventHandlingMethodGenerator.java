@@ -109,7 +109,8 @@ public class EventHandlingMethodGenerator {
     MethodSpec.Builder eventHandlingMethod = MethodSpec.methodBuilder(executableElement.getSimpleName()
                                                                                        .toString())
                                                        .addAnnotation(Override.class)
-                                                       .addModifiers(Modifier.PUBLIC);
+                                                       .addModifiers(Modifier.PUBLIC,
+                                                                     Modifier.FINAL);
     eventHandlingMethod.addStatement("int startLogDepth = $T.logDepth",
                                      ClassName.get(AbstractEventBus.class));
     eventHandlingMethod.beginControlFlow("try");
@@ -170,7 +171,8 @@ public class EventHandlingMethodGenerator {
                                  .toString()
                                  .substring(1);
     MethodSpec.Builder eventHandlingMethod = MethodSpec.methodBuilder(sb)
-                                                       .addModifiers(Modifier.PUBLIC);
+                                                       .addModifiers(Modifier.PUBLIC,
+                                                                     Modifier.FINAL);
     // add parametners to method signature ...
     // generate method body
     executableElement.getParameters()
@@ -194,6 +196,38 @@ public class EventHandlingMethodGenerator {
     eventHandlingMethod.addCode(");\n");
     eventHandlingMethod.addStatement("++$T.logDepth",
                                      ClassName.get(AbstractEventBus.class));
+    // generate code for filter event!
+    if (executableElement.getParameters()
+                         .size() > 0) {
+      StringBuilder parameters = new StringBuilder();
+      IntStream.range(0,
+                      executableElement.getParameters()
+                                       .size())
+               .forEachOrdered(i -> {
+                 parameters.append(executableElement.getParameters()
+                                                    .get(i)
+                                                    .getSimpleName()
+                                                    .toString());
+                 if (i != executableElement.getParameters()
+                                           .size() - 1) {
+                   parameters.append(", ");
+                 }
+               });
+      eventHandlingMethod.beginControlFlow("if (!super.filterEvent($S, $L))",
+                                           executableElement.getSimpleName()
+                                                            .toString(),
+                                           parameters);
+    } else {
+      eventHandlingMethod.beginControlFlow("if (!super.filterEvent($S))",
+                                           executableElement.getSimpleName()
+                                                            .toString());
+    }
+    eventHandlingMethod.addStatement("super.logEventFilter($T.logDepth, $S)",
+                                     ClassName.get(AbstractEventBus.class),
+                                     executableElement.getSimpleName()
+                                                      .toString());
+    eventHandlingMethod.addStatement("return");
+    eventHandlingMethod.endControlFlow();
     // get event meta data from store ...
     eventHandlingMethod.addStatement("$T<$T> eventMetaData = super.getEventMetaData($S)",
                                      ClassName.get(EventMetaData.class),
@@ -306,18 +340,17 @@ public class EventHandlingMethodGenerator {
 
   private void callEventExecMethod(MethodSpec.Builder method,
                                    ExecutableElement executableElement) {
-    StringBuilder sb = new StringBuilder();
-    sb.append(EventHandlingMethodGenerator.EXECUTION_METHOD_PREFIX)
-      .append(executableElement.getSimpleName()
-                               .toString()
-                               .substring(0,
-                                          1)
-                               .toUpperCase())
-      .append(executableElement.getSimpleName()
-                               .toString()
-                               .substring(1));
+    String sb = EventHandlingMethodGenerator.EXECUTION_METHOD_PREFIX +
+                executableElement.getSimpleName()
+                                 .toString()
+                                 .substring(0,
+                                            1)
+                                 .toUpperCase() +
+                executableElement.getSimpleName()
+                                 .toString()
+                                 .substring(1);
 
-    method.addCode(sb.toString() + "(");
+    method.addCode(sb + "(");
     IntStream.range(0,
                     executableElement.getParameters()
                                      .size())
@@ -413,9 +446,9 @@ public class EventHandlingMethodGenerator {
   private void createPlaceSericePlaceCall(MethodSpec.Builder method,
                                           ExecutableElement executableElement) {
     TypeElement historyConverterTypeElement = this.getHistoryConverterTypeElement(executableElement.getAnnotation(Event.class));
-    String name01 = historyConverterTypeElement.getQualifiedName()
-                                               .toString();
-    String name02 = Event.NoHistoryConverter.class.getCanonicalName();
+    if (historyConverterTypeElement == null) {
+      return;
+    }
     if (Event.NoHistoryConverter.class.getCanonicalName()
                                       .equals(historyConverterTypeElement.getQualifiedName()
                                                                          .toString())) {

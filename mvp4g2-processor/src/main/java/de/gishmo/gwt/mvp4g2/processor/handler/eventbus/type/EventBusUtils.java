@@ -3,6 +3,7 @@ package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -111,6 +112,31 @@ public class EventBusUtils {
                                                                           .map((v) -> v.substring(0,
                                                                                                   v.indexOf(".class")))
                                                                           .collect(Collectors.toList())).orElse(null);
+  }
+
+  public List<String> getEventFiltersAsList(TypeElement typeElement) {
+    Element filterAnnotation = this.processingEnvironment.getElementUtils()
+                                                         .getTypeElement(Filters.class.getName());
+    TypeMirror filterAnnotationAsTypeMirror = filterAnnotation.asType();
+    return typeElement.getAnnotationMirrors()
+                      .stream()
+                      .filter(annotationMirror -> annotationMirror.getAnnotationType()
+                                                                  .equals(filterAnnotationAsTypeMirror))
+                      .flatMap(annotationMirror -> annotationMirror.getElementValues()
+                                                                   .entrySet()
+                                                                   .stream())
+                      .findFirst().<List<String>>map(entry -> Arrays.stream(entry.getValue()
+                                                                                 .toString()
+                                                                                 .replace("{",
+                                                                                          "")
+                                                                                 .replace("}",
+                                                                                          "")
+                                                                                 .replace(" ",
+                                                                                          "")
+                                                                                 .split(","))
+                                                                    .map((v) -> v.substring(0,
+                                                                                            v.indexOf(".class")))
+                                                                    .collect(Collectors.toList())).orElse(null);
   }
 
   public boolean isPresenter(String eventHandlerClassName) {

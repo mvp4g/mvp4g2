@@ -15,6 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
@@ -29,6 +30,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 // TODO check, that @Filter is annoted at a interface that extends IsEventBus! and other tests ...
@@ -92,24 +94,31 @@ public class FilterAnnotationGenerator {
 
   private void generateLoadFilterConfigurationMethod() {
     // method msut always be created!
-    MethodSpec.Builder loadDebugConfigurationMethod = MethodSpec.methodBuilder("loadFilterConfiguration")
-                                                                .addAnnotation(Override.class)
-                                                                .addModifiers(Modifier.PUBLIC);
+    MethodSpec.Builder loadFilterConfigurationMethod = MethodSpec.methodBuilder("loadFilterConfiguration")
+                                                                 .addAnnotation(Override.class)
+                                                                 .addModifiers(Modifier.PUBLIC);
 
     // get elements annotated with EventBus annotation
     Set<? extends Element> elementsWithFiltersAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
     if (elementsWithFiltersAnnotation.size() == 0) {
-      loadDebugConfigurationMethod.addStatement("super.setFiltersEnable(false)");
+      loadFilterConfigurationMethod.addStatement("super.setFiltersEnable(false)");
     } else {
-//      elementsWithFiltersAnnotation.forEach(element -> loadDebugConfigurationMethod.addStatement("super.setDebugEnable(true)")
-//                                                                                 .addStatement("super.setLogger(new $T())",
-//                                                                                               ClassName.get(getLogger(element.getAnnotation(Debug.class))))
-//                                                                                 .addStatement("super.setLogLevel($T.LogLevel.$L)",
-//                                                                                               ClassName.get(Debug.class),
-//                                                                                               element.getAnnotation(Debug.class)
-//                                                                                                      .logLevel()));
+      List<String> eventFilterAsStringList = this.eventBusUtils.getEventFiltersAsList(this.eventBusTypeElement);
+      if (eventFilterAsStringList != null) {
+        if (eventFilterAsStringList.size() > 0) {
+          loadFilterConfigurationMethod.addStatement("super.setFiltersEnable(true)");
+          for (String eventFilter : eventFilterAsStringList) {
+            loadFilterConfigurationMethod.addStatement("super.eventFilters.add(new $T())",
+                                                       ClassName.get(this.processingEnvironment.getElementUtils()
+                                                                                               .getTypeElement(eventFilter)
+                                                                                               .asType()));
+          }
+        } else {
+          loadFilterConfigurationMethod.addStatement("super.setFiltersEnable(false)");
+        }
+      }
     }
-    typeSpec.addMethod(loadDebugConfigurationMethod.build());
+    typeSpec.addMethod(loadFilterConfigurationMethod.build());
   }
 
   private TypeElement getLogger(Debug debugAnnotation) {

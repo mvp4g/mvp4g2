@@ -66,4 +66,18 @@ public interface IsEventBus {
   // interne MEthode nicht benutzen!
   void setPlaceService(PlaceService<? extends IsEventBus> placeService);
 
+  /**
+   * Add a new event filter
+   *
+   * @param filter new event filter to add
+   */
+  void addEventFilter(IsEventFilter<? extends IsEventBus> filter);
+
+  /**
+   * Remove event filter
+   *
+   * @param filter event filter to remove
+   */
+  void removeEventFilter(IsEventFilter<? extends IsEventBus> filter);
+
 }

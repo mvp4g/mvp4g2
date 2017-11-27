@@ -52,9 +52,11 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
   /* the place service */
-  protected PlaceService<? extends IsEventBus> placeService;
+  protected PlaceService<? extends IsEventBus>        placeService;
+  /* list of filters */
+  protected List<IsEventFilter<? extends IsEventBus>> eventFilters;
   /* current navigation confirmation handler */
-  private   IsNavigationConfirmation           navigationConfirmationPresenter;
+  private   IsNavigationConfirmation                  navigationConfirmationPresenter;
   /* debug enabled? */
   private boolean debugEnable = false;
   /* logger */
@@ -80,6 +82,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     this.eventHandlerMetaDataMap = new HashMap<>();
     this.presenterHandlerMetaDataMap = new HashMap<>();
     this.eventMetaDataMap = new HashMap<>();
+    this.eventFilters = new ArrayList<>();
 
     this.loadDebugConfiguration();
     this.loadFilterConfiguration();
@@ -181,13 +184,12 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                    String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DEBUG - EventBus -> event: >>")
-          .append(eventName)
-          .append("<< binding handler: >>")
-          .append(handlerClassName)
-          .append("<<");
-        this.log(sb.toString(),
+        String sb = "DEBUG - EventBus -> event: >>" +
+                    eventName +
+                    "<< binding handler: >>" +
+                    handlerClassName +
+                    "<<";
+        this.log(sb,
                  logDepth);
       }
     }
@@ -246,6 +248,26 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     for (String eventName : this.eventMetaDataMap.keySet()) {
       this.placeService.addConverter(this.eventMetaDataMap.get(eventName));
     }
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus#addEventFilter(de.gishmo.gwt.mvp4g2.client.eventbus.IsEventFilter)
+   */
+  @Override
+  public void addEventFilter(IsEventFilter<? extends IsEventBus> filter) {
+    eventFilters.add(filter);
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus#removeEventFilter(cde.gishmo.gwt.mvp4g2.client.eventbus.IsEventFilter)
+   */
+  @Override
+  public void removeEventFilter(IsEventFilter<? extends IsEventBus> filter) {
+    eventFilters.remove(filter);
   }
 
   protected EventMetaData<E> getEventMetaData(String eventName) {
@@ -332,15 +354,15 @@ public abstract class AbstractEventBus<E extends IsEventBus>
       StringBuilder sb = new StringBuilder();
       sb.append("DEBUG - EventBus -> handling event: >>")
         .append(eventName);
-      this.prearearametersForLog(sb,
-                                 parameters);
+      this.prepareParametersForLog(sb,
+                                   parameters);
       this.log(sb.toString(),
                logDepth);
     }
   }
 
-  private void prearearametersForLog(StringBuilder sb,
-                                     Object... parameters) {
+  private void prepareParametersForLog(StringBuilder sb,
+                                       Object... parameters) {
     if (parameters.length > 0) {
       sb.append("<< with parameters: ");
       for (int i = 0; i < parameters.length; i++) {
@@ -355,6 +377,18 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     }
   }
 
+  protected void logEventFilter(int logDepth,
+                                String eventName) {
+    if (debugEnable) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("DEBUG - EventBus -> handling event: >>")
+        .append(eventName)
+        .append("<< did not pass filter(s)!");
+      this.log(sb.toString(),
+               logDepth);
+    }
+  }
+
   protected void logAskingForConfirmation(int logDepth,
                                           String eventName,
                                           Object... parameters) {
@@ -362,8 +396,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
       StringBuilder sb = new StringBuilder();
       sb.append("DEBUG - Asking for confirmation: event: >>")
         .append(eventName);
-      this.prearearametersForLog(sb,
-                                 parameters);
+      this.prepareParametersForLog(sb,
+                                   parameters);
       this.log(sb.toString(),
                logDepth);
     }
@@ -384,6 +418,50 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                  logDepth);
       }
     }
+  }
+
+  /**
+   * If filtering is enabled, executes event filters associated with this event bus.
+   *
+   * @param eventName event's name
+   * @param params    event parameters for this event
+   */
+  protected boolean filterEvent(String eventName,
+                                Object... params) {
+    boolean executeEvent = true;
+    if (filtersEnable) {
+      executeEvent = doFilterEvent(eventName,
+                                   params);
+    }
+//    if (changeFilteringEnabledForNextOne) {
+//      filteringEnabled = !filteringEnabled;
+//      changeFilteringEnabledForNextOne = false;
+//    }
+    return executeEvent;
+  }
+
+  /**
+   * Performs the actual filtering by calling each associated event filter in turn. If any event
+   * filter returns false, then the event will be canceled.
+   *
+   * @param eventName event's name
+   * @param params    event parameters for this event
+   */
+  @SuppressWarnings("unchecked")
+  private boolean doFilterEvent(String eventName,
+                                Object[] params) {
+    int filterCount = eventFilters.size();
+    @SuppressWarnings("rawtypes")
+    IsEventFilter eventFilter;
+    for (int i = 0; i < filterCount; i++) {
+      eventFilter = eventFilters.get(i);
+      if (!eventFilter.filterEvent(this,
+                                   eventName,
+                                   params)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
