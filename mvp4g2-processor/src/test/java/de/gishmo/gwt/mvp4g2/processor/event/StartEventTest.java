@@ -40,7 +40,7 @@ public class StartEventTest {
 //          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestEventBusWithOneStartAnnotation.java"))
 //          .processedWith(new Processor())
 //          .compilesWithoutError();
-  }
+//  }
 
   @Test
   public void testStartEventTestWithNonZeroArgumentMethod() {
@@ -51,7 +51,7 @@ public class StartEventTest {
           .withErrorContaining("@Start-annotation can only be used on zero argument methods");
   }
 
-  @Test
+//  @Test
 //  public void testStartEventTestWithZeroArgumentMethod() {
 //    ASSERT.about(javaSource())
 //          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithZeroArgumentMethod.java"))
