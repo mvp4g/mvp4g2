@@ -17,11 +17,12 @@
 package de.gishmo.gwt.mvp4g2.processor.event;
 
 import com.google.testing.compile.JavaFileObjects;
-import de.gishmo.gwt.mvp4g2.processor.Processor;
+import de.gishmo.gwt.mvp4g2.processor.EventBusProcessor;
 import org.junit.Test;
 
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
+
 
 public class StartEventTest {
 
@@ -29,7 +30,7 @@ public class StartEventTest {
   public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
-          .processedWith(new Processor())
+          .processedWith(new EventBusProcessor())
           .failsToCompile()
           .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
   }
@@ -46,7 +47,7 @@ public class StartEventTest {
   public void testStartEventTestWithNonZeroArgumentMethod() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithNonZeroArgumentMethod.java"))
-          .processedWith(new Processor())
+          .processedWith(new EventBusProcessor())
           .failsToCompile()
           .withErrorContaining("@Start-annotation can only be used on zero argument methods");
   }
@@ -58,7 +59,6 @@ public class StartEventTest {
 //          .processedWith(new Processor())
 //          .compilesWithoutError();
 //  }
-
 
 
   /**
