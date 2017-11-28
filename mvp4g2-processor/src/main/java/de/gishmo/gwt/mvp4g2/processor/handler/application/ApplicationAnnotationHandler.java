@@ -6,6 +6,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.application.AbstractApplication;
+import de.gishmo.gwt.mvp4g2.client.application.IsApplication;
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
 import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
@@ -76,16 +77,26 @@ public class ApplicationAnnotationHandler {
     if (elementsWithApplicaitonAnnotation.size() > 1) {
       throw new ProcessorException("There should be at least only one interface, that is annotated with @Application");
     }
-    // annotated element has to be a interface
     for (Element element : elementsWithApplicaitonAnnotation) {
-      if (element instanceof TypeElement) {
         TypeElement typeElement = (TypeElement) element;
+      // annotated element has to be a interface
+      if (element instanceof TypeElement) {
         if (!typeElement.getKind()
                         .isInterface()) {
-          throw new ProcessorException("@Application can only be used with an interface");
+          throw new ProcessorException("@Application annotated must be used with an interface");
         }
       }
+      // check, that the typeElement implements IsApplication
+      if (!ProcessorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                  typeElement.asType(),
+                                                  this.processingEnvironment.getElementUtils()
+                                                                            .getTypeElement(IsApplication.class.getCanonicalName())
+                                                                            .asType())) {
+        throw new ProcessorException(typeElement.getSimpleName()
+                                                .toString() + ": @Application must implement IsApplicaiton interface");
+      }
     }
+
   }
 
   private void generate(Element element)

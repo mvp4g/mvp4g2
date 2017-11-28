@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler;
 
-import de.gishmo.gwt.mvp4g2.processor.application.ApplicationTest;
-import de.gishmo.gwt.mvp4g2.processor.event.StartEventTest;
-import de.gishmo.gwt.mvp4g2.processor.eventhandler.EventHandlerTest;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.processor.mock.MockEventBus;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ApplicationTest.class,
-                     EventHandlerTest.class,
-                     StartEventTest.class
-//                      DebugTest.class,
-//                      EventBusTest.class
-})
-public class AllTests {
+@Application(eventBus = MockEventBus.class)
+public interface ApplicationInterfaceWithoutExtendsIsApplication {
 }
