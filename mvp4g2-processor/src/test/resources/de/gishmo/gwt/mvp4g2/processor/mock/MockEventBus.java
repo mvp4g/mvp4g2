@@ -27,6 +27,6 @@ public interface MockEventBus
   extends IsEventBus {
 
   @Event(handlers = MockOneEventHandler.class)
-  public void onOneEvent() {
-  }
+  public void oneEvent();
+
 }

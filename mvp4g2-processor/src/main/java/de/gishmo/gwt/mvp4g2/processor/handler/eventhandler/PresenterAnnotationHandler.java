@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.processor.handler.eventHandler;
+package de.gishmo.gwt.mvp4g2.processor.handler.eventhandler;
 
 import com.squareup.javapoet.*;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;

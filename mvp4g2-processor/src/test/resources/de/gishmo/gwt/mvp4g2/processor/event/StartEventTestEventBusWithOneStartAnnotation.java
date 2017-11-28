@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event;
+package de.gishmo.gwt.mvp4g2.processor.input.event;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;

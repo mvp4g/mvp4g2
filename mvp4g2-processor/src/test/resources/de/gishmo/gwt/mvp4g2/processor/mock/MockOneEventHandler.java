@@ -26,11 +26,9 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
 public class MockOneEventHandler
   extends AbstractEventHandler<MockEventBus> {
 
-  @Override
   public void onOneEvent() {
   }
 
-  @Override
   public void onStart() {
   }
 }

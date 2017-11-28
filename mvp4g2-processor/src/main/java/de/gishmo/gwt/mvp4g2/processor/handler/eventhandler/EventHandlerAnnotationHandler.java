@@ -1,8 +1,8 @@
-package de.gishmo.gwt.mvp4g2.processor.handler.eventHandler;
+package de.gishmo.gwt.mvp4g2.processor.handler.eventhandler;
 
 import com.squareup.javapoet.*;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -48,7 +48,7 @@ public class EventHandlerAnnotationHandler {
   public void process()
     throws ProcessorException, IOException {
     // check, whether we have o do something ...
-    if (roundEnvironment.getElementsAnnotatedWith(Presenter.class)
+    if (roundEnvironment.getElementsAnnotatedWith(EventHandler.class)
                         .size() == 0) {
       return;
     }
@@ -63,17 +63,29 @@ public class EventHandlerAnnotationHandler {
   private void validate()
     throws ProcessorException {
     // get elements annotated with Presenter annotation
-    Set<? extends Element> elementsWithPresenterAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Presenter.class);
+    Set<? extends Element> elementsWithPresenterAnnotation = this.roundEnvironment.getElementsAnnotatedWith(EventHandler.class);
     for (Element element : elementsWithPresenterAnnotation) {
       if (element instanceof TypeElement) {
         TypeElement typeElement = (TypeElement) element;
         // check, that the presenter annotion is only used with classes
         if (!typeElement.getKind()
                         .isClass()) {
-          throw new ProcessorException(typeElement.getSimpleName().toString() + ": @EventHandler can only be used with as class!");
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": @EventHandler can only be used with as class!");
+        }
+        // check, that the typeElement extends AbstarctEventHandler
+        if (!ProcessorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                    typeElement.asType(),
+                                                    this.processingEnvironment.getElementUtils()
+                                                                              .getTypeElement(AbstractEventHandler.class.getCanonicalName())
+                                                                              .asType())) {
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
         }
       }
     }
+
+
   }
 
   private void generate(Element element)
