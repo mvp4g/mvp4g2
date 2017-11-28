@@ -30,6 +30,7 @@ public class PresenterProcessor
     annotations.add(Presenter.class.getCanonicalName());
     return annotations;
   }
+
   @Override
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {

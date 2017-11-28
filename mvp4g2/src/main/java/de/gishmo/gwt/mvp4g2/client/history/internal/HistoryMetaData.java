@@ -8,7 +8,7 @@ import de.gishmo.gwt.mvp4g2.client.history.annotation.History;
 public abstract class HistoryMetaData {
 
   /* type of the history converter */
-  private History.HistoryConverterType             type;
+  private History.HistoryConverterType type;
 
   public HistoryMetaData(History.HistoryConverterType type) {
     this.type = type;

@@ -3,7 +3,9 @@ package de.gishmo.gwt.mvp4g2.client.ui;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 
 /**
- * type of the eventBus
+ * Super class of a mvp4g2 event handler.
+ *
+ * @param <E> the eventbus of the applicaiton
  */
 public abstract class AbstractEventHandler<E extends IsEventBus>
   implements IsEventHandler<E> {
@@ -40,8 +42,8 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   public void bind() {
     /*
      * Default implementation does nothing: extensions are responsible for (optionally) defining
-		 * binding specifics.
-		 */
+     * binding specifics.
+     */
   }
 
   /*

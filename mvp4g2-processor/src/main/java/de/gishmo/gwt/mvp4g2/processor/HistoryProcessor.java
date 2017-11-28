@@ -30,6 +30,7 @@ public class HistoryProcessor
     annotations.add(History.class.getCanonicalName());
     return annotations;
   }
+
   @Override
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {

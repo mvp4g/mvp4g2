@@ -27,8 +27,6 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
  *
  * @param <V> Type of the view injected into the presenter
  * @param <E> Type of the event bus used by the presenter.
- * @author Frank Hossfeld
- * @since 16.09.2016
  */
 public interface IsPresenter<E extends IsEventBus, V extends IsLazyReverseView<?>>
   extends IsEventHandler<E> {
@@ -38,14 +36,14 @@ public interface IsPresenter<E extends IsEventBus, V extends IsLazyReverseView<?
    *
    * @return view manipulated by the presenter.
    */
-  public V getView();
+  V getView();
 
   /**
    * Sets the view associated with the presenter.
    *
    * @param view view to set
    */
-  public void setView(V view);
+  void setView(V view);
 
   /**
    * Call by the event bus when the handler handles its first event.

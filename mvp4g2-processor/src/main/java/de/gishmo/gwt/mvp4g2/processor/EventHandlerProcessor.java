@@ -30,6 +30,7 @@ public class EventHandlerProcessor
     annotations.add(EventHandler.class.getCanonicalName());
     return annotations;
   }
+
   @Override
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {

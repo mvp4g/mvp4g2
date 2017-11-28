@@ -22,6 +22,9 @@ public abstract class HandlerMetaData {
     return kind;
   }
 
+  /**
+   * Type of event handlers.
+   */
   public enum Kind {
     EVENT_HANDLER,
     PRESENTER

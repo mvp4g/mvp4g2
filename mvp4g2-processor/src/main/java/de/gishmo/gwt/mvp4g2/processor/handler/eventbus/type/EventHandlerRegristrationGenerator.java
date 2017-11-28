@@ -15,7 +15,11 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
 
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.WildcardTypeName;
 import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
@@ -143,6 +147,40 @@ public class EventHandlerRegristrationGenerator {
     typeSpec.addMethod(addHandlerMethod.build());
   }
 
+  private List<String> createListOfEventHandlersToCreate() {
+    // get all elements annotated with Event
+    List<Element> events = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                     this.eventBusTypeElement,
+                                                                                     Event.class);
+    // List of already created EventHandler used to avoid a second create ...
+    List<String> listOfEventHandlersToCreate = new ArrayList<>();
+    events.stream()
+          .map(eventElement -> (ExecutableElement) eventElement)
+          .forEach(executableElement -> {
+            List<String> handlersFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
+                                                                                              "handlers");
+            if (handlersFromAnnotation != null) {
+              for (String eventHandlerClassName : handlersFromAnnotation) {
+                if (!listOfEventHandlersToCreate.contains(eventHandlerClassName)) {
+                  // save the name of the event handler to create
+                  listOfEventHandlersToCreate.add(eventHandlerClassName);
+                }
+              }
+            }
+            List<String> bindingsFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
+                                                                                              "bind");
+            if (bindingsFromAnnotation != null) {
+              for (String eventHandlerClassName : bindingsFromAnnotation) {
+                if (!listOfEventHandlersToCreate.contains(eventHandlerClassName)) {
+                  // save the name of the event Handler to create
+                  listOfEventHandlersToCreate.add(eventHandlerClassName);
+                }
+              }
+            }
+          });
+    return listOfEventHandlersToCreate;
+  }
+
   private void addHandlerToMetaList(MethodSpec.Builder methodToGenerate,
                                     String eventHandlerClassName) {
     // check if we deal with a presenter
@@ -179,40 +217,6 @@ public class EventHandlerRegristrationGenerator {
       methodToGenerate.addStatement("$N.getEventHandler().setEventBus(this)",
                                     metaDataVariableName);
     }
-  }
-
-  private List<String> createListOfEventHandlersToCreate() {
-    // get all elements annotated with Event
-    List<Element> events = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
-                                                                                     this.eventBusTypeElement,
-                                                                                     Event.class);
-    // List of already created EventHandler used to avoid a second create ...
-    List<String> listOfEventHandlersToCreate = new ArrayList<>();
-    events.stream()
-          .map(eventElement -> (ExecutableElement) eventElement)
-          .forEach(executableElement -> {
-            List<String> handlersFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
-                                                                                "handlers");
-            if (handlersFromAnnotation != null) {
-              for (String eventHandlerClassName : handlersFromAnnotation) {
-                if (!listOfEventHandlersToCreate.contains(eventHandlerClassName)) {
-                  // save the name of the event handler to create
-                  listOfEventHandlersToCreate.add(eventHandlerClassName);
-                }
-              }
-            }
-            List<String> bindingsFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
-                                                                                "bind");
-            if (bindingsFromAnnotation != null) {
-              for (String eventHandlerClassName : bindingsFromAnnotation) {
-                if (!listOfEventHandlersToCreate.contains(eventHandlerClassName)) {
-                  // save the name of the event Handler to create
-                  listOfEventHandlersToCreate.add(eventHandlerClassName);
-                }
-              }
-            }
-          });
-    return listOfEventHandlersToCreate;
   }
 
   public static final class Builder {

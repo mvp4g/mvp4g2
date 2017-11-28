@@ -10,7 +10,7 @@ public abstract class AbstractApplication<E extends IsEventBus>
   implements IsApplication {
 
   /* the eventbus */
-  protected E            eventBus;
+  protected E                                  eventBus;
   /* the PlaceService */
   private   PlaceService<? extends IsEventBus> placeService;
 

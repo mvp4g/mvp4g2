@@ -68,7 +68,8 @@ public class StartAnnotationValidator {
       // check, that the @Start annotation is only used on zero-argument methods!
       if (elementsAnnotatedWithStart.size() == 1) {
         ExecutableElement executableElement = (ExecutableElement) elementsAnnotatedWithStart.get(0);
-        if (executableElement.getParameters().size() > 0) {
+        if (executableElement.getParameters()
+                             .size() > 0) {
           throw new ProcessorException("@Start-annotation can only be used on zero argument methods");
         }
       }

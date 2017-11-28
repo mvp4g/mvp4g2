@@ -1,6 +1,10 @@
 package de.gishmo.gwt.mvp4g2.processor.handler.eventhandler;
 
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
@@ -71,7 +75,8 @@ public class PresenterAnnotationHandler {
         // check, that the presenter annotion is only used with classes
         if (!typeElement.getKind()
                         .isClass()) {
-          throw new ProcessorException(typeElement.getSimpleName().toString() + ": @Presenter can only be used with as class!");
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": @Presenter can only be used with as class!");
         }
         // check, that the view attribute is a class
         TypeElement viewClassElement = this.getViewClassTypeElement(element.getAnnotation(Presenter.class));
@@ -79,18 +84,21 @@ public class PresenterAnnotationHandler {
         // check, that the viewClass is a class
         if (!viewClassElement.getKind()
                              .isClass()) {
-          throw new ProcessorException(typeElement.getSimpleName().toString() + ": the viewClass-attribute of a @Presenter must be a class!");
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": the viewClass-attribute of a @Presenter must be a class!");
         }
         // chekc if the vioewInterface is a interface
         if (!viewInterfaceElement.getKind()
                                  .isInterface()) {
-          throw new ProcessorException(typeElement.getSimpleName().toString() + ": the viewInterface-attribute of a @Presenter must be a interface!");
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": the viewInterface-attribute of a @Presenter must be a interface!");
         }
         // check, if viewClass is implementing viewInterface
         if (!ProcessorUtils.implementsInterface(this.processingEnvironment,
                                                 viewClassElement,
                                                 viewInterfaceElement.asType())) {
-          throw new ProcessorException(typeElement.getSimpleName().toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
         }
       }
     }

@@ -13,13 +13,9 @@ public interface IsEventFilter<E extends IsEventBus> {
   /**
    * Filter an event
    *
-   * @param eventBus
-   *   event bus used to fire the event
-   * @param eventName
-   *   name of the event to filter
-   * @param params
-   *   objects sent with the event
-   *
+   * @param eventBus  event bus used to fire the event
+   * @param eventName name of the event to filter
+   * @param params    objects sent with the event
    * @return false if event should be stopped, true otherwise
    */
   boolean filterEvent(E eventBus,

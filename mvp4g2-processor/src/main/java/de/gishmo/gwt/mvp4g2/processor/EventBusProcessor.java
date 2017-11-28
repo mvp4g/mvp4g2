@@ -2,7 +2,11 @@ package de.gishmo.gwt.mvp4g2.processor;
 
 
 import com.google.auto.service.AutoService;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.*;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.EventBusAnnotationHandler;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -34,6 +38,7 @@ public class EventBusProcessor
     annotations.add(Start.class.getCanonicalName());
     return annotations;
   }
+
   @Override
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {

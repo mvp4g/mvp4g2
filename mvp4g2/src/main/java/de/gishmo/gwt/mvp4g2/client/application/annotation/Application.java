@@ -170,7 +170,7 @@ public @interface Application {
   //    implements HistoryConverter<Mvp4gInternalEventBus> {
   //
   //    private NoHistoryConverter() {
-  //      //to prevent this class to be used
+  //      // to prevent this class to be used
   //    }
   //
   //    public void convertFromToken(String historyName,
