@@ -8,7 +8,7 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
  * <br>
  * Make sure, that viewCreator attriburte of the
  *
- * @param <V> type of view
+ * @param <V> generator of view
  * @see Presenter#viewCreator() is set to
  * PRESENTER!
  */

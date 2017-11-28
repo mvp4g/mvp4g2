@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
+package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator;
 
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
@@ -166,12 +166,12 @@ public class EventBusUtils {
     }
 //
 //      /**
-//       * Set the eventbus type element
+//       * Set the eventbus generator element
 //       *
-//       * @param eventBusTypeElement the eventbvus type element
+//       * @param eventBusTypeElement the eventbvus generator element
 //       * @return the Builder
 //       */
-//      public de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlingMethodGenerator.Builder eventBusTypeElement(TypeElement eventBusTypeElement) {
+//      public de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlingMethodGenerator.Builder eventBusTypeElement(TypeElement eventBusTypeElement) {
 //        this.eventBusTypeElement = eventBusTypeElement;
 //        return this;
 //      }
@@ -182,7 +182,7 @@ public class EventBusUtils {
 //       * @param typeSpec ttype spec of the crruent eventbus
 //       * @return the Builder
 //       */
-//      public de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlingMethodGenerator.Builder typeSpec(TypeSpec.Builder typeSpec) {
+//      public de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlingMethodGenerator.Builder typeSpec(TypeSpec.Builder typeSpec) {
 //        this.typeSpec = typeSpec;
 //        return this;
 //      }

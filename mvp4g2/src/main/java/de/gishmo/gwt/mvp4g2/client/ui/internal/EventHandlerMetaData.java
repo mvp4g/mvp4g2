@@ -3,7 +3,7 @@ package de.gishmo.gwt.mvp4g2.client.ui.internal;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 
 /**
- * type of the eventBus
+ * generator of the eventBus
 
  * @param <P> the meta data event handler
  */

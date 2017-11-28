@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProcessorUtils {
 
@@ -73,9 +74,9 @@ public class ProcessorUtils {
   }
 
   /**
-   * Returns all of the superclasses and superinterfaces for a given type
-   * including the type itself. The returned set maintains an internal
-   * breadth-first ordering of the type, followed by its interfaces (and their
+   * Returns all of the superclasses and superinterfaces for a given generator
+   * including the generator itself. The returned set maintains an internal
+   * breadth-first ordering of the generator, followed by its interfaces (and their
    * super-interfaces), then the supertype and its interfaces, and so on.
    */
   public static boolean extendsClassOrInterface(Types types,
@@ -101,9 +102,9 @@ public class ProcessorUtils {
   }
 
   /**
-   * Returns all of the superclasses and superinterfaces for a given type
-   * including the type itself. The returned set maintains an internal
-   * breadth-first ordering of the type, followed by its interfaces (and their
+   * Returns all of the superclasses and superinterfaces for a given generator
+   * including the generator itself. The returned set maintains an internal
+   * breadth-first ordering of the generator, followed by its interfaces (and their
    * super-interfaces), then the supertype and its interfaces, and so on.
    */
   public static Set<TypeMirror> getFlattenedSupertypeHierarchy(Types types,
@@ -129,13 +130,11 @@ public class ProcessorUtils {
   public <A extends Annotation> List<Element> getMethodFromTypeElementAnnotatedWith(ProcessingEnvironment processingEnvironment,
                                                                                     TypeElement element,
                                                                                     Class<A> annotation) {
-    List<Element> annotatedMethods = new ArrayList<>();
-    for (Element methodElement : processingEnvironment.getElementUtils()
-                                                      .getAllMembers(element)) {
-      if (methodElement.getAnnotation(annotation) != null) {
-        annotatedMethods.add(methodElement);
-      }
-    }
+    List<Element> annotatedMethods = processingEnvironment.getElementUtils()
+                                                          .getAllMembers(element)
+                                                          .stream()
+                                                          .filter(methodElement -> methodElement.getAnnotation(annotation) != null)
+                                                          .collect(Collectors.toList());
     return annotatedMethods;
   }
 

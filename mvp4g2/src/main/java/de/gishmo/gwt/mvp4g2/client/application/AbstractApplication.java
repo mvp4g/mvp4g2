@@ -4,7 +4,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
 
 /**
- * type of the eventBus
+ * generator of the eventBus
  */
 public abstract class AbstractApplication<E extends IsEventBus>
   implements IsApplication {

@@ -1,7 +1,7 @@
 package de.gishmo.gwt.mvp4g2.client.ui.internal;
 
 /**
- * type of the eventBus
+ * generator of the eventBus
  */
 public abstract class HandlerMetaData {
 

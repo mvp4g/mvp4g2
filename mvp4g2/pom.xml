@@ -16,7 +16,7 @@
   <description>Model View Presenter with Event Bus For GWT 2 + 3 based on APT</description>
 
   <properties>
-    <elemental2.version>1.0.0-beta-2</elemental2.version>
+    <elemental2.version>1.0.0-beta-1</elemental2.version>
   </properties>
 
   <dependencies>

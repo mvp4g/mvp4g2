@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type;
+package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
@@ -575,9 +575,9 @@ public class EventHandlingMethodGenerator {
     }
 
     /**
-     * Set the eventbus type element
+     * Set the eventbus generator element
      *
-     * @param eventBusTypeElement the eventbvus type element
+     * @param eventBusTypeElement the eventbvus generator element
      * @return the Builder
      */
     public Builder eventBusTypeElement(TypeElement eventBusTypeElement) {

@@ -20,7 +20,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 /**
  * Interface that defines methods to convert a token from/to an event.<br>
  *
- * @param <E> type of the event bus where the event is defined.
+ * @param <E> generator of the event bus where the event is defined.
  * @author plcoirier
  */
 public interface IsHistoryConverter<E extends IsEventBus> {

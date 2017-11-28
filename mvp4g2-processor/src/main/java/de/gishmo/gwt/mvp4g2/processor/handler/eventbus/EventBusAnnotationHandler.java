@@ -10,11 +10,11 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.DebugAnnotationGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventAnnotationMetaDataGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlerRegristrationGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventHandlingMethodGenerator;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.FilterAnnotationGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.DebugAnnotationGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventAnnotationMetaDataGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlerRegristrationGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlingMethodGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.FilterAnnotationGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.validation.StartAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;

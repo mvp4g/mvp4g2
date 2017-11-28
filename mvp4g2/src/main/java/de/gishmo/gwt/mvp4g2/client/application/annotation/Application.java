@@ -41,7 +41,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p>
  * <p>
  * <p>
- * <li>applicationType: defines the application type. Possible type are: MAIN_MODULE or SUB_MODULE</li>
+ * <li>applicationType: defines the application generator. Possible generator are: MAIN_MODULE or SUB_MODULE</li>
  * <li>framework: defines the base technologic of this application. Currently the only supported technology is GWT.</li>
  * <p>
  * <p>

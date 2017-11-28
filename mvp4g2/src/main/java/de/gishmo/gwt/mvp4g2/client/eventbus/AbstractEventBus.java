@@ -162,20 +162,20 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                    String eventHandlerClassName) {
     List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
     if (presenters != null && presenters.size() != 0) {
-      for (PresenterHandlerMetaData<?, ?> presenterHandlerMetaData : presenters) {
-        if (!presenterHandlerMetaData.getView()
-                                     .isBinded()) {
-          this.logHandlerBinding(AbstractEventBus.logDepth,
-                                 eventName,
-                                 eventHandlerClassName);
-          presenterHandlerMetaData.getView()
-                                  .setBinded(true);
-          presenterHandlerMetaData.getView()
-                                  .createView();
-          presenterHandlerMetaData.getView()
-                                  .bind();
-        }
-      }
+      presenters.stream()
+                .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
+                                                                             .isBinded())
+                .forEachOrdered(presenterHandlerMetaData -> {
+                  this.logHandlerBinding(AbstractEventBus.logDepth,
+                                         eventName,
+                                         eventHandlerClassName);
+                  presenterHandlerMetaData.getView()
+                                          .setBinded(true);
+                  presenterHandlerMetaData.getView()
+                                          .createView();
+                  presenterHandlerMetaData.getView()
+                                          .bind();
+                });
     }
   }
 

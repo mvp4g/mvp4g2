@@ -18,7 +18,7 @@ package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.validation;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.type.EventBusUtils;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventBusUtils;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;

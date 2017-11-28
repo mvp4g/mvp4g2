@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * This annotation can be used to annotate the method of an event in your EventBus interface when
  * you have history converters. It indicates which event should be fired in case the history token
- * doesn't correspond to an event type. If not specified, the event annotated by
+ * doesn't correspond to an event generator. If not specified, the event annotated by
  * <code>InitHistory</code> will be used. <br>
  * <br>
  * You must not have more than one <code>NotFoundHistory</code> annotation in a class.<br>
