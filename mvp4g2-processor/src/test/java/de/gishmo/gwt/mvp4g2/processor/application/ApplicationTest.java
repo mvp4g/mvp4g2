@@ -18,6 +18,9 @@ package de.gishmo.gwt.mvp4g2.processor.application;
 
 import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.ApplicationProcessor;
+import org.junit.Test;
+
+import javax.tools.JavaFileObject;
 
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
@@ -41,5 +44,29 @@ public class ApplicationTest {
           .processedWith(new ApplicationProcessor())
           .failsToCompile()
           .withErrorContaining("@Application must implement IsApplicaiton interface");
+  }
+
+  @Test
+  public void testApplicationAnnotationOkWithLoader() {
+    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithLoaderImpl.java");
+
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithLoader.java"))
+          .processedWith(new ApplicationProcessor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(okSource);
+  }
+
+  @Test
+  public void testApplicationAnnotationOkWithoutLoader() {
+    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithoutLoaderImpl.java");
+
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithoutLoader.java"))
+          .processedWith(new ApplicationProcessor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(okSource);
   }
 }

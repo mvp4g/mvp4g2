@@ -20,6 +20,8 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.EventHandlerProcessor;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
@@ -46,38 +48,13 @@ public class EventHandlerTest {
 
   @Test
   public void testEventHandlerOK() {
+    JavaFileObject eventHandlerOKExpectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/De_gishmo_gwt_mvp4g2_processor_eventhandler_EventHandlerOKMetaData.java");
+
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/De_gishmo_gwt_mvp4g2_processor_eventhandler_EventHandlerOKMetaData.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerOK.java"))
           .processedWith(new EventHandlerProcessor())
-          .compilesWithoutError();
+          .compilesWithoutError()
+          .and()
+          .generatesSources(eventHandlerOKExpectedSource);
   }
-
-
-  /**
-   * <p>Test:
-   * <br>
-   * Mvp4gInternalEvent bus with one events
-   * <br><br>
-   * Expected result:
-   * <br>
-   * error message:
-   * </p>
-   */
-//  @Test
-//  public void ApplicationOKTest() {
-//    JavaFileObject applicationOKImplOKObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/expectedResults/ApplicationOKImpl.java");
-////    JavaFileObject applicationOKDaggerModuleObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/expectedResults/ApplicationDaggerModule.java");
-////    JavaFileObject applicationOKApplicationDaggerComponentObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/expectedResults/ApplicationDaggerComponent.java");
-////    JavaFileObject twoEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/TwoEventMvp4gInternalEventHandler.java");
-////    JavaFileObject twoEventObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/TwoEventMvp4gInternalEvent.java");
-////    JavaFileObject threeEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/ThreeEventMvp4gInternalEventHandler.java");
-////    JavaFileObject threEveentObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/ThreeEventMvp4gInternalEvent.java");
-//
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/ApplicationOK.java"))
-//          .processedWith(new Processor())
-//          .compilesWithoutError()
-//          .and()
-//          .generatesSources(applicationOKImplOKObject);
-//  }
 }
