@@ -1,4 +1,4 @@
-# MVP4G 2
+# MVP4G 2 (Early Beta)
 MVP4G 2 will be the second edition of MVP4G.
 
 In opposite to the first version of MVP4G, MVP4G 2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 and APT.
