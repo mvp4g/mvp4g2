@@ -72,8 +72,6 @@ MVP:
 
 History Management/Place Service:
 - convert any event to history token thanks to simple history converters
-- support for crawlable urls
-- easily customize your place service
 
 Not only does Mvp4g help you follow the best practices, it also provides mechanisms to build fast applications:
 - support for lazy loading: build your presenters/views only when you need them. Useless presenters/views are also automatically removed.
