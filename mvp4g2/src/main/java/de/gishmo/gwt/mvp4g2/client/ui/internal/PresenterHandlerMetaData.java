@@ -24,7 +24,6 @@ public abstract class PresenterHandlerMetaData<P extends IsPresenter<?, ?>, V ex
                                   Presenter.VIEW_CREATION_METHOD viewCreationMethod) {
     super(canonicalName,
           kind);
-    this.presenter = presenter;
     this.multiple = multiple;
     this.viewCreationMethod = viewCreationMethod;
   }
