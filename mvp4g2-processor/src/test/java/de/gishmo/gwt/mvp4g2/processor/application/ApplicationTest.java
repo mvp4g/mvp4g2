@@ -38,6 +38,15 @@ public class ApplicationTest {
   }
 
   @org.junit.Test
+  public void testApplicationAnnotationWithoutEventBusAttribute() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationWithoutEventBusAttribute.java"))
+          .processedWith(new ApplicationProcessor())
+          .failsToCompile()
+          .withErrorContaining("is missing a default value for the element 'eventBus");
+  }
+
+  @org.junit.Test
   public void testApplicationInterfaceWithoutExtendsIsApplication() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationInterfaceWithoutExtendsIsApplication.java"))

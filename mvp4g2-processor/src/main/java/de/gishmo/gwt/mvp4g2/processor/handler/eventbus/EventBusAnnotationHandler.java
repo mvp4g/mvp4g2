@@ -15,6 +15,7 @@ import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventAnnotation
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlerRegristrationGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlingMethodGenerator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.FilterAnnotationGenerator;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.validation.ShellAttributeValidator;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.validation.StartAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -125,6 +126,10 @@ public class EventBusAnnotationHandler {
   private void validateEventBus()
     throws ProcessorException {
     // create validator instances
+    ShellAttributeValidator shellAttributeValidator = ShellAttributeValidator.builder()
+                                                                             .processingEnvironment(this.processingEnvironment)
+                                                                             .roundEnvironment(this.roundEnvironment)
+                                                                             .build();
     StartAnnotationValidator startAnnotationValidator = StartAnnotationValidator.builder()
                                                                                 .processingEnvironment(this.processingEnvironment)
                                                                                 .roundEnvironment(this.roundEnvironment)
@@ -147,11 +152,15 @@ public class EventBusAnnotationHandler {
     for (Element element : elementsWithEventBusAnnotation) {
       if (element instanceof TypeElement) {
         TypeElement typeElement = (TypeElement) element;
+        // Eventbus must be an interface!
         if (!typeElement.getKind()
                         .isInterface()) {
           throw new ProcessorException("@Eventbus can only be used with an interface");
         }
+        // EventBus must extends IsEventBus
 
+        // Eventbus: validate shellPresenter
+        shellAttributeValidator.validate(typeElement);
 
         // validate @Start-annotation
         startAnnotationValidator.validate(typeElement);

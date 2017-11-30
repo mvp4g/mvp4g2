@@ -93,7 +93,7 @@ public class ApplicationAnnotationHandler {
                                                                             .getTypeElement(IsApplication.class.getCanonicalName())
                                                                             .asType())) {
         throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Application must implement IsApplicaiton interface");
+                                                .toString() + ": @Application must implement IsApplication interface");
       }
     }
 
