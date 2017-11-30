@@ -43,7 +43,7 @@ public class ApplicationTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationInterfaceWithoutExtendsIsApplication.java"))
           .processedWith(new ApplicationProcessor())
           .failsToCompile()
-          .withErrorContaining("@Application must implement IsApplicaiton interface");
+          .withErrorContaining("@Application must implement IsApplication interface");
   }
 
   @Test

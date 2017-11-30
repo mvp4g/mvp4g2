@@ -91,7 +91,7 @@ import java.lang.annotation.Target;
 public @interface Event {
 
   //default name that developers are unlikely to enter to know when method name should be used
-  public static final String DEFAULT_NAME = "#%!|&";
+  public static final String DEFAULT_NAME = "#%!|&*+!##%$";
 
   String name() default DEFAULT_NAME;
 

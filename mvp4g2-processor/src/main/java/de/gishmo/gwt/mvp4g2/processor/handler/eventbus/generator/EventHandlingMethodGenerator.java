@@ -534,7 +534,6 @@ public class EventHandlingMethodGenerator {
              });
   }
 
-
   private TypeElement getHistoryConverterTypeElement(Event eventAnnotation) {
     try {
       eventAnnotation.historyConverter();

@@ -213,8 +213,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
   public void setShell() {
     // no IsShellPresenter found! ==> error
-    assert this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName)
-                                           .get(0) != null : "there is no presenter which implements IsShellPresenter!";
+    assert this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName) != null : "there is no presenter which implements IsShellPresenter!";
     // more than one IsShellPresenter found! ==> error
     assert this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName)
                                            .size() > 0 : "there is more than one presenter defined which implements IsShellPresenter!";

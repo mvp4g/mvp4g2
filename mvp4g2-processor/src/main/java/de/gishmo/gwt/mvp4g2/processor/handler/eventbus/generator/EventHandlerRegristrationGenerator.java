@@ -22,6 +22,7 @@ import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
 import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
@@ -33,6 +34,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,12 +150,19 @@ public class EventHandlerRegristrationGenerator {
   }
 
   private List<String> createListOfEventHandlersToCreate() {
+    // List of already created EventHandler used to avoid a second create ...
+    List<String> listOfEventHandlersToCreate = new ArrayList<>();
+    // add the ShellPresenter to the list!
+    TypeElement shellTypeElement = this.getShellTypeElement();
+    if (shellTypeElement != null) {
+      listOfEventHandlersToCreate.add(shellTypeElement.getQualifiedName()
+                                                      .toString());
+    }
     // get all elements annotated with Event
     List<Element> events = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
                                                                                      this.eventBusTypeElement,
                                                                                      Event.class);
-    // List of already created EventHandler used to avoid a second create ...
-    List<String> listOfEventHandlersToCreate = new ArrayList<>();
+    // get al eventhandelers from @Event
     events.stream()
           .map(eventElement -> (ExecutableElement) eventElement)
           .forEach(executableElement -> {
@@ -217,6 +226,17 @@ public class EventHandlerRegristrationGenerator {
       methodToGenerate.addStatement("$N.getEventHandler().setEventBus(this)",
                                     metaDataVariableName);
     }
+  }
+
+  private TypeElement getShellTypeElement() {
+    try {
+      eventBusTypeElement.getAnnotation(EventBus.class)
+                         .shell();
+    } catch (MirroredTypeException exception) {
+      return (TypeElement) this.processingEnvironment.getTypeUtils()
+                                                     .asElement(exception.getTypeMirror());
+    }
+    return null;
   }
 
   public static final class Builder {
