@@ -146,7 +146,6 @@ public class EventBusUtils {
                                             AbstractPresenter.class);
   }
 
-
   public static final class Builder {
 
     ProcessingEnvironment processingEnvironment;

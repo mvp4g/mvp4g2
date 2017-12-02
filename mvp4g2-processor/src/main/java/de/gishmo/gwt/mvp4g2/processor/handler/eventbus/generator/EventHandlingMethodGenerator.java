@@ -19,7 +19,9 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.WildcardTypeName;
 import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
@@ -41,6 +43,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -92,8 +95,11 @@ public class EventHandlingMethodGenerator {
     events.stream()
           .map(eventElement -> (ExecutableElement) eventElement)
           .forEach(executableElement -> {
-            this.generateEventHandlingMethod(executableElement);
-            this.generateEventHandlingMethodForExecution(executableElement);
+            TypeElement historyConverterTypeElement = this.getHistoryConverterTypeElement(executableElement.getAnnotation(Event.class));
+            this.generateEventHandlingMethod(historyConverterTypeElement,
+                                             executableElement);
+            this.generateEventHandlingMethodForExecution(historyConverterTypeElement,
+                                                         executableElement);
           });
     // generate the code for the Start event handling
     this.generateStartEventHandlingMethod();
@@ -115,7 +121,25 @@ public class EventHandlingMethodGenerator {
     //    }
   }
 
-  private void generateEventHandlingMethod(ExecutableElement executableElement) {
+  private TypeElement getHistoryConverterTypeElement(Event eventAnnotation) {
+    try {
+      eventAnnotation.historyConverter();
+    } catch (MirroredTypeException exception) {
+      TypeElement historyConverterTypeElement = (TypeElement) this.processingEnvironment.getTypeUtils()
+                                                                                        .asElement(exception.getTypeMirror());
+      if (Event.NoHistoryConverter.class.getCanonicalName()
+                                        .equals(historyConverterTypeElement.getQualifiedName()
+                                                                           .toString())) {
+        return null;
+      }
+
+      return historyConverterTypeElement;
+    }
+    return null;
+  }
+
+  private void generateEventHandlingMethod(TypeElement historyConverterTypeElement,
+                                           ExecutableElement executableElement) {
     MethodSpec.Builder eventHandlingMethod = MethodSpec.methodBuilder(executableElement.getSimpleName()
                                                                                        .toString())
                                                        .addAnnotation(Override.class)
@@ -170,7 +194,8 @@ public class EventHandlingMethodGenerator {
     typeSpec.addMethod(eventHandlingMethod.build());
   }
 
-  private void generateEventHandlingMethodForExecution(ExecutableElement executableElement) {
+  private void generateEventHandlingMethodForExecution(TypeElement historyConverterTypeElement,
+                                                       ExecutableElement executableElement) {
     String sb = EventHandlingMethodGenerator.EXECUTION_METHOD_PREFIX +
                 executableElement.getSimpleName()
                                  .toString()
@@ -263,7 +288,12 @@ public class EventHandlingMethodGenerator {
       eventHandlingMethod.addStatement("$T<$T<?, ?>> presenters = null",
                                        ClassName.get(List.class),
                                        ClassName.get(PresenterHandlerMetaData.class));
-      eventHandlingMethod.addStatement("boolean executed = false");
+      if (historyConverterTypeElement != null) {
+        eventHandlingMethod.addStatement("$T<$T> listOfExecutedHandlers = new $T<>()",
+                                         ClassName.get(List.class),
+                                         ClassName.get(String.class),
+                                         ClassName.get(ArrayList.class));
+      }
       // start presenter code
       eventHandlerClasses.forEach(eventHandlerClass -> {
         eventHandlingMethod.addComment("handling: " + eventHandlerClass);
@@ -271,15 +301,22 @@ public class EventHandlingMethodGenerator {
                                        executableElement,
                                        eventHandlerClass,
                                        "eventHandlerMetaDataMap",
-                                       false);
+                                       false,
+                                       historyConverterTypeElement);
         this.createEventHandlingMethod(eventHandlingMethod,
                                        executableElement,
                                        eventHandlerClass,
                                        "presenterHandlerMetaDataMap",
-                                       true);
+                                       true,
+                                       historyConverterTypeElement);
       });
-      this.createPlaceSericePlaceCall(eventHandlingMethod,
-                                      executableElement);
+      // Manage broadcasting
+      // TODO asdasdsad
+
+
+      this.createPlaceServicePlaceCall(eventHandlingMethod,
+                                       executableElement,
+                                       historyConverterTypeElement);
     }
     typeSpec.addMethod(eventHandlingMethod.build());
   }
@@ -381,7 +418,8 @@ public class EventHandlingMethodGenerator {
                                          ExecutableElement executableElement,
                                          String eventHandlerClass,
                                          String handlerMetaDataMapName,
-                                         boolean isPresenter) {
+                                         boolean isPresenter,
+                                         TypeElement historyConverterTypeElement) {
     String getHandlerMethodName = isPresenter ? "getPresenter" : "getEventHandler";
     String variableName = isPresenter ? "presenters" : "eventHandlers";
 
@@ -391,71 +429,71 @@ public class EventHandlingMethodGenerator {
                         variableName,
                         handlerMetaDataMapName,
                         eventHandlerClass);
-    method.beginControlFlow("if ($N != null && $N.size() != 0)",
-                            variableName,
-                            variableName);
-    method.beginControlFlow("for ($T<$N> metaData : $N)",
-                            ClassName.get(metaDataClass),
-                            isPresenter ? "?, ?" : "?",
-                            variableName);
-    method.addStatement("boolean activated = metaData.$N().isActivated()",
-                        getHandlerMethodName);
-    method.addCode("activated = activated && metaData.$N().pass(eventMetaData.getEventName()",
-                   getHandlerMethodName);
-    executableElement.getParameters()
-                     .forEach(variableElement -> method.addCode(", $N",
-                                                                variableElement.getSimpleName()
-                                                                               .toString()));
-    method.addCode(");\n");
-    method.beginControlFlow("if (activated)");
-    //      method.beginControlFlow("if (presenterHandlerMetaData.getPresenter().isBinded())");
-    // event handling
-    method.addStatement("super.logHandler($T.logDepth, $S, $S)",
-                        ClassName.get(AbstractEventBus.class),
-                        executableElement.getSimpleName()
-                                         .toString(),
-                        eventHandlerClass);
-    method.addStatement("metaData.$N().onBeforeEvent($S)",
-                        getHandlerMethodName,
-                        executableElement.getSimpleName()
-                                         .toString());
-    method.addCode("(($T) metaData.$N()).on$L(",
-                   ClassName.get(eventHandlerClass.substring(0,
-                                                             eventHandlerClass.lastIndexOf(".")),
-                                 eventHandlerClass.substring(eventHandlerClass.lastIndexOf(".") + 1)),
-                   getHandlerMethodName,
-                   executableElement.getSimpleName()
-                                    .toString()
-                                    .substring(0,
-                                               1)
-                                    .toUpperCase() + executableElement.getSimpleName()
-                                                                      .toString()
-                                                                      .substring(1));
-    this.createSignatureForEventCall(method,
-                                     executableElement,
-                                     false);
-//    boolean firstElement = true;
-//    for (VariableElement variableElement : executableElement.getParameters()) {
-//      if (firstElement) {
-//        firstElement = false;
-//      } else {
-//        method.addCode(", ");
-//      }
-//      method.addCode("$N",
-//                     variableElement.getSimpleName()
-//                                    .toString());
+    this.generateEventHandlerCall(method,
+                                  executableElement,
+                                  eventHandlerClass,
+                                  getHandlerMethodName,
+                                  isPresenter,
+                                  historyConverterTypeElement);
+
+
+//    method.beginControlFlow("if ($N != null && $N.size() != 0)",
+//                            variableName,
+//                            variableName);
+//    method.beginControlFlow("for ($T<$N> metaData : $N)",
+//                            ClassName.get(metaDataClass),
+//                            isPresenter ? "?, ?" : "?",
+//                            variableName);
+//    method.addStatement("boolean activated = metaData.$N().isActivated()",
+//                        getHandlerMethodName);
+//    method.addCode("activated = activated && metaData.$N().pass(eventMetaData.getEventName()",
+//                   getHandlerMethodName);
+//    executableElement.getParameters()
+//                     .forEach(variableElement -> method.addCode(", $N",
+//                                                                variableElement.getSimpleName()
+//                                                                               .toString()));
+//    method.addCode(");\n");
+//    method.beginControlFlow("if (activated)");
+//    //      method.beginControlFlow("if (presenterHandlerMetaData.getPresenter().isBinded())");
+//    // event handling
+//    method.addStatement("super.logHandler($T.logDepth, $S, $S)",
+//                        ClassName.get(AbstractEventBus.class),
+//                        executableElement.getSimpleName()
+//                                         .toString(),
+//                        eventHandlerClass);
+//    method.addStatement("metaData.$N().onBeforeEvent($S)",
+//                        getHandlerMethodName,
+//                        executableElement.getSimpleName()
+//                                         .toString());
+//    method.addCode("(($T) metaData.$N()).on$L(",
+//                   ClassName.get(eventHandlerClass.substring(0,
+//                                                             eventHandlerClass.lastIndexOf(".")),
+//                                 eventHandlerClass.substring(eventHandlerClass.lastIndexOf(".") + 1)),
+//                   getHandlerMethodName,
+//                   executableElement.getSimpleName()
+//                                    .toString()
+//                                    .substring(0,
+//                                               1)
+//                                    .toUpperCase() + executableElement.getSimpleName()
+//                                                                      .toString()
+//                                                                      .substring(1));
+//    this.createSignatureForEventCall(method,
+//                                     executableElement,
+//                                     false);
+//    method.addCode(");\n");
+//    if (historyConverterTypeElement != null) {
+//      method.addStatement("listOfExecutedHandlers.add($S)",
+//                          eventHandlerClass);
 //    }
-    method.addCode(");\n");
-    method.addStatement("executed = true");
-    //      method.endControlFlow();
-    method.endControlFlow();
-    method.endControlFlow();
-    method.endControlFlow();
+//    //      method.endControlFlow();
+//    method.endControlFlow();
+//    method.endControlFlow();
+//    method.endControlFlow();
   }
 
-  private void createPlaceSericePlaceCall(MethodSpec.Builder method,
-                                          ExecutableElement executableElement) {
-    TypeElement historyConverterTypeElement = this.getHistoryConverterTypeElement(executableElement.getAnnotation(Event.class));
+  private void createPlaceServicePlaceCall(MethodSpec.Builder method,
+                                           ExecutableElement executableElement,
+                                           TypeElement historyConverterTypeElement) {
     if (historyConverterTypeElement == null) {
       return;
     }
@@ -466,7 +504,7 @@ public class EventHandlingMethodGenerator {
     }
     History.HistoryConverterType historyConverterType = historyConverterTypeElement.getAnnotation(History.class)
                                                                                    .type();
-    method.beginControlFlow("if (executed)");
+    method.beginControlFlow("if (listOfExecutedHandlers.size() > 0)");
     switch (historyConverterType) {
       case NONE:
         method.addStatement("super.placeService.place($S, null, false)",
@@ -512,6 +550,90 @@ public class EventHandlingMethodGenerator {
     method.endControlFlow();
   }
 
+  private void generateEventHandlerCall(MethodSpec.Builder method,
+                                        ExecutableElement executableElement,
+                                        String eventHandlerClass,
+                                        String handlerMetaDataMapName,
+                                        boolean isPresenter,
+                                        TypeElement historyConverterTypeElement) {
+    String getHandlerMethodName = isPresenter ? "getPresenter" : "getEventHandler";
+    String variableName = isPresenter ? "presenters" : "eventHandlers";
+    String methodName = isPresenter ? "executePresenter" : "executeEventHandler";
+
+    Class<?> metaDataClass = isPresenter ? PresenterHandlerMetaData.class : EventHandlerMetaData.class;
+
+    MethodSpec.Builder passMethod = MethodSpec.methodBuilder("execPass")
+                                              .addAnnotation(Override.class)
+                                              .addModifiers(Modifier.PUBLIC)
+                                              .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(EventMetaData.class),
+                                                                                                           WildcardTypeName.subtypeOf(Object.class)),
+                                                                                  "eventMetaData")
+                                                                         .build())
+                                              .addParameter(isPresenter ? ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(PresenterHandlerMetaData.class),
+                                                                                                                          WildcardTypeName.subtypeOf(Object.class),
+                                                                                                                          WildcardTypeName.subtypeOf(Object.class)),
+                                                                                                "metaData")
+                                                                                       .build() : ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(EventHandlerMetaData.class),
+                                                                                                                                                  WildcardTypeName.subtypeOf(Object.class)),
+                                                                                                                        "metaData")
+                                                                                                               .build())
+                                              .returns(boolean.class)
+                                              .addCode("return metaData.$N().pass(eventMetaData.getEventName()",
+                                                       getHandlerMethodName);
+    createSignatureForEventCall(passMethod,
+                                executableElement,
+                                true);
+    passMethod.addCode(");\n");
+
+    MethodSpec.Builder execMethod = MethodSpec.methodBuilder("execEventHandlingMethod")
+                                              .addAnnotation(Override.class)
+                                              .addModifiers(Modifier.PUBLIC)
+                                              .addParameter(isPresenter ? ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(PresenterHandlerMetaData.class),
+                                                                                                                          WildcardTypeName.subtypeOf(Object.class),
+                                                                                                                          WildcardTypeName.subtypeOf(Object.class)),
+                                                                                                "metaData")
+                                                                                       .build() : ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(EventHandlerMetaData.class),
+                                                                                                                                                  WildcardTypeName.subtypeOf(Object.class)),
+                                                                                                                        "metaData")
+                                                                                                               .build())
+                                              .addCode("(($T) metaData.$N()).on$L(",
+                                                       ClassName.get(eventHandlerClass.substring(0,
+                                                                                                 eventHandlerClass.lastIndexOf(".")),
+                                                                     eventHandlerClass.substring(eventHandlerClass.lastIndexOf(".") + 1)),
+                                                       getHandlerMethodName,
+                                                       executableElement.getSimpleName()
+                                                                        .toString()
+                                                                        .substring(0,
+                                                                                   1)
+                                                                        .toUpperCase() + executableElement.getSimpleName()
+                                                                                                          .toString()
+                                                                                                          .substring(1));
+    this.createSignatureForEventCall(execMethod,
+                                     executableElement,
+                                     false);
+    execMethod.addCode(");\n");
+
+    ParameterizedTypeName execEventHanderTypeName = ParameterizedTypeName.get(ClassName.get(AbstractEventBus.ExecEventHandler.class),
+                                                                              ClassName.get(this.processorUtils.getPackageAsString(this.eventBusTypeElement),
+                                                                                            this.eventBusTypeElement.getSimpleName()
+                                                                                                                    .toString()));
+    ParameterizedTypeName presenterTypeName = ParameterizedTypeName.get(ClassName.get(AbstractEventBus.ExecPresenter.class),
+                                                                        ClassName.get(this.processorUtils.getPackageAsString(this.eventBusTypeElement),
+                                                                                      this.eventBusTypeElement.getSimpleName()
+                                                                                                              .toString()));
+
+    method.addStatement("super.$L(eventMetaData, $L, $L, $L, $L)",
+                        methodName,
+                        variableName,
+                        historyConverterTypeElement != null ? "listOfExecutedHandlers" : "null",
+                        TypeSpec.anonymousClassBuilder("")
+                                .addSuperinterface(isPresenter ? ClassName.get(AbstractEventBus.ExecPresenter.class) : ClassName.get(AbstractEventBus.ExecEventHandler.class))
+                                .addMethod(passMethod.build())
+                                .addMethod(execMethod.build())
+                                .build(),
+                        historyConverterTypeElement != null);
+  }
+
   private void createSignatureForEventCall(MethodSpec.Builder method,
                                            ExecutableElement executableElement,
                                            boolean leadingComma) {
@@ -532,16 +654,6 @@ public class EventHandlingMethodGenerator {
                                                .getSimpleName()
                                                .toString());
              });
-  }
-
-  private TypeElement getHistoryConverterTypeElement(Event eventAnnotation) {
-    try {
-      eventAnnotation.historyConverter();
-    } catch (MirroredTypeException exception) {
-      return (TypeElement) this.processingEnvironment.getTypeUtils()
-                                                     .asElement(exception.getTypeMirror());
-    }
-    return null;
   }
 
   public static final class Builder {

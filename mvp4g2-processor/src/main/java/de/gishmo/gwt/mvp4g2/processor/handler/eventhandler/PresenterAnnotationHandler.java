@@ -94,9 +94,9 @@ public class PresenterAnnotationHandler {
                                                   .toString() + ": the viewInterface-attribute of a @Presenter must be a interface!");
         }
         // check, if viewClass is implementing viewInterface
-        if (!ProcessorUtils.implementsInterface(this.processingEnvironment,
-                                                viewClassElement,
-                                                viewInterfaceElement.asType())) {
+        if (!this.processorUtils.implementsInterface(this.processingEnvironment,
+                                                     viewClassElement,
+                                                     viewInterfaceElement.asType())) {
           throw new ProcessorException(typeElement.getSimpleName()
                                                   .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
         }
@@ -112,15 +112,15 @@ public class PresenterAnnotationHandler {
     TypeElement viewClassElement = this.getViewClassTypeElement(presenter);
     TypeElement viewInterfaceElement = this.getViewInterfaceTypeElement(presenter);
 
-    String className = this.processorUtils.createFullClassName(ProcessorUtils.getPackageAsString(element),
+    String className = this.processorUtils.createFullClassName(this.processorUtils.getPackageAsString(element),
                                                                element.getSimpleName()
                                                                       .toString()) + PresenterAnnotationHandler.IMPL_NAME;
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.processorUtils.setFirstCharacterToUpperCase(className))
                                         .superclass(ParameterizedTypeName.get(ClassName.get(PresenterHandlerMetaData.class),
-                                                                              ClassName.get(ProcessorUtils.getPackageAsString(typeElement),
+                                                                              ClassName.get(this.processorUtils.getPackageAsString(typeElement),
                                                                                             typeElement.getSimpleName()
                                                                                                        .toString()),
-                                                                              ClassName.get(ProcessorUtils.getPackageAsString(viewInterfaceElement),
+                                                                              ClassName.get(this.processorUtils.getPackageAsString(viewInterfaceElement),
                                                                                             viewInterfaceElement.getSimpleName()
                                                                                                                 .toString())))
                                         .addModifiers(Modifier.PUBLIC,
@@ -130,21 +130,21 @@ public class PresenterAnnotationHandler {
     MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
                                                .addModifiers(Modifier.PUBLIC)
                                                .addStatement("super($S, $T.PRESENTER, $N, $T.$L)",
-                                                             ProcessorUtils.getCanonicalClassName(typeElement),
+                                                             this.processorUtils.getCanonicalClassName(typeElement),
                                                              ClassName.get(EventHandlerMetaData.Kind.class),
                                                              presenter.multiple() ? "true" : "false",
                                                              ClassName.get(Presenter.VIEW_CREATION_METHOD.class),
                                                              getCreator(typeElement));
     constructor.addStatement("super.presenter = new $T()",
-                             ClassName.get(ProcessorUtils.getPackageAsString(typeElement),
+                             ClassName.get(this.processorUtils.getPackageAsString(typeElement),
                                            typeElement.getSimpleName()
                                                       .toString()));
     if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.equals(getCreator(typeElement))) {
       constructor.addStatement("super.view = ($T) new $T()",
-                               ClassName.get(ProcessorUtils.getPackageAsString(viewClassElement),
+                               ClassName.get(this.processorUtils.getPackageAsString(viewClassElement),
                                              viewInterfaceElement.getSimpleName()
                                                                  .toString()),
-                               ClassName.get(ProcessorUtils.getPackageAsString(viewClassElement),
+                               ClassName.get(this.processorUtils.getPackageAsString(viewClassElement),
                                              viewClassElement.getSimpleName()
                                                              .toString()));
     } else {
@@ -152,7 +152,7 @@ public class PresenterAnnotationHandler {
     }
     typeSpec.addMethod(constructor.build());
 
-    JavaFile javaFile = JavaFile.builder(ProcessorUtils.getPackageAsString(element),
+    JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(element),
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());
@@ -203,4 +203,6 @@ public class PresenterAnnotationHandler {
     }
 
   }
+
+
 }

@@ -78,11 +78,11 @@ public class EventHandlerAnnotationHandler {
                                                   .toString() + ": @EventHandler can only be used with as class!");
         }
         // check, that the typeElement extends AbstarctEventHandler
-        if (!ProcessorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                    typeElement.asType(),
-                                                    this.processingEnvironment.getElementUtils()
-                                                                              .getTypeElement(AbstractEventHandler.class.getCanonicalName())
-                                                                              .asType())) {
+        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                         typeElement.asType(),
+                                                         this.processingEnvironment.getElementUtils()
+                                                                                   .getTypeElement(AbstractEventHandler.class.getCanonicalName())
+                                                                                   .asType())) {
           throw new ProcessorException(typeElement.getSimpleName()
                                                   .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
         }
@@ -97,12 +97,12 @@ public class EventHandlerAnnotationHandler {
     EventHandler presenter = element.getAnnotation(EventHandler.class);
     TypeElement typeElement = (TypeElement) element;
 
-    String className = this.processorUtils.createFullClassName(ProcessorUtils.getPackageAsString(element),
+    String className = this.processorUtils.createFullClassName(this.processorUtils.getPackageAsString(element),
                                                                element.getSimpleName()
                                                                       .toString()) + EventHandlerAnnotationHandler.IMPL_NAME;
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.processorUtils.setFirstCharacterToUpperCase(className))
                                         .superclass(ParameterizedTypeName.get(ClassName.get(EventHandlerMetaData.class),
-                                                                              ClassName.get(ProcessorUtils.getPackageAsString(typeElement),
+                                                                              ClassName.get(this.processorUtils.getPackageAsString(typeElement),
                                                                                             typeElement.getSimpleName()
                                                                                                        .toString())))
                                         .addModifiers(Modifier.PUBLIC,
@@ -112,13 +112,13 @@ public class EventHandlerAnnotationHandler {
     MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
                                                .addModifiers(Modifier.PUBLIC)
                                                .addStatement("super($S, $T.EVENT_HANDLER, new $T())",
-                                                             ProcessorUtils.getCanonicalClassName(typeElement),
+                                                             this.processorUtils.getCanonicalClassName(typeElement),
                                                              ClassName.get(EventHandlerMetaData.Kind.class),
-                                                             ClassName.get(ProcessorUtils.getPackageAsString(typeElement),
+                                                             ClassName.get(this.processorUtils.getPackageAsString(typeElement),
                                                                            typeElement.getSimpleName()
                                                                                       .toString()));
     typeSpec.addMethod(constructor.build());
-    JavaFile javaFile = JavaFile.builder(ProcessorUtils.getPackageAsString(element),
+    JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(element),
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());

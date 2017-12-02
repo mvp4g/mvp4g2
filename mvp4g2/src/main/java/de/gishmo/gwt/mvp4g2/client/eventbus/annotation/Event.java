@@ -29,6 +29,11 @@ import java.lang.annotation.Target;
  * <code>IsEventBus</code> in order to define event.<br>
  * <br>
  * The annotation has the following attributes:
+ * <p>
+ * <li>handlers: classes of the handlers of this event. You can have zero to several handlers for an
+ * event.</li>
+ * <li> bind: classes that need to be binded when this event occurs. You can have zero to several classes
+ * for an event. </li>
  * <ul>
  * <p>
  * <p>
@@ -41,14 +46,9 @@ import java.lang.annotation.Target;
  * <p>
  * <p>
  * <p>
- * <p>
- * <li>handlers: classes of the handlers of this event. You can have zero to several handlers for an
- * event.</li>
  * <li>handlerNames: instead of using their classes, you can define handlers thanks to their name
  * (in case you have given names to your handlers). Not recommended because this method tends to
  * create typo errors.</li>
- * <li> bind: classes that need to be binded when this event occurs. You can have zero to several classes
- * for an event. </li>
  * <li> bindNames: instead of using their classes, you can define binds thanks to their name. Not recommended.
  * <li>modulesToLoad: child modules that should be loaded if necessary and to which the event should
  * be forwarded. Child modules to which the event is forwarded must be one of the child modules of
@@ -105,6 +105,8 @@ public @interface Event {
 
   boolean passive() default false;
 
+//  Class<? extends IsBroadcast> broadcastTo() default NoBroadcast.class;
+
   class NoHistoryConverter
     implements IsHistoryConverter<IsEventBus> {
 
@@ -122,6 +124,10 @@ public @interface Event {
       return false;
     }
   }
+
+//  interface NoBroadcast
+//    extends IsBroadcast {
+//  }
 
 //
 //  String historyConverterName() default "";
@@ -144,12 +150,9 @@ public @interface Event {
 //  String[] deactivateNames() default {};
 
 
-//  Class<?> broadcastTo() default NoBroadcast.class;
 //
 //  Class<? extends EventHandlerInterface<? extends EventBus>>[] generate() default {};
 //
 //  String[] generateNames() default {};
-//  class NoBroadcast {
-//  }
 
 }

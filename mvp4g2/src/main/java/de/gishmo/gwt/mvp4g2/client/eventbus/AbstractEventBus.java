@@ -402,23 +402,6 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     }
   }
 
-  protected void logHandler(int logDepth,
-                            String eventName,
-                            String handlerClassName) {
-    if (debugEnable) {
-      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DEBUG - EventBus -> event: >>")
-          .append(eventName)
-          .append("<< handled by: >>")
-          .append(handlerClassName)
-          .append("<<");
-        this.log(sb.toString(),
-                 logDepth);
-      }
-    }
-  }
-
   /**
    * If filtering is enabled, executes event filters associated with this event bus.
    *
@@ -470,5 +453,90 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    */
   protected void setFiltersEnable(boolean filtersEnable) {
     this.filtersEnable = filtersEnable;
+  }
+
+  protected void logHandler(int logDepth,
+                            String eventName,
+                            String handlerClassName) {
+    if (debugEnable) {
+      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DEBUG - EventBus -> event: >>")
+          .append(eventName)
+          .append("<< handled by: >>")
+          .append(handlerClassName)
+          .append("<<");
+        this.log(sb.toString(),
+                 logDepth);
+      }
+    }
+  }
+
+  protected <E extends IsEventBus> void executeEventHandler(EventMetaData<E> eventMetaData,
+                                                            List<EventHandlerMetaData<?>> eventHandlers,
+                                                            List<String> listOfExecutedHandlers,
+                                                            ExecEventHandler execEventHandler,
+                                                            boolean addHandler) {
+    if (eventHandlers != null && eventHandlers.size() != 0) {
+      for (EventHandlerMetaData<?> metaData : eventHandlers) {
+        boolean activated = metaData.getEventHandler()
+                                    .isActivated();
+        boolean pass = execEventHandler.execPass(eventMetaData, metaData);
+        if (activated && pass) {
+          logHandler(AbstractEventBus.logDepth,
+                     eventMetaData.getEventName(),
+                     metaData.getCanonicalName());
+          metaData.getEventHandler()
+                  .onBeforeEvent(eventMetaData.getEventName());
+          execEventHandler.execEventHandlingMethod(metaData);
+          if (listOfExecutedHandlers != null && addHandler) {
+            listOfExecutedHandlers.add(metaData.getCanonicalName());
+          }
+        }
+      }
+    }
+  }
+
+  protected <E extends IsEventBus> void executePresenter(EventMetaData<E> eventMetaData,
+                                                         List<PresenterHandlerMetaData<?, ?>> presenters,
+                                                         List<String> listOfExecutedHandlers,
+                                                         ExecPresenter execEventHandler,
+                                                         boolean addHandler) {
+    if (presenters != null && presenters.size() != 0) {
+      for (PresenterHandlerMetaData<?, ?> metaData : presenters) {
+        boolean activated = metaData.getPresenter()
+                                    .isActivated();
+        boolean pass = execEventHandler.execPass(eventMetaData, metaData);
+        if (activated && pass) {
+          logHandler(AbstractEventBus.logDepth,
+                     eventMetaData.getEventName(),
+                     metaData.getCanonicalName());
+          metaData.getPresenter()
+                  .onBeforeEvent(eventMetaData.getEventName());
+          execEventHandler.execEventHandlingMethod(metaData);
+          if (listOfExecutedHandlers != null && addHandler) {
+            listOfExecutedHandlers.add(metaData.getCanonicalName());
+          }
+        }
+      }
+    }
+  }
+
+  public interface ExecEventHandler {
+
+    boolean execPass(EventMetaData<?> eventMetaData,
+                     EventHandlerMetaData<?> metaData);
+
+    void execEventHandlingMethod(EventHandlerMetaData<?> metaData);
+
+  }
+
+  public interface ExecPresenter {
+
+    boolean execPass(EventMetaData<?> eventMetaData,
+                     PresenterHandlerMetaData<?, ?> metaData                     );
+
+    void execEventHandlingMethod(PresenterHandlerMetaData<?, ?> metaData);
+
   }
 }

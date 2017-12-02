@@ -78,7 +78,7 @@ public class ApplicationAnnotationHandler {
       throw new ProcessorException("There should be at least only one interface, that is annotated with @Application");
     }
     for (Element element : elementsWithApplicaitonAnnotation) {
-        TypeElement typeElement = (TypeElement) element;
+      TypeElement typeElement = (TypeElement) element;
       // annotated element has to be a interface
       if (element instanceof TypeElement) {
         if (!typeElement.getKind()
@@ -87,11 +87,11 @@ public class ApplicationAnnotationHandler {
         }
       }
       // check, that the typeElement implements IsApplication
-      if (!ProcessorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                  typeElement.asType(),
-                                                  this.processingEnvironment.getElementUtils()
-                                                                            .getTypeElement(IsApplication.class.getCanonicalName())
-                                                                            .asType())) {
+      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                       typeElement.asType(),
+                                                       this.processingEnvironment.getElementUtils()
+                                                                                 .getTypeElement(IsApplication.class.getCanonicalName())
+                                                                                 .asType())) {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": @Application must implement IsApplication interface");
       }
@@ -108,12 +108,12 @@ public class ApplicationAnnotationHandler {
 
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(element.getSimpleName() + ApplicationAnnotationHandler.IMPL_NAME)
                                         .superclass(ParameterizedTypeName.get(ClassName.get(AbstractApplication.class),
-                                                                              ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                                                                              ClassName.get(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                                                                             eventBusTypeElement.getSimpleName()
                                                                                                                .toString())))
                                         .addModifiers(Modifier.PUBLIC,
                                                       Modifier.FINAL)
-                                        .addSuperinterface(ClassName.get(ProcessorUtils.getPackageAsString(element),
+                                        .addSuperinterface(ClassName.get(this.processorUtils.getPackageAsString(element),
                                                                          element.getSimpleName()
                                                                                 .toString()));
 
@@ -122,7 +122,7 @@ public class ApplicationAnnotationHandler {
                                        .addModifiers(Modifier.PUBLIC)
                                        .addStatement("super()")
                                        .addStatement("super.eventBus = new $N.$N()",
-                                                     ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                                                     this.processorUtils.getPackageAsString(eventBusTypeElement),
                                                      eventBusTypeElement.getSimpleName()
                                                                         .toString() + ApplicationAnnotationHandler.IMPL_NAME)
                                        .build();
@@ -134,14 +134,14 @@ public class ApplicationAnnotationHandler {
                                                       .addAnnotation(Override.class)
                                                       .returns(IsApplicationLoader.class)
                                                       .addStatement("return new $T()",
-                                                                    ClassName.get(ProcessorUtils.getPackageAsString(apllicaitonLoaderTypeElement),
+                                                                    ClassName.get(this.processorUtils.getPackageAsString(apllicaitonLoaderTypeElement),
                                                                                   apllicaitonLoaderTypeElement.getSimpleName()
                                                                                                               .toString()))
                                                       .build();
     typeSpec.addMethod(getApplicaitonLaoderMethod);
 
 
-    JavaFile javaFile = JavaFile.builder(ProcessorUtils.getPackageAsString(element),
+    JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(element),
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());

@@ -100,7 +100,7 @@ public class HistoryAnnotationHandler {
                                        .build();
     typeSpec.addMethod(constructor);
 
-    JavaFile javaFile = JavaFile.builder(ProcessorUtils.getPackageAsString(element),
+    JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(element),
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());

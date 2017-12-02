@@ -116,9 +116,11 @@ public class EventBusAnnotationHandler {
                                   .generate();
 
       // write eventBus
-      JavaFile javaFile = JavaFile.builder(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+      JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                            typeSpec.build())
                                   .build();
+      System.out.println(javaFile.toString());
+
       javaFile.writeTo(this.processingEnvironment.getFiler());
     }
   }
@@ -173,12 +175,12 @@ public class EventBusAnnotationHandler {
   private TypeSpec.Builder createTypeSpecEventBus(TypeElement eventBusTypeElement) {
     return TypeSpec.classBuilder(eventBusTypeElement.getSimpleName() + ProcessorConstants.IMPL_NAME)
                    .superclass(ParameterizedTypeName.get(ClassName.get(AbstractEventBus.class),
-                                                         ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                                                         ClassName.get(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                                                        eventBusTypeElement.getSimpleName()
                                                                                           .toString())))
                    .addModifiers(Modifier.PUBLIC,
                                  Modifier.FINAL)
-                   .addSuperinterface(ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                   .addSuperinterface(ClassName.get(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                                     eventBusTypeElement.getSimpleName()
                                                                        .toString()));
   }

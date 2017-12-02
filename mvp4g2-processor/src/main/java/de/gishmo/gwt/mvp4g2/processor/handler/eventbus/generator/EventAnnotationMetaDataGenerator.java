@@ -111,7 +111,7 @@ public class EventAnnotationMetaDataGenerator {
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.eventBusUtils.createEventMetaDataClassName(this.eventBusTypeElement,
                                                                                                       executableElement))
                                         .superclass(ParameterizedTypeName.get(ClassName.get(EventMetaData.class),
-                                                                              ClassName.get(ProcessorUtils.getPackageAsString(eventBusTypeElement),
+                                                                              ClassName.get(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                                                                             eventBusTypeElement.getSimpleName()
                                                                                                                .toString())))
                                         .addModifiers(Modifier.PUBLIC,
@@ -139,7 +139,7 @@ public class EventAnnotationMetaDataGenerator {
       constructor.addCode("null, null, ");
     } else {
       constructor.addCode("new $L(), new $T(), ",
-                          ProcessorUtils.getPackageAsString(historyConverterTypeElement) + "." + this.historyUtils.createHistoryMetaDataClassName(historyConverterTypeElement),
+                          this.processorUtils.getPackageAsString(historyConverterTypeElement) + "." + this.historyUtils.createHistoryMetaDataClassName(historyConverterTypeElement),
                           ClassName.get(historyConverterTypeElement));
     }
     constructor.addCode("$L, $L);\n",
@@ -164,7 +164,7 @@ public class EventAnnotationMetaDataGenerator {
     }
     typeSpec.addMethod(constructor.build());
 
-    JavaFile javaFile = JavaFile.builder(ProcessorUtils.getPackageAsString(eventElement),
+    JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(eventElement),
                                          typeSpec.build())
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());
