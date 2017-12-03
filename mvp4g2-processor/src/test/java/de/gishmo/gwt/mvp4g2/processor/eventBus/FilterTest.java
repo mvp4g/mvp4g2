@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event;
+package de.gishmo.gwt.mvp4g2.processor.eventBus;
 
 import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.EventBusProcessor;
@@ -23,14 +23,14 @@ import org.junit.Test;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
-public class DebugEventTest {
+public class FilterTest {
 
   @Test
   public void testDebugAnnotationOnAMethod() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/DebugAnnotationOnAMethod.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/FilterAnnotationOnAMethod.java"))
           .processedWith(new EventBusProcessor())
           .failsToCompile()
-          .withErrorContaining("@Debug can only be used on a type (interface)");
+          .withErrorContaining("@Filter can only be used on a type (interface)");
   }
 }

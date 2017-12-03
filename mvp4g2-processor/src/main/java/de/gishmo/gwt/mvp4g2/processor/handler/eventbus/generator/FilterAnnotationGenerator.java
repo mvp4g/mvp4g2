@@ -18,7 +18,8 @@ package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventFilter;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -28,7 +29,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -75,21 +75,44 @@ public class FilterAnnotationGenerator {
   private void validate()
     throws ProcessorException {
     // get elements annotated with EventBus annotation
-    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
-//    // at least there should only one Application annotation!
-//    if (elementsWithDebugAnnotation.size() > 1) {
-//      throw new ProcessorException("There should be at least only one interface, that is annotated with @Debug");
-//    }
-//    // annotated element has to be a interface
-//    for (Element element : elementsWithDebugAnnotation) {
-//      if (element instanceof TypeElement) {
-//        TypeElement typeElement = (TypeElement) element;
-//        if (!typeElement.getKind()
-//                        .isInterface()) {
-//          throw new ProcessorException("@Debug can only be used with an interface");
-//        }
-//      }
-//    }
+    Set<? extends Element> elementsWithFilterAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
+    // at least there should only one Application annotation!
+    if (elementsWithFilterAnnotation.size() > 1) {
+      throw new ProcessorException("There should be at least only one interface, that is annotated with @Filter");
+    }
+    // annotated element has to be a interface
+    for (Element element : elementsWithFilterAnnotation) {
+      if (element instanceof TypeElement) {
+        TypeElement typeElement = (TypeElement) element;
+        if (!typeElement.getKind()
+                        .isInterface()) {
+          throw new ProcessorException("@Filter can only be used with an interface");
+        }
+        // @Filter can only be used on a interface that extends IsEventBus
+        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                         typeElement.asType(),
+                                                         this.processingEnvironment.getElementUtils()
+                                                                                   .getTypeElement(IsEventBus.class.getCanonicalName())
+                                                                                   .asType())) {
+          throw new ProcessorException("@Filter can only be used on interfaces that extends IsEventBus");
+        }
+        // test, that all filters implement IsEventFilter!
+        List<String> eventFilterAsStringList = this.eventBusUtils.getEventFiltersAsList(this.eventBusTypeElement);
+        for (String eventFilterClassname : eventFilterAsStringList) {
+          TypeElement filterElement = this.processingEnvironment.getElementUtils()
+                                                                .getTypeElement(eventFilterClassname);
+          if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                           filterElement.asType(),
+                                                           this.processingEnvironment.getElementUtils()
+                                                                                     .getTypeElement(IsEventFilter.class.getCanonicalName())
+                                                                                     .asType())) {
+            throw new ProcessorException("@Filter - the filters attribute needs class that implements IsEventFilter");
+          }
+        }
+      } else {
+        throw new ProcessorException("@Filter can only be used on a type (interface)");
+      }
+    }
   }
 
   private void generateLoadFilterConfigurationMethod() {
@@ -119,16 +142,6 @@ public class FilterAnnotationGenerator {
       }
     }
     typeSpec.addMethod(loadFilterConfigurationMethod.build());
-  }
-
-  private TypeElement getLogger(Debug debugAnnotation) {
-    try {
-      debugAnnotation.logger();
-    } catch (MirroredTypeException exception) {
-      return (TypeElement) this.processingEnvironment.getTypeUtils()
-                                                     .asElement(exception.getTypeMirror());
-    }
-    return null;
   }
 
   public static final class Builder {
