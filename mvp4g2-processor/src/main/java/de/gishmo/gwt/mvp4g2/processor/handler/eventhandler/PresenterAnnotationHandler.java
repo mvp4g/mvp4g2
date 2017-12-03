@@ -100,6 +100,8 @@ public class PresenterAnnotationHandler {
           throw new ProcessorException(typeElement.getSimpleName()
                                                   .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
         }
+      } else {
+        throw new ProcessorException("@Presenter can only be used on a type (interface)");
       }
     }
   }

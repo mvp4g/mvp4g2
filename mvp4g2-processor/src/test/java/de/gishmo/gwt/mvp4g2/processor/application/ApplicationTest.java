@@ -56,6 +56,15 @@ public class ApplicationTest {
   }
 
   @Test
+  public void testApplictionAnnotationOnAMethod() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOnAMethod.java"))
+          .processedWith(new ApplicationProcessor())
+          .failsToCompile()
+          .withErrorContaining("@Application can only be used on a type (interface)");
+  }
+
+  @Test
   public void testApplicationAnnotationOkWithLoader() {
     JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithLoaderImpl.java");
 

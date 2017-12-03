@@ -78,22 +78,26 @@ public class ApplicationAnnotationHandler {
       throw new ProcessorException("There should be at least only one interface, that is annotated with @Application");
     }
     for (Element element : elementsWithApplicaitonAnnotation) {
-      TypeElement typeElement = (TypeElement) element;
-      // annotated element has to be a interface
       if (element instanceof TypeElement) {
-        if (!typeElement.getKind()
-                        .isInterface()) {
-          throw new ProcessorException("@Application annotated must be used with an interface");
+        TypeElement typeElement = (TypeElement) element;
+        // annotated element has to be a interface
+        if (element instanceof TypeElement) {
+          if (!typeElement.getKind()
+                          .isInterface()) {
+            throw new ProcessorException("@Application annotated must be used with an interface");
+          }
         }
-      }
-      // check, that the typeElement implements IsApplication
-      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                       typeElement.asType(),
-                                                       this.processingEnvironment.getElementUtils()
-                                                                                 .getTypeElement(IsApplication.class.getCanonicalName())
-                                                                                 .asType())) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Application must implement IsApplication interface");
+        // check, that the typeElement implements IsApplication
+        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                         typeElement.asType(),
+                                                         this.processingEnvironment.getElementUtils()
+                                                                                   .getTypeElement(IsApplication.class.getCanonicalName())
+                                                                                   .asType())) {
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": @Application must implement IsApplication interface");
+        }
+      } else {
+        throw new ProcessorException("@Application can only be used on a type (interface)");
       }
     }
 

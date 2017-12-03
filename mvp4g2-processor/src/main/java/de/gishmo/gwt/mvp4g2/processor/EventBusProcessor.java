@@ -7,6 +7,8 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.client.history.annotation.InitHistory;
+import de.gishmo.gwt.mvp4g2.client.history.annotation.NotFoundHistory;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventbus.EventBusAnnotationHandler;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -35,6 +37,8 @@ public class EventBusProcessor
     annotations.add(Event.class.getCanonicalName());
     annotations.add(EventBus.class.getCanonicalName());
     annotations.add(Filters.class.getCanonicalName());
+    annotations.add(InitHistory.class.getCanonicalName());
+    annotations.add(NotFoundHistory.class.getCanonicalName());
     annotations.add(Start.class.getCanonicalName());
     return annotations;
   }

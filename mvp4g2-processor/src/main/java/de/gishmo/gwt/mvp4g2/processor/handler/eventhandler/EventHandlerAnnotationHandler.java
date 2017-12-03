@@ -86,6 +86,8 @@ public class EventHandlerAnnotationHandler {
           throw new ProcessorException(typeElement.getSimpleName()
                                                   .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
         }
+      } else {
+        throw new ProcessorException("@EventHandler can only be used on a type (interface)");
       }
     }
 

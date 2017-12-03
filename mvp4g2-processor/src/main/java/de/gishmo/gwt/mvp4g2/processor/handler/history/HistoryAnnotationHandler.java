@@ -79,6 +79,9 @@ public class HistoryAnnotationHandler {
 //          throw new ProcessorException("@Application can only be used with an interface");
 //        }
 //      }
+//  } else {
+//    throw new ProcessorException("@History can only be used on a type (interface)");
+
 //    }
   }
 

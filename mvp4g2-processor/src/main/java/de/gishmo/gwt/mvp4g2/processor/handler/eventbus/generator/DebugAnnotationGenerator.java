@@ -18,6 +18,8 @@ package de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.Mvp4g2Logger;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -82,10 +84,30 @@ public class DebugAnnotationGenerator {
     for (Element element : elementsWithDebugAnnotation) {
       if (element instanceof TypeElement) {
         TypeElement typeElement = (TypeElement) element;
+        // @Debug can only be used on a interface
         if (!typeElement.getKind()
                         .isInterface()) {
           throw new ProcessorException("@Debug can only be used with an interface");
         }
+        // @Debug can only be used on a interface that extends IsEventBus
+        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                         typeElement.asType(),
+                                                         this.processingEnvironment.getElementUtils()
+                                                                                   .getTypeElement(IsEventBus.class.getCanonicalName())
+                                                                                   .asType())) {
+          throw new ProcessorException("@Debug can only be used on interfaces that extends IsEventBus");
+        }
+        // the loggerinside the annotation must extends Mvp4g2Logger!
+        TypeElement loggerElement = this.getLogger(typeElement.getAnnotation(Debug.class));
+        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                         typeElement.asType(),
+                                                         this.processingEnvironment.getElementUtils()
+                                                                                   .getTypeElement(Mvp4g2Logger.class.getCanonicalName())
+                                                                                   .asType())) {
+          throw new ProcessorException("@Debug - the logger attribute needs class that extends Mvp4g2Logger");
+        }
+      } else {
+        throw new ProcessorException("@Debug can only be used on a type (interface)");
       }
     }
   }

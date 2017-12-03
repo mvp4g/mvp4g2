@@ -166,6 +166,8 @@ public class EventBusAnnotationHandler {
 
         // validate @Start-annotation
         startAnnotationValidator.validate(typeElement);
+      } else {
+        throw new ProcessorException("@Eventbus can only be used on a type (interface)");
       }
     }
 
