@@ -28,7 +28,7 @@ import static org.truth0.Truth.ASSERT;
 
 public class ApplicationTest {
 
-  @org.junit.Test
+  @Test
   public void testApplicationAnnotationOnAClass() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationInterfaceOnAClass.java"))
@@ -37,7 +37,7 @@ public class ApplicationTest {
           .withErrorContaining("@Application annotated must be used with an interface");
   }
 
-  @org.junit.Test
+  @Test
   public void testApplicationAnnotationWithoutEventBusAttribute() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationWithoutEventBusAttribute.java"))
@@ -46,7 +46,7 @@ public class ApplicationTest {
           .withErrorContaining("is missing a default value for the element 'eventBus");
   }
 
-  @org.junit.Test
+  @Test
   public void testApplicationInterfaceWithoutExtendsIsApplication() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationInterfaceWithoutExtendsIsApplication.java"))

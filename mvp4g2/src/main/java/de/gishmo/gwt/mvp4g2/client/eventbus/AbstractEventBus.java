@@ -500,20 +500,20 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   protected <E extends IsEventBus> void executePresenter(EventMetaData<E> eventMetaData,
                                                          List<PresenterHandlerMetaData<?, ?>> presenters,
                                                          List<String> listOfExecutedHandlers,
-                                                         ExecPresenter execEventHandler,
+                                                         ExecPresenter execPresenter,
                                                          boolean addHandler) {
     if (presenters != null && presenters.size() != 0) {
       for (PresenterHandlerMetaData<?, ?> metaData : presenters) {
         boolean activated = metaData.getPresenter()
                                     .isActivated();
-        boolean pass = execEventHandler.execPass(eventMetaData, metaData);
+        boolean pass = execPresenter.execPass(eventMetaData, metaData);
         if (activated && pass) {
           logHandler(AbstractEventBus.logDepth,
                      eventMetaData.getEventName(),
                      metaData.getCanonicalName());
           metaData.getPresenter()
                   .onBeforeEvent(eventMetaData.getEventName());
-          execEventHandler.execEventHandlingMethod(metaData);
+          execPresenter.execEventHandlingMethod(metaData);
           if (listOfExecutedHandlers != null && addHandler) {
             listOfExecutedHandlers.add(metaData.getCanonicalName());
           }
