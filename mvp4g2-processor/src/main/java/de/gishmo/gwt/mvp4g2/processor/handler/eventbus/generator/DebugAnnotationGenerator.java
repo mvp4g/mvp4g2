@@ -67,7 +67,7 @@ public class DebugAnnotationGenerator {
   }
 
   public void generate()
-    throws ProcessorException, IOException {
+    throws ProcessorException {
     this.validate();
     this.generateLoadDebugConfigurationMethod();
   }
@@ -100,7 +100,7 @@ public class DebugAnnotationGenerator {
         // the loggerinside the annotation must extends Mvp4g2Logger!
         TypeElement loggerElement = this.getLogger(typeElement.getAnnotation(Debug.class));
         if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                         typeElement.asType(),
+                                                         loggerElement.asType(),
                                                          this.processingEnvironment.getElementUtils()
                                                                                    .getTypeElement(Mvp4g2Logger.class.getCanonicalName())
                                                                                    .asType())) {
