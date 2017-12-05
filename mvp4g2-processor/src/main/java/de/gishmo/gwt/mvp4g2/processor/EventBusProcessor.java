@@ -50,7 +50,7 @@ public class EventBusProcessor
       // setup processor ...
       setUp();
       try {
-        // handling the eventBus annotation
+        // handling the eventbus annotation
         EventBusAnnotationHandler.builder()
                                  .processingEnvironment(super.processingEnv)
                                  .roundEnvironment(roundEnv)

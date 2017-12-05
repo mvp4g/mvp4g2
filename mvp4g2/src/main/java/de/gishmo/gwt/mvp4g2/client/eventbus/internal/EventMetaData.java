@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * generator of the eventBus
+ * generator of the eventbus
  */
 public abstract class EventMetaData<E extends IsEventBus> {
 

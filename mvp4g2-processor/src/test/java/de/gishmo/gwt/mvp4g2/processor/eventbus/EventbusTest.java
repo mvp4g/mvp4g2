@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventBus;
+package de.gishmo.gwt.mvp4g2.processor.eventbus;
 
 public class EventbusTest {
 
