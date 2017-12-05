@@ -278,6 +278,10 @@ public class EventHandlingMethodGenerator {
                                                                              variableElement.getSimpleName()
                                                                                             .toString()));
     eventHandlingMethod.addCode(");\n");
+    /* activaiting handlers */
+    eventHandlingMethod.addStatement("super.activate(eventMetaData)");
+    /* deactivaiting handlers */
+    eventHandlingMethod.addStatement("super.deactivate(eventMetaData)");
     // fire events
     List<String> eventHandlerClasses = this.eventBusUtils.getHandlerElementsAsList(executableElement,
                                                                                    "handlers");

@@ -30,17 +30,31 @@ import java.lang.annotation.Target;
  * <br>
  * The annotation has the following attributes:
  * <p>
- * <li>handlers: classes of the handlers of this event. You can have zero to several handlers for an
- * event.</li>
  * <li> bind: classes that need to be binded when this event occurs. You can have zero to several classes
  * for an event. </li>
+ * <li>handlers: classes of the handlers of this event. You can have zero to several handlers for an
+ * event.</li>
+ * <li>historyConverter: class of the history converter that should be used to store the event in
+ * browse history. If no history converter is specified, event won't be stored in browse history.
+ * You can define only one history converter for each event.
+ * <li>historyName: name of the event that should be stored in the history token. By default, this
+ * name is equal to the name of the event's method.
+ * <li>navigationEvent: indicates that when this event is fired, a navigation control is done to
+ * verify the event can be fired. Usually a navigation event is an event that will change the
+ * displayed screen.</li>
+ * <li>passive: when an event is fired, it will build any handlers not built yet and/or load any
+ * child modules not loaded yet expect if the event is passive.</li>
  * <ul>
  * <p>
  * <p>
  * <p>
  * <p>
  * <p>
- * <p>
+ * <p> TODO
+ * <li>activate: classes of handlers that should be activated with this event. You can activate zero
+ * to several handlers. Handlers to activate don't have to handle the event.</li>
+ * <li>deactivate: classes of handlers that should be deactivated with this event. You can activate
+ * zero to several handlers. Handlers to deactivate must not handle the event.</li>
  * <p>
  * <p>
  * <p>
@@ -59,29 +73,15 @@ import java.lang.annotation.Target;
  * module must have a parent.</li>
  * <li>calledMethod: name of the method that handlers should define and that will be called when the
  * event is fired. By default it's equal to "on" + event's method name.</li>
- * <li>historyConverter: class of the history converter that should be used to store the event in
- * browse history. If no history converter is specified, event won't be stored in browse history.
- * You can define only one history converter for each event.
  * <li>historyConverterName: instead of using its class, you can define the history converter thanks
  * to his name (in case you have given names to your history converter). Not recommended because
  * this method tends to create typo errors.</li>
- * <li>historyName: name of the event that should be stored in the history token. By default, this
- * name is equal to the name of the event's method.
- * <li>activate: classes of handlers that should be activated with this event. You can activate zero
- * to several handlers. Handlers to activate don't have to handle the event.</li>
  * <li>activateNames: instead of using their classes, you can activate handlers thanks to their name
  * (in case you have given names to your handlers). Not recommended because this method tends to
  * create typo errors.</li>
- * <li>deactivate: classes of handlers that should be deactivated with this event. You can activate
- * zero to several handlers. Handlers to deactivate must not handle the event.</li>
  * <li>deactivateNames: instead of using their classes, you can activate handlers thanks to their
  * name (in case you have given names to your handlers). Not recommended because this method tends
  * to create typo errors.</li>
- * <li>navigationEvent: indicates that when this event is fired, a navigation control is done to
- * verify the event can be fired. Usually a navigation event is an event that will change the
- * displayed screen.</li>
- * <li>passive: when an event is fired, it will build any handlers not built yet and/or load any
- * child modules not loaded yet expect if the event is passive.</li>
  * </ul>
  *
  * @author Frank Hossfeld
@@ -91,9 +91,9 @@ import java.lang.annotation.Target;
 public @interface Event {
 
   //default name that developers are unlikely to enter to know when method name should be used
-  public static final String DEFAULT_NAME = "#%!|&*+!##%$";
+  public static final String DEFAULT_HISTORY_NAME = "#%!|&*+!##%$";
 
-  String name() default DEFAULT_NAME;
+  String historyName() default DEFAULT_HISTORY_NAME;
 
   Class<? extends IsEventHandler<? extends IsEventBus>>[] bind() default {};
 
@@ -105,7 +105,9 @@ public @interface Event {
 
   boolean passive() default false;
 
-//  Class<? extends IsBroadcast> broadcastTo() default NoBroadcast.class;
+  Class<? extends IsEventHandler<? extends IsEventBus>>[] deactivate() default {};
+
+  Class<? extends IsEventHandler<? extends IsEventBus>>[] activate() default {};
 
   class NoHistoryConverter
     implements IsHistoryConverter<IsEventBus> {
@@ -124,35 +126,11 @@ public @interface Event {
       return false;
     }
   }
-
-//  interface NoBroadcast
-//    extends IsBroadcast {
-//  }
-
 //
 //  String historyConverterName() default "";
 
-//  String[] handlerNames() default {};
-
-//  String[] bindNames() default {};
-//
 //  Class<? extends Mvp4gModule>[] forwardToModules() default {};
 //
 //  boolean forwardToParent() default false;
-//
-//  String calledMethod() default "";
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] activate() default {};
-//
-//  String[] activateNames() default {};
-//
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] deactivate() default {};
-//
-//  String[] deactivateNames() default {};
-
-
-//
-//  Class<? extends EventHandlerInterface<? extends EventBus>>[] generate() default {};
-//
-//  String[] generateNames() default {};
 
 }

@@ -28,6 +28,7 @@ import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
+import jsinterop.base.Js;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,10 +196,120 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     }
   }
 
+//  private void doCreateAndBindView(String eventName,
+//                                   String eventHandlerClassName) {
+//    List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+//    if (presenters != null && presenters.size() != 0) {
+//      presenters.stream()
+//                .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
+//                                                                             .isBinded())
+//                .forEachOrdered(presenterHandlerMetaData -> {
+//                  this.logHandlerBinding(AbstractEventBus.logDepth,
+//                                         eventName,
+//                                         eventHandlerClassName);
+//                  presenterHandlerMetaData.getView()
+//                                          .setBinded(true);
+//                  presenterHandlerMetaData.getView()
+//                                          .createView();
+//                  presenterHandlerMetaData.getView()
+//                                          .bind();
+//                });
+//
+//    }
+//  }
+
   protected void log(String message,
                      int depth) {
     this.logger.log(message,
                     depth);
+  }
+
+  protected final void activate(EventMetaData<E> eventMetaData) {
+    Js.debugger();
+    for (String eventHandlerClassName : eventMetaData.getActivateHandlerTypes()) {
+      List<EventHandlerMetaData<?>> eventHandler = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
+      if (eventHandler != null && eventHandler.size() != 0) {
+        eventHandler.stream()
+                    .forEachOrdered(eventHandlerMetaData -> {
+                      this.logHandlerActivating(AbstractEventBus.logDepth,
+                                                eventMetaData.getEventName(),
+                                                eventHandlerClassName);
+                      eventHandlerMetaData.getEventHandler()
+                                          .setActivated(true);
+                    });
+        List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+        if (presenters != null && presenters.size() != 0) {
+          presenters.stream()
+                    .forEachOrdered(presenterHandlerMetaData -> {
+                      this.logHandlerActivating(AbstractEventBus.logDepth,
+                                                eventMetaData.getEventName(),
+                                                eventHandlerClassName);
+                      presenterHandlerMetaData.getPresenter()
+                                              .setActivated(true);
+                    });
+        }
+      }
+    }
+  }
+
+  protected void logHandlerActivating(int logDepth,
+                                      String eventName,
+                                      String handlerClassName) {
+    if (debugEnable) {
+      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
+        String sb = "DEBUG - EventBus -> event: >>" +
+                    eventName +
+                    "<< activaiting handler: >>" +
+                    handlerClassName +
+                    "<<";
+        this.log(sb,
+                 logDepth);
+      }
+    }
+  }
+
+  protected final void deactivate(EventMetaData<E> eventMetaData) {
+    Js.debugger();
+    for (String eventHandlerClassName : eventMetaData.getDeactivateHandlerTypes()) {
+      List<EventHandlerMetaData<?>> eventHandler = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
+      if (eventHandler != null && eventHandler.size() != 0) {
+        eventHandler.stream()
+                    .forEachOrdered(eventHandlerMetaData -> {
+                      this.logHandlerDeactivating(AbstractEventBus.logDepth,
+                                                  eventMetaData.getEventName(),
+                                                  eventHandlerClassName);
+                      eventHandlerMetaData.getEventHandler()
+                                          .setActivated(false);
+                    });
+        List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+        if (presenters != null && presenters.size() != 0) {
+          presenters.stream()
+                    .forEachOrdered(presenterHandlerMetaData -> {
+                      this.logHandlerDeactivating(AbstractEventBus.logDepth,
+                                                  eventMetaData.getEventName(),
+                                                  eventHandlerClassName);
+                      presenterHandlerMetaData.getPresenter()
+                                              .setActivated(false);
+                    });
+        }
+      }
+    }
+  }
+
+  protected void logHandlerDeactivating(int logDepth,
+                                        String eventName,
+                                        String handlerClassName) {
+    if (debugEnable) {
+      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
+        String sb = "DEBUG - EventBus -> event: >>" +
+                    eventName +
+                    "<< deactivating handler: >>" +
+                    handlerClassName +
+                    "<<";
+        this.log(sb,
+                 logDepth);
+      }
+    }
   }
 
   public abstract void fireStartEvent();
@@ -455,6 +566,32 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     this.filtersEnable = filtersEnable;
   }
 
+  protected <E extends IsEventBus> void executeEventHandler(EventMetaData<E> eventMetaData,
+                                                            List<EventHandlerMetaData<?>> eventHandlers,
+                                                            List<String> listOfExecutedHandlers,
+                                                            ExecEventHandler execEventHandler,
+                                                            boolean addHandler) {
+    if (eventHandlers != null && eventHandlers.size() != 0) {
+      for (EventHandlerMetaData<?> metaData : eventHandlers) {
+        boolean activated = metaData.getEventHandler()
+                                    .isActivated();
+        boolean pass = execEventHandler.execPass(eventMetaData,
+                                                 metaData);
+        if (activated && pass) {
+          logHandler(AbstractEventBus.logDepth,
+                     eventMetaData.getEventName(),
+                     metaData.getCanonicalName());
+          metaData.getEventHandler()
+                  .onBeforeEvent(eventMetaData.getEventName());
+          execEventHandler.execEventHandlingMethod(metaData);
+          if (listOfExecutedHandlers != null && addHandler) {
+            listOfExecutedHandlers.add(metaData.getCanonicalName());
+          }
+        }
+      }
+    }
+  }
+
   protected void logHandler(int logDepth,
                             String eventName,
                             String handlerClassName) {
@@ -472,41 +609,17 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     }
   }
 
-  protected <E extends IsEventBus> void executeEventHandler(EventMetaData<E> eventMetaData,
-                                                            List<EventHandlerMetaData<?>> eventHandlers,
-                                                            List<String> listOfExecutedHandlers,
-                                                            ExecEventHandler execEventHandler,
-                                                            boolean addHandler) {
-    if (eventHandlers != null && eventHandlers.size() != 0) {
-      for (EventHandlerMetaData<?> metaData : eventHandlers) {
-        boolean activated = metaData.getEventHandler()
-                                    .isActivated();
-        boolean pass = execEventHandler.execPass(eventMetaData, metaData);
-        if (activated && pass) {
-          logHandler(AbstractEventBus.logDepth,
-                     eventMetaData.getEventName(),
-                     metaData.getCanonicalName());
-          metaData.getEventHandler()
-                  .onBeforeEvent(eventMetaData.getEventName());
-          execEventHandler.execEventHandlingMethod(metaData);
-          if (listOfExecutedHandlers != null && addHandler) {
-            listOfExecutedHandlers.add(metaData.getCanonicalName());
-          }
-        }
-      }
-    }
-  }
-
   protected <E extends IsEventBus> void executePresenter(EventMetaData<E> eventMetaData,
-                                                         List<PresenterHandlerMetaData<?, ?>> presenters,
+                                                         List<PresenterHandlerMetaData<?, ?>> eventHandler,
                                                          List<String> listOfExecutedHandlers,
                                                          ExecPresenter execPresenter,
                                                          boolean addHandler) {
-    if (presenters != null && presenters.size() != 0) {
-      for (PresenterHandlerMetaData<?, ?> metaData : presenters) {
+    if (eventHandler != null && eventHandler.size() != 0) {
+      for (PresenterHandlerMetaData<?, ?> metaData : eventHandler) {
         boolean activated = metaData.getPresenter()
                                     .isActivated();
-        boolean pass = execPresenter.execPass(eventMetaData, metaData);
+        boolean pass = execPresenter.execPass(eventMetaData,
+                                              metaData);
         if (activated && pass) {
           logHandler(AbstractEventBus.logDepth,
                      eventMetaData.getEventName(),
@@ -534,7 +647,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   public interface ExecPresenter {
 
     boolean execPass(EventMetaData<?> eventMetaData,
-                     PresenterHandlerMetaData<?, ?> metaData                     );
+                     PresenterHandlerMetaData<?, ?> metaData);
 
     void execEventHandlingMethod(PresenterHandlerMetaData<?, ?> metaData);
 

@@ -107,6 +107,12 @@ public class EventAnnotationMetaDataGenerator {
     // List of binding handlers (full class names as String)
     List<String> bindHandlersFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
                                                                                           "bind");
+    // List of activate handlers (full class names as String)
+    List<String> activateHandlersFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
+                                                                                              "activate");
+    // List of deactivate handlers (full class names as String)
+    List<String> deactivateHandlersFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
+                                                                                                "deactivate");
 
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.eventBusUtils.createEventMetaDataClassName(this.eventBusTypeElement,
                                                                                                       executableElement))
@@ -125,13 +131,13 @@ public class EventAnnotationMetaDataGenerator {
                                                .addCode("super($S, ",
                                                         executableElement.getSimpleName()
                                                                          .toString());
-    if (Event.DEFAULT_NAME.equals(executableElement.getAnnotation(Event.class)
-                                                   .name())) {
+    if (Event.DEFAULT_HISTORY_NAME.equals(executableElement.getAnnotation(Event.class)
+                                                           .historyName())) {
       constructor.addCode("null, ");
     } else {
       constructor.addCode("$S, ",
                           executableElement.getAnnotation(Event.class)
-                                           .name());
+                                           .historyName());
     }
     if (Event.NoHistoryConverter.class.getCanonicalName()
                                       .equals(historyConverterTypeElement.getQualifiedName()
@@ -161,6 +167,14 @@ public class EventAnnotationMetaDataGenerator {
     if (bindHandlersFromAnnotation != null) {
       bindHandlersFromAnnotation.forEach((s) -> constructor.addStatement("super.addBindHandler($S)",
                                                                          s));
+    }
+    if (activateHandlersFromAnnotation != null) {
+      activateHandlersFromAnnotation.forEach((s) -> constructor.addStatement("super.addActivateHandler($S)",
+                                                                             s));
+    }
+    if (deactivateHandlersFromAnnotation != null) {
+      deactivateHandlersFromAnnotation.forEach((s) -> constructor.addStatement("super.addDeactivateHandler($S)",
+                                                                               s));
     }
     typeSpec.addMethod(constructor.build());
 

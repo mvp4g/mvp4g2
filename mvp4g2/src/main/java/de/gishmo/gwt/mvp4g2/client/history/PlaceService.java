@@ -191,8 +191,7 @@ public class PlaceService<E extends IsEventBus> {
       return null;
     }
 
-    String token = tokenize(metaData.getHistoryName() != null && !"".equals(metaData.getHistoryName()
-                                                                                    .trim()) ? metaData.getHistoryName() : metaData.getEventName(),
+    String token = tokenize(metaData.getHistoryName(),
                             param);
 
 //    if (converters.get(eventName)
