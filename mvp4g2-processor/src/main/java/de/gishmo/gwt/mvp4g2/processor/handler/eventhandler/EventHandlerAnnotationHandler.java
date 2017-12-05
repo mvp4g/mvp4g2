@@ -87,7 +87,7 @@ public class EventHandlerAnnotationHandler {
                                                   .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
         }
       } else {
-        throw new ProcessorException("@EventHandler can only be used on a type (interface)");
+        throw new ProcessorException("@EventHandler can only be used on a type (class)");
       }
     }
 

@@ -5,6 +5,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
@@ -100,8 +101,17 @@ public class PresenterAnnotationHandler {
           throw new ProcessorException(typeElement.getSimpleName()
                                                   .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
         }
+        // check, that the typeElement extends AbstarctEventHandler
+        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                         typeElement.asType(),
+                                                         this.processingEnvironment.getElementUtils()
+                                                                                   .getTypeElement(AbstractPresenter.class.getCanonicalName())
+                                                                                   .asType())) {
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": @Presenter must extend AbstractPresenter.class!");
+        }
       } else {
-        throw new ProcessorException("@Presenter can only be used on a type (interface)");
+        throw new ProcessorException("@Presenter can only be used on a type (class)");
       }
     }
   }

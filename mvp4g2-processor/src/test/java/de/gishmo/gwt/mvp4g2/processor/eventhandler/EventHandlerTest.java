@@ -29,7 +29,7 @@ import static org.truth0.Truth.ASSERT;
 public class EventHandlerTest {
 
   @Test
-  public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
+  public void testEventHandlerAnnotationAnnotatedOnAInterface() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerAnnotationAnnotatedOnAInterface.java"))
           .processedWith(new EventHandlerProcessor())
