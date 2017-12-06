@@ -225,7 +225,6 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   }
 
   protected final void activate(EventMetaData<E> eventMetaData) {
-    Js.debugger();
     for (String eventHandlerClassName : eventMetaData.getActivateHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandler = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
       if (eventHandler != null && eventHandler.size() != 0) {
@@ -269,7 +268,6 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   }
 
   protected final void deactivate(EventMetaData<E> eventMetaData) {
-    Js.debugger();
     for (String eventHandlerClassName : eventMetaData.getDeactivateHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandler = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
       if (eventHandler != null && eventHandler.size() != 0) {
