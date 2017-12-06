@@ -24,9 +24,9 @@ import java.util.Set;
 public class ApplicationAnnotationHandler {
 
   private final static String IMPL_NAME = "Impl";
+  private final static ClassName AbstractApplication = ClassName.get(AbstractApplication.class);
 
   private ProcessorUtils processorUtils;
-
   private ProcessingEnvironment processingEnvironment;
   private RoundEnvironment      roundEnvironment;
 
@@ -111,7 +111,7 @@ public class ApplicationAnnotationHandler {
     TypeElement apllicaitonLoaderTypeElement = this.getApplicationLoaderTypeElement(applicationAnnotation);
 
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(element.getSimpleName() + ApplicationAnnotationHandler.IMPL_NAME)
-                                        .superclass(ParameterizedTypeName.get(ClassName.get(AbstractApplication.class),
+                                        .superclass(ParameterizedTypeName.get(AbstractApplication,
                                                                               ClassName.get(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                                                                             eventBusTypeElement.getSimpleName()
                                                                                                                .toString())))

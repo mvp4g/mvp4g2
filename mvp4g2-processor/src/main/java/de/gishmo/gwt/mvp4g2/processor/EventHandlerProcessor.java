@@ -10,8 +10,10 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(EventHandlerProcessor.class)
@@ -26,9 +28,7 @@ public class EventHandlerProcessor
 
   @Override
   public Set<String> getSupportedAnnotationTypes() {
-    Set<String> annotations = new LinkedHashSet<String>();
-    annotations.add(EventHandler.class.getCanonicalName());
-    return annotations;
+    return of(EventHandler.class.getCanonicalName()).collect(toSet());
   }
 
   @Override

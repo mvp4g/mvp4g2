@@ -30,11 +30,12 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
-import java.io.IOException;
 import java.util.Set;
 
 // TODO check, that @Debug is annoted at a interface that extends IsEventBus!
 public class DebugAnnotationGenerator {
+
+  private final static ClassName Debug = ClassName.get(Debug.class);
 
   private ProcessorUtils processorUtils;
   private EventBusUtils  eventBusUtils;
@@ -127,7 +128,7 @@ public class DebugAnnotationGenerator {
                                                                                  .addStatement("super.setLogger(new $T())",
                                                                                                ClassName.get(getLogger(element.getAnnotation(Debug.class))))
                                                                                  .addStatement("super.setLogLevel($T.LogLevel.$L)",
-                                                                                               ClassName.get(Debug.class),
+                                                                                               Debug.class,
                                                                                                element.getAnnotation(Debug.class)
                                                                                                       .logLevel()));
     }

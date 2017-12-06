@@ -16,8 +16,10 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(EventBusProcessor.class)
@@ -32,16 +34,15 @@ public class EventBusProcessor
 
   @Override
   public Set<String> getSupportedAnnotationTypes() {
-    Set<String> annotations = new LinkedHashSet<String>();
-    annotations.add(Debug.class.getCanonicalName());
-    annotations.add(Event.class.getCanonicalName());
-    annotations.add(EventBus.class.getCanonicalName());
-    annotations.add(Filters.class.getCanonicalName());
-    annotations.add(InitHistory.class.getCanonicalName());
-    annotations.add(NotFoundHistory.class.getCanonicalName());
-    annotations.add(Start.class.getCanonicalName());
-    return annotations;
+    return of(Debug.class.getCanonicalName(),
+              Event.class.getCanonicalName(),
+              EventBus.class.getCanonicalName(),
+              Filters.class.getCanonicalName(),
+              InitHistory.class.getCanonicalName(),
+              NotFoundHistory.class.getCanonicalName(),
+              Start.class.getCanonicalName()).collect(toSet());
   }
+
 
   @Override
   public boolean process(Set<? extends TypeElement> annotations,

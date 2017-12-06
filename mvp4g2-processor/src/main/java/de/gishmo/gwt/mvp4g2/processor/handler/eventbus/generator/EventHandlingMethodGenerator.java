@@ -570,7 +570,7 @@ public class EventHandlingMethodGenerator {
                                               .addAnnotation(Override.class)
                                               .addModifiers(Modifier.PUBLIC)
                                               .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(EventMetaData.class),
-                                                                                                           WildcardTypeName.subtypeOf(Object.class)),
+                                                                                                            WildcardTypeName.subtypeOf(Object.class)),
                                                                                   "eventMetaData")
                                                                          .build())
                                               .addParameter(isPresenter ? ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(PresenterHandlerMetaData.class),
