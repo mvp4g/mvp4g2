@@ -33,6 +33,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,15 +78,35 @@ public class EventAnnotationMetaDataGenerator {
   public void generate()
     throws ProcessorException, IOException {
     // generate the event meta data
-    List<Element> events = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
-                                                                                     this.eventBusTypeElement,
-                                                                                     Event.class);
-    for (Element event : events) {
+    this.validate();
+    for (Element event : this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                   this.eventBusTypeElement,
+                                                                                   Event.class)) {
       this.validateEvent(event);
       this.generateEventMetaData(event);
     }
     // load meta data
     this.generateLoadEventMetaDataMethod();
+  }
+
+  private void validate()
+    throws ProcessorException {
+    // check if all historyNames are unique!
+    List<String> historyNames = new ArrayList<>();
+    for (Element eventElement : this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                   this.eventBusTypeElement,
+                                                                                   Event.class)) {
+      Event event = eventElement.getAnnotation(Event.class);
+      if (event == null) {
+        throw new ProcessorException("EventElement: >>" + eventElement.getSimpleName().toString() + "<< annotaion not found");
+      }
+      if (!Event.DEFAULT_HISTORY_NAME.equals(event.historyName())) {
+        if (historyNames.contains(event.historyName())) {
+          throw new ProcessorException("EventElement: >>" + eventElement.getSimpleName().toString() + "<< using a already used historyName -> >>" + event.historyName() + "<<");
+        }
+        historyNames.add(event.historyName());
+      }
+    }
   }
 
   private void validateEvent(Element eventElement)

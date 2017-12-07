@@ -17,7 +17,7 @@
 package de.gishmo.gwt.mvp4g2.processor.eventhandler;
 
 import com.google.testing.compile.JavaFileObjects;
-import de.gishmo.gwt.mvp4g2.processor.PresenterProcessor;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -32,7 +32,7 @@ public class PresenterTest {
   public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterAnnotationAnnotatedOnAInterface.java"))
-          .processedWith(new PresenterProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Presenter can only be used with as class");
   }
@@ -41,7 +41,7 @@ public class PresenterTest {
   public void testPresenterNotExtendingAbstractPresenter() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterAnnotationNotExtendingAbstractPresenter.java"))
-          .processedWith(new PresenterProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Presenter must extend AbstractPresenter.class");
   }
@@ -50,7 +50,7 @@ public class PresenterTest {
   public void testPresenterAnnotationUsingViewClassAsInterface() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterAnnotationUsingViewClassAsInterface.java"))
-          .processedWith(new PresenterProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("the viewInterface-attribute of a @Presenter must be a interface!");
   }
@@ -61,7 +61,7 @@ public class PresenterTest {
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterOK.java"))
-          .processedWith(new PresenterProcessor())
+          .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
           .generatesSources(presenterOKExpectedSource);

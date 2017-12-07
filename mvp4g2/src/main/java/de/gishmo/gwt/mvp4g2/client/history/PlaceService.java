@@ -3,6 +3,7 @@ package de.gishmo.gwt.mvp4g2.client.history;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
 import elemental2.dom.DomGlobal;
+import jsinterop.base.Js;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class PlaceService<E extends IsEventBus> {
 
   private IsEventBus                                       eventBus;
   private Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
+  private Map<String, String>                              historyNameMap;
 
   private boolean enabled = true;
 
@@ -22,13 +24,14 @@ public class PlaceService<E extends IsEventBus> {
     super();
 
     this.eventMetaDataMap = new HashMap<>();
+    this.historyNameMap = new HashMap<>();
+
     this.eventBus = eventBus;
 
     DomGlobal.window.addEventListener("popstate",
                                       (e) -> {
                                         confirmEvent(new NavigationEventCommand(eventBus) {
                                           protected void execute() {
-                                            // TODO check if this will work (avoid setting history in case back or forward button of the browser is pressed ... <- does not work ...
                                             enabled = false;
                                             convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
                                             enabled = true;
@@ -114,18 +117,21 @@ public class PlaceService<E extends IsEventBus> {
   protected void dispatchEvent(String historyName,
                                String param) {
     if (historyName != null) {
-      EventMetaData<? extends IsEventBus> metaData = this.eventMetaDataMap.get(historyName);
-      if (metaData != null) {
-        @SuppressWarnings("rawtypes")
-        IsHistoryConverter converter = metaData.getHistoryConverter();
-        if (converter == null) {
-          eventBus.fireNotFoundHistoryEvent();
+      String key = this.historyNameMap.get(historyName);
+      if (key != null) {
+        EventMetaData<? extends IsEventBus> metaData = this.eventMetaDataMap.get(key);
+        if (metaData != null) {
+          @SuppressWarnings("rawtypes")
+          IsHistoryConverter converter = metaData.getHistoryConverter();
+          if (converter == null) {
+            eventBus.fireNotFoundHistoryEvent();
+          } else {
+            converter.convertFromToken(metaData.getEventName(),
+                                       param,
+                                       this.eventBus);
+          }
         } else {
-          String[] tab = historyName.split(MODULE_SEPARATOR);
-          String finalEventName = tab[tab.length - 1];
-          converter.convertFromToken(finalEventName,
-                                     param,
-                                     this.eventBus);
+          eventBus.fireNotFoundHistoryEvent();
         }
       } else {
         eventBus.fireNotFoundHistoryEvent();
@@ -169,6 +175,12 @@ public class PlaceService<E extends IsEventBus> {
    * @param eventMetaData EventMetaDAta object containing all relevant informations
    */
   public void addConverter(EventMetaData<? extends IsEventBus> eventMetaData) {
+    Js.debugger();
+    String historyName = eventMetaData.getHistoryName() != null && eventMetaData.getHistoryName()
+                                                                                .trim()
+                                                                                .length() > 0 ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
+    this.historyNameMap.put(historyName,
+                            eventMetaData.getEventName());
     this.eventMetaDataMap.put(eventMetaData.getEventName(),
                               eventMetaData);
   }
@@ -186,14 +198,11 @@ public class PlaceService<E extends IsEventBus> {
                       String param,
                       boolean onlyToken) {
     EventMetaData<? extends IsEventBus> metaData = this.eventMetaDataMap.get(eventName);
-
     if (!enabled && !onlyToken) {
       return null;
     }
-
     String token = tokenize(metaData.getHistoryName(),
                             param);
-
 //    if (converters.get(eventName)
 //                  .isCrawlable()) {
 //      token = CRAWLABLE + token;
@@ -223,7 +232,20 @@ public class PlaceService<E extends IsEventBus> {
   }
 
   public IsHistoryConverter<? extends IsEventBus> getHistoryConverter(String eventName) {
-    return this.eventMetaDataMap.get(eventName)
-                                .getHistoryConverter();
+    DomGlobal.window.console.log("eventName -> " + eventName);
+    String key = this.historyNameMap.get(eventName);
+    if (key != null) {
+      return this.eventMetaDataMap.get(key)
+                                  .getHistoryConverter();
+    } else {
+      for (String eventNameFromMap : this.historyNameMap.values()) {
+        DomGlobal.window.console.log("eventNameFromMap -> " + eventNameFromMap);
+        if (eventNameFromMap.equals(eventName)) {
+          return this.eventMetaDataMap.get(eventNameFromMap)
+                                      .getHistoryConverter();
+        }
+      }
+    }
+    return null;
   }
 }

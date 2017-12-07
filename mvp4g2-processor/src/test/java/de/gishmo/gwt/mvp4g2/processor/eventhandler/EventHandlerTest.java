@@ -17,7 +17,7 @@
 package de.gishmo.gwt.mvp4g2.processor.eventhandler;
 
 import com.google.testing.compile.JavaFileObjects;
-import de.gishmo.gwt.mvp4g2.processor.EventHandlerProcessor;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -32,7 +32,7 @@ public class EventHandlerTest {
   public void testEventHandlerAnnotationAnnotatedOnAInterface() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerAnnotationAnnotatedOnAInterface.java"))
-          .processedWith(new EventHandlerProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@EventHandler can only be used with as class");
   }
@@ -41,7 +41,7 @@ public class EventHandlerTest {
   public void testEventHandlerNotExtendingAbstractEventHandlerd() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerNotExtendingAbstractEventHandler.java"))
-          .processedWith(new EventHandlerProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@EventHandler must extend AbstractEventHandler.class!");
   }
@@ -52,7 +52,7 @@ public class EventHandlerTest {
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerOK.java"))
-          .processedWith(new EventHandlerProcessor())
+          .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
           .generatesSources(eventHandlerOKExpectedSource);

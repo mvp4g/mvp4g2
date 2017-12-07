@@ -17,7 +17,7 @@
 package de.gishmo.gwt.mvp4g2.processor.application;
 
 import com.google.testing.compile.JavaFileObjects;
-import de.gishmo.gwt.mvp4g2.processor.ApplicationProcessor;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -32,7 +32,7 @@ public class ApplicationTest {
   public void testApplicationAnnotationOnAClass() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationInterfaceOnAClass.java"))
-          .processedWith(new ApplicationProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Application annotated must be used with an interface");
   }
@@ -41,7 +41,7 @@ public class ApplicationTest {
   public void testApplicationAnnotationWithoutEventBusAttribute() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationWithoutEventBusAttribute.java"))
-          .processedWith(new ApplicationProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("is missing a default value for the element 'eventBus");
   }
@@ -50,7 +50,7 @@ public class ApplicationTest {
   public void testApplicationInterfaceWithoutExtendsIsApplication() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationInterfaceWithoutExtendsIsApplication.java"))
-          .processedWith(new ApplicationProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Application must implement IsApplication interface");
   }
@@ -59,7 +59,7 @@ public class ApplicationTest {
   public void testApplictionAnnotationOnAMethod() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOnAMethod.java"))
-          .processedWith(new ApplicationProcessor())
+          .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Application can only be used on a type (interface)");
   }
@@ -70,7 +70,7 @@ public class ApplicationTest {
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithLoader.java"))
-          .processedWith(new ApplicationProcessor())
+          .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
           .generatesSources(okSource);
@@ -82,7 +82,7 @@ public class ApplicationTest {
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithoutLoader.java"))
-          .processedWith(new ApplicationProcessor())
+          .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
           .generatesSources(okSource);
