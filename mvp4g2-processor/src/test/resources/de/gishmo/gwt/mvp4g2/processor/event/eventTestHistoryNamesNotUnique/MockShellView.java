@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.mock;
+package  de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique;
 
 import de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView;
 

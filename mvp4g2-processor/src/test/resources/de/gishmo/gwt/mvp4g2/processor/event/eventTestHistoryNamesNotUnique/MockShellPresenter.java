@@ -15,16 +15,18 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.mock;
+package de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique;
 
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique.IMockShellView;
 
 @Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER)
 public class MockShellPresenter
   extends AbstractPresenter<MockEventBus, IMockShellView>
-  implements IsShell {
+  implements IMockShellView,
+             IsShell {
 
   @Override
   public void setShell() {

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.input.event;
+package de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.processor.mock.MockShellPresenter;
 
 @EventBus(shell = MockShellPresenter.class)
 public interface EventTestHistoryNamesNotUnique
