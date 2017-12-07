@@ -16,14 +16,21 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventbus;
 
+import com.google.testing.compile.JavaFileObjects;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
+import org.junit.Test;
+
+import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static org.truth0.Truth.ASSERT;
+
 public class EventTest {
 
-//  @Test
-//  public void testDebugAnnotationOnAMethod() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/EventTestHistoryNamesNotUnique.java"))
-//          .processedWith(new EventBusProcessor())
-//          .failsToCompile()
-//          .withErrorContaining("using a already used historyName");
-//  }
+  @Test
+  public void testDebugAnnotationOnAMethod() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventTestHistoryNamesNotUnique/EventTestHistoryNamesNotUnique.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("using a already used historyName");
+  }
 }
