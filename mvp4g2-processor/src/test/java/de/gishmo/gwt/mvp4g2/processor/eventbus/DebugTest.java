@@ -28,7 +28,7 @@ public class DebugTest {
   @Test
   public void testDebugAnnotationOnAMethod() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/DebugAnnotationOnAMethod.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/debugAnnotationOnAMethod/DebugAnnotationOnAMethod.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Debug can only be used on a type (interface)");

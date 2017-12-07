@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventhandler;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlerAnnotationAnnotatedOnAInterface;
 
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
 
 @EventHandler
-public class EventHandlerNotExtendingAbstractEventHandler {
+public interface EventHandlerAnnotationAnnotatedOnAInterface {
 }

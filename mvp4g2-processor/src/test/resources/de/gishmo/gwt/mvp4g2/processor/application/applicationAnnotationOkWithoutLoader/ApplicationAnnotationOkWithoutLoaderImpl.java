@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.processor.application;
+package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithoutLoader;
 
 import de.gishmo.gwt.mvp4g2.client.application.AbstractApplication;
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;

@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventhandler;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewClassAsInterface;
 
-import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.mock.MockEventBus;
+import de.gishmo.gwt.mvp4g2.processor.mock.MockOneView;
 
-@Application(eventBus = MockEventBus.class)
-public interface ApplicationInterfaceWithoutExtendsIsApplication {
+@Presenter(viewClass = MockOneView.class, viewInterface = MockOneView.class)
+public class PresenterAnnotationUsingViewClassAsInterface
+  extends AbstractPresenter<MockEventBus, MockOneView> {
 }

@@ -31,7 +31,7 @@ public class EventHandlerTest {
   @Test
   public void testEventHandlerAnnotationAnnotatedOnAInterface() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerAnnotationAnnotatedOnAInterface.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAInterface/EventHandlerAnnotationAnnotatedOnAInterface.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@EventHandler can only be used with as class");
@@ -40,7 +40,7 @@ public class EventHandlerTest {
   @Test
   public void testEventHandlerNotExtendingAbstractEventHandlerd() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerNotExtendingAbstractEventHandler.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerNotExtendingAbstractEventHandler/EventHandlerNotExtendingAbstractEventHandler.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@EventHandler must extend AbstractEventHandler.class!");
@@ -48,10 +48,10 @@ public class EventHandlerTest {
 
   @Test
   public void testEventHandlerOK() {
-    JavaFileObject eventHandlerOKExpectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/De_gishmo_gwt_mvp4g2_processor_eventhandler_EventHandlerOKMetaData.java");
+    JavaFileObject eventHandlerOKExpectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/De_gishmo_gwt_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java");
 
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/EventHandlerOK.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/EventHandlerOK.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()

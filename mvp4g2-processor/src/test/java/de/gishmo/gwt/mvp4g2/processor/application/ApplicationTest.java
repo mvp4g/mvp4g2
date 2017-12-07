@@ -31,7 +31,7 @@ public class ApplicationTest {
   @Test
   public void testApplicationAnnotationOnAClass() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationInterfaceOnAClass.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOnClass/ApplicationAnnotationInterfaceOnAClass.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Application annotated must be used with an interface");
@@ -40,7 +40,7 @@ public class ApplicationTest {
   @Test
   public void testApplicationAnnotationWithoutEventBusAttribute() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationWithoutEventBusAttribute.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationWithoutEventBusAttribute/ApplicationAnnotationWithoutEventBusAttribute.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("is missing a default value for the element 'eventBus");
@@ -49,7 +49,7 @@ public class ApplicationTest {
   @Test
   public void testApplicationInterfaceWithoutExtendsIsApplication() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationInterfaceWithoutExtendsIsApplication.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationInterfaceWithoutExtendsIsApplication/ApplicationInterfaceWithoutExtendsIsApplication.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Application must implement IsApplication interface");
@@ -58,7 +58,7 @@ public class ApplicationTest {
   @Test
   public void testApplictionAnnotationOnAMethod() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOnAMethod.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOnAMethod/ApplicationAnnotationOnAMethod.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Application can only be used on a type (interface)");
@@ -66,10 +66,10 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithLoader() {
-    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithLoaderImpl.java");
+    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoaderImpl.java");
 
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithLoader.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoader.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
@@ -78,10 +78,10 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithoutLoader() {
-    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithoutLoaderImpl.java");
+    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoaderImpl.java");
 
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/ApplicationAnnotationOkWithoutLoader.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoader.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()

@@ -31,7 +31,7 @@ public class PresenterTest {
   @Test
   public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterAnnotationAnnotatedOnAInterface.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationAnnotatedOnAInterface/PresenterAnnotationAnnotatedOnAInterface.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Presenter can only be used with as class");
@@ -40,7 +40,7 @@ public class PresenterTest {
   @Test
   public void testPresenterNotExtendingAbstractPresenter() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterAnnotationNotExtendingAbstractPresenter.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationNotExtendingAbstractPresenter/PresenterAnnotationNotExtendingAbstractPresenter.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Presenter must extend AbstractPresenter.class");
@@ -49,7 +49,7 @@ public class PresenterTest {
   @Test
   public void testPresenterAnnotationUsingViewClassAsInterface() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterAnnotationUsingViewClassAsInterface.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationUsingViewClassAsInterface/PresenterAnnotationUsingViewClassAsInterface.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("the viewInterface-attribute of a @Presenter must be a interface!");
@@ -57,10 +57,10 @@ public class PresenterTest {
 
   @Test
   public void testPresenterOK() {
-    JavaFileObject presenterOKExpectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/De_gishmo_gwt_mvp4g2_processor_eventhandler_PresenterOKMetaData.java");
+    JavaFileObject presenterOKExpectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/De_gishmo_gwt_mvp4g2_processor_eventhandler_presenterOK_PresenterOKMetaData.java");
 
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/PresenterOK.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/PresenterOK.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()

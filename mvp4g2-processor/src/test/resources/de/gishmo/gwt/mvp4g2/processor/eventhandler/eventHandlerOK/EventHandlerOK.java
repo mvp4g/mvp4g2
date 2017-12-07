@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventhandler;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlerOK;
 
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.processor.mock.MockEventBus;
 
 @EventHandler
-public interface EventHandlerAnnotationAnnotatedOnAInterface {
+public class EventHandlerOK
+  extends AbstractEventHandler<MockEventBus> {
 }

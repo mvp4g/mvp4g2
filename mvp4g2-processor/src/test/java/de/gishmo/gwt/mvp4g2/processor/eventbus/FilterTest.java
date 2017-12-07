@@ -28,7 +28,7 @@ public class FilterTest {
   @Test
   public void testDebugAnnotationOnAMethod() {
     ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/FilterAnnotationOnAMethod.java"))
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationOnAMethod/FilterAnnotationOnAMethod.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Filter can only be used on a type (interface)");

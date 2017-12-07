@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventhandler;
+package de.gishmo.gwt.mvp4g2.processor.input.event.startEventTestWithNonZeroArgumentMethod;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
-import de.gishmo.gwt.mvp4g2.processor.mock.MockEventBus;
-import de.gishmo.gwt.mvp4g2.processor.mock.MockOneView;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.processor.mock.MockShellPresenter;
 
-@Presenter(viewClass = MockOneView.class, viewInterface = MockOneView.class)
-public class PresenterAnnotationUsingViewClassAsInterface
-  extends AbstractPresenter<MockEventBus, MockOneView> {
+@EventBus(shell = MockShellPresenter.class)
+public interface StartEventTestWithNonZeroArgumentMethod
+  extends IsEventBus {
+
+  @Start
+  public void start(String arg01);
+
 }
