@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.input.event.startEventTestEventBusWithMoreThanOneStartAnnotation;
+package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
 
 @EventBus(shell = MockShellPresenter.class)
-public interface StartEventTestEventBusWithMoreThanOneStartAnnotation
+public interface StartEventTestEventBusWithOneStartAnnotation
   extends IsEventBus {
 
   @Start
-  public void start01();
-
-  @Start
-  public void start02();
+  @Event(handlers = MockShellPresenter.class)
+  public void start();
 
 }

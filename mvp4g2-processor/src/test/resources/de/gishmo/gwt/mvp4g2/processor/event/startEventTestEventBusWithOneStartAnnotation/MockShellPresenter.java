@@ -15,16 +15,15 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique;
+package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation;
 
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
-import de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique.IMockShellView;
 
 @Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER)
 public class MockShellPresenter
-  extends AbstractPresenter<MockEventBus, IMockShellView>
+  extends AbstractPresenter<StartEventTestEventBusWithOneStartAnnotation, IMockShellView>
   implements IMockShellView.Presenter,
              IsShell {
 
@@ -32,15 +31,7 @@ public class MockShellPresenter
   public void setShell() {
   }
 
-  public void onEvent01() {
-
+  public void onStart() {
   }
 
-  public void onEvent02() {
-
-  }
-
-  public void onEvent03() {
-
-  }
 }

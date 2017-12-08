@@ -119,8 +119,6 @@ public class EventBusAnnotationHandler {
       JavaFile javaFile = JavaFile.builder(this.processorUtils.getPackageAsString(eventBusTypeElement),
                                            typeSpec.build())
                                   .build();
-      System.out.println(javaFile.toString());
-
       javaFile.writeTo(this.processingEnvironment.getFiler());
     }
   }

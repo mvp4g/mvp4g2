@@ -15,7 +15,7 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique;
+package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithMoreThanOneStartAnnotation;
 
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
@@ -32,15 +32,10 @@ public class MockShellPresenter
   public void setShell() {
   }
 
-  public void onEvent01() {
-
+  public void onStart01() {
   }
 
-  public void onEvent02() {
-
+  public void onStart02() {
   }
 
-  public void onEvent03() {
-
-  }
 }

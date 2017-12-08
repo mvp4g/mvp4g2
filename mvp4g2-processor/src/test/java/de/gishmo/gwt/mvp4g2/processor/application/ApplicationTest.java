@@ -66,25 +66,25 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithLoader() {
-    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoaderImpl.java");
+    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoaderImpl.java");
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoader.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(okSource);
+          .generatesSources(expectedSource);
   }
 
   @Test
   public void testApplicationAnnotationOkWithoutLoader() {
-    JavaFileObject okSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoaderImpl.java");
+    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoaderImpl.java");
 
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoader.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(okSource);
+          .generatesSources(expectedSource);
   }
 }
