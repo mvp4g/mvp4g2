@@ -28,7 +28,6 @@ import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
-import jsinterop.base.Js;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +60,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /* debug enabled? */
   private boolean debugEnable = false;
   /* logger */
-  private Mvp4g2Logger   logger;
+  private IsMvp4g2Logger logger;
   /* log level */
   private Debug.LogLevel logLevel;
 
@@ -415,7 +414,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    *
    * @return logger
    */
-  protected Mvp4g2Logger getLogger() {
+  protected IsMvp4g2Logger getLogger() {
     return logger;
   }
 
@@ -424,7 +423,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    *
    * @param logger logger
    */
-  protected void setLogger(Mvp4g2Logger logger) {
+  protected void setLogger(IsMvp4g2Logger logger) {
     this.logger = logger;
   }
 

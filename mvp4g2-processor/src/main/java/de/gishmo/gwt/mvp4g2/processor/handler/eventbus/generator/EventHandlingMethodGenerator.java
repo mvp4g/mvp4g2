@@ -112,13 +112,28 @@ public class EventHandlingMethodGenerator {
   // TODO Validation
   private void validateEvent(Element element)
     throws ProcessorException {
-
-
-    //    try {
-    //      ExecutableElement executableElement = (ExecutableElement) element;
-    //    } catch (Exception e) {
-    //      throw new ProcessorException("@Event can only be used with a method");
-    //    }
+    // check, that no handler is also listed as binding
+    ExecutableElement executableElement = (ExecutableElement) element;
+    List<String> bindHandlerClasses = this.eventBusUtils.getHandlerElementsAsList(executableElement,
+                                                                                  "bind");
+    List<String> handlerClasses = this.eventBusUtils.getHandlerElementsAsList(executableElement,
+                                                                              "handlers");
+    if (bindHandlerClasses != null && handlerClasses != null) {
+      for (String bindHandlerClass : bindHandlerClasses) {
+        for (String handlerClass : handlerClasses) {
+          if (bindHandlerClass.equals(handlerClass)) {
+            throw new ProcessorException("Event: >>" + executableElement.getSimpleName() + "<< - handler: >>" + handlerClass + " can not be set in bind- and handlers-attribute");
+          }
+        }
+      }
+    }
+    // check, that passive events have not binding
+    if (executableElement.getAnnotation(Event.class)
+                         .passive()) {
+      if (bindHandlerClasses.size() > 0) {
+        throw new ProcessorException("Event: >>" + executableElement.getSimpleName() + "<< - a passive event can not have a bind-attribute");
+      }
+    }
   }
 
   private TypeElement getHistoryConverterTypeElement(Event eventAnnotation) {

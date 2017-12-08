@@ -16,7 +16,7 @@
 package de.gishmo.gwt.mvp4g2.client.eventbus.internal;
 
 import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
-import de.gishmo.gwt.mvp4g2.client.eventbus.Mvp4g2Logger;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsMvp4g2Logger;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,7 +27,7 @@ import java.util.stream.IntStream;
  * @author plcoirier
  */
 public class DefaultMvp4g2Logger
-  implements Mvp4g2Logger {
+  implements IsMvp4g2Logger {
 
   static final String INDENT = "    ";
 

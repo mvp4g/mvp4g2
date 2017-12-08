@@ -15,7 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.client.eventbus.annotation;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.Mvp4g2Logger;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsMvp4g2Logger;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.DefaultMvp4g2Logger;
 
 import java.lang.annotation.Retention;
@@ -39,7 +39,7 @@ public @interface Debug {
 
   LogLevel logLevel() default LogLevel.SIMPLE;
 
-  Class<? extends Mvp4g2Logger> logger() default DefaultMvp4g2Logger.class;
+  Class<? extends IsMvp4g2Logger> logger() default DefaultMvp4g2Logger.class;
 
   enum LogLevel {
     SIMPLE,

@@ -3,7 +3,6 @@ package de.gishmo.gwt.mvp4g2.client.history;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
 import elemental2.dom.DomGlobal;
-import jsinterop.base.Js;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -175,7 +174,6 @@ public class PlaceService<E extends IsEventBus> {
    * @param eventMetaData EventMetaDAta object containing all relevant informations
    */
   public void addConverter(EventMetaData<? extends IsEventBus> eventMetaData) {
-    Js.debugger();
     String historyName = eventMetaData.getHistoryName() != null && eventMetaData.getHistoryName()
                                                                                 .trim()
                                                                                 .length() > 0 ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
@@ -232,14 +230,12 @@ public class PlaceService<E extends IsEventBus> {
   }
 
   public IsHistoryConverter<? extends IsEventBus> getHistoryConverter(String eventName) {
-    DomGlobal.window.console.log("eventName -> " + eventName);
     String key = this.historyNameMap.get(eventName);
     if (key != null) {
       return this.eventMetaDataMap.get(key)
                                   .getHistoryConverter();
     } else {
       for (String eventNameFromMap : this.historyNameMap.values()) {
-        DomGlobal.window.console.log("eventNameFromMap -> " + eventNameFromMap);
         if (eventNameFromMap.equals(eventName)) {
           return this.eventMetaDataMap.get(eventNameFromMap)
                                       .getHistoryConverter();

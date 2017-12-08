@@ -20,7 +20,7 @@ package de.gishmo.gwt.mvp4g2.client.eventbus;
  *
  * @author plcoirier
  */
-public interface Mvp4g2Logger {
+public interface IsMvp4g2Logger {
 
   /**
    * Add a log
