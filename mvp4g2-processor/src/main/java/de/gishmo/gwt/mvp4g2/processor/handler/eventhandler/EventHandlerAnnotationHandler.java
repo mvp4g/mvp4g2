@@ -5,11 +5,11 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventhandler.validation.EventHandlerAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -17,7 +17,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
-import java.util.Set;
 
 // TODO check, that @Eventhandler is annoted at a class that extends AbstractEventHandler!
 public class EventHandlerAnnotationHandler {
@@ -57,41 +56,18 @@ public class EventHandlerAnnotationHandler {
       return;
     }
     // valildate @Application annotation
-    this.validate();
-    // generate code
+    EventHandlerAnnotationValidator eventHandlerAnnotationValidator = EventHandlerAnnotationValidator.builder()
+                                                                                                   .processingEnvironment(this.processingEnvironment)
+                                                                                                   .roundEnvironment(this.roundEnvironment)
+                                                                                                   .build();
+
+    // valildate @Application annotation
+    eventHandlerAnnotationValidator.validate();
+    // valdaite and generate
     for (Element element : this.roundEnvironment.getElementsAnnotatedWith(EventHandler.class)) {
+      eventHandlerAnnotationValidator.validate(element);
       this.generate(element);
     }
-  }
-
-  private void validate()
-    throws ProcessorException {
-    // get elements annotated with Presenter annotation
-    Set<? extends Element> elementsWithPresenterAnnotation = this.roundEnvironment.getElementsAnnotatedWith(EventHandler.class);
-    for (Element element : elementsWithPresenterAnnotation) {
-      if (element instanceof TypeElement) {
-        TypeElement typeElement = (TypeElement) element;
-        // check, that the presenter annotion is only used with classes
-        if (!typeElement.getKind()
-                        .isClass()) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": @EventHandler can only be used with as class!");
-        }
-        // check, that the typeElement extends AbstarctEventHandler
-        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                         typeElement.asType(),
-                                                         this.processingEnvironment.getElementUtils()
-                                                                                   .getTypeElement(AbstractEventHandler.class.getCanonicalName())
-                                                                                   .asType())) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
-        }
-      } else {
-        throw new ProcessorException("@EventHandler can only be used on a type (class)");
-      }
-    }
-
-
   }
 
   private void generate(Element element)

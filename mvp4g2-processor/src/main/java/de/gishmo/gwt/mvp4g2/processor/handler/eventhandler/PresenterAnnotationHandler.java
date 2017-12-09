@@ -5,21 +5,19 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.handler.eventhandler.validation.PresenterAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
 import java.io.IOException;
-import java.util.Set;
 
 // TODO check, that @Eventhandler is annoted at a class that extends AbstractPresent!
 public class PresenterAnnotationHandler {
@@ -27,6 +25,7 @@ public class PresenterAnnotationHandler {
   private final static String IMPL_NAME = "MetaData";
 
   private ProcessorUtils processorUtils;
+  private PresenterUtils presenterUtils;
 
   private ProcessingEnvironment processingEnvironment;
   private RoundEnvironment      roundEnvironment;
@@ -45,6 +44,9 @@ public class PresenterAnnotationHandler {
     this.processorUtils = ProcessorUtils.builder()
                                         .processingEnvironment(this.processingEnvironment)
                                         .build();
+    this.presenterUtils = PresenterUtils.builder()
+                                        .processingEnvironment(this.processingEnvironment)
+                                        .build();
   }
 
   public static Builder builder() {
@@ -59,60 +61,17 @@ public class PresenterAnnotationHandler {
       return;
     }
     // valildate @Application annotation
-    this.validate();
-    // generate code
-    for (Element element : this.roundEnvironment.getElementsAnnotatedWith(Presenter.class)) {
-      this.generate(element);
-    }
-  }
+    PresenterAnnotationValidator presenterAnnotationValidator = PresenterAnnotationValidator.builder()
+                                                                                            .processingEnvironment(this.processingEnvironment)
+                                                                                            .roundEnvironment(this.roundEnvironment)
+                                                                                            .build();
 
-  private void validate()
-    throws ProcessorException {
-    // get elements annotated with Presenter annotation
-    Set<? extends Element> elementsWithPresenterAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Presenter.class);
-    for (Element element : elementsWithPresenterAnnotation) {
-      if (element instanceof TypeElement) {
-        TypeElement typeElement = (TypeElement) element;
-        // check, that the presenter annotion is only used with classes
-        if (!typeElement.getKind()
-                        .isClass()) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": @Presenter can only be used with as class!");
-        }
-        // check, that the view attribute is a class
-        TypeElement viewClassElement = this.getViewClassTypeElement(element.getAnnotation(Presenter.class));
-        TypeElement viewInterfaceElement = this.getViewInterfaceTypeElement(element.getAnnotation(Presenter.class));
-        // check, that the viewClass is a class
-        if (!viewClassElement.getKind()
-                             .isClass()) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": the viewClass-attribute of a @Presenter must be a class!");
-        }
-        // chekc if the vioewInterface is a interface
-        if (!viewInterfaceElement.getKind()
-                                 .isInterface()) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": the viewInterface-attribute of a @Presenter must be a interface!");
-        }
-        // check, if viewClass is implementing viewInterface
-        if (!this.processorUtils.implementsInterface(this.processingEnvironment,
-                                                     viewClassElement,
-                                                     viewInterfaceElement.asType())) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
-        }
-        // check, that the typeElement extends AbstarctEventHandler
-        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                         typeElement.asType(),
-                                                         this.processingEnvironment.getElementUtils()
-                                                                                   .getTypeElement(AbstractPresenter.class.getCanonicalName())
-                                                                                   .asType())) {
-          throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": @Presenter must extend AbstractPresenter.class!");
-        }
-      } else {
-        throw new ProcessorException("@Presenter can only be used on a type (class)");
-      }
+    // valildate @Application annotation
+    presenterAnnotationValidator.validate();
+    // valdaite and generate
+    for (Element element : this.roundEnvironment.getElementsAnnotatedWith(Presenter.class)) {
+      presenterAnnotationValidator.validate(element);
+      this.generate(element);
     }
   }
 
@@ -121,8 +80,8 @@ public class PresenterAnnotationHandler {
     Presenter presenter = element.getAnnotation(Presenter.class);
     TypeElement typeElement = (TypeElement) element;
 
-    TypeElement viewClassElement = this.getViewClassTypeElement(presenter);
-    TypeElement viewInterfaceElement = this.getViewInterfaceTypeElement(presenter);
+    TypeElement viewClassElement = this.presenterUtils.getViewClassTypeElement(presenter);
+    TypeElement viewInterfaceElement = this.presenterUtils.getViewInterfaceTypeElement(presenter);
 
     String className = this.processorUtils.createFullClassName(this.processorUtils.getPackageAsString(element),
                                                                element.getSimpleName()
@@ -146,12 +105,12 @@ public class PresenterAnnotationHandler {
                                                              ClassName.get(EventHandlerMetaData.Kind.class),
                                                              presenter.multiple() ? "true" : "false",
                                                              ClassName.get(Presenter.VIEW_CREATION_METHOD.class),
-                                                             getCreator(typeElement));
+                                                             this.presenterUtils.getCreator(typeElement));
     constructor.addStatement("super.presenter = new $T()",
                              ClassName.get(this.processorUtils.getPackageAsString(typeElement),
                                            typeElement.getSimpleName()
                                                       .toString()));
-    if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.equals(getCreator(typeElement))) {
+    if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.equals(this.presenterUtils.getCreator(typeElement))) {
       constructor.addStatement("super.view = ($T) new $T()",
                                ClassName.get(this.processorUtils.getPackageAsString(viewClassElement),
                                              viewInterfaceElement.getSimpleName()
@@ -169,31 +128,6 @@ public class PresenterAnnotationHandler {
                                 .build();
     javaFile.writeTo(this.processingEnvironment.getFiler());
 //    System.out.println(javaFile.toString());
-  }
-
-  private TypeElement getViewClassTypeElement(Presenter presenterAnnotation) {
-    try {
-      presenterAnnotation.viewClass();
-    } catch (MirroredTypeException exception) {
-      return (TypeElement) this.processingEnvironment.getTypeUtils()
-                                                     .asElement(exception.getTypeMirror());
-    }
-    return null;
-  }
-
-  private TypeElement getViewInterfaceTypeElement(Presenter presenterAnnotation) {
-    try {
-      presenterAnnotation.viewInterface();
-    } catch (MirroredTypeException exception) {
-      return (TypeElement) this.processingEnvironment.getTypeUtils()
-                                                     .asElement(exception.getTypeMirror());
-    }
-    return null;
-  }
-
-  private Presenter.VIEW_CREATION_METHOD getCreator(TypeElement element) {
-    return element.getAnnotation(Presenter.class)
-                  .viewCreator();
   }
 
   public static class Builder {
