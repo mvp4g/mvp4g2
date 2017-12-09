@@ -33,4 +33,12 @@ public class FilterTest {
           .failsToCompile()
           .withErrorContaining("@Filter can only be used on a type (interface)");
   }
+
+  @Test
+  public void testDebugAnnotationWithoutExtendsIsEventBus() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationWithoutExtendsIsEventBus/FilterAnnotationWithoutExtendsIsEventBus.java"))
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError();
+  }
 }
