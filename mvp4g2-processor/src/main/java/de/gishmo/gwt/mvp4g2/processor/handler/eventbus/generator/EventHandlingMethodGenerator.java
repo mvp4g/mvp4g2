@@ -25,13 +25,13 @@ import com.squareup.javapoet.WildcardTypeName;
 import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
-import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.history.NavigationEventCommand;
 import de.gishmo.gwt.mvp4g2.client.history.annotation.History;
 import de.gishmo.gwt.mvp4g2.client.history.annotation.InitHistory;
 import de.gishmo.gwt.mvp4g2.client.history.annotation.NotFoundHistory;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package de.gishmo.gwt.mvp4g2.client.eventbus.internal;
+package de.gishmo.gwt.mvp4g2.client.internal.eventbus;
 
 import de.gishmo.gwt.mvp4g2.client.Mvp4g2;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsMvp4g2Logger;

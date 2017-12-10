@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.client.history.internal;
+package de.gishmo.gwt.mvp4g2.client.internal.history;
 
 import de.gishmo.gwt.mvp4g2.client.history.annotation.History;
 

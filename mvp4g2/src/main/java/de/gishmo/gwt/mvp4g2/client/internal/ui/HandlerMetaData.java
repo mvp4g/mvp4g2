@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.client.ui.internal;
+package de.gishmo.gwt.mvp4g2.client.internal.ui;
 
 /**
  * generator of the eventbus

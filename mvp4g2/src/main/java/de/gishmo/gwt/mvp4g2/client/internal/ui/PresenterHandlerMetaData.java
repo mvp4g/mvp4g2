@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.client.ui.internal;
+package de.gishmo.gwt.mvp4g2.client.internal.ui;
 
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;

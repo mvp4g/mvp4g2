@@ -5,7 +5,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.history.annotation.History;
-import de.gishmo.gwt.mvp4g2.client.history.internal.HistoryMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.history.HistoryMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 

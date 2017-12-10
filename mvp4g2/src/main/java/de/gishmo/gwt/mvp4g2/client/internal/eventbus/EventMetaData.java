@@ -1,9 +1,9 @@
-package de.gishmo.gwt.mvp4g2.client.eventbus.internal;
+package de.gishmo.gwt.mvp4g2.client.internal.eventbus;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
-import de.gishmo.gwt.mvp4g2.client.history.internal.HistoryMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.history.HistoryMetaData;
 
 import java.util.ArrayList;
 import java.util.HashMap;

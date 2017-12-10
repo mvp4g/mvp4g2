@@ -1,7 +1,7 @@
 package de.gishmo.gwt.mvp4g2.client.application.annotation;
 
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
-import de.gishmo.gwt.mvp4g2.client.application.internal.NoApplicationLoader;
+import de.gishmo.gwt.mvp4g2.client.internal.application.NoApplicationLoader;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 
 import java.lang.annotation.Retention;

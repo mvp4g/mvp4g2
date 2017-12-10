@@ -1,7 +1,7 @@
 package de.gishmo.gwt.mvp4g2.client.history;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
 import elemental2.dom.DomGlobal;
 
 import java.util.HashMap;

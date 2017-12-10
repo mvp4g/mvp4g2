@@ -2,10 +2,10 @@ package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartA
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
-import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
 import java.lang.Override;
 import java.util.List;
 

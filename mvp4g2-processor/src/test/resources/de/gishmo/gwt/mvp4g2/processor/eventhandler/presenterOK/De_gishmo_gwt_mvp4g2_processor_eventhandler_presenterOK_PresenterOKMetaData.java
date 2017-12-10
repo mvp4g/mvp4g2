@@ -1,8 +1,8 @@
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterOK;
 
+import de.gishmo.gwt.mvp4g2.client.internal.ui.HandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.HandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.mock.IMockOneView;
 import de.gishmo.gwt.mvp4g2.processor.mock.MockOneView;
 

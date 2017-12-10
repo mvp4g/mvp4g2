@@ -19,15 +19,15 @@ package de.gishmo.gwt.mvp4g2.client.eventbus;
 
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.internal.EventMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.history.IsNavigationConfirmation;
 import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.EventHandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
 
 import java.util.ArrayList;
 import java.util.HashMap;

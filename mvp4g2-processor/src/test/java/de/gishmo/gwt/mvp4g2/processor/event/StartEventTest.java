@@ -47,7 +47,7 @@ public class StartEventTest {
   }
 
   @Test
-  public void testApplicationAnnotationOkWithoutLoader() {
+  public void testStartEventTestEventBusWithOneStartAnnotation() {
     JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/StartEventTestEventBusWithOneStartAnnotationImpl.java");
 
     ASSERT.about(javaSource())

@@ -1,9 +1,8 @@
 package  de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
 
-import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.HandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.ui.internal.PresenterHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.HandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
 
 public final class De_gishmo_gwt_mvp4g2_processor_event_eventTestHandlerNotInBindAndHandlersAttribute_MockShellPresenterMetaData
   extends PresenterHandlerMetaData<MockShellPresenter, IMockShellView> {

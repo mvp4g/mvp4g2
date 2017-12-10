@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.client.application.internal;
+package de.gishmo.gwt.mvp4g2.client.internal.application;
 
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
