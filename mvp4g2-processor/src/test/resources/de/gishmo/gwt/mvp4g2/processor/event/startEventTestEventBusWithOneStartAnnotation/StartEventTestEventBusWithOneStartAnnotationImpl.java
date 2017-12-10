@@ -1,7 +1,8 @@
+
 package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;

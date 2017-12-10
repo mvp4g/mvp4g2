@@ -22,7 +22,7 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
-import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;

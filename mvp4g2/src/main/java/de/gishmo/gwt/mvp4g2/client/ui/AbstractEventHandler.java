@@ -1,6 +1,7 @@
 package de.gishmo.gwt.mvp4g2.client.ui;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 
 /**
  * Super class of a mvp4g2 event handler.

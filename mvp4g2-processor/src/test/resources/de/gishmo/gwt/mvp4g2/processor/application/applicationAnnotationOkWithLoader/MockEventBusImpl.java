@@ -17,7 +17,7 @@
 
 package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithLoader;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.AbstractEventBus;
+import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 

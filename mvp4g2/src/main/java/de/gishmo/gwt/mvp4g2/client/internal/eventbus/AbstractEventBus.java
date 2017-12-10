@@ -15,11 +15,13 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.client.eventbus;
+package de.gishmo.gwt.mvp4g2.client.internal.eventbus;
 
 import de.gishmo.gwt.mvp4g2.client.annotation.internal.ForInternalUseOnly;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventFilter;
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsMvp4g2Logger;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.history.IsNavigationConfirmation;
 import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
