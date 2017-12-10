@@ -58,9 +58,9 @@ public class ApplicationAnnotationHandler {
     }
     // create @Application-Validator
     ApplicationAnnotationValidator applicationAnnotationValidator = ApplicationAnnotationValidator.builder()
-                                                                                      .processingEnvironment(this.processingEnvironment)
-                                                                                      .roundEnvironment(this.roundEnvironment)
-                                                                                      .build();
+                                                                                                  .processingEnvironment(this.processingEnvironment)
+                                                                                                  .roundEnvironment(this.roundEnvironment)
+                                                                                                  .build();
 
     // valildate @Application annotation
     applicationAnnotationValidator.validate();
@@ -85,9 +85,7 @@ public class ApplicationAnnotationHandler {
                                                                                                                .toString())))
                                         .addModifiers(Modifier.PUBLIC,
                                                       Modifier.FINAL)
-                                        .addSuperinterface(ClassName.get(this.processorUtils.getPackageAsString(element),
-                                                                         element.getSimpleName()
-                                                                                .toString()));
+                                        .addSuperinterface(ClassName.get(element.asType()));
 
     // constructor ...
     MethodSpec constructor = MethodSpec.constructorBuilder()

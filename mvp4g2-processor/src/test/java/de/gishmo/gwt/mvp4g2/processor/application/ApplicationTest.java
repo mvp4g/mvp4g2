@@ -87,4 +87,28 @@ public class ApplicationTest {
           .and()
           .generatesSources(expectedSource);
   }
+
+  @Test
+  public void testApplicationAnnotationOkWithoutLoaderAsInnerInterface() {
+    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/MyApplicationImpl.java");
+
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/ApplicationAnnotationOkWithoutLoaderAsInnerInterface.java"))
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(expectedSource);
+  }
+
+  @Test
+  public void testApplicationAnnotationOkWithLoaderAsInnerInterface() {
+    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterfaceImpl.java");
+
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterface.java"))
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(expectedSource);
+  }
 }
