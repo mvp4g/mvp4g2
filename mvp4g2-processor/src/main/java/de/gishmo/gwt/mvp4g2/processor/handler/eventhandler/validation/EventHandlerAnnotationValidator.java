@@ -22,6 +22,7 @@ import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
 public class EventHandlerAnnotationValidator {
@@ -50,16 +51,6 @@ public class EventHandlerAnnotationValidator {
 
   public void validate()
     throws ProcessorException {
-//    // get elements annotated with Applicaiton annotation
-//    Set<? extends Element> elementsWithApplicaitonAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Application.class);
-//    // at least there should exatly one Application annotation!
-//    if (elementsWithApplicaitonAnnotation.size() == 0) {
-//      throw new ProcessorException("Missing Mvp4g Application interface");
-//    }
-//    // at least there should only one Application annotation!
-//    if (elementsWithApplicaitonAnnotation.size() > 1) {
-//      throw new ProcessorException("There should be at least only one interface, that is annotated with @Application");
-//    }
   }
 
   public void validate(Element element)
@@ -80,6 +71,11 @@ public class EventHandlerAnnotationValidator {
                                                                                  .asType())) {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
+      }
+      // check if annotated class si abstract
+      if (typeElement.getModifiers().contains(Modifier.ABSTRACT)) {
+        throw new ProcessorException(typeElement.getSimpleName()
+                                                .toString() + ": @EventHandler can not be ABSTRACT");
       }
     } else {
       throw new ProcessorException("@EventHandler can only be used on a type (class)");

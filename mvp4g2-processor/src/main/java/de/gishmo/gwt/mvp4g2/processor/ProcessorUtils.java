@@ -218,43 +218,6 @@ public class ProcessorUtils {
 
   }
 
-  protected void createErrorMessage(String errorMessage,
-                                    Exception exception) {
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-    pw.println(errorMessage);
-    exception.printStackTrace(pw);
-    pw.close();
-    messager.printMessage(Diagnostic.Kind.ERROR,
-                          sw.toString());
-  }
-
-  protected void createWarningMessage(String errorMessage) {
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-    pw.println(errorMessage);
-    pw.close();
-    messager.printMessage(Diagnostic.Kind.WARNING,
-                          sw.toString());
-
-  }
-
-  protected void log(Element element,
-                     Object... message) {
-    StringBuilder sb = new StringBuilder();
-    for (Object object : message) {
-      sb.append(object);
-    }
-    if (element == null) {
-      messager.printMessage(Diagnostic.Kind.ERROR,
-                            sb.toString());
-    } else {
-      messager.printMessage(Diagnostic.Kind.ERROR,
-                            sb.toString(),
-                            element);
-    }
-  }
-
   public static class Builder {
 
     ProcessingEnvironment processingEnvironment;

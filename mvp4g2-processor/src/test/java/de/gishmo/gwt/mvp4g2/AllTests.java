@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor;
+package de.gishmo.gwt.mvp4g2;
 
 import de.gishmo.gwt.mvp4g2.processor.application.ApplicationTest;
 import de.gishmo.gwt.mvp4g2.processor.event.StartEventTest;

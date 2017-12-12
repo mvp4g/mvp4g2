@@ -29,6 +29,16 @@ import static org.truth0.Truth.ASSERT;
 public class EventHandlerTest {
 
   @Test
+  public void testEventHandlerAnnotationAnnotatedAbstractClass() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAbstractClass/EventHandlerAnnotationAnnotatedOnAbstractClass.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@EventHandler can not be ABSTRACT");
+  }
+
+
+  @Test
   public void testEventHandlerAnnotationAnnotatedOnAInterface() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAInterface/EventHandlerAnnotationAnnotatedOnAInterface.java"))
