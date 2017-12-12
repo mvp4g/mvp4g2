@@ -24,6 +24,7 @@ import de.gishmo.gwt.mvp4g2.processor.handler.eventhandler.PresenterUtils;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
 public class PresenterAnnotationValidator {
@@ -60,16 +61,6 @@ public class PresenterAnnotationValidator {
 
   public void validate()
     throws ProcessorException {
-//    // get elements annotated with Applicaiton annotation
-//    Set<? extends Element> elementsWithApplicaitonAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Application.class);
-//    // at least there should exatly one Application annotation!
-//    if (elementsWithApplicaitonAnnotation.size() == 0) {
-//      throw new ProcessorException("Missing Mvp4g Application interface");
-//    }
-//    // at least there should only one Application annotation!
-//    if (elementsWithApplicaitonAnnotation.size() > 1) {
-//      throw new ProcessorException("There should be at least only one interface, that is annotated with @Application");
-//    }
   }
 
   public void validate(Element element)
@@ -104,7 +95,7 @@ public class PresenterAnnotationValidator {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
       }
-      // check, that the typeElement extends AbstarctEventHandler
+      // check, that the typeElement extends AbstractEventHandler
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
                                                        typeElement.asType(),
                                                        this.processingEnvironment.getElementUtils()
@@ -112,6 +103,16 @@ public class PresenterAnnotationValidator {
                                                                                  .asType())) {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": @Presenter must extend AbstractPresenter.class!");
+      }
+      // check if annotated class is abstract
+      if (typeElement.getModifiers().contains(Modifier.ABSTRACT)) {
+        throw new ProcessorException(typeElement.getSimpleName()
+                                                .toString() + ": @Presenter can not be ABSTRACT");
+      }
+      // check if class attribute is not abstradt
+      if (viewClassElement.getModifiers().contains(Modifier.ABSTRACT)) {
+        throw new ProcessorException(typeElement.getSimpleName()
+                                                .toString() + ": class-attribute of @Presenter can not be ABSTRACT");
       }
     } else {
       throw new ProcessorException("@Presenter can only be used on a type (class)");

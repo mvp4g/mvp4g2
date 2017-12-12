@@ -29,7 +29,17 @@ import static org.truth0.Truth.ASSERT;
 public class PresenterTest {
 
   @Test
-  public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
+  public void testPresenterAnnotationAnnotatedOnAbstractClass() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationAnnotatedOnAbstractClass" +
+                                            "/PresenterAnnotationAnnotatedOnAbstractClass.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@Presenter can not be ABSTRACT");
+  }
+
+  @Test
+  public void testPresenterAnnotationAnnotatedOnAInterface() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationAnnotatedOnAInterface/PresenterAnnotationAnnotatedOnAInterface.java"))
           .processedWith(new Mvp4g2Processor())
@@ -53,6 +63,24 @@ public class PresenterTest {
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("the viewInterface-attribute of a @Presenter must be a interface!");
+  }
+
+  @Test
+  public void testPresenterAnnotationUsingViewInterfaceAsClass() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationUsingViewInterfaceAsClass/PresenterAnnotationUsingViewInterfaceAsClass.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("incompatible types: java.lang.Class<de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewInterfaceAsClass.MockOneView> cannot be converted to java.lang.Class<? extends de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView<?>>");
+  }
+
+  @Test
+  public void testPresenterAnnotationUsingViewAbstractClass() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationUsingViewAbstractClass/PresenterAnnotationUsingViewAbstractClass.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("class-attribute of @Presenter can not be ABSTRACT");
   }
 
   @Test

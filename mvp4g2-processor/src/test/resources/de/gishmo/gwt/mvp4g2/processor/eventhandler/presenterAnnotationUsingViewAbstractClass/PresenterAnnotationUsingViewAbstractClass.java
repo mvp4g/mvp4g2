@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationAnnotatedOnAInterface;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewAbstractClass;
 
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 
 @Presenter(viewClass = MockOneView.class, viewInterface = IMockOneView.class)
-public interface PresenterAnnotationAnnotatedOnAInterface {
+public class PresenterAnnotationUsingViewAbstractClass
+
+  extends AbstractPresenter<MockEventBus, IMockOneView> {
+
+  public void onOneEvent() {
+  }
+
 }

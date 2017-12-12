@@ -19,11 +19,11 @@ package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterOK;
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 
-import de.gishmo.gwt.mvp4g2.processor.mock.IMockOneView;
-import de.gishmo.gwt.mvp4g2.processor.mock.MockEventBus;
-import de.gishmo.gwt.mvp4g2.processor.mock.MockOneView;
-
 @Presenter(viewClass = MockOneView.class, viewInterface = IMockOneView.class)
 public class PresenterOK
   extends AbstractPresenter<MockEventBus, IMockOneView> {
+
+  public void onOneEvent() {
+  }
+
 }

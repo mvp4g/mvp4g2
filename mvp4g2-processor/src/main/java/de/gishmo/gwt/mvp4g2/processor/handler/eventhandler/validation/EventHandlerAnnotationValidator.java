@@ -72,7 +72,7 @@ public class EventHandlerAnnotationValidator {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
       }
-      // check if annotated class si abstract
+      // check if annotated class is abstract
       if (typeElement.getModifiers().contains(Modifier.ABSTRACT)) {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": @EventHandler can not be ABSTRACT");

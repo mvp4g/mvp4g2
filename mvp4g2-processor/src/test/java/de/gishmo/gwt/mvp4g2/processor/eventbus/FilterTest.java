@@ -26,7 +26,7 @@ import static org.truth0.Truth.ASSERT;
 public class FilterTest {
 
   @Test
-  public void testDebugAnnotationOnAMethod() {
+  public void testFiltersAnnotationOnAMethod() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationOnAMethod/FilterAnnotationOnAMethod.java"))
           .processedWith(new Mvp4g2Processor())
@@ -35,7 +35,7 @@ public class FilterTest {
   }
 
   @Test
-  public void testDebugAnnotationWithoutExtendsIsEventBus() {
+  public void testFiltersAnnotationWithoutExtendsIsEventBus() {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationWithoutExtendsIsEventBus/FilterAnnotationWithoutExtendsIsEventBus.java"))
           .processedWith(new Mvp4g2Processor())
