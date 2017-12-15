@@ -5,8 +5,10 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -216,6 +218,16 @@ public class ProcessorUtils {
     messager.printMessage(Diagnostic.Kind.ERROR,
                           sw.toString());
 
+  }
+
+  public String createInternalEventName(ExecutableElement executableElement) {
+    String internalEventname = executableElement.getSimpleName().toString();
+    for (VariableElement variableElement : executableElement.getParameters())   {
+      internalEventname += "_";
+      internalEventname += variableElement.asType()
+                                          .toString().replace(".", "_");
+    }
+    return internalEventname;
   }
 
   public static class Builder {

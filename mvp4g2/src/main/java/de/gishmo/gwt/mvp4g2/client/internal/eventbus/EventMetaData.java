@@ -1,22 +1,24 @@
 package de.gishmo.gwt.mvp4g2.client.internal.eventbus;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
-import de.gishmo.gwt.mvp4g2.client.internal.history.HistoryMetaData;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
+import de.gishmo.gwt.mvp4g2.client.internal.history.HistoryMetaData;
 
 /**
  * generator of the eventbus
  */
 public abstract class EventMetaData<E extends IsEventBus> {
 
-  /* historyName of the event */
+  /* name of the event */
   private String                eventName;
+  /* internal event name */
+  private String                internalEventName;
   /* event historyName -> history */
   private String                historyName;
   /* history converter meta Data*/
@@ -39,19 +41,20 @@ public abstract class EventMetaData<E extends IsEventBus> {
   /* flag if event is navigation event */
   private boolean               navigationEvent;
 
-  public EventMetaData(String eventName,
+  public EventMetaData(String internalEventName,
+                       String eventName,
                        String historyName,
                        HistoryMetaData historyMetaData,
                        IsHistoryConverter<E> historyConverter,
                        boolean passive,
                        boolean navigationEvent) {
+    this.internalEventName = internalEventName;
     this.eventName = eventName;
     this.historyName = historyName;
     this.historyMetaData = historyMetaData;
     this.historyConverter = historyConverter;
     this.passive = passive;
     this.navigationEvent = navigationEvent;
-
 
     this.paraemterTypes = new HashMap<>();
     this.handlerTypes = new ArrayList<>();
@@ -124,5 +127,13 @@ public abstract class EventMetaData<E extends IsEventBus> {
 
   public IsHistoryConverter<E> getHistoryConverter() {
     return historyConverter;
+  }
+
+  public String getInternalEventName() {
+    return internalEventName;
+  }
+
+  public void setInternalEventName(String internalEventName) {
+    this.internalEventName = internalEventName;
   }
 }

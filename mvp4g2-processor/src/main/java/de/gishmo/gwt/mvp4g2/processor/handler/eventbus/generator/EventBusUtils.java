@@ -12,14 +12,17 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
+
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class EventBusUtils {
 
-  private ProcessorUtils processorUtils;
+  ProcessorUtils processorUtils;
 
   private ProcessingEnvironment processingEnvironment;
   private TypeElement           eventBusTypeElement;

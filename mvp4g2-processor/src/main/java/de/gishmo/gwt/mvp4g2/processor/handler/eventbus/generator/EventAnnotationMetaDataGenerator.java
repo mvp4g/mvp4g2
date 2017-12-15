@@ -149,7 +149,8 @@ public class EventAnnotationMetaDataGenerator {
     // constructor ...
     MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
                                                .addModifiers(Modifier.PUBLIC)
-                                               .addCode("super($S, ",
+                                               .addCode("super($S, $S, ",
+                                                        this.eventBusUtils.processorUtils.createInternalEventName(executableElement),
                                                         executableElement.getSimpleName()
                                                                          .toString());
     if (Event.DEFAULT_HISTORY_NAME.equals(executableElement.getAnnotation(Event.class)

@@ -83,7 +83,7 @@ public class EventHandlerRegristrationGenerator {
     this.generateAddHandlerMethod();
   }
 
-  // TODO implement event vaidation
+  // TODO implement event validation
   private void validateEvent(Element element)
     throws ProcessorException {
     //    try {
@@ -169,22 +169,18 @@ public class EventHandlerRegristrationGenerator {
             List<String> handlersFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
                                                                                               "handlers");
             if (handlersFromAnnotation != null) {
-              for (String eventHandlerClassName : handlersFromAnnotation) {
-                if (!listOfEventHandlersToCreate.contains(eventHandlerClassName)) {
-                  // save the name of the event handler to create
-                  listOfEventHandlersToCreate.add(eventHandlerClassName);
-                }
-              }
+              // save the name of the event handler to create
+              handlersFromAnnotation.stream()
+                                    .filter(eventHandlerClassName -> !listOfEventHandlersToCreate.contains(eventHandlerClassName))
+                                    .forEach(listOfEventHandlersToCreate::add);
             }
             List<String> bindingsFromAnnotation = this.eventBusUtils.getHandlerElementsAsList(executableElement,
                                                                                               "bind");
             if (bindingsFromAnnotation != null) {
-              for (String eventHandlerClassName : bindingsFromAnnotation) {
-                if (!listOfEventHandlersToCreate.contains(eventHandlerClassName)) {
-                  // save the name of the event Handler to create
-                  listOfEventHandlersToCreate.add(eventHandlerClassName);
-                }
-              }
+              // save the name of the event Handler to create
+              bindingsFromAnnotation.stream()
+                                    .filter(eventHandlerClassName -> !listOfEventHandlersToCreate.contains(eventHandlerClassName))
+                                    .forEach(listOfEventHandlersToCreate::add);
             }
           });
     return listOfEventHandlersToCreate;
@@ -199,8 +195,7 @@ public class EventHandlerRegristrationGenerator {
     String metaDataVariableName = this.processorUtils.createFullClassName(eventHandlerClassName + ProcessorConstants.META_DATA);
     // comment
     methodToGenerate.addComment("");
-    methodToGenerate.addComment("----------------------------------------------------------------------");
-    methodToGenerate.addComment("");
+    methodToGenerate.addComment("===> ");
     methodToGenerate.addComment("handle $N ($N)",
                                 eventHandlerClassName,
                                 isPresenter ? "Presenter" : "EventHandler");

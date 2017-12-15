@@ -5,9 +5,11 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.handler.eventhandler.validation.PresenterAnnotationValidator;
@@ -15,9 +17,14 @@ import de.gishmo.gwt.mvp4g2.processor.handler.eventhandler.validation.PresenterA
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 // TODO check, that @Eventhandler is annoted at a class that extends AbstractPresent!
 public class PresenterAnnotationHandler {
@@ -72,6 +79,9 @@ public class PresenterAnnotationHandler {
     for (Element element : this.roundEnvironment.getElementsAnnotatedWith(Presenter.class)) {
       presenterAnnotationValidator.validate(element);
       this.generate(element);
+      // handlng the annotated event handling metohds
+      this.presenterUtils.createMetaFile((TypeElement) element,
+                                         true);
     }
   }
 

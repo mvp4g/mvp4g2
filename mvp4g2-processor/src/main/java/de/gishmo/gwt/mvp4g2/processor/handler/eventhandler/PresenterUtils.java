@@ -1,12 +1,25 @@
 package de.gishmo.gwt.mvp4g2.processor.handler.eventhandler;
 
-import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.List;
 
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
+
+import com.squareup.javapoet.TypeSpec;
+
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandlingMethod;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
 public class PresenterUtils {
 
@@ -21,8 +34,8 @@ public class PresenterUtils {
 
   private PresenterUtils(Builder builder) {
     this.processingEnvironment = builder.processingEnvironment;
-//      this.eventBusTypeElement = builder.eventBusTypeElement;
-//      this.typeSpec = builder.typeSpec;
+    //      this.eventBusTypeElement = builder.eventBusTypeElement;
+    //      this.typeSpec = builder.typeSpec;
 
     this.processorUtils = ProcessorUtils.builder()
                                         .processingEnvironment(this.processingEnvironment)
@@ -58,45 +71,52 @@ public class PresenterUtils {
                   .viewCreator();
   }
 
+  public void createMetaFile(TypeElement typeElement,
+                             boolean isPresenter)
+    throws ProcessorException {
+    List<Element> annotatedMethods = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                               typeElement,
+                                                                                               EventHandlingMethod.class);
+    String fileName = ProcessorConstants.META_FILE_EVENTHANDLER_PREFIX + this.processorUtils.createFullClassName(typeElement.getSimpleName()
+                                                                                                                            .toString());
+    try {
+      FileObject resource = processingEnvironment.getFiler()
+                                                 .createResource(StandardLocation.CLASS_OUTPUT,
+                                                                 "",
+                                                                 "META-INF/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + fileName);
+      PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(resource.openOutputStream()));
+      printWriter.println(typeElement.asType()
+                                     .toString());
+      printWriter.println(isPresenter ? ProcessorConstants.PRESENTER : ProcessorConstants.EVENT_HANDLER);
+      annotatedMethods.stream()
+                      .map(element -> (ExecutableElement) element)
+                      .map(executableElement -> this.processorUtils.createInternalEventName(executableElement) + "!")
+                      .forEach(printWriter::println);
+      printWriter.close();
+    } catch (IOException ex) {
+      throw new ProcessorException("Unable to write file: >>" + fileName + "<< -> exception: " + ex.getMessage());
+    }
+  }
+
   public static final class Builder {
 
     ProcessingEnvironment processingEnvironment;
-//      TypeElement           eventBusTypeElement;
-//      TypeSpec.Builder      typeSpec;
-//
+    //      TypeElement           eventBusTypeElement;
+    //      TypeSpec.Builder      typeSpec;
+    //
 
     /**
      * Set the processing envirement
      *
-     * @param processingEnvirement the processing envirement
+     * @param processingEnvirement
+     *   the processing envirement
+     *
      * @return the Builder
      */
     public Builder processingEnvironment(ProcessingEnvironment processingEnvirement) {
       this.processingEnvironment = processingEnvirement;
       return this;
     }
-//
-//      /**
-//       * Set the eventbus generator element
-//       *
-//       * @param eventBusTypeElement the eventbvus generator element
-//       * @return the Builder
-//       */
-//      public de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlingMethodGenerator.Builder eventBusTypeElement(TypeElement eventBusTypeElement) {
-//        this.eventBusTypeElement = eventBusTypeElement;
-//        return this;
-//      }
-//
-//      /**
-//       * Set the typeSpec of the currently generated eventBus
-//       *
-//       * @param typeSpec ttype spec of the crruent eventbus
-//       * @return the Builder
-//       */
-//      public de.gishmo.gwt.mvp4g2.processor.handler.eventbus.generator.EventHandlingMethodGenerator.Builder typeSpec(TypeSpec.Builder typeSpec) {
-//        this.typeSpec = typeSpec;
-//        return this;
-//      }
 
     public PresenterUtils build() {
       return new PresenterUtils(this);
