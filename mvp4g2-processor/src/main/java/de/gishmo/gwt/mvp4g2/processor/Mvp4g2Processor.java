@@ -16,6 +16,7 @@ import de.gishmo.gwt.mvp4g2.processor.handler.eventhandler.PresenterAnnotationHa
 import de.gishmo.gwt.mvp4g2.processor.handler.history.HistoryAnnotationHandler;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
@@ -47,14 +48,18 @@ public class Mvp4g2Processor
               Presenter.class.getCanonicalName()).collect(toSet());
   }
 
+  @Override
+  public void init(ProcessingEnvironment processingEnv) {
+    this.processorUtils = ProcessorUtils.builder()
+                                        .processingEnvironment(processingEnv)
+                                        .build();
+  }
 
   @Override
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {
-    if (!roundEnv.processingOver()) {
-      // setup processor ...
-      setUp();
-      try {
+    try {
+      if (!roundEnv.processingOver()) {
         // handling the eventBus annotation
         EventHandlerAnnotationHandler.builder()
                                      .processingEnvironment(super.processingEnv)
@@ -79,23 +84,25 @@ public class Mvp4g2Processor
                                  .roundEnvironment(roundEnv)
                                  .build()
                                  .process();
+        // handling the eventbus annotation
+        EventBusAnnotationHandler.builder()
+                                 .processingEnvironment(super.processingEnv)
+                                 .roundEnvironment(roundEnv)
+                                 .build()
+                                 .process();
         // handling the Application annotation
         ApplicationAnnotationHandler.builder()
                                     .processingEnvironment(super.processingEnv)
                                     .roundEnvironment(roundEnv)
                                     .build()
                                     .process();
-      } catch (Exception e) {
-        this.processorUtils.createErrorMessage(e.getMessage());
+        return true;
+      } else {
+        System.out.println("Test");
       }
-      return true;
+    } catch (Exception e) {
+      this.processorUtils.createErrorMessage(e.getMessage());
     }
     return false;
-  }
-
-  private void setUp() {
-    this.processorUtils = ProcessorUtils.builder()
-                                        .processingEnvironment(super.processingEnv)
-                                        .build();
   }
 }
