@@ -2,10 +2,10 @@ package  de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStart
 
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.HandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
 
 public final class De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData
-  extends PresenterHandlerMetaData<MockShellPresenter, IMockShellView> {
+  extends PresenterMetaData<MockShellPresenter, IMockShellView> {
   public De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData() {
     super("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter",
           HandlerMetaData.Kind.PRESENTER,

@@ -1,14 +1,16 @@
 package de.gishmo.gwt.mvp4g2.client.internal.eventbus;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
+import de.gishmo.gwt.mvp4g2.client.internal.history.HistoryMetaData;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
-import de.gishmo.gwt.mvp4g2.client.internal.history.HistoryMetaData;
+import static java.util.Objects.isNull;
 
 /**
  * generator of the eventbus
@@ -118,7 +120,7 @@ public abstract class EventMetaData<E extends IsEventBus> {
   }
 
   public String getHistoryName() {
-    return this.historyName != null && !Event.DEFAULT_HISTORY_NAME.equals(this.historyName) && !"".equals(this.historyName.trim()) ? this.historyName : this.eventName;
+    return !isNull(this.historyName) && !Event.DEFAULT_HISTORY_NAME.equals(this.historyName) && !"".equals(this.historyName.trim()) ? this.historyName : this.eventName;
   }
 
   public HistoryMetaData getHistoryMetaData() {

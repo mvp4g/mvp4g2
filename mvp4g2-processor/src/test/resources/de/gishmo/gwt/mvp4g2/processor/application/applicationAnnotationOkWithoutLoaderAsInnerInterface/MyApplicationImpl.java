@@ -3,9 +3,10 @@ package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithou
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
 import de.gishmo.gwt.mvp4g2.client.internal.application.AbstractApplication;
 import de.gishmo.gwt.mvp4g2.client.internal.application.NoApplicationLoader;
+import de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithoutLoaderAsInnerInterface.ApplicationAnnotationOkWithoutLoaderAsInnerInterface.MyApplication;
 import java.lang.Override;
 
-public final class MyApplicationImpl extends AbstractApplication<MockEventBus> implements ApplicationAnnotationOkWithoutLoaderAsInnerInterface.MyApplication {
+public final class MyApplicationImpl extends AbstractApplication<MockEventBus> implements MyApplication {
   public MyApplicationImpl() {
     super();
     super.eventBus = new de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithoutLoaderAsInnerInterface.MockEventBusImpl();

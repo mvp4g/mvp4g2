@@ -10,7 +10,7 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
  * @param <P> the meta data presenter
  * @param <P> the meta data view
  */
-public abstract class PresenterHandlerMetaData<P extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>>
+public abstract class PresenterMetaData<P extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>>
   extends HandlerMetaData {
 
   protected P                              presenter;
@@ -18,10 +18,10 @@ public abstract class PresenterHandlerMetaData<P extends IsPresenter<?, ?>, V ex
   private   boolean                        multiple;
   private   Presenter.VIEW_CREATION_METHOD viewCreationMethod;
 
-  public PresenterHandlerMetaData(String canonicalName,
-                                  Kind kind,
-                                  boolean multiple,
-                                  Presenter.VIEW_CREATION_METHOD viewCreationMethod) {
+  public PresenterMetaData(String canonicalName,
+                           Kind kind,
+                           boolean multiple,
+                           Presenter.VIEW_CREATION_METHOD viewCreationMethod) {
     super(canonicalName,
           kind);
     this.multiple = multiple;

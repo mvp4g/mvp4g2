@@ -42,7 +42,7 @@ public @interface History {
 
   HistoryConverterType type() default HistoryConverterType.DEFAULT;
 
-  public enum HistoryConverterType {
+  enum HistoryConverterType {
     DEFAULT,
     SIMPLE,
     NONE

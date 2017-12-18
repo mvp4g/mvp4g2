@@ -16,29 +16,22 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventbus;
 
-import com.google.testing.compile.JavaFileObjects;
-import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
-import org.junit.Test;
-
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static org.truth0.Truth.ASSERT;
-
 public class FilterTest {
 
-  @Test
-  public void testFiltersAnnotationOnAMethod() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationOnAMethod/FilterAnnotationOnAMethod.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Filter can only be used on a type (interface)");
-  }
-
-  @Test
-  public void testFiltersAnnotationWithoutExtendsIsEventBus() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationWithoutExtendsIsEventBus/FilterAnnotationWithoutExtendsIsEventBus.java"))
-          .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError();
-  }
+//  @Test
+//  public void testFiltersAnnotationOnAMethod() {
+//    ASSERT.about(javaSource())
+//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationOnAMethod/FilterAnnotationOnAMethod.java"))
+//          .processedWith(new Mvp4g2Processor())
+//          .failsToCompile()
+//          .withErrorContaining("@Filter can only be used on a type (interface)");
+//  }
+//
+//  @Test
+//  public void testFiltersAnnotationWithoutExtendsIsEventBus() {
+//    ASSERT.about(javaSource())
+//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationWithoutExtendsIsEventBus/FilterAnnotationWithoutExtendsIsEventBus.java"))
+//          .processedWith(new Mvp4g2Processor())
+//          .compilesWithoutError();
+//  }
 }

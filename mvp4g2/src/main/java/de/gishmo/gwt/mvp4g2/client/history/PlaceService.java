@@ -7,6 +7,8 @@ import elemental2.dom.DomGlobal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 public class PlaceService<E extends IsEventBus> {
 
   private static final String MODULE_SEPARATOR = "/";
@@ -45,7 +47,7 @@ public class PlaceService<E extends IsEventBus> {
    * @param event event to confirm
    */
   public void confirmEvent(NavigationEventCommand event) {
-    if (this.eventBus.getNavigationConfirmationPresenter() == null) {
+    if (isNull(this.eventBus.getNavigationConfirmationPresenter())) {
       //no need to remove the confirmation, there is none
       event.fireEvent(false);
     } else {
@@ -61,7 +63,7 @@ public class PlaceService<E extends IsEventBus> {
    */
   protected void convertToken(String token) {
     boolean toContinue = false;
-    if (token != null) {
+    if (!isNull(token)) {
       if (token.startsWith(CRAWLABLE)) {
         token = token.substring(1);
       }
@@ -115,14 +117,14 @@ public class PlaceService<E extends IsEventBus> {
   @SuppressWarnings("unchecked")
   protected void dispatchEvent(String historyName,
                                String param) {
-    if (historyName != null) {
+    if (!isNull(historyName)) {
       String key = this.historyNameMap.get(historyName);
-      if (key != null) {
+      if (!isNull(key)) {
         EventMetaData<? extends IsEventBus> metaData = this.eventMetaDataMap.get(key);
-        if (metaData != null) {
+        if (!isNull(metaData)) {
           @SuppressWarnings("rawtypes")
           IsHistoryConverter converter = metaData.getHistoryConverter();
-          if (converter == null) {
+          if (isNull(converter)) {
             eventBus.fireNotFoundHistoryEvent();
           } else {
             converter.convertFromToken(metaData.getEventName(),
@@ -165,7 +167,7 @@ public class PlaceService<E extends IsEventBus> {
   private boolean hasHistory() {
     return this.eventMetaDataMap.values()
                                 .stream()
-                                .anyMatch(metaData -> metaData.getHistoryConverter() != null);
+                                .anyMatch(metaData -> !isNull(metaData.getHistoryConverter()));
   }
 
   /**
@@ -174,9 +176,9 @@ public class PlaceService<E extends IsEventBus> {
    * @param eventMetaData EventMetaDAta object containing all relevant informations
    */
   public void addConverter(EventMetaData<? extends IsEventBus> eventMetaData) {
-    String historyName = eventMetaData.getHistoryName() != null && eventMetaData.getHistoryName()
-                                                                                .trim()
-                                                                                .length() > 0 ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
+    String historyName = !isNull(eventMetaData.getHistoryName()) && eventMetaData.getHistoryName()
+                                                                                 .trim()
+                                                                                 .length() > 0 ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
     this.historyNameMap.put(historyName,
                             eventMetaData.getEventName());
     this.eventMetaDataMap.put(eventMetaData.getEventName(),
@@ -223,7 +225,7 @@ public class PlaceService<E extends IsEventBus> {
   private String tokenize(String eventName,
                           String param) {
     String token = eventName;
-    if ((param != null) && (param.length() > 0)) {
+    if ((!isNull(param)) && (param.length() > 0)) {
       token = token + getParamSeparator() + param;
     }
     return token;
@@ -231,7 +233,7 @@ public class PlaceService<E extends IsEventBus> {
 
   public IsHistoryConverter<? extends IsEventBus> getHistoryConverter(String eventName) {
     String key = this.historyNameMap.get(eventName);
-    if (key != null) {
+    if (!isNull(key)) {
       return this.eventMetaDataMap.get(key)
                                   .getHistoryConverter();
     } else {

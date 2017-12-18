@@ -1,18 +1,23 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandlingMethod;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
@@ -48,6 +53,24 @@ public class ProcessorUtils {
     return new Builder();
   }
 
+  public void store(IsMetaModel metaModel,
+                    String fileName)
+    throws ProcessorException {
+    try {
+      FileObject fileObject = processingEnvironment.getFiler()
+                                                   .createResource(StandardLocation.CLASS_OUTPUT,
+                                                                   "",
+                                                                   fileName);
+      PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(fileObject.openOutputStream()));
+      metaModel.createPropertes()
+               .store(printWriter,
+                      "");
+      printWriter.close();
+    } catch (IOException ex) {
+      throw new ProcessorException("Unable to write file: >>" + fileName + "<< -> exception: " + ex.getMessage());
+    }
+  }
+
   public boolean implementsInterface(ProcessingEnvironment processingEnvironment,
                                      TypeElement typeElement,
                                      TypeMirror implementedInterface) {
@@ -56,24 +79,24 @@ public class ProcessorUtils {
                                               implementedInterface);
   }
 
-  public String getCanonicalClassName(Element element) {
-    return this.getPackageAsString(element) +
-           "." + element.getSimpleName()
-                        .toString();
-  }
-
-  public String getPackageAsString(Element type) {
-    return this.getPackage(type)
-               .getQualifiedName()
-               .toString();
-  }
-
-  public PackageElement getPackage(Element type) {
-    while (type.getKind() != ElementKind.PACKAGE) {
-      type = type.getEnclosingElement();
-    }
-    return (PackageElement) type;
-  }
+//  public String getCanonicalClassName(Element element) {
+//    return this.getPackageAsString(element) +
+//           "." + element.getSimpleName()
+//                        .toString();
+//  }
+//
+//  public String getPackageAsString(Element type) {
+//    return this.getPackage(type)
+//               .getQualifiedName()
+//               .toString();
+//  }
+//
+//  public PackageElement getPackage(Element type) {
+//    while (type.getKind() != ElementKind.PACKAGE) {
+//      type = type.getEnclosingElement();
+//    }
+//    return (PackageElement) type;
+//  }
 
   /**
    * Returns all of the superclasses and superinterfaces for a given generator
@@ -123,21 +146,20 @@ public class ProcessorUtils {
     return result;
   }
 
-  public String createNameWithleadingUpperCase(String name) {
-    return name.substring(0,
-                          1)
-               .toUpperCase() + name.substring(1);
-  }
+//  public String createNameWithleadingUpperCase(String name) {
+//    return name.substring(0,
+//                          1)
+//               .toUpperCase() + name.substring(1);
+//  }
 
-  public <A extends Annotation> List<Element> getMethodFromTypeElementAnnotatedWith(ProcessingEnvironment processingEnvironment,
-                                                                                    TypeElement element,
-                                                                                    Class<A> annotation) {
-    List<Element> annotatedMethods = processingEnvironment.getElementUtils()
-                                                          .getAllMembers(element)
-                                                          .stream()
-                                                          .filter(methodElement -> methodElement.getAnnotation(annotation) != null)
-                                                          .collect(Collectors.toList());
-    return annotatedMethods;
+  public void createErrorMessage(String errorMessage) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    pw.println(errorMessage);
+    pw.close();
+    messager.printMessage(Diagnostic.Kind.ERROR,
+                          sw.toString());
+
   }
 
   public String createFullClassName(String packageName,
@@ -157,75 +179,113 @@ public class ProcessorUtils {
                     .toUpperCase() + className.substring(1);
   }
 
-  public <T> boolean isSuperClass(Types typeUtils,
-                                  TypeElement typeElement,
-                                  Class<T> superClazz) {
-    for (TypeMirror tm : typeUtils.directSupertypes(typeElement.asType())) {
-      String canonicalNameTM = this.getCanonicalClassName((TypeElement) typeUtils.asElement(tm));
-      if (superClazz.getCanonicalName()
-                    .equals(canonicalNameTM)) {
-        return true;
-      } else {
-        return this.isSuperClass(typeUtils,
-                                 (TypeElement) typeUtils.asElement(tm),
-                                 superClazz);
-      }
-    }
-    return false;
-  }
+//  public <T> boolean isSuperClass(Types typeUtils,
+//                                  TypeElement typeElement,
+//                                  Class<T> superClazz) {
+//    for (TypeMirror tm : typeUtils.directSupertypes(typeElement.asType())) {
+//      String canonicalNameTM = this.getCanonicalClassName((TypeElement) typeUtils.asElement(tm));
+//      if (superClazz.getCanonicalName()
+//                    .equals(canonicalNameTM)) {
+//        return true;
+//      } else {
+//        return this.isSuperClass(typeUtils,
+//                                 (TypeElement) typeUtils.asElement(tm),
+//                                 superClazz);
+//      }
+//    }
+//    return false;
+//  }
+//
+//  public List<TypeElement> getListOfSuperClasses(TypeElement typeElement,
+//                                                 Class<?> implementingSuperClass) {
+//    List<TypeElement> listOfTypeMirror = new ArrayList<>();
+//    TypeMirror implementingSuperClassTypeMirror = this.getTypeMirror(implementingSuperClass.getCanonicalName());
+//    Set<TypeMirror> list = this.getFlattenedSupertypeHierarchy(this.processingEnvironment.getTypeUtils(),
+//                                                               typeElement.asType());
+//    list.stream()
+//        .filter(mirror -> !implementingSuperClassTypeMirror.toString()
+//                                                           .equals(mirror.toString()))
+//        .filter(mirror -> !typeElement.asType()
+//                                      .toString()
+//                                      .equals(mirror.toString()))
+//        .filter(mirror -> this.processingEnvironment.getTypeUtils()
+//                                                    .isAssignable(mirror,
+//                                                                  implementingSuperClassTypeMirror))
+//        .forEachOrdered(mirror -> {
+//          listOfTypeMirror.add(this.getTypeElement(mirror));
+//        });
+//    return listOfTypeMirror;
+//  }
+//
+//  public TypeMirror getTypeMirror(String className) {
+//    return this.getTypeElement(className)
+//               .asType();
+//  }
+//
+//  public TypeElement getTypeElement(TypeMirror mirror) {
+//    return (TypeElement) this.processingEnvironment.getTypeUtils()
+//                                                   .asElement(mirror);
+//  }
+//
+//  public TypeElement getTypeElement(String className) {
+//    return this.processingEnvironment.getElementUtils()
+//                                     .getTypeElement(className);
+//  }
+//
+//  public String getEventBusResourcePath() {
+//    return StandardLocation.CLASS_OUTPUT + "/" + "META-INF/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + ProcessorConstants.EVENT_BUS_FOLDER_NAME + "/EventBus";
+//  }
 
-  public List<TypeElement> getListOfSuperClasses(TypeElement typeElement,
-                                                 Class<?> implementingSuperClass) {
-    List<TypeElement> listOfTypeMirror = new ArrayList<>();
-    TypeMirror implementingSuperClassTypeMirror = this.getTypeMirror(implementingSuperClass.getCanonicalName());
-    Set<TypeMirror> list = this.getFlattenedSupertypeHierarchy(this.processingEnvironment.getTypeUtils(),
-                                                               typeElement.asType());
-    list.stream()
-        .filter(mirror -> !implementingSuperClassTypeMirror.toString()
-                                                           .equals(mirror.toString()))
-        .filter(mirror -> !typeElement.asType()
-                                      .toString()
-                                      .equals(mirror.toString()))
-        .filter(mirror -> this.processingEnvironment.getTypeUtils()
-                                                    .isAssignable(mirror,
-                                                                  implementingSuperClassTypeMirror))
-        .forEachOrdered(mirror -> {
-          listOfTypeMirror.add(this.getTypeElement(mirror));
-        });
-    return listOfTypeMirror;
-  }
-
-  public TypeMirror getTypeMirror(String className) {
-    return this.getTypeElement(className)
-               .asType();
-  }
-
-  public TypeElement getTypeElement(TypeMirror mirror) {
-    return (TypeElement) this.processingEnvironment.getTypeUtils()
-                                                   .asElement(mirror);
-  }
-
-  public TypeElement getTypeElement(String className) {
-    return this.processingEnvironment.getElementUtils()
-                                     .getTypeElement(className);
-  }
-
-  protected void createErrorMessage(String errorMessage) {
+  public void createNoteMessage(String errorMessage) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     pw.println(errorMessage);
     pw.close();
-    messager.printMessage(Diagnostic.Kind.ERROR,
+    messager.printMessage(Diagnostic.Kind.NOTE,
                           sw.toString());
 
   }
 
+  public String createHandledEventArray(TypeElement typeElement) {
+    List<String> eventHandlingMethods = new ArrayList<>();
+    List<Element> annotatedMethods = this.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                typeElement,
+                                                                                EventHandlingMethod.class);
+    annotatedMethods.stream()
+                    .map(element -> (ExecutableElement) element)
+                    .forEach(element -> {
+                      eventHandlingMethods.add(this.createInternalEventName(element));
+                    });
+    String returnValue = "";
+    for (int i = eventHandlingMethods.size() - 1; i >= 0; i--) {
+      returnValue += eventHandlingMethods.get(i);
+      if (i < eventHandlingMethods.size() - 1) {
+        returnValue += ",";
+      }
+    }
+    return returnValue;
+  }
+
+  public <A extends Annotation> List<Element> getMethodFromTypeElementAnnotatedWith(ProcessingEnvironment processingEnvironment,
+                                                                                    TypeElement element,
+                                                                                    Class<A> annotation) {
+    List<Element> annotatedMethods = processingEnvironment.getElementUtils()
+                                                          .getAllMembers(element)
+                                                          .stream()
+                                                          .filter(methodElement -> methodElement.getAnnotation(annotation) != null)
+                                                          .collect(Collectors.toList());
+    return annotatedMethods;
+  }
+
   public String createInternalEventName(ExecutableElement executableElement) {
-    String internalEventname = executableElement.getSimpleName().toString();
-    for (VariableElement variableElement : executableElement.getParameters())   {
+    String internalEventname = executableElement.getSimpleName()
+                                                .toString();
+    for (VariableElement variableElement : executableElement.getParameters()) {
       internalEventname += "_";
       internalEventname += variableElement.asType()
-                                          .toString().replace(".", "_");
+                                          .toString()
+                                          .replace(".",
+                                                   "_");
     }
     return internalEventname;
   }

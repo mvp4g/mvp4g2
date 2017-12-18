@@ -5,7 +5,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import java.lang.Override;
 import java.util.List;
@@ -94,7 +94,7 @@ public final class StartEventTestEventBusWithOneStartAnnotationImpl extends Abst
     super.activate(eventMetaData);
     super.deactivate(eventMetaData);
     List<EventHandlerMetaData<?>> eventHandlers = null;
-    List<PresenterHandlerMetaData<?, ?>> presenters = null;
+    List<PresenterMetaData<?, ?>> presenters = null;
     // handling: de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter
     eventHandlers = this.eventHandlerMetaDataMap.get("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter");
     super.executeEventHandler(eventMetaData, eventHandlers, null, new AbstractEventBus.ExecEventHandler() {
@@ -112,12 +112,12 @@ public final class StartEventTestEventBusWithOneStartAnnotationImpl extends Abst
     super.executePresenter(eventMetaData, presenters, null, new AbstractEventBus.ExecPresenter() {
       @Override
       public boolean execPass(EventMetaData<?> eventMetaData,
-                              PresenterHandlerMetaData<?, ?> metaData) {
+                              PresenterMetaData<?, ?> metaData) {
         return metaData.getPresenter().pass(eventMetaData.getEventName());
       }
 
       @Override
-      public void execEventHandlingMethod(PresenterHandlerMetaData<?, ?> metaData) {
+      public void execEventHandlingMethod(PresenterMetaData<?, ?> metaData) {
         ((MockShellPresenter) metaData.getPresenter()).onStart();
       }
     }, false);

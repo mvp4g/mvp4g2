@@ -25,7 +25,6 @@ import javax.tools.JavaFileObject;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
-
 public class PresenterTest {
 
   @Test

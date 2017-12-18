@@ -24,17 +24,19 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.IsMvp4g2Logger;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.history.IsNavigationConfirmation;
 import de.gishmo.gwt.mvp4g2.client.history.PlaceService;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
-import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterHandlerMetaData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Objects.isNull;
 
 @ForInternalUseOnly
 public abstract class AbstractEventBus<E extends IsEventBus>
@@ -42,15 +44,15 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
   public static int logDepth = -1;
   /* Map od EventMedaData (key: canonical class name, EventMetaData */
-  protected Map<String, EventMetaData<E>>                     eventMetaDataMap;
+  protected Map<String, EventMetaData<E>>              eventMetaDataMap;
   /* Map od EventHandlerMedaData (key: canonical class name, List<EventHandlerMetaData> */
   /* value is list -> think on multiple presenter ... */
-  protected Map<String, List<EventHandlerMetaData<?>>>        eventHandlerMetaDataMap;
+  protected Map<String, List<EventHandlerMetaData<?>>> eventHandlerMetaDataMap;
   /* Map od EventHandlerMedaData (key: canonical class name, List<EventHandlerMetaData> */
   /* value is list -> think on multiple presenter ... */
-  protected Map<String, List<PresenterHandlerMetaData<?, ?>>> presenterHandlerMetaDataMap;
+  protected Map<String, List<PresenterMetaData<?, ?>>> presenterHandlerMetaDataMap;
   /* presenter which creates the shell */
-  protected String                                            shellPresenterCanonialName;
+  protected String                                     shellPresenterCanonialName;
   /* flag, if the start event is already fired */
   protected boolean startEventFired = false;
   /* the place service */
@@ -104,7 +106,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                             Object... parameters) {
     for (String eventHandlerClassName : eventMetaData.getBindHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandlers = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
-      if (eventHandlers != null && eventHandlers.size() != 0) {
+      if (!isNull(eventHandlers) && eventHandlers.size() != 0) {
         for (EventHandlerMetaData<?> eventHandlerMetaData : eventHandlers) {
           boolean activated = eventHandlerMetaData.getEventHandler()
                                                   .isActivated();
@@ -124,22 +126,22 @@ public abstract class AbstractEventBus<E extends IsEventBus>
           }
         }
       } else {
-        List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
-        if (presenters != null && presenters.size() != 0) {
-          for (PresenterHandlerMetaData<?, ?> presenterHandlerMetaData : presenters) {
-            boolean activated = presenterHandlerMetaData.getPresenter()
-                                                        .isActivated();
-            activated = activated && presenterHandlerMetaData.getPresenter()
-                                                             .pass(eventMetaData.getEventName(),
+        List<PresenterMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+        if (!isNull(presenters) && presenters.size() != 0) {
+          for (PresenterMetaData<?, ?> presenterMetaData : presenters) {
+            boolean activated = presenterMetaData.getPresenter()
+                                                 .isActivated();
+            activated = activated && presenterMetaData.getPresenter()
+                                                      .pass(eventMetaData.getEventName(),
                                                                    parameters);
             if (activated) {
-              if (!presenterHandlerMetaData.getPresenter()
-                                           .isBinded()) {
+              if (!presenterMetaData.getPresenter()
+                                    .isBinded()) {
                 if (!eventMetaData.isPassive()) {
-                  presenterHandlerMetaData.getPresenter()
-                                          .setBinded(true);
-                  presenterHandlerMetaData.getPresenter()
-                                          .bind();
+                  presenterMetaData.getPresenter()
+                                   .setBinded(true);
+                  presenterMetaData.getPresenter()
+                                   .bind();
                 }
               }
             }
@@ -162,8 +164,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
   private void doCreateAndBindView(String eventName,
                                    String eventHandlerClassName) {
-    List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
-    if (presenters != null && presenters.size() != 0) {
+    List<PresenterMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+    if (!isNull(presenters) && presenters.size() != 0) {
       presenters.stream()
                 .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
                                                                              .isBinded())
@@ -199,7 +201,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
 //  private void doCreateAndBindView(String eventName,
 //                                   String eventHandlerClassName) {
-//    List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+//    List<PresenterMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
 //    if (presenters != null && presenters.size() != 0) {
 //      presenters.stream()
 //                .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
@@ -228,7 +230,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   protected final void activate(EventMetaData<E> eventMetaData) {
     for (String eventHandlerClassName : eventMetaData.getActivateHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandler = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
-      if (eventHandler != null && eventHandler.size() != 0) {
+      if (!isNull(eventHandler) && eventHandler.size() != 0) {
         eventHandler.stream()
                     .forEachOrdered(eventHandlerMetaData -> {
                       this.logHandlerActivating(AbstractEventBus.logDepth,
@@ -237,8 +239,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                       eventHandlerMetaData.getEventHandler()
                                           .setActivated(true);
                     });
-        List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
-        if (presenters != null && presenters.size() != 0) {
+        List<PresenterMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+        if (!isNull(presenters) && presenters.size() != 0) {
           presenters.stream()
                     .forEachOrdered(presenterHandlerMetaData -> {
                       this.logHandlerActivating(AbstractEventBus.logDepth,
@@ -271,7 +273,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   protected final void deactivate(EventMetaData<E> eventMetaData) {
     for (String eventHandlerClassName : eventMetaData.getDeactivateHandlerTypes()) {
       List<EventHandlerMetaData<?>> eventHandler = this.eventHandlerMetaDataMap.get(eventHandlerClassName);
-      if (eventHandler != null && eventHandler.size() != 0) {
+      if (!isNull(eventHandler) && eventHandler.size() != 0) {
         eventHandler.stream()
                     .forEachOrdered(eventHandlerMetaData -> {
                       this.logHandlerDeactivating(AbstractEventBus.logDepth,
@@ -280,8 +282,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                       eventHandlerMetaData.getEventHandler()
                                           .setActivated(false);
                     });
-        List<PresenterHandlerMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
-        if (presenters != null && presenters.size() != 0) {
+        List<PresenterMetaData<?, ?>> presenters = this.presenterHandlerMetaDataMap.get(eventHandlerClassName);
+        if (!isNull(presenters) && presenters.size() != 0) {
           presenters.stream()
                     .forEachOrdered(presenterHandlerMetaData -> {
                       this.logHandlerDeactivating(AbstractEventBus.logDepth,
@@ -323,12 +325,12 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
   public void setShell() {
     // no IsShellPresenter found! ==> error
-    assert this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName) != null : "there is no presenter which implements IsShellPresenter!";
+    assert !isNull(this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName)) : "there is no presenter which implements IsShellPresenter!";
     // more than one IsShellPresenter found! ==> error
     assert this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName)
                                            .size() > 0 : "there is more than one presenter defined which implements IsShellPresenter!";
-    PresenterHandlerMetaData<?, ?> presenter = this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName)
-                                                                               .get(0);
+    PresenterMetaData<?, ?> presenter = this.presenterHandlerMetaDataMap.get(this.shellPresenterCanonialName)
+                                                                        .get(0);
     presenter.getPresenter()
              .setBinded(true);
     presenter.getPresenter()
@@ -397,16 +399,16 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   }
 
   protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> void putPresenterHandlerMetaData(String className,
-                                                                                                           PresenterHandlerMetaData<E, V> metaData) {
-    List<PresenterHandlerMetaData<?, ?>> presenterHandlerMetaDataList = this.presenterHandlerMetaDataMap.computeIfAbsent(className,
+                                                                                                           PresenterMetaData<E, V> metaData) {
+    List<PresenterMetaData<?, ?>> presenterMetaDataList = this.presenterHandlerMetaDataMap.computeIfAbsent(className,
                                                                                                                          k -> new ArrayList<>());
-    presenterHandlerMetaDataList.add(metaData);
+    presenterMetaDataList.add(metaData);
   }
 
   protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> void removePresenterHandlerMetaData(String className,
-                                                                                                              PresenterHandlerMetaData<E, V> metaData) {
+                                                                                                              PresenterMetaData<E, V> metaData) {
     List<EventHandlerMetaData<?>> eventHandlerMetaDataList = this.eventHandlerMetaDataMap.get(className);
-    if (eventHandlerMetaDataList != null) {
+    if (!isNull(eventHandlerMetaDataList)) {
       eventHandlerMetaDataList.remove(metaData);
     }
   }
@@ -476,7 +478,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
       sb.append("<< with parameters: ");
       for (int i = 0; i < parameters.length; i++) {
         sb.append(">>");
-        sb.append(parameters[i] == null ? "null" : parameters[i].toString());
+        sb.append(isNull(parameters[i]) ? "null" : parameters[i].toString());
         if (i < parameters.length - 1) {
           sb.append("<<, ");
         } else {
@@ -570,7 +572,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                                             List<String> listOfExecutedHandlers,
                                                             ExecEventHandler execEventHandler,
                                                             boolean addHandler) {
-    if (eventHandlers != null && eventHandlers.size() != 0) {
+    if (!isNull(eventHandlers) && eventHandlers.size() != 0) {
       for (EventHandlerMetaData<?> metaData : eventHandlers) {
         boolean activated = metaData.getEventHandler()
                                     .isActivated();
@@ -583,7 +585,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
           metaData.getEventHandler()
                   .onBeforeEvent(eventMetaData.getEventName());
           execEventHandler.execEventHandlingMethod(metaData);
-          if (listOfExecutedHandlers != null && addHandler) {
+          if (!isNull(listOfExecutedHandlers) && addHandler) {
             listOfExecutedHandlers.add(metaData.getCanonicalName());
           }
         }
@@ -609,12 +611,12 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   }
 
   protected <E extends IsEventBus> void executePresenter(EventMetaData<E> eventMetaData,
-                                                         List<PresenterHandlerMetaData<?, ?>> eventHandler,
+                                                         List<PresenterMetaData<?, ?>> eventHandler,
                                                          List<String> listOfExecutedHandlers,
                                                          ExecPresenter execPresenter,
                                                          boolean addHandler) {
-    if (eventHandler != null && eventHandler.size() != 0) {
-      for (PresenterHandlerMetaData<?, ?> metaData : eventHandler) {
+    if (!isNull(eventHandler) && eventHandler.size() != 0) {
+      for (PresenterMetaData<?, ?> metaData : eventHandler) {
         boolean activated = metaData.getPresenter()
                                     .isActivated();
         boolean pass = execPresenter.execPass(eventMetaData,
@@ -626,7 +628,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
           metaData.getPresenter()
                   .onBeforeEvent(eventMetaData.getEventName());
           execPresenter.execEventHandlingMethod(metaData);
-          if (listOfExecutedHandlers != null && addHandler) {
+          if (!isNull(listOfExecutedHandlers) && addHandler) {
             listOfExecutedHandlers.add(metaData.getCanonicalName());
           }
         }
@@ -646,9 +648,9 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   public interface ExecPresenter {
 
     boolean execPass(EventMetaData<?> eventMetaData,
-                     PresenterHandlerMetaData<?, ?> metaData);
+                     PresenterMetaData<?, ?> metaData);
 
-    void execEventHandlingMethod(PresenterHandlerMetaData<?, ?> metaData);
+    void execEventHandlingMethod(PresenterMetaData<?, ?> metaData);
 
   }
 }
