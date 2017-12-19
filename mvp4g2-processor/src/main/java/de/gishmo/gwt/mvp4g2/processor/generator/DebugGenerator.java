@@ -17,22 +17,22 @@ package de.gishmo.gwt.mvp4g2.processor.generator;
 
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 
 import javax.lang.model.element.Modifier;
 
-// TODO check, that @Filter is annoted at a interface that extends IsEventBus! and other tests ...
-public class FilterAnnotationGenerator {
+public class DebugGenerator {
 
   private EventBusMetaModel eventBusMetaModel;
   private TypeSpec.Builder  typeSpec;
 
   @SuppressWarnings("unused")
-  private FilterAnnotationGenerator() {
+  private DebugGenerator() {
   }
 
-  private FilterAnnotationGenerator(Builder builder) {
+  private DebugGenerator(Builder builder) {
     this.eventBusMetaModel = builder.eventBusMetaModel;
     this.typeSpec = builder.typeSpec;
   }
@@ -43,20 +43,21 @@ public class FilterAnnotationGenerator {
 
   public void generate()
     throws ProcessorException {
-    // method msut always be created!
-    MethodSpec.Builder loadFilterConfigurationMethod = MethodSpec.methodBuilder("loadFilterConfiguration")
-                                                                 .addAnnotation(Override.class)
-                                                                 .addModifiers(Modifier.PUBLIC);
-    if (eventBusMetaModel.hasFiltersAnnotation()) {
-      loadFilterConfigurationMethod.addStatement("super.setFiltersEnable(true)");
-      eventBusMetaModel.getFilters()
-                       .stream()
-                       .forEach(filterClassName -> loadFilterConfigurationMethod.addStatement("super.eventFilters.add(new $T())",
-                                                                                              filterClassName));
+    // method must always be created!
+    MethodSpec.Builder loadDebugConfigurationMethod = MethodSpec.methodBuilder("loadDebugConfiguration")
+                                                                .addAnnotation(Override.class)
+                                                                .addModifiers(Modifier.PUBLIC);
+    if (eventBusMetaModel.hasDebugAnnotation()) {
+      loadDebugConfigurationMethod.addStatement("super.setDebugEnable(true)")
+                                  .addStatement("super.setLogger(new $T())",
+                                                eventBusMetaModel.getDebugLogger())
+                                  .addStatement("super.setLogLevel($T.LogLevel.$L)",
+                                                Debug.class,
+                                                eventBusMetaModel.getDebugLogLevel());
     } else {
-      loadFilterConfigurationMethod.addStatement("super.setFiltersEnable(false)");
+      loadDebugConfigurationMethod.addStatement("super.setDebugEnable(false)");
     }
-    typeSpec.addMethod(loadFilterConfigurationMethod.build());
+    typeSpec.addMethod(loadDebugConfigurationMethod.build());
   }
 
   public static final class Builder {
@@ -86,8 +87,8 @@ public class FilterAnnotationGenerator {
       return this;
     }
 
-    public FilterAnnotationGenerator build() {
-      return new FilterAnnotationGenerator(this);
+    public DebugGenerator build() {
+      return new DebugGenerator(this);
     }
   }
 }

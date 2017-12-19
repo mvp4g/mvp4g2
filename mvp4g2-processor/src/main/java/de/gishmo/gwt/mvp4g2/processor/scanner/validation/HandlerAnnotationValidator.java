@@ -1,33 +1,43 @@
-package de.gishmo.gwt.mvp4g2.processor.scanner;
+/*
+ * Copyright 2015-2017 Frank Hossfeld
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.tools.FileObject;
-import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.Properties;
 
-public class EventHandlerAnnotationScanner {
-
-  private final static String EVENT_HANDLER_PROPERTIES  = "eventHandler.properties";
+public class HandlerAnnotationValidator {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
+  private RoundEnvironment      roundEnvironment;
 
   @SuppressWarnings("unused")
-  private EventHandlerAnnotationScanner(Builder builder) {
-    super();
+  private HandlerAnnotationValidator() {
+  }
+
+  private HandlerAnnotationValidator(Builder builder) {
     this.processingEnvironment = builder.processingEnvironment;
+    this.roundEnvironment = builder.roundEnvironment;
     setUp();
   }
 
@@ -41,41 +51,7 @@ public class EventHandlerAnnotationScanner {
     return new Builder();
   }
 
-  public EventHandlerMetaModel scan(RoundEnvironment roundEnvironment)
-    throws ProcessorException {
-    // read all already created model
-    EventHandlerMetaModel model = this.restore();
-    for (Element element : roundEnvironment.getElementsAnnotatedWith(Handler.class)) {
-      TypeElement typeElement = (TypeElement) element;
-      // validate the element. In case of error throw exception!
-      validate(typeElement);
-      // update model
-      model.add(((TypeElement) element).getQualifiedName().toString(),
-                this.processorUtils.createHandledEventArray(typeElement));
-      // let's store the updated model
-      this.processorUtils.store(model,
-                                this.createRelativeFileName());
-    }
-    return model;
-  }
-
-  private EventHandlerMetaModel restore() {
-    Properties props = new Properties();
-    try {
-      FileObject resource = this.processingEnvironment.getFiler()
-                                                      .getResource(StandardLocation.CLASS_OUTPUT,
-                                                                   "",
-                                                                   this.createRelativeFileName());
-      props.load(resource.openInputStream());
-      return new EventHandlerMetaModel(props);
-    } catch (IOException e) {
-      this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
-    }
-    return new EventHandlerMetaModel();
-  }
-
-
-  private void validate(Element element)
+  public void validate(Element element)
     throws ProcessorException {
     if (element instanceof TypeElement) {
       TypeElement typeElement = (TypeElement) element;
@@ -105,21 +81,23 @@ public class EventHandlerAnnotationScanner {
     }
   }
 
-  private String createRelativeFileName() {
-    return ProcessorConstants.META_INF + "/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + EventHandlerAnnotationScanner.EVENT_HANDLER_PROPERTIES;
-  }
-
-  public static class Builder {
+  public static final class Builder {
 
     ProcessingEnvironment processingEnvironment;
+    RoundEnvironment      roundEnvironment;
 
     public Builder processingEnvironment(ProcessingEnvironment processingEnvironment) {
       this.processingEnvironment = processingEnvironment;
       return this;
     }
 
-    public EventHandlerAnnotationScanner build() {
-      return new EventHandlerAnnotationScanner(this);
+    public Builder roundEnvironment(RoundEnvironment roundEnvironment) {
+      this.roundEnvironment = roundEnvironment;
+      return this;
+    }
+
+    public HandlerAnnotationValidator build() {
+      return new HandlerAnnotationValidator(this);
     }
   }
 }

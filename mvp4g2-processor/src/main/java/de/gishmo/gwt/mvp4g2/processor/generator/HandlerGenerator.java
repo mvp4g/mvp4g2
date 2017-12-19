@@ -14,7 +14,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 
-public class EventHandlerGenerator {
+public class HandlerGenerator {
 
   private final static String IMPL_NAME = "MetaData";
 
@@ -22,7 +22,7 @@ public class EventHandlerGenerator {
   private ProcessingEnvironment processingEnvironment;
 
   @SuppressWarnings("unused")
-  private EventHandlerGenerator(Builder builder) {
+  private HandlerGenerator(Builder builder) {
     super();
 
     this.processingEnvironment = builder.processingEnvironment;
@@ -56,7 +56,7 @@ public class EventHandlerGenerator {
       String className = this.processorUtils.createFullClassName(data.getEventHandler()
                                                                      .getPackage(),
                                                                  data.getEventHandler()
-                                                                     .getSimpleName() + EventHandlerGenerator.IMPL_NAME);
+                                                                     .getSimpleName() + HandlerGenerator.IMPL_NAME);
       TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.processorUtils.setFirstCharacterToUpperCase(className))
                                           .superclass(ParameterizedTypeName.get(eventHandlerMetaDataClassName,
                                                                                 eventHandlerClassName))
@@ -80,7 +80,7 @@ public class EventHandlerGenerator {
         javaFile.writeTo(this.processingEnvironment.getFiler());
       } catch (IOException e) {
         throw new ProcessorException("Unable to write generated file: >>" + data.getEventHandler()
-                                                                                .getSimpleName() + EventHandlerGenerator.IMPL_NAME + "<< -> exception: " + e.getMessage());
+                                                                                .getSimpleName() + HandlerGenerator.IMPL_NAME + "<< -> exception: " + e.getMessage());
       }
     }
   }
@@ -94,8 +94,8 @@ public class EventHandlerGenerator {
       return this;
     }
 
-    public EventHandlerGenerator build() {
-      return new EventHandlerGenerator(this);
+    public HandlerGenerator build() {
+      return new HandlerGenerator(this);
     }
   }
 }

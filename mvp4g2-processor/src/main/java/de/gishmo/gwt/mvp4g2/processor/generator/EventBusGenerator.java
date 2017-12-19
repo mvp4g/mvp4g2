@@ -76,11 +76,17 @@ public class EventBusGenerator {
                                        .build();
     typeSpec.addMethod(constructor);
 
-    DebugAnnotationGenerator.builder()
-                            .eventBusMetaModel(eventBusMetaMetaModel)
-                            .typeSpec(typeSpec)
-                            .build()
-                            .generate();
+    DebugGenerator.builder()
+                  .eventBusMetaModel(eventBusMetaMetaModel)
+                  .typeSpec(typeSpec)
+                  .build()
+                  .generate();
+
+    FilterGenerator.builder()
+                   .eventBusMetaModel(eventBusMetaMetaModel)
+                   .typeSpec(typeSpec)
+                   .build()
+                   .generate();
 
     JavaFile javaFile = JavaFile.builder(eventBusMetaMetaModel.getEventBus()
                                                               .getPackage(),
