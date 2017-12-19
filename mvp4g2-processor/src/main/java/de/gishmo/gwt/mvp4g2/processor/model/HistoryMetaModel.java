@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-public class HistoryModel
+public class HistoryMetaModel
   implements IsMetaModel {
 
   private static final String KEY_HISTORY_CONVERTERS = "historyConverters";
@@ -16,17 +16,17 @@ public class HistoryModel
 
   private Map<String, HistoryData> historyDatas;
 
-  public HistoryModel() {
+  public HistoryMetaModel() {
     this.historyDatas = new HashMap<>();
   }
 
-  public HistoryModel(Properties properties) {
+  public HistoryMetaModel(Properties properties) {
     Set<String> t = properties.stringPropertyNames();
     t.stream()
      .forEach(System.out::println);
 
-//    .getProperty(EventHandlerModel.KEY_EVENT_HANDLER),
-//       props.getProperty(EventHandlerModel.KEY_HANDLED_EVENTS)
+//    .getProperty(EventHandlerMetaModel.KEY_EVENT_HANDLER),
+//       props.getProperty(EventHandlerMetaModel.KEY_HANDLED_EVENTS)
   }
 
   public void add(String historyConverter,
@@ -46,17 +46,17 @@ public class HistoryModel
 
   public Properties createPropertes() {
     Properties props = new Properties();
-//    props.setProperty(HistoryModel.KEY_HISTORY_CONVERTERS,
+//    props.setProperty(HistoryMetaModel.KEY_HISTORY_CONVERTERS,
 //                      ModelUtils.stringify(this.historyDatas.keySet()));
 //    this.historyDatas.values()
 //                     .stream()
 //                     .forEach(data -> {
 //                            props.setProperty(data.getHistoryConverter()
-//                                                              .getClassName() + HistoryModel.KEY_EVENT_HANDLER,
+//                                                              .getClassName() + HistoryMetaModel.KEY_EVENT_HANDLER,
 //                                              data.getEventHandler()
 //                                                              .getClassName());
 //                            props.setProperty(data.getEventHandler()
-//                                                              .getClassName() + HistoryModel.KEY_HANDLED_EVENTS,
+//                                                              .getClassName() + HistoryMetaModel.KEY_HANDLED_EVENTS,
 //                                              ModelUtils.stringify(data.getHandledEvents()));
 //                          });
     return props;

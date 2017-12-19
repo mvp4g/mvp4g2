@@ -10,7 +10,7 @@ import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.PresenterModel;
+import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
@@ -42,14 +42,14 @@ public class PresenterGenerator {
     return new Builder();
   }
 
-  public void generate(PresenterModel metaModel)
+  public void generate(PresenterMetaModel metaModel)
     throws ProcessorException {
     ClassName presenterrMetaDataClassName = ClassName.get(PresenterMetaData.class);
     ClassName presenterMetaDataKindClassName = ClassName.get(EventHandlerMetaData.Kind.class);
     ClassName presenterViewCreationMethodClassName = ClassName.get(Presenter.VIEW_CREATION_METHOD.class);
 
     for (String presenter : metaModel.getPresenterKeys()) {
-      PresenterModel.PresenterData data = metaModel.getPresenterData(presenter);
+      PresenterMetaModel.PresenterData data = metaModel.getPresenterData(presenter);
 
       ClassName presenterClassName = ClassName.get(data.getPresenter()
                                                        .getPackage(),

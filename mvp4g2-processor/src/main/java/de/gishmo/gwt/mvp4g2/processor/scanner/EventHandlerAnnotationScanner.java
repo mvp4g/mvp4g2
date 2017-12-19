@@ -1,11 +1,11 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
 import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -41,11 +41,11 @@ public class EventHandlerAnnotationScanner {
     return new Builder();
   }
 
-  public EventHandlerModel scan(RoundEnvironment roundEnvironment)
+  public EventHandlerMetaModel scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
     // read all already created model
-    EventHandlerModel model = this.restore();
-    for (Element element : roundEnvironment.getElementsAnnotatedWith(EventHandler.class)) {
+    EventHandlerMetaModel model = this.restore();
+    for (Element element : roundEnvironment.getElementsAnnotatedWith(Handler.class)) {
       TypeElement typeElement = (TypeElement) element;
       // validate the element. In case of error throw exception!
       validate(typeElement);
@@ -59,7 +59,7 @@ public class EventHandlerAnnotationScanner {
     return model;
   }
 
-  private EventHandlerModel restore() {
+  private EventHandlerMetaModel restore() {
     Properties props = new Properties();
     try {
       FileObject resource = this.processingEnvironment.getFiler()
@@ -67,11 +67,11 @@ public class EventHandlerAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      return new EventHandlerModel(props);
+      return new EventHandlerMetaModel(props);
     } catch (IOException e) {
       this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
     }
-    return new EventHandlerModel();
+    return new EventHandlerMetaModel();
   }
 
 
@@ -83,7 +83,7 @@ public class EventHandlerAnnotationScanner {
       if (!typeElement.getKind()
                       .isClass()) {
         throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @EventHandler can only be used with as class!");
+                                                .toString() + ": @Handler can only be used with as class!");
       }
       // check, that the typeElement extends AbstarctEventHandler
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
@@ -92,16 +92,16 @@ public class EventHandlerAnnotationScanner {
                                                                                  .getTypeElement(AbstractEventHandler.class.getCanonicalName())
                                                                                  .asType())) {
         throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @EventHandler must extend AbstractEventHandler.class!");
+                                                .toString() + ": @Handler must extend AbstractEventHandler.class!");
       }
       // check if annotated class is abstract
       if (typeElement.getModifiers()
                      .contains(Modifier.ABSTRACT)) {
         throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @EventHandler can not be ABSTRACT");
+                                                .toString() + ": @Handler can not be ABSTRACT");
       }
     } else {
-      throw new ProcessorException("@EventHandler can only be used on a type (class)");
+      throw new ProcessorException("@Handler can only be used on a type (class)");
     }
   }
 

@@ -18,8 +18,6 @@ public class ApplicationGenerator {
 
   private final static String IMPL_NAME = "Impl";
 
-  private final ClassName abstractApplicationClassName = ClassName.get(AbstractApplication.class);
-
   //  private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
 
@@ -44,6 +42,7 @@ public class ApplicationGenerator {
 
   public void generate(ApplicationMetaModel metaModel)
     throws ProcessorException {
+    ClassName abstractApplicationClassName = ClassName.get(AbstractApplication.class);
     ClassName applicationClassName = ClassName.get(metaModel.getApplication()
                                                             .getPackage(),
                                                    metaModel.getApplication()
@@ -59,7 +58,7 @@ public class ApplicationGenerator {
 
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(metaModel.getApplication()
                                                                .getSimpleName() + ApplicationGenerator.IMPL_NAME)
-                                        .superclass(ParameterizedTypeName.get(this.abstractApplicationClassName,
+                                        .superclass(ParameterizedTypeName.get(abstractApplicationClassName,
                                                                               eventBusClassName))
                                         .addModifiers(Modifier.PUBLIC,
                                                       Modifier.FINAL)

@@ -2,8 +2,8 @@ package de.gishmo.gwt.mvp4g2.processor.model;
 
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ModelUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-public class PresenterModel
+public class PresenterMetaModel
   implements IsMetaModel {
 
   private static final String KEY_PRESENTERS           = "presenters";
@@ -24,17 +24,17 @@ public class PresenterModel
 
   private Map<String, PresenterData> presenterDatas;
 
-  public PresenterModel() {
+  public PresenterMetaModel() {
     this.presenterDatas = new HashMap<>();
   }
 
-  public PresenterModel(Properties properties) {
+  public PresenterMetaModel(Properties properties) {
     Set<String> t = properties.stringPropertyNames();
     t.stream()
      .forEach(System.out::println);
 
-//    .getProperty(EventHandlerModel.KEY_EVENT_HANDLER),
-//       props.getProperty(EventHandlerModel.KEY_HANDLED_EVENTS)
+//    .getProperty(EventHandlerMetaModel.KEY_EVENT_HANDLER),
+//       props.getProperty(EventHandlerMetaModel.KEY_HANDLED_EVENTS)
   }
 
   public void add(String presenter,
@@ -77,32 +77,32 @@ public class PresenterModel
 
   public Properties createPropertes() {
     Properties props = new Properties();
-    props.setProperty(PresenterModel.KEY_PRESENTERS,
-                      ModelUtils.stringify(this.presenterDatas.keySet()));
+    props.setProperty(PresenterMetaModel.KEY_PRESENTERS,
+                      String.join(",", this.presenterDatas.keySet()));
     this.presenterDatas.values()
                        .stream()
                        .forEach(data -> {
                          props.setProperty(data.getPresenter()
-                                               .getClassName() + PresenterModel.KEY_PRESENTER,
+                                               .getClassName() + PresenterMetaModel.KEY_PRESENTER,
                                            data.getPresenter()
                                                .getClassName());
                          props.setProperty(data.getPresenter()
-                                               .getClassName() + PresenterModel.KEY_IS_MULTIPLE,
+                                               .getClassName() + PresenterMetaModel.KEY_IS_MULTIPLE,
                                            data.getIsMultiple());
                          props.setProperty(data.getPresenter()
-                                               .getClassName() + PresenterModel.KEY_VIEW_CLASS,
+                                               .getClassName() + PresenterMetaModel.KEY_VIEW_CLASS,
                                            data.getViewClass()
                                                .getClassName());
                          props.setProperty(data.getPresenter()
-                                               .getClassName() + PresenterModel.KEY_VIEW_INTERFACE,
+                                               .getClassName() + PresenterMetaModel.KEY_VIEW_INTERFACE,
                                            data.getViewInterface()
                                                .getClassName());
                          props.setProperty(data.getPresenter()
-                                               .getClassName() + PresenterModel.KEY_VIEW_CREATION_METHOD,
+                                               .getClassName() + PresenterMetaModel.KEY_VIEW_CREATION_METHOD,
                                            data.getViewCreationMethod());
                          props.setProperty(data.getPresenter()
-                                               .getClassName() + PresenterModel.KEY_HANDLED_EVENTS,
-                                           ModelUtils.stringify(data.handledEvents));
+                                               .getClassName() + PresenterMetaModel.KEY_HANDLED_EVENTS,
+                                           String.join(",", data.handledEvents));
                        });
     return props;
   }
@@ -114,7 +114,7 @@ public class PresenterModel
     private ClassNameModel viewClass;
     private ClassNameModel viewInterface;
     private String         viewCreationMethod;
-    private List<String>   handledEvents;
+    private List<String>   handledEvents = new ArrayList<>();
 
     public PresenterData(String presenter,
                          String isMultiple,

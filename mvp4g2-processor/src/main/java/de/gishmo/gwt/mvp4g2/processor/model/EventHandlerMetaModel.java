@@ -2,8 +2,8 @@ package de.gishmo.gwt.mvp4g2.processor.model;
 
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ModelUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-public class EventHandlerModel
+public class EventHandlerMetaModel
   implements IsMetaModel {
 
   private static final String KEY_EVENT_HANDLERS = "eventHandlers";
@@ -20,17 +20,17 @@ public class EventHandlerModel
 
   private Map<String, EventHandlerData> eventHandlerDatas;
 
-  public EventHandlerModel() {
+  public EventHandlerMetaModel() {
     this.eventHandlerDatas = new HashMap<>();
   }
 
-  public EventHandlerModel(Properties properties) {
+  public EventHandlerMetaModel(Properties properties) {
     Set<String> t = properties.stringPropertyNames();
     t.stream()
      .forEach(System.out::println);
 
-//    .getProperty(EventHandlerModel.KEY_EVENT_HANDLER),
-//       props.getProperty(EventHandlerModel.KEY_HANDLED_EVENTS)
+//    .getProperty(EventHandlerMetaModel.KEY_EVENT_HANDLER),
+//       props.getProperty(EventHandlerMetaModel.KEY_HANDLED_EVENTS)
   }
 
   public void add(String eventHandler,
@@ -57,18 +57,19 @@ public class EventHandlerModel
 
   public Properties createPropertes() {
     Properties props = new Properties();
-    props.setProperty(EventHandlerModel.KEY_EVENT_HANDLERS,
-                      ModelUtils.stringify(this.eventHandlerDatas.keySet()));
+    props.setProperty(EventHandlerMetaModel.KEY_EVENT_HANDLERS,
+                      String.join(",", this.eventHandlerDatas.keySet()));
     this.eventHandlerDatas.values()
                           .stream()
                           .forEach(data -> {
                             props.setProperty(data.getEventHandler()
-                                                  .getClassName() + EventHandlerModel.KEY_EVENT_HANDLER,
+                                                  .getClassName() + EventHandlerMetaModel.KEY_EVENT_HANDLER,
                                               data.getEventHandler()
                                                   .getClassName());
                             props.setProperty(data.getEventHandler()
-                                                  .getClassName() + EventHandlerModel.KEY_HANDLED_EVENTS,
-                                              ModelUtils.stringify(data.getHandledEvents()));
+                                                  .getClassName() + EventHandlerMetaModel.KEY_HANDLED_EVENTS,
+                                              String.join(",",
+                                                          data.getHandledEvents()));
                           });
     return props;
   }
@@ -76,7 +77,7 @@ public class EventHandlerModel
   public class EventHandlerData {
 
     private ClassNameModel eventHandler;
-    private List<String>   handledEvents;
+    private List<String>   handledEvents = new ArrayList<>();
 
     public EventHandlerData(String eventHandler,
                             String eventHandlers) {

@@ -16,36 +16,42 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventbus;
 
+import com.google.testing.compile.JavaFileObjects;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
+import org.junit.Test;
+
+import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static org.truth0.Truth.ASSERT;
+
 public class EventbusTest {
 
-//  @Test
-//  public void testEventBusAnnotationOnAMethod() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventBusAnnotationOnAMethod/EventBusAnnotationOnAMethod.java"))
-//          .processedWith(new Mvp4g2Processor())
-//          .failsToCompile()
-//          .withErrorContaining("@Eventbus can only be used on a type (interface)");
-//  }
-//
-//  @Test
-//  public void testEventBusAnnotationOnAClass() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventBusAnnotationOnAClass/EventBusAnnotationOnAClass.java"))
-//          .processedWith(new Mvp4g2Processor())
-//          .failsToCompile()
-//          .withErrorContaining("@Eventbus can only be used with an interface");
-//  }
+  @Test
+  public void testEventBusAnnotationOnAMethod() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventBusAnnotationOnAMethod/EventBusAnnotationOnAMethod.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@Eventbus can only be used on a type (interface)");
+  }
 
+  @Test
+  public void testEventBusAnnotationOnAClass() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventBusAnnotationOnAClass/EventBusAnnotationOnAClass.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@Eventbus can only be used with an interface");
+  }
 
 //  @Test
 //  public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
 //    ASSERT.about(javaSource())
 //          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
-//          .processedWith(new EventBusProcessor())
+//          .processedWith(new Mvp4g2Processor())
 //          .failsToCompile()
 //          .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
 //  }
-//
+
 ////  @Test
 ////  public void testStartEventTestEventBusWithOneStartAnnotation() {
 ////    ASSERT.about(javaSource())

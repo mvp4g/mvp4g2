@@ -22,7 +22,7 @@ import de.gishmo.gwt.mvp4g2.processor.eventbus.DebugTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.EventTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.EventbusTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.FilterTest;
-import de.gishmo.gwt.mvp4g2.processor.eventhandler.EventHandlerTest;
+import de.gishmo.gwt.mvp4g2.processor.eventhandler.HandlerTest;
 import de.gishmo.gwt.mvp4g2.processor.eventhandler.PresenterTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -32,7 +32,7 @@ import org.junit.runners.Suite;
                      DebugTest.class,
                      EventTest.class,
                      EventbusTest.class,
-                     EventHandlerTest.class,
+                     HandlerTest.class,
                      PresenterTest.class,
                      FilterTest.class,
                      StartEventTest.class})

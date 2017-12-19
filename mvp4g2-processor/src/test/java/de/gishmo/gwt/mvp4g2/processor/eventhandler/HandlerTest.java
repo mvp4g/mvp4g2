@@ -25,7 +25,7 @@ import javax.tools.JavaFileObject;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
-public class EventHandlerTest {
+public class HandlerTest {
 
   @Test
   public void testEventHandlerAnnotationAnnotatedAbstractClass() {
@@ -33,7 +33,7 @@ public class EventHandlerTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAbstractClass/EventHandlerAnnotationAnnotatedOnAbstractClass.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("@EventHandler can not be ABSTRACT");
+          .withErrorContaining("@Handler can not be ABSTRACT");
   }
 
 
@@ -43,7 +43,7 @@ public class EventHandlerTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAInterface/EventHandlerAnnotationAnnotatedOnAInterface.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("@EventHandler can only be used with as class");
+          .withErrorContaining("@Handler can only be used with as class");
   }
 
   @Test
@@ -52,7 +52,7 @@ public class EventHandlerTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerNotExtendingAbstractEventHandler/EventHandlerNotExtendingAbstractEventHandler.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("@EventHandler must extend AbstractEventHandler.class!");
+          .withErrorContaining("@Handler must extend AbstractEventHandler.class!");
   }
 
   @Test

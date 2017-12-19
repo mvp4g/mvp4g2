@@ -5,7 +5,7 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.PresenterModel;
+import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -42,10 +42,10 @@ public class PresenterAnnotationScanner {
     return new Builder();
   }
 
-  public PresenterModel scan(RoundEnvironment roundEnvironment)
+  public PresenterMetaModel scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
     // read all already created model
-    PresenterModel model = this.restore();
+    PresenterMetaModel model = this.restore();
     for (Element element : roundEnvironment.getElementsAnnotatedWith(Presenter.class)) {
       TypeElement typeElement = (TypeElement) element;
       // validate the element. In case of error throw exception!
@@ -72,7 +72,7 @@ public class PresenterAnnotationScanner {
     return model;
   }
 
-  private PresenterModel restore() {
+  private PresenterMetaModel restore() {
     Properties props = new Properties();
     try {
       FileObject resource = this.processingEnvironment.getFiler()
@@ -80,11 +80,11 @@ public class PresenterAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      return new PresenterModel(props);
+      return new PresenterMetaModel(props);
     } catch (IOException e) {
       this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
     }
-    return new PresenterModel();
+    return new PresenterMetaModel();
   }
 
   private void validate(Element element)

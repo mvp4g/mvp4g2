@@ -8,7 +8,7 @@ import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
@@ -40,13 +40,13 @@ public class EventHandlerGenerator {
     return new Builder();
   }
 
-  public void generate(EventHandlerModel metaModel)
+  public void generate(EventHandlerMetaModel metaModel)
     throws ProcessorException {
     ClassName eventHandlerMetaDataClassName = ClassName.get(EventHandlerMetaData.class);
     ClassName eventHandlerMetaDataKindClassName = ClassName.get(EventHandlerMetaData.Kind.class);
 
     for (String eventHandler : metaModel.getEventHandlerKeys()) {
-      EventHandlerModel.EventHandlerData data = metaModel.getEventHandlerData(eventHandler);
+      EventHandlerMetaModel.EventHandlerData data = metaModel.getEventHandlerData(eventHandler);
 
       ClassName eventHandlerClassName = ClassName.get(data.getEventHandler()
                                                           .getPackage(),

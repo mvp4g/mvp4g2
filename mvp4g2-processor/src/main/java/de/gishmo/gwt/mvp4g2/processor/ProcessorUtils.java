@@ -1,6 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandlingMethod;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 import javax.annotation.processing.Filer;
@@ -250,7 +250,7 @@ public class ProcessorUtils {
     List<String> eventHandlingMethods = new ArrayList<>();
     List<Element> annotatedMethods = this.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
                                                                                 typeElement,
-                                                                                EventHandlingMethod.class);
+                                                                                EventHandler.class);
     annotatedMethods.stream()
                     .map(element -> (ExecutableElement) element)
                     .forEach(element -> {

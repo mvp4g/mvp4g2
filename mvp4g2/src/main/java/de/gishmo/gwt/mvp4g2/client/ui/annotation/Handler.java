@@ -15,35 +15,18 @@
  */
 package de.gishmo.gwt.mvp4g2.client.ui.annotation;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
- * This method should be used to annotate a event handling method inside a Handler/Presenter.
- * The Handler/Presenter has to have a @Handler/@Presenter annotation in order to get the
- * event handling processed.
- *
- * The name of a event handling method must be the event name with a leading 'on' and needs to
- * have the signutare as the event!
- *
- * For example:
- *
- * To handle the event:
- *
- * void oneEvent(String arg0);
- *
- * the name of the event handling method should be:
- *
- * public void onOneEvent(String arg0);
- *
- * This annotation has no attributes.
- *
+ * This annotation should be used to annotate methods inside of the presenter,
+ * which handle a event.
+ * <br>
+ * The name of the method must be the name of the event-method of the eventbus with a leading "on"
+ * and followed by the first letter uppercase.
  *
  * @author Frank Hossfeld
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface EventHandler {
+public @interface Handler {
 }
