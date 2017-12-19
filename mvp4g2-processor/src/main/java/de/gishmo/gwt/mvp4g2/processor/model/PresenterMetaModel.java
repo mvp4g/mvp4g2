@@ -22,17 +22,16 @@ public class PresenterMetaModel
   private static final String KEY_VIEW_INTERFACE       = ".viewInterface";
   private static final String KEY_VIEW_CREATION_METHOD = ".viewCreationMethod";
 
-  private Map<String, PresenterData> presenterDatas;
+  private Map<String, PresenterData> presenterDatas = new HashMap<>();
 
   public PresenterMetaModel() {
-    this.presenterDatas = new HashMap<>();
   }
 
   public PresenterMetaModel(Properties properties) {
     Set<String> t = properties.stringPropertyNames();
     t.stream()
      .forEach(System.out::println);
-
+// TODO implement reading from Property-File!
 //    .getProperty(EventHandlerMetaModel.KEY_EVENT_HANDLER),
 //       props.getProperty(EventHandlerMetaModel.KEY_HANDLED_EVENTS)
   }

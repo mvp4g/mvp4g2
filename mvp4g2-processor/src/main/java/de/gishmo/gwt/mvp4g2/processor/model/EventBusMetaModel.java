@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 public class EventBusMetaModel
   implements IsMetaModel {
 
@@ -31,7 +33,7 @@ public class EventBusMetaModel
   private ClassNameModel eventBus;
   private ClassNameModel shell;
   private String         historyOnStart;
-  private List<String> events;
+  private List<String>   events;
 
 
   private String         hasDebugAnnotation;
@@ -59,10 +61,14 @@ public class EventBusMetaModel
     this.debugLogLevel = properties.getProperty(EventBusMetaModel.KEY_DEBUG_LOG_LEVEL);
 
     this.hasFiltersAnnotation = properties.getProperty(EventBusMetaModel.KEY_HAS_FILTERS_ANNOTATION);
-    this.filters = Arrays.stream(properties.getProperty(EventBusMetaModel.KEY_FILTERS)
-                                           .split("\\s*,\\s*"))
-                         .map(s -> new ClassNameModel(s))
-                         .collect(Collectors.toCollection(ArrayList::new));
+    if (isNull(properties.getProperty(EventBusMetaModel.KEY_FILTERS))) {
+      this.filters = new ArrayList<>();
+    } else {
+      this.filters = Arrays.stream(properties.getProperty(EventBusMetaModel.KEY_FILTERS)
+                                             .split("\\s*,\\s*"))
+                           .map(s -> new ClassNameModel(s))
+                           .collect(Collectors.toCollection(ArrayList::new));
+    }
   }
 
   public EventBusMetaModel(String eventBus,
@@ -139,13 +145,13 @@ public class EventBusMetaModel
     return filters;
   }
 
-  public List<String> getEvents() {
-    return events;
-  }
-
   public void setFilters(List<String> filters) {
     filters.stream()
            .forEach(s -> this.filters.add(new ClassNameModel(s)));
+  }
+
+  public List<String> getEvents() {
+    return events;
   }
 
   @Override

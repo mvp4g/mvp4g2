@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 public class EventMetaModel
   implements IsMetaModel {
 
@@ -40,24 +42,40 @@ public class EventMetaModel
     this.eventName = properties.getProperty(this.eventInternalName + EventMetaModel.KEY_EVENT_NAME);
     this.historyEventName = properties.getProperty(this.eventInternalName + EventMetaModel.KEY_HISTORY_EVENT_NAME);
     this.historyConverter = new ClassNameModel(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_HISTORY_CONVERTER));
-    this.bindings = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_BINDINGS)
-                                            .split("\\s*,\\s*"))
-                          .map(s -> new ClassNameModel(s))
-                          .collect(Collectors.toCollection(ArrayList::new));
-    this.handlers = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_HANDLERS)
-                                            .split("\\s*,\\s*"))
-                          .map(s -> new ClassNameModel(s))
-                          .collect(Collectors.toCollection(ArrayList::new));
+    if (isNull(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_BINDINGS))) {
+      this.bindings = new ArrayList<>();
+    } else {
+      this.bindings = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_BINDINGS)
+                                              .split("\\s*,\\s*"))
+                            .map(s -> new ClassNameModel(s))
+                            .collect(Collectors.toCollection(ArrayList::new));
+    }
+    if (isNull(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_HANDLERS))) {
+      this.bindings = new ArrayList<>();
+    } else {
+      this.handlers = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_HANDLERS)
+                                              .split("\\s*,\\s*"))
+                            .map(s -> new ClassNameModel(s))
+                            .collect(Collectors.toCollection(ArrayList::new));
+    }
     this.navigationEvent = properties.getProperty(this.eventInternalName + EventMetaModel.KEY_NAVIGATION_EVENT);
     this.passive = properties.getProperty(this.eventInternalName + EventMetaModel.KEY_PASSIVE);
-    this.activateHandlers = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_ACTIVATE_HANDELRS)
-                                                    .split("\\s*,\\s*"))
-                                  .map(s -> new ClassNameModel(s))
-                                  .collect(Collectors.toCollection(ArrayList::new));
-    this.deactivateHandlers = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_DEACTIVATE_HANDELRS)
+    if (isNull(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_ACTIVATE_HANDELRS))) {
+      this.bindings = new ArrayList<>();
+    } else {
+      this.activateHandlers = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_ACTIVATE_HANDELRS)
                                                       .split("\\s*,\\s*"))
                                     .map(s -> new ClassNameModel(s))
                                     .collect(Collectors.toCollection(ArrayList::new));
+    }
+    if (isNull(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_DEACTIVATE_HANDELRS))) {
+      this.bindings = new ArrayList<>();
+    } else {
+      this.deactivateHandlers = Arrays.stream(properties.getProperty(this.eventInternalName + EventMetaModel.KEY_DEACTIVATE_HANDELRS)
+                                                        .split("\\s*,\\s*"))
+                                      .map(s -> new ClassNameModel(s))
+                                      .collect(Collectors.toCollection(ArrayList::new));
+    }
   }
 
   public EventMetaModel(String eventInternalName,

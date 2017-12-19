@@ -57,10 +57,10 @@ public class HandlerAnnotationScanner {
       model.add(((TypeElement) element).getQualifiedName()
                                        .toString(),
                 this.processorUtils.createHandledEventArray(typeElement));
-      // let's store the updated model
-      this.processorUtils.store(model,
-                                this.createRelativeFileName());
     }
+    // let's store the updated model
+    this.processorUtils.store(model,
+                              this.createRelativeFileName());
     return model;
   }
 

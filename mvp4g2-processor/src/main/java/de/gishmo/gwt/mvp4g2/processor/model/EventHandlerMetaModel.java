@@ -18,7 +18,7 @@ public class EventHandlerMetaModel
   private static final String KEY_EVENT_HANDLER  = ".eventHandlerClassName";
   private static final String KEY_HANDLED_EVENTS = ".handledEvents";
 
-  private Map<String, EventHandlerData> eventHandlerDatas;
+  private Map<String, EventHandlerData> eventHandlerDatas = new HashMap<>();
 
   public EventHandlerMetaModel() {
     this.eventHandlerDatas = new HashMap<>();
