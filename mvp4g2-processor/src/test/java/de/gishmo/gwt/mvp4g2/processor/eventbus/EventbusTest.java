@@ -43,14 +43,23 @@ public class EventbusTest {
           .withErrorContaining("@Eventbus can only be used with an interface");
   }
 
-//  @Test
-//  public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
-//          .processedWith(new Mvp4g2Processor())
-//          .failsToCompile()
-//          .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
-//  }
+  @Test
+  public void testEventBusNotExtendingAbstractEventHandlerd() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventBusNotExtendingIsEventBus/EventBusNotExtendingIsEventBus.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@Eventbus must extend IsEventBus.class!");
+  }
+
+  @Test
+  public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/startEventTestEventBusWithMoreThanOneStartAnnotation/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
+  }
 
 ////  @Test
 ////  public void testStartEventTestEventBusWithOneStartAnnotation() {
@@ -59,21 +68,21 @@ public class EventbusTest {
 ////          .processedWith(new Processor())
 ////          .compilesWithoutError();
 ////  }
-//
-//  @Test
-//  public void testStartEventTestWithNonZeroArgumentMethod() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithNonZeroArgumentMethod.java"))
-//          .processedWith(new EventBusProcessor())
-//          .failsToCompile()
-//          .withErrorContaining("@Start-annotation can only be used on zero argument methods");
-//  }
+
+  @Test
+  public void testStartEventTestWithNonZeroArgumentMethod() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/startEventTestWithNonZeroArgumentMethod/StartEventTestWithNonZeroArgumentMethod.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@Start-annotation can only be used on zero argument methods");
+  }
 
 //  @Test
 //  public void testStartEventTestWithZeroArgumentMethod() {
 //    ASSERT.about(javaSource())
 //          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithZeroArgumentMethod.java"))
-//          .processedWith(new Processor())
+//          .processedWith(new Mvp4g2Processor())
 //          .compilesWithoutError();
 //  }
 

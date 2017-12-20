@@ -1,32 +1,26 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.DebugAnnotationValidator;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.FilterAnnotationValidator;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
 
 import static java.util.Objects.isNull;
 
@@ -84,23 +78,26 @@ public class EventBusAnnotationScanner {
                                         isNull(shellTypeElement) ? "" : shellTypeElement.toString(),
                                         String.valueOf(eventBusAnnotation.historyOnStart()));
           // Debug-Annotation
-          DebugAnnotationValidator.builder()
-                                  .roundEnvironment(roundEnvironment)
-                                  .processingEnvironment(processingEnvironment)
-                                  .build()
-                                  .validate();
-          this.handleDebugAnnotation(eventBusAnnotationElement,
-                                     model);
+          model = DebugAnnotationScanner.builder()
+                                        .processingEnvironment(processingEnvironment)
+                                        .eventBusTypeElement((TypeElement) eventBusAnnotationElement)
+                                        .eventBusMetaModel(model)
+                                        .build()
+                                        .scan(roundEnvironment);
           // Filters-Annotation
-          FilterAnnotationValidator.builder()
-                                   .roundEnvironment(roundEnvironment)
-                                   .processingEnvironment(processingEnvironment)
-                                   .eventBusTypeElement((TypeElement) eventBusAnnotationElement)
-                                   .build()
-                                   .validate();
-          this.handleFilterAnnotation(eventBusAnnotationElement,
-                                      model);
-
+          model = FilterAnnotationScanner.builder()
+                                         .processingEnvironment(processingEnvironment)
+                                         .eventBusTypeElement((TypeElement) eventBusAnnotationElement)
+                                         .eventBusMetaModel(model)
+                                         .build()
+                                         .scan(roundEnvironment);
+          // handle Event-annotation
+          model = EventAnnotationScanner.builder()
+                                        .processingEnvironment(processingEnvironment)
+                                        .eventBusTypeElement((TypeElement) eventBusAnnotationElement)
+                                        .eventBusMetaModel(model)
+                                        .build()
+                                        .scan(roundEnvironment);
 
           // let's store the updated model
           this.processorUtils.store(model,
@@ -123,7 +120,7 @@ public class EventBusAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      EventBusMetaModel model = new EventBusMetaModel(props);
+      EventBusMetaModel    model       = new EventBusMetaModel(props);
       List<EventMetaModel> eventModels = new ArrayList<>();
       for (String eventInternalName : model.getEvents()) {
         FileObject resourceEvent = this.processingEnvironment.getFiler()
@@ -152,76 +149,12 @@ public class EventBusAnnotationScanner {
     return null;
   }
 
-  private void handleDebugAnnotation(Element eventBusTypeElement,
-                                     EventBusMetaModel model) {
-    Debug debugAnnotation = eventBusTypeElement.getAnnotation(Debug.class);
-    if (!isNull(debugAnnotation)) {
-      model.setHasDebugAnnotation("true");
-      model.setDebugLogLevel(debugAnnotation.logLevel()
-                                            .toString());
-      if (!isNull(getLogger(debugAnnotation))) {
-        model.setDebugLogger(getLogger(debugAnnotation).getQualifiedName()
-                                                       .toString());
-      }
-    } else {
-      model.setHasDebugAnnotation("false");
-      model.setDebugLogLevel("");
-      model.setDebugLogger("");
-    }
-  }
-
-  private void handleFilterAnnotation(Element eventBusTypeElement,
-                                      EventBusMetaModel model) {
-    Filters filtersAnnotation = eventBusTypeElement.getAnnotation(Filters.class);
-    if (isNull(filtersAnnotation)) {
-      model.setHasFiltersAnnotation("false");
-    } else {
-      model.setHasFiltersAnnotation("true");
-      model.setFilters(this.getEventFiltersAsList((TypeElement) eventBusTypeElement));
-    }
-  }
-
   private String createRelativeFileName() {
     return ProcessorConstants.META_INF + "/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + EventBusAnnotationScanner.EVENTBUS_PROPERTIES;
   }
 
   private String createRelativeEventModelFileName(String eventInternalName) {
     return ProcessorConstants.META_INF + "/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + eventInternalName + ProcessorConstants.PROPERTIES_POSTFIX;
-  }
-
-  private TypeElement getLogger(Debug debugAnnotation) {
-    try {
-      debugAnnotation.logger();
-    } catch (MirroredTypeException exception) {
-      return (TypeElement) this.processingEnvironment.getTypeUtils()
-                                                     .asElement(exception.getTypeMirror());
-    }
-    return null;
-  }
-
-  public List<String> getEventFiltersAsList(TypeElement typeElement) {
-    Element filterAnnotation = this.processingEnvironment.getElementUtils()
-                                                         .getTypeElement(Filters.class.getName());
-    TypeMirror filterAnnotationAsTypeMirror = filterAnnotation.asType();
-    return typeElement.getAnnotationMirrors()
-                      .stream()
-                      .filter(annotationMirror -> annotationMirror.getAnnotationType()
-                                                                  .equals(filterAnnotationAsTypeMirror))
-                      .flatMap(annotationMirror -> annotationMirror.getElementValues()
-                                                                   .entrySet()
-                                                                   .stream())
-                      .findFirst().<List<String>>map(entry -> Arrays.stream(entry.getValue()
-                                                                                 .toString()
-                                                                                 .replace("{",
-                                                                                          "")
-                                                                                 .replace("}",
-                                                                                          "")
-                                                                                 .replace(" ",
-                                                                                          "")
-                                                                                 .split(","))
-                                                                    .map((v) -> v.substring(0,
-                                                                                            v.indexOf(".class")))
-                                                                    .collect(Collectors.toList())).orElse(null);
   }
 
   public static class Builder {

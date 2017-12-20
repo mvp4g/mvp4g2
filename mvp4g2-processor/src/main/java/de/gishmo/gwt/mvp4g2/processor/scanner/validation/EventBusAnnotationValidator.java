@@ -15,8 +15,10 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
@@ -80,7 +82,15 @@ public class EventBusAnnotationValidator {
                       .isInterface()) {
         throw new ProcessorException("@Eventbus can only be used with an interface");
       }
-      // EventBus must extends IsEventBus
+      // check, that the typeElement extends IsEventBus
+      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                       typeElement.asType(),
+                                                       this.processingEnvironment.getElementUtils()
+                                                                                 .getTypeElement(IsEventBus.class.getCanonicalName())
+                                                                                 .asType())) {
+        throw new ProcessorException(typeElement.getSimpleName()
+                                                .toString() + ": @Eventbus must extend IsEventBus.class!");
+      }
 
 
 
