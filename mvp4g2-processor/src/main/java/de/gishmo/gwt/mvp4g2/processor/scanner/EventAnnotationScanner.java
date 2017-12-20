@@ -2,8 +2,10 @@ package de.gishmo.gwt.mvp4g2.processor.scanner;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
@@ -39,12 +41,19 @@ public class EventAnnotationScanner {
 
   public EventBusMetaModel scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
+    for (Element element : roundEnvironment.getElementsAnnotatedWith(Event.class)) {
     // do validation
     EventAnnotationValidator.builder()
                             .roundEnvironment(roundEnvironment)
                             .processingEnvironment(processingEnvironment)
+                            .eventBusTypeElement(eventBusTypeElement)
+                            .eventElement(element)
                             .build()
                             .validate();
+
+    }
+
+
     // handle event-annotation
 
     return this.eventBusMetaModel;

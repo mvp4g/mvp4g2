@@ -15,17 +15,11 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import java.util.Set;
-
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsMvp4g2Logger;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
@@ -34,6 +28,8 @@ public class EventAnnotationValidator {
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
   private RoundEnvironment      roundEnvironment;
+  private TypeElement           eventBusTypeElement;
+  private Element               eventElement;
 
   @SuppressWarnings("unused")
   private EventAnnotationValidator() {
@@ -42,6 +38,8 @@ public class EventAnnotationValidator {
   private EventAnnotationValidator(Builder builder) {
     this.processingEnvironment = builder.processingEnvironment;
     this.roundEnvironment = builder.roundEnvironment;
+    this.eventBusTypeElement = builder.eventBusTypeElement;
+    this.eventElement = builder.eventElement;
     setUp();
   }
 
@@ -57,57 +55,59 @@ public class EventAnnotationValidator {
 
   public void validate()
     throws ProcessorException {
-//    // get elements annotated with Debug annotation
-//    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Debug.class);
-//    // at least there should only one Application annotation!
-//    if (elementsWithDebugAnnotation.size() > 1) {
-//      throw new ProcessorException("There should be at least only one interface, that is annotated with @Debug");
-//    }
-//    for (Element element : elementsWithDebugAnnotation) {
-//      if (element instanceof TypeElement) {
-//        TypeElement typeElement = (TypeElement) element;
-//        // @Debug can only be used on a interface
-//        if (!typeElement.getKind()
-//                        .isInterface()) {
-//          throw new ProcessorException("@Debug can only be used with an interface");
-//        }
-//        // @Debug can only be used on a interface that extends IsEventBus
-//        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-//                                                         typeElement.asType(),
-//                                                         this.processingEnvironment.getElementUtils()
-//                                                                                   .getTypeElement(IsEventBus.class.getCanonicalName())
-//                                                                                   .asType())) {
-//          throw new ProcessorException("@Debug can only be used on interfaces that extends IsEventBus");
-//        }
-//        // the loggerinside the annotation must extends IsMvp4g2Logger!
-//        TypeElement loggerElement = this.getLogger(typeElement.getAnnotation(Debug.class));
-//        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-//                                                         loggerElement.asType(),
-//                                                         this.processingEnvironment.getElementUtils()
-//                                                                                   .getTypeElement(IsMvp4g2Logger.class.getCanonicalName())
-//                                                                                   .asType())) {
-//          throw new ProcessorException("@Debug - the logger attribute needs class that extends IsMvp4g2Logger");
-//        }
-//      } else {
-//        throw new ProcessorException("@Debug can only be used on a type (interface)");
-//      }
-//    }
+    //    // get elements annotated with Debug annotation
+    //    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Debug.class);
+    //    // at least there should only one Application annotation!
+    //    if (elementsWithDebugAnnotation.size() > 1) {
+    //      throw new ProcessorException("There should be at least only one interface, that is annotated with @Debug");
+    //    }
+    //    for (Element element : elementsWithDebugAnnotation) {
+    //      if (element instanceof TypeElement) {
+    //        TypeElement typeElement = (TypeElement) element;
+    //        // @Debug can only be used on a interface
+    //        if (!typeElement.getKind()
+    //                        .isInterface()) {
+    //          throw new ProcessorException("@Debug can only be used with an interface");
+    //        }
+    //        // @Debug can only be used on a interface that extends IsEventBus
+    //        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+    //                                                         typeElement.asType(),
+    //                                                         this.processingEnvironment.getElementUtils()
+    //                                                                                   .getTypeElement(IsEventBus.class.getCanonicalName())
+    //                                                                                   .asType())) {
+    //          throw new ProcessorException("@Debug can only be used on interfaces that extends IsEventBus");
+    //        }
+    //        // the loggerinside the annotation must extends IsMvp4g2Logger!
+    //        TypeElement loggerElement = this.getLogger(typeElement.getAnnotation(Debug.class));
+    //        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+    //                                                         loggerElement.asType(),
+    //                                                         this.processingEnvironment.getElementUtils()
+    //                                                                                   .getTypeElement(IsMvp4g2Logger.class.getCanonicalName())
+    //                                                                                   .asType())) {
+    //          throw new ProcessorException("@Debug - the logger attribute needs class that extends IsMvp4g2Logger");
+    //        }
+    //      } else {
+    //        throw new ProcessorException("@Debug can only be used on a type (interface)");
+    //      }
+    //    }
   }
 
-//  private TypeElement getLogger(Debug debugAnnotation) {
-//    try {
-//      debugAnnotation.logger();
-//    } catch (MirroredTypeException exception) {
-//      return (TypeElement) this.processingEnvironment.getTypeUtils()
-//                                                     .asElement(exception.getTypeMirror());
-//    }
-//    return null;
-//  }
+  //  private TypeElement getLogger(Debug debugAnnotation) {
+  //    try {
+  //      debugAnnotation.logger();
+  //    } catch (MirroredTypeException exception) {
+  //      return (TypeElement) this.processingEnvironment.getTypeUtils()
+  //                                                     .asElement(exception.getTypeMirror());
+  //    }
+  //    return null;
+  //  }
 
   public static final class Builder {
 
     ProcessingEnvironment processingEnvironment;
     RoundEnvironment      roundEnvironment;
+    TypeElement           eventBusTypeElement;
+    Element               eventElement;
 
     public Builder processingEnvironment(ProcessingEnvironment processingEnvironment) {
       this.processingEnvironment = processingEnvironment;
@@ -116,6 +116,16 @@ public class EventAnnotationValidator {
 
     public Builder roundEnvironment(RoundEnvironment roundEnvironment) {
       this.roundEnvironment = roundEnvironment;
+      return this;
+    }
+
+    public Builder eventBusTypeElement(TypeElement eventBusTypeElement) {
+      this.eventBusTypeElement = eventBusTypeElement;
+      return this;
+    }
+
+    public Builder eventElement(Element eventElement) {
+      this.eventElement = eventElement;
       return this;
     }
 
