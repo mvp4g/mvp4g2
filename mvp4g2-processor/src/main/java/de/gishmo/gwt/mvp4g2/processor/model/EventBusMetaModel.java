@@ -33,7 +33,7 @@ public class EventBusMetaModel
   private ClassNameModel eventBus;
   private ClassNameModel shell;
   private String         historyOnStart;
-  private List<String>   events;
+  private List<String> events = new ArrayList<>();
 
 
   private String         hasDebugAnnotation;

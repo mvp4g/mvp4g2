@@ -281,7 +281,7 @@ public class ProcessorUtils {
     String internalEventname = executableElement.getSimpleName()
                                                 .toString();
     for (VariableElement variableElement : executableElement.getParameters()) {
-      internalEventname += "_";
+      internalEventname += ProcessorConstants.PARAMETER_DELIMITER;
       internalEventname += variableElement.asType()
                                           .toString()
                                           .replace(".",

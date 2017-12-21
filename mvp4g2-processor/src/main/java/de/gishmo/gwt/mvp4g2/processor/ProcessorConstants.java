@@ -10,8 +10,9 @@ public class ProcessorConstants {
 //  public final static String EVENT_HANDLER_FOLDER_NAME     = "eventhandler";
 //  public final static String PRESENTER                     = "Presenter";
 
-  public final static String META_INF           = "META-INF";
-  public final static String MVP4G2_FOLDER_NAME = "mvp4g2";
-  public final static String PROPERTIES_POSTFIX = ".properties";
+  public final static String META_INF            = "META-INF";
+  public final static String MVP4G2_FOLDER_NAME  = "mvp4g2";
+  public final static String PARAMETER_DELIMITER = "_pPp_";
+  public final static String PROPERTIES_POSTFIX  = ".properties";
 
 }

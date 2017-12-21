@@ -37,6 +37,9 @@ public class EventMetaModel
   private List<ClassNameModel> deactivateHandlers;
 
 
+  public EventMetaModel() {
+  }
+
   public EventMetaModel(Properties properties) {
     this.eventInternalName = properties.getProperty(EventMetaModel.KEY_EVENT_EVENT_INTERNAL_NAME);
     this.eventName = properties.getProperty(this.eventInternalName + EventMetaModel.KEY_EVENT_NAME);
@@ -92,60 +95,124 @@ public class EventMetaModel
     this.eventName = eventName;
     this.historyEventName = historyEventName;
     this.historyConverter = historyConverter;
-    this.bindings = bindings.stream()
-                            .map(s -> new ClassNameModel(s))
-                            .collect(Collectors.toCollection(ArrayList::new));
-    this.handlers = handlers.stream()
-                            .map(s -> new ClassNameModel(s))
-                            .collect(Collectors.toCollection(ArrayList::new));
+    this.setBindings(bindings);
+    this.setHandlers(handlers);
     this.navigationEvent = navigationEvent;
     this.passive = passive;
-    this.activateHandlers = activateHandlers.stream()
-                                            .map(s -> new ClassNameModel(s))
-                                            .collect(Collectors.toCollection(ArrayList::new));
-    this.deactivateHandlers = deactivateHandlers.stream()
-                                                .map(s -> new ClassNameModel(s))
-                                                .collect(Collectors.toCollection(ArrayList::new));
+    this.setActivateHandlers(activateHandlers);
+    this.setDeactivateHandlers(deactivateHandlers);
   }
 
   public String getEventInternalName() {
     return eventInternalName;
   }
 
+  public void setEventInternalName(String eventInternalName) {
+    this.eventInternalName = eventInternalName;
+  }
+
   public String getEventName() {
     return eventName;
+  }
+
+  public void setEventName(String eventName) {
+    this.eventName = eventName;
   }
 
   public String getHistoryEventName() {
     return historyEventName;
   }
 
+  public void setHistoryEventName(String historyEventName) {
+    this.historyEventName = historyEventName;
+  }
+
   public ClassNameModel getHistoryConverter() {
     return historyConverter;
+  }
+
+  public void setHistoryConverter(String historyConverter) {
+    this.historyConverter = new ClassNameModel(historyConverter);
   }
 
   public List<ClassNameModel> getBindings() {
     return bindings;
   }
 
+  public void setBindings(List<String> bindings) {
+    if (isNull(bindings)) {
+      this.bindings = new ArrayList<>();
+    } else {
+      this.bindings = bindings.stream()
+                              .map(s -> new ClassNameModel(s))
+                              .collect(Collectors.toCollection(ArrayList::new));
+    }
+  }
+
   public List<ClassNameModel> getHandlers() {
     return handlers;
+  }
+
+  public void setHandlers(List<String> handlers) {
+    if (isNull(handlers)) {
+      this.handlers = new ArrayList<>();
+    } else {
+      this.handlers = handlers.stream()
+                              .map(s -> new ClassNameModel(s))
+                              .collect(Collectors.toCollection(ArrayList::new));
+    }
   }
 
   public List<ClassNameModel> getActivateHandlers() {
     return activateHandlers;
   }
 
+  public void setActivateHandlers(List<String> activateHandlers) {
+    if (isNull(activateHandlers)) {
+      this.activateHandlers = new ArrayList<>();
+    } else {
+      this.activateHandlers = activateHandlers.stream()
+                                              .map(s -> new ClassNameModel(s))
+                                              .collect(Collectors.toCollection(ArrayList::new));
+    }
+  }
+
   public List<ClassNameModel> getDeactivateHandlers() {
     return deactivateHandlers;
   }
 
+  public void setDeactivateHandlers(List<String> deactivateHandlers) {
+    if (isNull(deactivateHandlers)) {
+      this.deactivateHandlers = new ArrayList<>();
+    } else {
+      this.deactivateHandlers = deactivateHandlers.stream()
+                                                  .map(s -> new ClassNameModel(s))
+                                                  .collect(Collectors.toCollection(ArrayList::new));
+    }
+  }
+
+  public String getNavigationEvent() {
+    return navigationEvent;
+  }
+
   public boolean isNavigationEvent() {
-    return "true".equals(this.navigationEvent);
+    return "true".equals(navigationEvent);
+  }
+
+  public void setNavigationEvent(String navigationEvent) {
+    this.navigationEvent = navigationEvent;
+  }
+
+  public String getPassive() {
+    return passive;
   }
 
   public boolean isPassive() {
-    return "true".equals(this.passive);
+    return "true".equals(passive);
+  }
+
+  public void setPassive(String passive) {
+    this.passive = passive;
   }
 
   @Override
