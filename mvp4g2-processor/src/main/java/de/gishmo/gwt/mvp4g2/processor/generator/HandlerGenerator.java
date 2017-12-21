@@ -9,6 +9,7 @@ import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
@@ -46,43 +47,45 @@ public class HandlerGenerator {
     ClassName eventHandlerMetaDataKindClassName = ClassName.get(EventHandlerMetaData.Kind.class);
 
     for (String eventHandler : metaModel.getEventHandlerKeys()) {
-      EventHandlerMetaModel.EventHandlerData data = metaModel.getEventHandlerData(eventHandler);
+      // check if element is existing (to avoid generating code for deleted items)
+      if (this.processorUtils.doesExist(new ClassNameModel(eventHandler))) {
+        EventHandlerMetaModel.EventHandlerData data = metaModel.getEventHandlerData(eventHandler);
 
-      ClassName eventHandlerClassName = ClassName.get(data.getEventHandler()
-                                                          .getPackage(),
-                                                      data.getEventHandler()
-                                                          .getSimpleName());
+        ClassName eventHandlerClassName = ClassName.get(data.getEventHandler()
+                                                            .getPackage(),
+                                                        data.getEventHandler()
+                                                            .getSimpleName());
 
-      String className = this.processorUtils.createFullClassName(data.getEventHandler()
-                                                                     .getPackage(),
+        String className = this.processorUtils.createFullClassName(data.getEventHandler()
+                                                                       .getPackage(),
+                                                                   data.getEventHandler()
+                                                                       .getSimpleName() + HandlerGenerator.IMPL_NAME);
+        TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.processorUtils.setFirstCharacterToUpperCase(className))
+                                            .superclass(ParameterizedTypeName.get(eventHandlerMetaDataClassName,
+                                                                                  eventHandlerClassName))
+                                            .addModifiers(Modifier.PUBLIC,
+                                                          Modifier.FINAL);
+        // constructor ...
+        MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
+                                                   .addModifiers(Modifier.PUBLIC)
+                                                   .addStatement("super($S, $T.EVENT_HANDLER, new $T())",
                                                                  data.getEventHandler()
-                                                                     .getSimpleName() + HandlerGenerator.IMPL_NAME);
-      TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.processorUtils.setFirstCharacterToUpperCase(className))
-                                          .superclass(ParameterizedTypeName.get(eventHandlerMetaDataClassName,
-                                                                                eventHandlerClassName))
-                                          .addModifiers(Modifier.PUBLIC,
-                                                        Modifier.FINAL);
-      // constructor ...
-      MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
-                                                 .addModifiers(Modifier.PUBLIC)
-                                                 .addStatement("super($S, $T.EVENT_HANDLER, new $T())",
-                                                               data.getEventHandler()
-                                                                   .getClassName(),
-                                                               eventHandlerMetaDataKindClassName,
-                                                               eventHandlerClassName);
-      typeSpec.addMethod(constructor.build());
+                                                                     .getClassName(),
+                                                                 eventHandlerMetaDataKindClassName,
+                                                                 eventHandlerClassName);
+        typeSpec.addMethod(constructor.build());
 
-      JavaFile javaFile = JavaFile.builder(data.getEventHandler()
-                                               .getPackage(),
-                                           typeSpec.build())
-                                  .build();
-      try {
-        javaFile.writeTo(this.processingEnvironment.getFiler());
-      } catch (IOException e) {
-        throw new ProcessorException("Unable to write generated file: >>" + data.getEventHandler()
-                                                                                .getSimpleName() + HandlerGenerator.IMPL_NAME + "<< -> exception: " + e.getMessage());
-      }
-    }
+        JavaFile javaFile = JavaFile.builder(data.getEventHandler()
+                                                 .getPackage(),
+                                             typeSpec.build())
+                                    .build();
+        try {
+          javaFile.writeTo(this.processingEnvironment.getFiler());
+        } catch (IOException e) {
+          throw new ProcessorException("Unable to write generated file: >>" + data.getEventHandler()
+                                                                                  .getSimpleName() + HandlerGenerator.IMPL_NAME + "<< -> exception: " + e.getMessage());
+        }
+      }}
   }
 
   public static class Builder {

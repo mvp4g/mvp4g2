@@ -85,12 +85,12 @@ public class EventBusAnnotationScanner {
                                         .build()
                                         .scan(roundEnvironment);
           // Filters-Annotation
-          model = FilterAnnotationScanner.builder()
-                                         .processingEnvironment(processingEnvironment)
-                                         .eventBusTypeElement((TypeElement) eventBusAnnotationElement)
-                                         .eventBusMetaModel(model)
-                                         .build()
-                                         .scan(roundEnvironment);
+          model = FiltersAnnotationScanner.builder()
+                                          .processingEnvironment(processingEnvironment)
+                                          .eventBusTypeElement((TypeElement) eventBusAnnotationElement)
+                                          .eventBusMetaModel(model)
+                                          .build()
+                                          .scan(roundEnvironment);
           // handle Event-annotation
           model = EventAnnotationScanner.builder()
                                         .processingEnvironment(processingEnvironment)
@@ -102,10 +102,6 @@ public class EventBusAnnotationScanner {
           // let's store the updated model
           this.processorUtils.store(model,
                                     this.createRelativeFileName());
-          for (EventMetaModel m : model.getEventMetaModels()) {
-            this.processorUtils.store(m,
-                                      this.createRelativeEventModelFileName(m.getEventInternalName()));
-          }
         }
       }
     }

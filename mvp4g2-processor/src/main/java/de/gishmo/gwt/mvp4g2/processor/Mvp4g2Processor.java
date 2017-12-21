@@ -86,52 +86,7 @@ public class Mvp4g2Processor
     } catch (ProcessorException e) {
       this.processorUtils.createErrorMessage(e.getMessage());
     }
-    return false;
-
-//    try {
-//      if (!roundEnv.processingOver()) {
-//        // handling the eventBus annotation
-//        EventHandlerAnnotationHandler.builder()
-//                                     .processingEnvironment(super.processingEnv)
-//                                     .roundEnvironment(roundEnv)
-//                                     .build()
-//                                     .process();
-//        // handling the Presenter annotation
-//        PresenterAnnotationHandler.builder()
-//                                  .processingEnvironment(super.processingEnv)
-//                                  .roundEnvironment(roundEnv)
-//                                  .build()
-//                                  .process();
-//        // handling the History annotation
-//        HistoryAnnotationHandler.builder()
-//                                .processingEnvironment(super.processingEnv)
-//                                .roundEnvironment(roundEnv)
-//                                .build()
-//                                .process();
-//        // handling the eventbus annotation
-//        EventBusAnnotationHandler.builder()
-//                                 .processingEnvironment(super.processingEnv)
-//                                 .roundEnvironment(roundEnv)
-//                                 .build()
-//                                 .process();
-//        // handling the Application annotation
-//        ApplicationAnnotationHandler.builder()
-//                                    .processingEnvironment(super.processingEnv)
-//                                    .roundEnvironment(roundEnv)
-//                                    .build()
-//                                    .process();
-//        return false;
-//      } else {
-//        EventBusGenerator.builder()
-//                         .processingEnvironment(super.processingEnv)
-//                         .roundEnvironment(roundEnv)
-//                         .build()
-//                         .generate();
-//        return true;
-//      }
-//    } catch (Exception e) {
-//      this.processorUtils.createErrorMessage(e.getMessage());
-//    }
+    return true;
   }
 
   private void setUp(RoundEnvironment roundEnv) {

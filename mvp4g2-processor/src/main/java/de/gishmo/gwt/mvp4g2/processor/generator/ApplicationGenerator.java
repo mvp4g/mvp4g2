@@ -1,24 +1,27 @@
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import java.io.IOException;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
 import de.gishmo.gwt.mvp4g2.client.internal.application.AbstractApplication;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.ApplicationMetaModel;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-import java.io.IOException;
 
 public class ApplicationGenerator {
 
   private final static String IMPL_NAME = "Impl";
 
-  //  private ProcessorUtils        processorUtils;
+  private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
 
   @SuppressWarnings("unused")
@@ -31,9 +34,9 @@ public class ApplicationGenerator {
   }
 
   private void setUp() {
-//    this.processorUtils = ProcessorUtils.builder()
-//                                        .processingEnvironment(this.processingEnvironment)
-//                                        .build();
+    this.processorUtils = ProcessorUtils.builder()
+                                        .processingEnvironment(this.processingEnvironment)
+                                        .build();
   }
 
   public static Builder builder() {
@@ -42,6 +45,11 @@ public class ApplicationGenerator {
 
   public void generate(ApplicationMetaModel metaModel)
     throws ProcessorException {
+    // check if element is existing (to avoid generating code for deleted items)
+    if (!this.processorUtils.doesExist(metaModel.getApplication())) {
+      return;
+    }
+    // generate code
     ClassName abstractApplicationClassName = ClassName.get(AbstractApplication.class);
     ClassName applicationClassName = ClassName.get(metaModel.getApplication()
                                                             .getPackage(),
@@ -85,7 +93,6 @@ public class ApplicationGenerator {
                                                                     applicaitonLoaderClassName)
                                                       .build();
     typeSpec.addMethod(getApplicaitonLaoderMethod);
-
 
     JavaFile javaFile = JavaFile.builder(metaModel.getEventBus()
                                                   .getPackage(),

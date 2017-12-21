@@ -18,9 +18,7 @@ import de.gishmo.gwt.mvp4g2.processor.scanner.validation.FilterAnnotationValidat
 
 import static java.util.Objects.isNull;
 
-public class FilterAnnotationScanner {
-  //
-  //  private final static String EVENT_HANDLER_PROPERTIES = "eventHandler.properties";
+public class FiltersAnnotationScanner {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
@@ -28,7 +26,7 @@ public class FilterAnnotationScanner {
   private EventBusMetaModel     eventBusMetaModel;
 
   @SuppressWarnings("unused")
-  private FilterAnnotationScanner(Builder builder) {
+  private FiltersAnnotationScanner(Builder builder) {
     super();
     this.processingEnvironment = builder.processingEnvironment;
     this.eventBusTypeElement = builder.eventBusTypeElement;
@@ -111,8 +109,8 @@ public class FilterAnnotationScanner {
       return this;
     }
 
-    public FilterAnnotationScanner build() {
-      return new FilterAnnotationScanner(this);
+    public FiltersAnnotationScanner build() {
+      return new FiltersAnnotationScanner(this);
     }
   }
 }

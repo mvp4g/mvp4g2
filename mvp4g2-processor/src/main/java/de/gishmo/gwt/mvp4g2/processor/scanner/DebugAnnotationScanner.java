@@ -18,8 +18,6 @@ import de.gishmo.gwt.mvp4g2.processor.scanner.validation.DebugAnnotationValidato
 import static java.util.Objects.isNull;
 
 public class DebugAnnotationScanner {
-  //
-  //  private final static String EVENT_HANDLER_PROPERTIES = "eventHandler.properties";
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;

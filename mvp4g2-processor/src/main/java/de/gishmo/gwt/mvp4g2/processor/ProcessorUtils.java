@@ -1,7 +1,15 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -16,16 +24,10 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 public class ProcessorUtils {
 
@@ -79,24 +81,24 @@ public class ProcessorUtils {
                                               implementedInterface);
   }
 
-//  public String getCanonicalClassName(Element element) {
-//    return this.getPackageAsString(element) +
-//           "." + element.getSimpleName()
-//                        .toString();
-//  }
-//
-//  public String getPackageAsString(Element type) {
-//    return this.getPackage(type)
-//               .getQualifiedName()
-//               .toString();
-//  }
-//
-//  public PackageElement getPackage(Element type) {
-//    while (type.getKind() != ElementKind.PACKAGE) {
-//      type = type.getEnclosingElement();
-//    }
-//    return (PackageElement) type;
-//  }
+  //  public String getCanonicalClassName(Element element) {
+  //    return this.getPackageAsString(element) +
+  //           "." + element.getSimpleName()
+  //                        .toString();
+  //  }
+  //
+  //  public String getPackageAsString(Element type) {
+  //    return this.getPackage(type)
+  //               .getQualifiedName()
+  //               .toString();
+  //  }
+  //
+  //  public PackageElement getPackage(Element type) {
+  //    while (type.getKind() != ElementKind.PACKAGE) {
+  //      type = type.getEnclosingElement();
+  //    }
+  //    return (PackageElement) type;
+  //  }
 
   /**
    * Returns all of the superclasses and superinterfaces for a given generator
@@ -134,7 +136,7 @@ public class ProcessorUtils {
    */
   public Set<TypeMirror> getFlattenedSupertypeHierarchy(Types types,
                                                         TypeMirror typeMirror) {
-    List<TypeMirror> toAdd = new ArrayList<>();
+    List<TypeMirror>          toAdd  = new ArrayList<>();
     LinkedHashSet<TypeMirror> result = new LinkedHashSet<>();
     toAdd.add(typeMirror);
     for (int i = 0; i < toAdd.size(); i++) {
@@ -146,15 +148,15 @@ public class ProcessorUtils {
     return result;
   }
 
-//  public String createNameWithleadingUpperCase(String name) {
-//    return name.substring(0,
-//                          1)
-//               .toUpperCase() + name.substring(1);
-//  }
+  //  public String createNameWithleadingUpperCase(String name) {
+  //    return name.substring(0,
+  //                          1)
+  //               .toUpperCase() + name.substring(1);
+  //  }
 
   public void createErrorMessage(String errorMessage) {
     StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
+    PrintWriter  pw = new PrintWriter(sw);
     pw.println(errorMessage);
     pw.close();
     messager.printMessage(Diagnostic.Kind.ERROR,
@@ -179,66 +181,66 @@ public class ProcessorUtils {
                     .toUpperCase() + className.substring(1);
   }
 
-//  public <T> boolean isSuperClass(Types typeUtils,
-//                                  TypeElement typeElement,
-//                                  Class<T> superClazz) {
-//    for (TypeMirror tm : typeUtils.directSupertypes(typeElement.asType())) {
-//      String canonicalNameTM = this.getCanonicalClassName((TypeElement) typeUtils.asElement(tm));
-//      if (superClazz.getCanonicalName()
-//                    .equals(canonicalNameTM)) {
-//        return true;
-//      } else {
-//        return this.isSuperClass(typeUtils,
-//                                 (TypeElement) typeUtils.asElement(tm),
-//                                 superClazz);
-//      }
-//    }
-//    return false;
-//  }
-//
-//  public List<TypeElement> getListOfSuperClasses(TypeElement typeElement,
-//                                                 Class<?> implementingSuperClass) {
-//    List<TypeElement> listOfTypeMirror = new ArrayList<>();
-//    TypeMirror implementingSuperClassTypeMirror = this.getTypeMirror(implementingSuperClass.getCanonicalName());
-//    Set<TypeMirror> list = this.getFlattenedSupertypeHierarchy(this.processingEnvironment.getTypeUtils(),
-//                                                               typeElement.asType());
-//    list.stream()
-//        .filter(mirror -> !implementingSuperClassTypeMirror.toString()
-//                                                           .equals(mirror.toString()))
-//        .filter(mirror -> !typeElement.asType()
-//                                      .toString()
-//                                      .equals(mirror.toString()))
-//        .filter(mirror -> this.processingEnvironment.getTypeUtils()
-//                                                    .isAssignable(mirror,
-//                                                                  implementingSuperClassTypeMirror))
-//        .forEachOrdered(mirror -> {
-//          listOfTypeMirror.add(this.getTypeElement(mirror));
-//        });
-//    return listOfTypeMirror;
-//  }
-//
-//  public TypeMirror getTypeMirror(String className) {
-//    return this.getTypeElement(className)
-//               .asType();
-//  }
-//
-//  public TypeElement getTypeElement(TypeMirror mirror) {
-//    return (TypeElement) this.processingEnvironment.getTypeUtils()
-//                                                   .asElement(mirror);
-//  }
-//
-//  public TypeElement getTypeElement(String className) {
-//    return this.processingEnvironment.getElementUtils()
-//                                     .getTypeElement(className);
-//  }
-//
-//  public String getEventBusResourcePath() {
-//    return StandardLocation.CLASS_OUTPUT + "/" + "META-INF/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + ProcessorConstants.EVENT_BUS_FOLDER_NAME + "/EventBus";
-//  }
+  //  public <T> boolean isSuperClass(Types typeUtils,
+  //                                  TypeElement typeElement,
+  //                                  Class<T> superClazz) {
+  //    for (TypeMirror tm : typeUtils.directSupertypes(typeElement.asType())) {
+  //      String canonicalNameTM = this.getCanonicalClassName((TypeElement) typeUtils.asElement(tm));
+  //      if (superClazz.getCanonicalName()
+  //                    .equals(canonicalNameTM)) {
+  //        return true;
+  //      } else {
+  //        return this.isSuperClass(typeUtils,
+  //                                 (TypeElement) typeUtils.asElement(tm),
+  //                                 superClazz);
+  //      }
+  //    }
+  //    return false;
+  //  }
+  //
+  //  public List<TypeElement> getListOfSuperClasses(TypeElement typeElement,
+  //                                                 Class<?> implementingSuperClass) {
+  //    List<TypeElement> listOfTypeMirror = new ArrayList<>();
+  //    TypeMirror implementingSuperClassTypeMirror = this.getTypeMirror(implementingSuperClass.getCanonicalName());
+  //    Set<TypeMirror> list = this.getFlattenedSupertypeHierarchy(this.processingEnvironment.getTypeUtils(),
+  //                                                               typeElement.asType());
+  //    list.stream()
+  //        .filter(mirror -> !implementingSuperClassTypeMirror.toString()
+  //                                                           .equals(mirror.toString()))
+  //        .filter(mirror -> !typeElement.asType()
+  //                                      .toString()
+  //                                      .equals(mirror.toString()))
+  //        .filter(mirror -> this.processingEnvironment.getTypeUtils()
+  //                                                    .isAssignable(mirror,
+  //                                                                  implementingSuperClassTypeMirror))
+  //        .forEachOrdered(mirror -> {
+  //          listOfTypeMirror.add(this.getTypeElement(mirror));
+  //        });
+  //    return listOfTypeMirror;
+  //  }
+  //
+  //  public TypeMirror getTypeMirror(String className) {
+  //    return this.getTypeElement(className)
+  //               .asType();
+  //  }
+  //
+  //  public TypeElement getTypeElement(TypeMirror mirror) {
+  //    return (TypeElement) this.processingEnvironment.getTypeUtils()
+  //                                                   .asElement(mirror);
+  //  }
+  //
+  //  public TypeElement getTypeElement(String className) {
+  //    return this.processingEnvironment.getElementUtils()
+  //                                     .getTypeElement(className);
+  //  }
+  //
+  //  public String getEventBusResourcePath() {
+  //    return StandardLocation.CLASS_OUTPUT + "/" + "META-INF/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + ProcessorConstants.EVENT_BUS_FOLDER_NAME + "/EventBus";
+  //  }
 
   public void createNoteMessage(String errorMessage) {
     StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
+    PrintWriter  pw = new PrintWriter(sw);
     pw.println(errorMessage);
     pw.close();
     messager.printMessage(Diagnostic.Kind.NOTE,
@@ -288,6 +290,11 @@ public class ProcessorUtils {
                                                    "_");
     }
     return internalEventname;
+  }
+
+  public boolean doesExist(ClassNameModel typeElementClassName) {
+    return this.processingEnvironment.getElementUtils()
+                                     .getTypeElement(typeElementClassName.getClassName()) != null;
   }
 
   public static class Builder {

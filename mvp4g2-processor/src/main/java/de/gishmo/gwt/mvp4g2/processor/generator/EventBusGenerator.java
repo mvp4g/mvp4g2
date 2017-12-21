@@ -1,28 +1,29 @@
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import java.io.IOException;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HistoryMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-import java.io.IOException;
-
 public class EventBusGenerator {
 
   private final static String IMPL_NAME = "Impl";
 
-//  private final ClassName abstractApplicationClassName = ClassName.get(AbstractApplication.class);
-
-  //  private ProcessorUtils        processorUtils;
+  private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
 
   @SuppressWarnings("unused")
@@ -35,9 +36,9 @@ public class EventBusGenerator {
   }
 
   private void setUp() {
-//    this.processorUtils = ProcessorUtils.builder()
-//                                        .processingEnvironment(this.processingEnvironment)
-//                                        .build();
+    this.processorUtils = ProcessorUtils.builder()
+                                        .processingEnvironment(this.processingEnvironment)
+                                        .build();
   }
 
   public static Builder builder() {
@@ -49,6 +50,11 @@ public class EventBusGenerator {
                        PresenterMetaModel presenterMetaModel,
                        HistoryMetaModel historyMetaModel)
     throws ProcessorException {
+    // check if element is existing (to avoid generating code for deleted items)
+    if (!this.processorUtils.doesExist(eventBusMetaMetaModel.getEventBus())) {
+      return;
+    }
+
     ClassName abstractEventBusClassName = ClassName.get(AbstractEventBus.class);
     ClassName eventBusClassName = ClassName.get(eventBusMetaMetaModel.getEventBus()
                                                                      .getPackage(),
@@ -87,6 +93,9 @@ public class EventBusGenerator {
                    .typeSpec(typeSpec)
                    .build()
                    .generate();
+
+
+
 
     JavaFile javaFile = JavaFile.builder(eventBusMetaMetaModel.getEventBus()
                                                               .getPackage(),
