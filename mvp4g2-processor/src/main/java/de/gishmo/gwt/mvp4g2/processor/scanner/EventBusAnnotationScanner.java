@@ -1,10 +1,13 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -13,14 +16,11 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 import static java.util.Objects.isNull;
 
@@ -50,7 +50,8 @@ public class EventBusAnnotationScanner {
     return new Builder();
   }
 
-  public EventBusMetaModel scan(RoundEnvironment roundEnvironment)
+  public EventBusMetaModel scan(RoundEnvironment roundEnvironment,
+                                PresenterMetaModel presenterMetaModel)
     throws ProcessorException {
     // First we try to read an already created resource ...
     EventBusMetaModel model = this.restore();

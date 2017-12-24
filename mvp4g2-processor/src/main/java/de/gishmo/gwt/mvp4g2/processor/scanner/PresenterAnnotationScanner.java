@@ -49,6 +49,7 @@ public class PresenterAnnotationScanner {
                                                                          .build();
     // read all already created model
     PresenterMetaModel model = this.restore();
+    // iterate over Presenter
     for (Element element : roundEnvironment.getElementsAnnotatedWith(Presenter.class)) {
       TypeElement typeElement = (TypeElement) element;
       // validate

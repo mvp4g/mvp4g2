@@ -17,7 +17,7 @@ package de.gishmo.gwt.mvp4g2.client.eventbus.annotation;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.history.IsHistoryConverter;
-import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.IsHandler;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -95,9 +95,9 @@ public @interface Event {
 
   String historyName() default DEFAULT_HISTORY_NAME;
 
-  Class<? extends IsEventHandler<? extends IsEventBus>>[] bind() default {};
+  Class<? extends IsHandler<? extends IsEventBus>>[] bind() default {};
 
-  Class<? extends IsEventHandler<? extends IsEventBus>>[] handlers() default {};
+  Class<? extends IsHandler<? extends IsEventBus>>[] handlers() default {};
 
   Class<? extends IsHistoryConverter<? extends IsEventBus>> historyConverter() default NoHistoryConverter.class;
 
@@ -105,9 +105,9 @@ public @interface Event {
 
   boolean passive() default false;
 
-  Class<? extends IsEventHandler<? extends IsEventBus>>[] deactivate() default {};
+  Class<? extends IsHandler<? extends IsEventBus>>[] deactivate() default {};
 
-  Class<? extends IsEventHandler<? extends IsEventBus>>[] activate() default {};
+  Class<? extends IsHandler<? extends IsEventBus>>[] activate() default {};
 
   class NoHistoryConverter
     implements IsHistoryConverter<IsEventBus> {

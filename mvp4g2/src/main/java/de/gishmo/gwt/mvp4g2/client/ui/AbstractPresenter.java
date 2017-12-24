@@ -3,7 +3,7 @@ package de.gishmo.gwt.mvp4g2.client.ui;
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 
 public abstract class AbstractPresenter<E extends IsEventBus, V extends IsLazyReverseView<?>>
-  extends AbstractEventHandler<E>
+  extends AbstractHandler<E>
   implements IsPresenter<E, V> {
 
   protected V view = null;

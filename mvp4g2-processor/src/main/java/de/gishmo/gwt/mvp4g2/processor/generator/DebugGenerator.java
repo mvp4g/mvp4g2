@@ -15,7 +15,6 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
@@ -51,10 +50,8 @@ public class DebugGenerator {
     if (eventBusMetaModel.hasDebugAnnotation()) {
       loadDebugConfigurationMethod.addStatement("super.setDebugEnable(true)")
                                   .addStatement("super.setLogger(new $T())",
-                                                ClassName.get(eventBusMetaModel.getDebugLogger()
-                                                                               .getPackage(),
-                                                              eventBusMetaModel.getDebugLogger()
-                                                                               .getSimpleName()))
+                                                eventBusMetaModel.getDebugLogger()
+                                                                 .getTypeName())
                                   .addStatement("super.setLogLevel($T.LogLevel.$L)",
                                                 Debug.class,
                                                 eventBusMetaModel.getDebugLogLevel());

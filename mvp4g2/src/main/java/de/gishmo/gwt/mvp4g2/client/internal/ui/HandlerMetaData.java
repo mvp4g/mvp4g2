@@ -1,32 +1,26 @@
 package de.gishmo.gwt.mvp4g2.client.internal.ui;
 
-/**
- * generator of the eventbus
- */
-public abstract class HandlerMetaData {
+import de.gishmo.gwt.mvp4g2.client.ui.IsHandler;
 
-  private String               canonicalName;
-  private HandlerMetaData.Kind kind;
+/**
+ * generator of the eventBus
+
+ * @param <P> the meta data event handler
+ */
+public abstract class HandlerMetaData<P extends IsHandler<?>>
+  extends AbstractHandlerMetaData {
+
+  private P handler;
 
   public HandlerMetaData(String canonicalName,
-                         HandlerMetaData.Kind kind) {
-    this.canonicalName = canonicalName;
-    this.kind = kind;
+                         HandlerMetaData.Kind kind,
+                         P handler) {
+    super(canonicalName,
+          kind);
+    this.handler = handler;
   }
 
-  public String getCanonicalName() {
-    return canonicalName;
-  }
-
-  public Kind getKind() {
-    return kind;
-  }
-
-  /**
-   * Type of event handlers.
-   */
-  public enum Kind {
-    EVENT_HANDLER,
-    PRESENTER
+  public P getHandler() {
+    return handler;
   }
 }

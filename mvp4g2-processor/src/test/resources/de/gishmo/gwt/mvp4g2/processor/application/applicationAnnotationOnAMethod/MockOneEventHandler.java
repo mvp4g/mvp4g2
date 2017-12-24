@@ -17,12 +17,12 @@
 
 package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOnAMethod;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
 
 @Handler
 public class MockOneEventHandler
-  extends AbstractEventHandler<MockEventBus> {
+  extends AbstractHandler<MockEventBus> {
 
   public void onOneEvent() {
   }

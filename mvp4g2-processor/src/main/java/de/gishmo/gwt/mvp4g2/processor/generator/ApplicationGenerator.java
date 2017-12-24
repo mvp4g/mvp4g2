@@ -1,21 +1,19 @@
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
-import java.io.IOException;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-
 import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
 import de.gishmo.gwt.mvp4g2.client.internal.application.AbstractApplication;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.ApplicationMetaModel;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+import java.io.IOException;
 
 public class ApplicationGenerator {
 
@@ -50,27 +48,15 @@ public class ApplicationGenerator {
       return;
     }
     // generate code
-    ClassName abstractApplicationClassName = ClassName.get(AbstractApplication.class);
-    ClassName applicationClassName = ClassName.get(metaModel.getApplication()
-                                                            .getPackage(),
-                                                   metaModel.getApplication()
-                                                            .getSimpleName());
-    ClassName eventBusClassName = ClassName.get(metaModel.getEventBus()
-                                                         .getPackage(),
-                                                metaModel.getEventBus()
-                                                         .getSimpleName());
-    ClassName applicaitonLoaderClassName = ClassName.get(metaModel.getLaoder()
-                                                                  .getPackage(),
-                                                         metaModel.getLaoder()
-                                                                  .getSimpleName());
-
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(metaModel.getApplication()
                                                                .getSimpleName() + ApplicationGenerator.IMPL_NAME)
-                                        .superclass(ParameterizedTypeName.get(abstractApplicationClassName,
-                                                                              eventBusClassName))
+                                        .superclass(ParameterizedTypeName.get(ClassName.get(AbstractApplication.class),
+                                                                              metaModel.getEventBus()
+                                                                                       .getTypeName()))
                                         .addModifiers(Modifier.PUBLIC,
                                                       Modifier.FINAL)
-                                        .addSuperinterface(applicationClassName);
+                                        .addSuperinterface(metaModel.getApplication()
+                                                                    .getTypeName());
 
     // constructor ...
     MethodSpec constructor = MethodSpec.constructorBuilder()
@@ -90,7 +76,8 @@ public class ApplicationGenerator {
                                                       .addAnnotation(Override.class)
                                                       .returns(IsApplicationLoader.class)
                                                       .addStatement("return new $T()",
-                                                                    applicaitonLoaderClassName)
+                                                                    metaModel.getLaoder()
+                                                                             .getTypeName())
                                                       .build();
     typeSpec.addMethod(getApplicaitonLaoderMethod);
 

@@ -79,7 +79,7 @@ public class PresenterAnnotationValidator {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
       }
-      // check, that the typeElement extends AbstractEventHandler
+      // check, that the typeElement extends AbstractHandler
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
                                                        typeElement.asType(),
                                                        this.processingEnvironment.getElementUtils()

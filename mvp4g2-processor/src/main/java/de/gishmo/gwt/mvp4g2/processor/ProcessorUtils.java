@@ -1,15 +1,8 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -24,10 +17,16 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProcessorUtils {
 
@@ -48,7 +47,6 @@ public class ProcessorUtils {
     this.messager = this.processingEnvironment.getMessager();
     this.filer = this.processingEnvironment.getFiler();
     this.elements = this.processingEnvironment.getElementUtils();
-
   }
 
   public static Builder builder() {
@@ -295,6 +293,14 @@ public class ProcessorUtils {
   public boolean doesExist(ClassNameModel typeElementClassName) {
     return this.processingEnvironment.getElementUtils()
                                      .getTypeElement(typeElementClassName.getClassName()) != null;
+  }
+
+  public String createHistoryMetaDataClassName(String historyConverterClassName) {
+    return this.setFirstCharacterToUpperCase(this.createHistoryMetaDataVariableName(historyConverterClassName)) + "_" + ProcessorConstants.META_DATA;
+  }
+
+  public String createHistoryMetaDataVariableName(String historyConverterClassName) {
+    return this.createFullClassName(historyConverterClassName);
   }
 
   public static class Builder {

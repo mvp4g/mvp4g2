@@ -12,15 +12,17 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.generator.ApplicationGenerator;
 import de.gishmo.gwt.mvp4g2.processor.generator.EventBusGenerator;
 import de.gishmo.gwt.mvp4g2.processor.generator.HandlerGenerator;
+import de.gishmo.gwt.mvp4g2.processor.generator.HistoryGenerator;
 import de.gishmo.gwt.mvp4g2.processor.generator.PresenterGenerator;
 import de.gishmo.gwt.mvp4g2.processor.model.ApplicationMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HistoryMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.scanner.ApplicationAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.EventBusAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.HandlerAnnotationScanner;
+import de.gishmo.gwt.mvp4g2.processor.scanner.HistoryAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.PresenterAnnotationScanner;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -44,18 +46,20 @@ public class Mvp4g2Processor
   private ApplicationAnnotationScanner applicationAnnotationScanner;
   private EventBusAnnotationScanner    eventBusAnnotationScanner;
   private HandlerAnnotationScanner     handlerAnnotationScanner;
+  private HistoryAnnotationScanner     historyAnnotationScanner;
   private PresenterAnnotationScanner   presenterAnnotationScanner;
 
   private ApplicationGenerator applicationGenerator;
   private EventBusGenerator    eventBusGenerator;
   private HandlerGenerator     handlerGenerator;
+  private HistoryGenerator     historyGenerator;
   private PresenterGenerator   presenterGenerator;
 
-  private ApplicationMetaModel  applicationMetaModel;
-  private EventBusMetaModel     eventBusMetaModel;
-  private EventHandlerMetaModel eventHandlerMetaModel;
-  private HistoryMetaModel      historyMetaModel;
-  private PresenterMetaModel    presenterMetaModel;
+  private ApplicationMetaModel applicationMetaModel;
+  private EventBusMetaModel    eventBusMetaModel;
+  private HandlerMetaModel     handlerMetaModel;
+  private HistoryMetaModel     historyMetaModel;
+  private PresenterMetaModel   presenterMetaModel;
 
   public Mvp4g2Processor() {
     super();
@@ -82,11 +86,11 @@ public class Mvp4g2Processor
       } else {
         this.scan(roundEnv);
       }
-      return true;
+      return false;
     } catch (ProcessorException e) {
       this.processorUtils.createErrorMessage(e.getMessage());
     }
-    return true;
+    return false;
   }
 
   private void setUp(RoundEnvironment roundEnv) {
@@ -105,6 +109,9 @@ public class Mvp4g2Processor
     this.handlerAnnotationScanner = HandlerAnnotationScanner.builder()
                                                             .processingEnvironment(this.processingEnv)
                                                             .build();
+    this.historyAnnotationScanner = HistoryAnnotationScanner.builder()
+                                                            .processingEnvironment(this.processingEnv)
+                                                            .build();
     this.presenterAnnotationScanner = PresenterAnnotationScanner.builder()
                                                                 .processingEnvironment(this.processingEnv)
                                                                 .build();
@@ -118,6 +125,9 @@ public class Mvp4g2Processor
     this.handlerGenerator = HandlerGenerator.builder()
                                             .processingEnvironment(this.processingEnv)
                                             .build();
+    this.historyGenerator = HistoryGenerator.builder()
+                                            .processingEnvironment(this.processingEnv)
+                                            .build();
     this.presenterGenerator = PresenterGenerator.builder()
                                                 .processingEnvironment(this.processingEnv)
                                                 .build();
@@ -128,15 +138,18 @@ public class Mvp4g2Processor
     if (!isNull(this.applicationMetaModel)) {
       this.applicationGenerator.generate(this.applicationMetaModel);
     }
-    if (!isNull(this.eventHandlerMetaModel)) {
-      this.handlerGenerator.generate(this.eventHandlerMetaModel);
+    if (!isNull(this.handlerMetaModel)) {
+      this.handlerGenerator.generate(this.handlerMetaModel);
     }
     if (!isNull(this.presenterMetaModel)) {
       this.presenterGenerator.generate(this.presenterMetaModel);
     }
+    if (!isNull(this.historyMetaModel)) {
+      this.historyGenerator.generate(this.historyMetaModel);
+    }
     if (!isNull(this.eventBusMetaModel)) {
       this.eventBusGenerator.generate(this.eventBusMetaModel,
-                                      this.eventHandlerMetaModel,
+                                      this.handlerMetaModel,
                                       this.presenterMetaModel,
                                       this.historyMetaModel);
     }
@@ -145,8 +158,10 @@ public class Mvp4g2Processor
   private void scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
     this.applicationMetaModel = this.applicationAnnotationScanner.scan(roundEnvironment);
-    this.eventHandlerMetaModel = this.handlerAnnotationScanner.scan(roundEnvironment);
+    this.handlerMetaModel = this.handlerAnnotationScanner.scan(roundEnvironment);
     this.presenterMetaModel = this.presenterAnnotationScanner.scan(roundEnvironment);
-    this.eventBusMetaModel = this.eventBusAnnotationScanner.scan(roundEnvironment);
+    this.historyMetaModel = this.historyAnnotationScanner.scan(roundEnvironment);
+    this.eventBusMetaModel = this.eventBusAnnotationScanner.scan(roundEnvironment,
+                                                                 this.presenterMetaModel);
   }
 }

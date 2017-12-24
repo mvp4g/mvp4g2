@@ -28,7 +28,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
  * @author Frank Hossfeld
  * @since 16.09.2016
  */
-public interface IsEventHandler<E extends IsEventBus> {
+public interface IsHandler<E extends IsEventBus> {
 
   /**
    * Get the event bus associated with the event handler

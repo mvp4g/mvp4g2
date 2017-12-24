@@ -16,10 +16,10 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlerAnnotationAnnotatedOnAbstractClass;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
 
 @Handler
 public abstract class EventHandlerAnnotationAnnotatedOnAbstractClass
-  extends AbstractEventHandler<MockEventBus> {
+  extends AbstractHandler<MockEventBus> {
 }

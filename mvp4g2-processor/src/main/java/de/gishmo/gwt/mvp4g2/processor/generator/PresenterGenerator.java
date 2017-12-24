@@ -1,27 +1,24 @@
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
-import java.io.IOException;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-
-import de.gishmo.gwt.mvp4g2.client.internal.ui.EventHandlerMetaData;
+import de.gishmo.gwt.mvp4g2.client.internal.ui.HandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 
-public class PresenterGenerator {
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+import java.io.IOException;
 
-  private final static String IMPL_NAME = "MetaData";
+public class PresenterGenerator {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
@@ -47,35 +44,24 @@ public class PresenterGenerator {
 
   public void generate(PresenterMetaModel metaModel)
     throws ProcessorException {
-    ClassName presenterrMetaDataClassName          = ClassName.get(PresenterMetaData.class);
-    ClassName presenterMetaDataKindClassName       = ClassName.get(EventHandlerMetaData.Kind.class);
+    ClassName presenterrMetaDataClassName = ClassName.get(PresenterMetaData.class);
+    ClassName presenterMetaDataKindClassName = ClassName.get(HandlerMetaData.Kind.class);
     ClassName presenterViewCreationMethodClassName = ClassName.get(Presenter.VIEW_CREATION_METHOD.class);
 
     for (String presenter : metaModel.getPresenterKeys()) {
       // check if element is existing (to avoid generating code for deleted items)
       if (this.processorUtils.doesExist(new ClassNameModel(presenter))) {
         PresenterMetaModel.PresenterData data = metaModel.getPresenterData(presenter);
-
-        ClassName presenterClassName = ClassName.get(data.getPresenter()
-                                                         .getPackage(),
-                                                     data.getPresenter()
-                                                         .getSimpleName());
-        ClassName viewClasseName = ClassName.get(data.getViewClass()
-                                                     .getPackage(),
-                                                 data.getViewClass()
-                                                     .getSimpleName());
-        ClassName viewInterfaceName = ClassName.get(data.getViewInterface()
-                                                        .getPackage(),
-                                                    data.getViewInterface()
-                                                        .getSimpleName());
         String className = this.processorUtils.createFullClassName(data.getPresenter()
                                                                        .getPackage(),
                                                                    data.getPresenter()
-                                                                       .getSimpleName() + PresenterGenerator.IMPL_NAME);
+                                                                       .getSimpleName() + ProcessorConstants.META_DATA);
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(this.processorUtils.setFirstCharacterToUpperCase(className))
                                             .superclass(ParameterizedTypeName.get(presenterrMetaDataClassName,
-                                                                                  presenterClassName,
-                                                                                  viewInterfaceName))
+                                                                                  data.getPresenter()
+                                                                                      .getTypeName(),
+                                                                                  data.getViewInterface()
+                                                                                      .getTypeName()))
                                             .addModifiers(Modifier.PUBLIC,
                                                           Modifier.FINAL);
         // constructor ...
@@ -89,12 +75,15 @@ public class PresenterGenerator {
                                                                  presenterViewCreationMethodClassName,
                                                                  data.getViewCreationMethod());
         constructor.addStatement("super.presenter = new $T()",
-                                 presenterClassName);
+                                 data.getPresenter()
+                                     .getTypeName());
         if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.toString()
                                                     .equals(data.getViewCreationMethod())) {
           constructor.addStatement("super.view = ($T) new $T()",
-                                   viewInterfaceName,
-                                   viewClasseName);
+                                   data.getViewInterface()
+                                       .getTypeName(),
+                                   data.getViewClass()
+                                       .getTypeName());
         } else {
           constructor.addStatement("super.view = presenter.createView()");
         }
@@ -108,7 +97,7 @@ public class PresenterGenerator {
           javaFile.writeTo(this.processingEnvironment.getFiler());
         } catch (IOException e) {
           throw new ProcessorException("Unable to write generated file: >>" + data.getPresenter()
-                                                                                  .getSimpleName() + PresenterGenerator.IMPL_NAME + "<< -> exception: " + e.getMessage());
+                                                                                  .getSimpleName() + ProcessorConstants.META_DATA + "<< -> exception: " + e.getMessage());
         }
       }
     }

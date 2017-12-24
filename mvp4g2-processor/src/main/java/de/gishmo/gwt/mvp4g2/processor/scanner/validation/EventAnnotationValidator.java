@@ -15,19 +15,25 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventAnnotationValidator {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
   private RoundEnvironment      roundEnvironment;
+  private EventBusMetaModel     eventBusMetaModel;
   private TypeElement           eventBusTypeElement;
   private Element               eventElement;
 
@@ -38,6 +44,7 @@ public class EventAnnotationValidator {
   private EventAnnotationValidator(Builder builder) {
     this.processingEnvironment = builder.processingEnvironment;
     this.roundEnvironment = builder.roundEnvironment;
+    this.eventBusMetaModel = builder.eventBusMetaModel;
     this.eventBusTypeElement = builder.eventBusTypeElement;
     this.eventElement = builder.eventElement;
     setUp();
@@ -55,6 +62,22 @@ public class EventAnnotationValidator {
 
   public void validate()
     throws ProcessorException {
+    // TODO test
+    // check if all historyNames are unique!
+    List<String> historyNames = new ArrayList<>();
+    // TODO test
+    for (EventMetaModel eventMetaModel : this.eventBusMetaModel.getEventMetaModels()) {
+      if (!Event.DEFAULT_HISTORY_NAME.equals(eventMetaModel.getHistoryEventName())) {
+        for (String savedHistoryEventName : historyNames) {
+          if (savedHistoryEventName.equals(eventMetaModel.getHistoryEventName())) {
+            throw new ProcessorException("EventElement: >>" + eventMetaModel.getHistoryConverter()
+                                                                            .getClassName() + "<< using a already used historyName -> >>" + eventMetaModel.getHistoryEventName() + "<<");
+          }
+        }
+        historyNames.add(eventMetaModel.getHistoryEventName());
+      }
+    }
+
     //    // get elements annotated with Debug annotation
     //    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Debug.class);
     //    // at least there should only one Application annotation!
@@ -108,6 +131,7 @@ public class EventAnnotationValidator {
     RoundEnvironment      roundEnvironment;
     TypeElement           eventBusTypeElement;
     Element               eventElement;
+    EventBusMetaModel     eventBusMetaModel;
 
     public Builder processingEnvironment(ProcessingEnvironment processingEnvironment) {
       this.processingEnvironment = processingEnvironment;
@@ -116,6 +140,11 @@ public class EventAnnotationValidator {
 
     public Builder roundEnvironment(RoundEnvironment roundEnvironment) {
       this.roundEnvironment = roundEnvironment;
+      return this;
+    }
+
+    public Builder eventBusMetaModel(EventBusMetaModel eventBusMetaModel) {
+      this.eventBusMetaModel = eventBusMetaModel;
       return this;
     }
 

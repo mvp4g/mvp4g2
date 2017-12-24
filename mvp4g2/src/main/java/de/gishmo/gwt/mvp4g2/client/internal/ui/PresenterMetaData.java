@@ -11,7 +11,7 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
  * @param <P> the meta data view
  */
 public abstract class PresenterMetaData<P extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>>
-  extends HandlerMetaData {
+  extends AbstractHandlerMetaData {
 
   protected P                              presenter;
   protected V                              view;

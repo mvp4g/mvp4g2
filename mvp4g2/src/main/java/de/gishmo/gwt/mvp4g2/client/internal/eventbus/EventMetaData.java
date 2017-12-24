@@ -78,7 +78,9 @@ public abstract class EventMetaData<E extends IsEventBus> {
   }
 
   public void addHandler(String handler) {
-    this.handlerTypes.add(handler);
+    if (!this.handlerTypes.contains(handler)) {
+      this.handlerTypes.add(handler);
+    }
   }
 
   public void addParameterType(String parameterName,

@@ -3,7 +3,8 @@ package de.gishmo.gwt.mvp4g2.client.ui;
 /**
  * <p>Marks an class as mvp4g2 shell.</p>
  */
-public interface IsShell {
+public interface IsShell
+  extends IsPresenter {
 
   /**
    * This method is used by the framework, to delegate the adding

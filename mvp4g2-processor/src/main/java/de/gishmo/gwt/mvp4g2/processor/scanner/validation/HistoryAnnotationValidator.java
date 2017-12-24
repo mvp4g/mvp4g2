@@ -15,27 +15,25 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractHandler;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
-public class HandlerAnnotationValidator {
+public class HistoryAnnotationValidator {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
   private RoundEnvironment      roundEnvironment;
 
   @SuppressWarnings("unused")
-  private HandlerAnnotationValidator() {
+  private HistoryAnnotationValidator() {
   }
 
-  private HandlerAnnotationValidator(Builder builder) {
+  private HistoryAnnotationValidator(Builder builder) {
     this.processingEnvironment = builder.processingEnvironment;
     this.roundEnvironment = builder.roundEnvironment;
     setUp();
@@ -53,31 +51,32 @@ public class HandlerAnnotationValidator {
 
   public void validate(Element element)
     throws ProcessorException {
+    // TODO history validation
     if (element instanceof TypeElement) {
-      TypeElement typeElement = (TypeElement) element;
-      // check, that the presenter annotion is only used with classes
-      if (!typeElement.getKind()
-                      .isClass()) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Handler can only be used with as class!");
-      }
-      // check, that the typeElement extends AbstarctEventHandler
-      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                       typeElement.asType(),
-                                                       this.processingEnvironment.getElementUtils()
-                                                                                 .getTypeElement(AbstractHandler.class.getCanonicalName())
-                                                                                 .asType())) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Handler must extend AbstractHandler.class!");
-      }
-      // check if annotated class is abstract
-      if (typeElement.getModifiers()
-                     .contains(Modifier.ABSTRACT)) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Handler can not be ABSTRACT");
-      }
+//      TypeElement typeElement = (TypeElement) element;
+//      // check, that the presenter annotion is only used with classes
+//      if (!typeElement.getKind()
+//                      .isClass()) {
+//        throw new ProcessorException(typeElement.getSimpleName()
+//                                                .toString() + ": @Handler can only be used with as class!");
+//      }
+//      // check, that the typeElement extends AbstarctEventHandler
+//      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+//                                                       typeElement.asType(),
+//                                                       this.processingEnvironment.getElementUtils()
+//                                                                                 .getTypeElement(AbstractHandler.class.getCanonicalName())
+//                                                                                 .asType())) {
+//        throw new ProcessorException(typeElement.getSimpleName()
+//                                                .toString() + ": @Handler must extend AbstractHandler.class!");
+//      }
+//      // check if annotated class is abstract
+//      if (typeElement.getModifiers()
+//                     .contains(Modifier.ABSTRACT)) {
+//        throw new ProcessorException(typeElement.getSimpleName()
+//                                                .toString() + ": @Handler can not be ABSTRACT");
+//      }
     } else {
-      throw new ProcessorException("@Handler can only be used on a type (class)");
+      throw new ProcessorException("@History can only be used on a type (class)");
     }
   }
 
@@ -96,8 +95,8 @@ public class HandlerAnnotationValidator {
       return this;
     }
 
-    public HandlerAnnotationValidator build() {
-      return new HandlerAnnotationValidator(this);
+    public HistoryAnnotationValidator build() {
+      return new HistoryAnnotationValidator(this);
     }
   }
 }

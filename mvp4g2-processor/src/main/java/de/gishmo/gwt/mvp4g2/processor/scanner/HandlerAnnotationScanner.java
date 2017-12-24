@@ -4,7 +4,7 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.scanner.validation.HandlerAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -40,7 +40,7 @@ public class HandlerAnnotationScanner {
     return new Builder();
   }
 
-  public EventHandlerMetaModel scan(RoundEnvironment roundEnvironment)
+  public HandlerMetaModel scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
     // Validator
     HandlerAnnotationValidator validator = HandlerAnnotationValidator.builder()
@@ -48,7 +48,7 @@ public class HandlerAnnotationScanner {
                                                                      .processingEnvironment(processingEnvironment)
                                                                      .build();
     // read all already created model
-    EventHandlerMetaModel model = this.restore();
+    HandlerMetaModel model = this.restore();
     for (Element element : roundEnvironment.getElementsAnnotatedWith(Handler.class)) {
       TypeElement typeElement = (TypeElement) element;
       // validate the element. In case of error throw exception!
@@ -64,7 +64,7 @@ public class HandlerAnnotationScanner {
     return model;
   }
 
-  private EventHandlerMetaModel restore() {
+  private HandlerMetaModel restore() {
     Properties props = new Properties();
     try {
       FileObject resource = this.processingEnvironment.getFiler()
@@ -72,11 +72,11 @@ public class HandlerAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      return new EventHandlerMetaModel(props);
+      return new HandlerMetaModel(props);
     } catch (IOException e) {
       this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
     }
-    return new EventHandlerMetaModel();
+    return new HandlerMetaModel();
   }
 
   private String createRelativeFileName() {

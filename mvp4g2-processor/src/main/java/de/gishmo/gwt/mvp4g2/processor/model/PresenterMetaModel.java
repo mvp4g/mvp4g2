@@ -32,8 +32,8 @@ public class PresenterMetaModel
     t.stream()
      .forEach(System.out::println);
 // TODO implement reading from Property-File!
-//    .getProperty(EventHandlerMetaModel.KEY_EVENT_HANDLER),
-//       props.getProperty(EventHandlerMetaModel.KEY_HANDLED_EVENTS)
+//    .getProperty(HandlerMetaModel.KEY_EVENT_HANDLER),
+//       props.getProperty(HandlerMetaModel.KEY_HANDLED_EVENTS)
   }
 
   public void add(String presenter,
@@ -104,6 +104,10 @@ public class PresenterMetaModel
                                            String.join(",", data.handledEvents));
                        });
     return props;
+  }
+
+  public boolean isPresenter(String handlerClassName) {
+    return this.presenterDatas.get(handlerClassName) != null;
   }
 
   public class PresenterData {

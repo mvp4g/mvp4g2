@@ -29,7 +29,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
  * @param <E> Type of the event bus used by the presenter.
  */
 public interface IsPresenter<E extends IsEventBus, V extends IsLazyReverseView<?>>
-  extends IsEventHandler<E> {
+  extends IsHandler<E> {
 
   /**
    * Gets the view associated with the presenter.

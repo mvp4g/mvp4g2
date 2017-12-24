@@ -17,12 +17,12 @@
 
 package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractEventHandler;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractHandler;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
 
 @Handler
 public class MockOneEventHandler
-  extends AbstractEventHandler<EventTestHandlerNotInBindAndHandlersAttribute> {
+  extends AbstractHandler<EventTestHandlerNotInBindAndHandlersAttribute> {
 
   public void bind() {
   }

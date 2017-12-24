@@ -1,15 +1,14 @@
 package de.gishmo.gwt.mvp4g2.client.ui;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler;
 
 /**
  * Super class of a mvp4g2 event handler.
  *
  * @param <E> the eventbus of the applicaiton
  */
-public abstract class AbstractEventHandler<E extends IsEventBus>
-  implements IsEventHandler<E> {
+public abstract class AbstractHandler<E extends IsEventBus>
+  implements IsHandler<E> {
 
   /* bind mehtod already called */
   protected boolean binded    = false;
@@ -20,7 +19,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /**
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#getEventBus()
+   * @see IsHandler#getEventBus()
    */
   public final E getEventBus() {
     return eventBus;
@@ -29,7 +28,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /**
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#setEventBus(de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus)
+   * @see IsHandler#setEventBus(de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus)
    */
   public final void setEventBus(E eventBus) {
     this.eventBus = eventBus;
@@ -38,7 +37,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /**
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#bind()
+   * @see IsHandler#bind()
    */
   public void bind() {
     /*
@@ -50,7 +49,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#isActivated()
+   * @see de.gishmo.gwt.mvp4g2.client.ui.IsHandler#isActivated()
    */
   public final boolean isActivated() {
 //    boolean activated = this.activated &&
@@ -73,7 +72,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#setBinded(boolean)
+   * @see de.gishmo.gwt.mvp4g2.client.ui.IsHandler#setBinded(boolean)
    */
   public final void setActivated(boolean activated) {
     this.activated = activated;
@@ -82,7 +81,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#isBinded()
+   * @see de.gishmo.gwt.mvp4g2.client.ui.IsHandler#isBinded()
    */
   public final boolean isBinded() {
     return binded;
@@ -91,7 +90,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#setActivated(boolean)
+   * @see de.gishmo.gwt.mvp4g2.client.ui.IsHandler#setActivated(boolean)
    */
   public final void setBinded(boolean binded) {
     this.binded = binded;
@@ -100,7 +99,7 @@ public abstract class AbstractEventHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.client.ui.IsEventHandler#pass(String, Object...)
+   * @see de.gishmo.gwt.mvp4g2.client.ui.IsHandler#pass(String, Object...)
    */
   public boolean pass(String eventName,
                       Object... parameters) {

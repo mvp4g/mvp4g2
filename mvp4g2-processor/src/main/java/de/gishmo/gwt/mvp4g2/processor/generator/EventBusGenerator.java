@@ -1,23 +1,22 @@
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
-import java.io.IOException;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventHandlerMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HistoryMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import java.io.IOException;
 
 public class EventBusGenerator {
 
@@ -25,13 +24,13 @@ public class EventBusGenerator {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
+  private TypeElement           eventBusTypeElement;
 
   @SuppressWarnings("unused")
   private EventBusGenerator(Builder builder) {
     super();
-
     this.processingEnvironment = builder.processingEnvironment;
-
+    this.eventBusTypeElement = builder.eventBusTypeElement;
     setUp();
   }
 
@@ -46,7 +45,7 @@ public class EventBusGenerator {
   }
 
   public void generate(EventBusMetaModel eventBusMetaMetaModel,
-                       EventHandlerMetaModel eventHandlerMetaModel,
+                       HandlerMetaModel handlerMetaModel,
                        PresenterMetaModel presenterMetaModel,
                        HistoryMetaModel historyMetaModel)
     throws ProcessorException {
@@ -56,22 +55,15 @@ public class EventBusGenerator {
     }
 
     ClassName abstractEventBusClassName = ClassName.get(AbstractEventBus.class);
-    ClassName eventBusClassName = ClassName.get(eventBusMetaMetaModel.getEventBus()
-                                                                     .getPackage(),
-                                                eventBusMetaMetaModel.getEventBus()
-                                                                     .getSimpleName());
-    ClassName shellClassName = ClassName.get(eventBusMetaMetaModel.getShell()
-                                                                  .getPackage(),
-                                             eventBusMetaMetaModel.getShell()
-                                                                  .getSimpleName());
-
     TypeSpec.Builder typeSpec = TypeSpec.classBuilder(eventBusMetaMetaModel.getEventBus()
                                                                            .getSimpleName() + EventBusGenerator.IMPL_NAME)
                                         .superclass(ParameterizedTypeName.get(abstractEventBusClassName,
-                                                                              eventBusClassName))
+                                                                              eventBusMetaMetaModel.getEventBus()
+                                                                                                   .getTypeName()))
                                         .addModifiers(Modifier.PUBLIC,
                                                       Modifier.FINAL)
-                                        .addSuperinterface(eventBusClassName);
+                                        .addSuperinterface(eventBusMetaMetaModel.getEventBus()
+                                                                                .getTypeName());
 
     MethodSpec constructor = MethodSpec.constructorBuilder()
                                        .addModifiers(Modifier.PUBLIC)
@@ -94,8 +86,29 @@ public class EventBusGenerator {
                    .build()
                    .generate();
 
+    EventMetaDataGenerator.builder()
+                          .processingEnvironment(this.processingEnvironment)
+                          .eventBusMetaModel(eventBusMetaMetaModel)
+                          .build()
+                          .generate();
 
+    EventHandlingMethodGenerator.builder()
+                                .typeSpec(typeSpec)
+                                .eventBusMetaModel(eventBusMetaMetaModel)
+                                .historyMetaModel(historyMetaModel)
+                                .presenterMetaModel(presenterMetaModel)
+                                .handlerMetaModel(handlerMetaModel)
+                                .build()
+                                .generate();
 
+    HandlerAndPresenterRegristrationGenerator.builder()
+                                             .processingEnvironment(this.processingEnvironment)
+                                             .typeSpec(typeSpec)
+                                             .eventBusMetaModel(eventBusMetaMetaModel)
+                                             .presenterMetaModel(presenterMetaModel)
+                                             .handlerMetaModel(handlerMetaModel)
+                                             .build()
+                                             .generate();
 
     JavaFile javaFile = JavaFile.builder(eventBusMetaMetaModel.getEventBus()
                                                               .getPackage(),
@@ -113,9 +126,15 @@ public class EventBusGenerator {
   public static class Builder {
 
     ProcessingEnvironment processingEnvironment;
+    TypeElement           eventBusTypeElement;
 
     public Builder processingEnvironment(ProcessingEnvironment processingEnvironment) {
       this.processingEnvironment = processingEnvironment;
+      return this;
+    }
+
+    public Builder eventBusTypeElement(TypeElement eventBusTypeElement) {
+      this.eventBusTypeElement = eventBusTypeElement;
       return this;
     }
 

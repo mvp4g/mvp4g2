@@ -52,7 +52,7 @@ public class HandlerTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerNotExtendingAbstractEventHandler/EventHandlerNotExtendingAbstractEventHandler.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("@Handler must extend AbstractEventHandler.class!");
+          .withErrorContaining("@Handler must extend AbstractHandler.class!");
   }
 
   @Test
