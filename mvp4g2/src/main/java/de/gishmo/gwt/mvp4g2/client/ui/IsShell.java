@@ -1,10 +1,12 @@
 package de.gishmo.gwt.mvp4g2.client.ui;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
+
 /**
  * <p>Marks an class as mvp4g2 shell.</p>
  */
-public interface IsShell
-  extends IsPresenter {
+public interface IsShell<E extends IsEventBus, V extends IsLazyReverseView<?>>
+  extends IsPresenter<E, V> {
 
   /**
    * This method is used by the framework, to delegate the adding

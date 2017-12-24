@@ -114,10 +114,6 @@ public class EventMetaDataGenerator {
       eventMetaModel.getDeactivateHandlers()
                     .forEach(s -> constructor.addStatement("super.addDeactivateHandler($S)",
                                                            s.getClassName()));
-
-
-      // TODO .... hier weitermachen! Handled Events aus Handler & presenter noch hier eintragen!
-
       typeSpec.addMethod(constructor.build());
 
       JavaFile javaFile = JavaFile.builder(eventBusMetaModel.getEventBus()

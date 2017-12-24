@@ -86,6 +86,13 @@ public class EventBusGenerator {
                    .build()
                    .generate();
 
+    EventLoadMetaDataGenerator.builder()
+                              .processingEnvironment(this.processingEnvironment)
+                              .eventBusMetaModel(eventBusMetaMetaModel)
+                              .typeSpec(typeSpec)
+                              .build()
+                              .generate();
+
     EventMetaDataGenerator.builder()
                           .processingEnvironment(this.processingEnvironment)
                           .eventBusMetaModel(eventBusMetaMetaModel)
@@ -100,6 +107,11 @@ public class EventBusGenerator {
                                 .handlerMetaModel(handlerMetaModel)
                                 .build()
                                 .generate();
+
+    AddPresenterGenerator.builder()
+                         .typeSpec(typeSpec)
+                         .build()
+                         .generate();
 
     HandlerAndPresenterRegristrationGenerator.builder()
                                              .processingEnvironment(this.processingEnvironment)

@@ -329,14 +329,15 @@ public class EventHandlingMethodGenerator {
                   .stream()
                   .filter(s -> !listOfEventHandlers.contains(s.getClassName()))
                   .forEach(s -> listOfEventHandlers.add(s.getClassName()));
-    this.handlerMetaModel.getHandlerKeys()
-                         .stream()
-                         .filter(s -> !listOfEventHandlers.contains(s))
-                         .forEach(listOfEventHandlers::add);
-    this.presenterMetaModel.getPresenterKeys()
-                           .stream()
-                           .filter(s -> !listOfEventHandlers.contains(s))
-                           .forEach(listOfEventHandlers::add);
+    // TODO add presenters & handlers that hanldes this event!
+//    this.handlerMetaModel.getHandlerKeys()                                   so aber nicht!!!!!
+//                         .stream()
+//                         .filter(s -> !listOfEventHandlers.contains(s))
+//                         .forEach(listOfEventHandlers::add);
+//    this.presenterMetaModel.getPresenterKeys()
+//                           .stream()
+//                           .filter(s -> !listOfEventHandlers.contains(s))
+//                           .forEach(listOfEventHandlers::add);
     return listOfEventHandlers;
   }
 
@@ -447,7 +448,7 @@ public class EventHandlingMethodGenerator {
                                                                                                                           WildcardTypeName.subtypeOf(Object.class),
                                                                                                                           WildcardTypeName.subtypeOf(Object.class)),
                                                                                                 "metaData")
-                                                                                       .build() : ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(EventMetaData.class),
+                                                                                       .build() : ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(HandlerMetaData.class),
                                                                                                                                                   WildcardTypeName.subtypeOf(Object.class)),
                                                                                                                         "metaData")
                                                                                                                .build())
@@ -480,15 +481,15 @@ public class EventHandlingMethodGenerator {
                         variableName,
                         eventMetaModel.getHistoryConverter() == null || Event.NoHistoryConverter.class.getCanonicalName()
                                                                                                       .equals(eventMetaModel.getHistoryConverter()
-                                                                                                                            .getClassName()) ? "listOfExecutedHandlers" : "null",
+                                                                                                                            .getClassName()) ? "null" : "listOfExecutedHandlers",
                         TypeSpec.anonymousClassBuilder("")
                                 .addSuperinterface(isPresenter ? ClassName.get(AbstractEventBus.ExecPresenter.class) : ClassName.get(AbstractEventBus.ExecHandler.class))
                                 .addMethod(passMethod.build())
                                 .addMethod(execMethod.build())
                                 .build(),
-                        eventMetaModel.getHistoryConverter() == null || Event.NoHistoryConverter.class.getCanonicalName()
+                        !(eventMetaModel.getHistoryConverter() == null || Event.NoHistoryConverter.class.getCanonicalName()
                                                                                                       .equals(eventMetaModel.getHistoryConverter()
-                                                                                                                            .getClassName()));
+                                                                                                                            .getClassName())));
   }
 
   private void createSignatureForEventCall(MethodSpec.Builder method,
