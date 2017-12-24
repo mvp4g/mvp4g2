@@ -14,8 +14,8 @@ import java.util.Set;
 public class HandlerMetaModel
   implements IsMetaModel {
 
-  private static final String KEY_EVENT_HANDLERS = "handlers";
-  private static final String KEY_EVENT_HANDLER  = ".handlerClassName";
+  private static final String KEY_HANDLERS       = "handlers";
+  private static final String KEY_HANDLER        = ".handlerClassName";
   private static final String KEY_HANDLED_EVENTS = ".handledEvents";
 
   private Map<String, HandlerData> handlerDatas = new HashMap<>();
@@ -25,12 +25,15 @@ public class HandlerMetaModel
   }
 
   public HandlerMetaModel(Properties properties) {
-    Set<String> t = properties.stringPropertyNames();
-    t.stream()
-     .forEach(System.out::println);
-
-//    .getProperty(HandlerMetaModel.KEY_EVENT_HANDLER),
-//       props.getProperty(HandlerMetaModel.KEY_HANDLED_EVENTS)
+    Arrays.stream(properties.getProperty(HandlerMetaModel.KEY_HANDLERS)
+                            .split("\\s*,\\s*"))
+          .forEach(s -> {
+            String handlerClassName = properties.getProperty(s + HandlerMetaModel.KEY_HANDLER);
+            this.handlerDatas.put(handlerClassName,
+                                  new HandlerData(handlerClassName,
+                                                  properties.getProperty(HandlerMetaModel.KEY_HANDLED_EVENTS)
+                                                            .split("\\s*,\\s*")));
+          });
   }
 
   public void add(String handler,
@@ -51,20 +54,20 @@ public class HandlerMetaModel
     return this.handlerDatas.keySet();
   }
 
-  public HandlerData getEventHandlerData(String key) {
+  public HandlerData getHandlerData(String key) {
     return this.handlerDatas.get(key);
   }
 
   public Properties createPropertes() {
     Properties props = new Properties();
-    props.setProperty(HandlerMetaModel.KEY_EVENT_HANDLERS,
+    props.setProperty(HandlerMetaModel.KEY_HANDLERS,
                       String.join(",",
                                   this.handlerDatas.keySet()));
     this.handlerDatas.values()
                      .stream()
                      .forEach(data -> {
                        props.setProperty(data.getHandler()
-                                             .getClassName() + HandlerMetaModel.KEY_EVENT_HANDLER,
+                                             .getClassName() + HandlerMetaModel.KEY_HANDLER,
                                          data.getHandler()
                                              .getClassName());
                        props.setProperty(data.getHandler()
@@ -74,10 +77,6 @@ public class HandlerMetaModel
                      });
     return props;
   }
-
-//  public boolean isHandler(String handlerClassName) {
-//    return this.handlerDatas.get(handlerClassName) != null;
-//  }
 
   public class HandlerData {
 
@@ -94,7 +93,7 @@ public class HandlerMetaModel
                        String... eventHandlers) {
       this.handler = new ClassNameModel(handler);
       Arrays.stream(eventHandlers)
-            .map(event -> handledEvents.add(event));
+            .forEach(eventHandler -> handledEvents.add(eventHandler));
     }
 
     public ClassNameModel getHandler() {

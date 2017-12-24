@@ -48,7 +48,7 @@ public class HandlerGenerator {
     for (String eventHandler : metaModel.getHandlerKeys()) {
       // check if element is existing (to avoid generating code for deleted items)
       if (this.processorUtils.doesExist(new ClassNameModel(eventHandler))) {
-        HandlerMetaModel.HandlerData data = metaModel.getEventHandlerData(eventHandler);
+        HandlerMetaModel.HandlerData data = metaModel.getHandlerData(eventHandler);
         String className = this.processorUtils.createFullClassName(data.getHandler()
                                                                        .getPackage(),
                                                                    data.getHandler()

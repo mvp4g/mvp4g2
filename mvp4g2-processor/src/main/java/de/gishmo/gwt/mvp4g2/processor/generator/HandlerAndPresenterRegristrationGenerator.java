@@ -79,32 +79,37 @@ public class HandlerAndPresenterRegristrationGenerator {
   }
 
 
-
-
   private List<ClassNameModel> createListOfEventHandlersToCreate() {
     // List of already created EventHandler used to avoid a second create ...
     List<ClassNameModel> listOfHandlersToCreate = new ArrayList<>();
     // add the ShellPresenter to the list!
-    if (eventBusMetaModel.getShell() != null) {
+    if (this.eventBusMetaModel.getShell() != null) {
       listOfHandlersToCreate.add(eventBusMetaModel.getShell());
     }
-    eventBusMetaModel.getEventMetaModels()
-                     .stream()
-                     .forEach(eventMetaModel -> {
-                       eventMetaModel.getBindings()
-                                     .stream()
-                                     .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
-                                     .forEach(listOfHandlersToCreate::add);
-                     });
-    eventBusMetaModel.getEventMetaModels()
-                     .stream()
-                     .forEach(eventMetaModel -> {
-                       eventMetaModel.getHandlers()
-                                     .stream()
-                                     .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
-                                     .forEach(listOfHandlersToCreate::add);
-                     });
-    // TODO evventHandler annotated with @EventHandler
+    this.eventBusMetaModel.getEventMetaModels()
+                          .stream()
+                          .forEach(eventMetaModel -> {
+                            eventMetaModel.getBindings()
+                                          .stream()
+                                          .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
+                                          .forEach(listOfHandlersToCreate::add);
+                          });
+    this.eventBusMetaModel.getEventMetaModels()
+                          .stream()
+                          .forEach(eventMetaModel -> {
+                            eventMetaModel.getHandlers()
+                                          .stream()
+                                          .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
+                                          .forEach(listOfHandlersToCreate::add);
+                          });
+    this.handlerMetaModel.getHandlerKeys()
+                         .stream()
+                         .filter(handlerClassName -> !listOfHandlersToCreate.contains(new ClassNameModel(handlerClassName)))
+                         .forEach(handlerClassName -> listOfHandlersToCreate.add(new ClassNameModel(handlerClassName)));
+    this.presenterMetaModel.getPresenterKeys()
+                           .stream()
+                           .filter(handlerClassName -> !listOfHandlersToCreate.contains(new ClassNameModel(handlerClassName)))
+                           .forEach(handlerClassName -> listOfHandlersToCreate.add(new ClassNameModel(handlerClassName)));
     return listOfHandlersToCreate;
   }
 
@@ -139,7 +144,7 @@ public class HandlerAndPresenterRegristrationGenerator {
       methodToGenerate.endControlFlow();
     } else {
       methodToGenerate.addStatement("super.putHandlerMetaData($S, $N)",
-                                    handlerClassName,
+                                    handlerClassName.getClassName(),
                                     metaDataVariableName);
       // set eventbus statement
       methodToGenerate.addStatement("$N.getHandler().setEventBus(this)",

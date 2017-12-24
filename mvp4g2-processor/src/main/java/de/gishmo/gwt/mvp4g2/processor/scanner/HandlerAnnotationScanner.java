@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class HandlerAnnotationScanner {
 
-  private final static String EVENT_HANDLER_PROPERTIES = "eventHandler.properties";
+  private final static String HANDLER_PROPERTIES = "handler.properties";
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
@@ -80,7 +80,7 @@ public class HandlerAnnotationScanner {
   }
 
   private String createRelativeFileName() {
-    return ProcessorConstants.META_INF + "/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + HandlerAnnotationScanner.EVENT_HANDLER_PROPERTIES;
+    return ProcessorConstants.META_INF + "/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + HandlerAnnotationScanner.HANDLER_PROPERTIES;
   }
 
   public static class Builder {

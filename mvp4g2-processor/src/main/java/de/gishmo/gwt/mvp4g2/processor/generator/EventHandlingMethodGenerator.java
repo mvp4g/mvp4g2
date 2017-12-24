@@ -329,23 +329,39 @@ public class EventHandlingMethodGenerator {
                   .stream()
                   .filter(s -> !listOfEventHandlers.contains(s.getClassName()))
                   .forEach(s -> listOfEventHandlers.add(s.getClassName()));
-    // TODO add presenters & handlers that hanldes this event!
-//    this.handlerMetaModel.getHandlerKeys()                                   so aber nicht!!!!!
-//                         .stream()
-//                         .filter(s -> !listOfEventHandlers.contains(s))
-//                         .forEach(listOfEventHandlers::add);
-//    this.presenterMetaModel.getPresenterKeys()
-//                           .stream()
-//                           .filter(s -> !listOfEventHandlers.contains(s))
-//                           .forEach(listOfEventHandlers::add);
+    this.handlerMetaModel.getHandlerKeys()
+                         .stream()
+                         .filter(s -> !listOfEventHandlers.contains(s))
+                         .map(s -> this.handlerMetaModel.getHandlerData(s))
+                         .forEach(handlerData -> {
+                           handlerData.getHandledEvents()
+                                      .stream()
+                                      .filter(handledEvent -> eventMetaModel.getEventInternalName()
+                                                                            .equals(handledEvent))
+                                      .map(handledEvent -> handlerData.getHandler()
+                                                                      .getClassName())
+                                      .forEach(listOfEventHandlers::add);
+                         });
+    this.presenterMetaModel.getPresenterKeys()
+                           .stream()
+                           .filter(s -> !listOfEventHandlers.contains(s))
+                           .map(handlerKey -> this.presenterMetaModel.getPresenterData(handlerKey))
+                           .forEach(presenterData -> {
+                             presenterData.getHandledEvents()
+                                          .stream()
+                                          .filter(handledEvent -> eventMetaModel.getEventInternalName()
+                                                                                .equals(handledEvent))
+                                          .map(handledEvent -> presenterData.getPresenter()
+                                                                            .getClassName())
+                                          .forEach(listOfEventHandlers::add);
+                           });
     return listOfEventHandlers;
   }
+
 
   private void createEventHandlingMethod(MethodSpec.Builder method,
                                          EventMetaModel eventMetaModel,
                                          String eventHandlerClass) {
-    boolean isEventhandler = this.handlerMetaModel.getHandlerKeys()
-                                                 .contains(eventHandlerClass);
     boolean isPresenter = this.presenterMetaModel.getPresenterKeys()
                                                  .contains(eventHandlerClass);
     String handlerMetaDataMapName = isPresenter ? "presenterMetaDataMap" : "handlerMetaDataMap";
@@ -466,16 +482,7 @@ public class EventHandlingMethodGenerator {
                                      eventMetaModel,
                                      false);
     execMethod.addCode(");\n");
-//
-//    ParameterizedTypeName execEventHanderTypeName = ParameterizedTypeName.get(ClassName.get(AbstractEventBus.ExecHandler.class),
-//                                                                              ClassName.get(this.processorUtils.getPackageAsString(this.eventBusTypeElement),
-//                                                                                            this.eventBusTypeElement.getSimpleName()
-//                                                                                                                    .toString()));
-//    ParameterizedTypeName presenterTypeName = ParameterizedTypeName.get(ClassName.get(AbstractEventBus.ExecPresenter.class),
-//                                                                        ClassName.get(this.processorUtils.getPackageAsString(this.eventBusTypeElement),
-//                                                                                      this.eventBusTypeElement.getSimpleName()
-//                                                                                                              .toString()));
-//
+
     method.addStatement("super.$L(eventMetaData, $L, $L, $L, $L)",
                         methodName,
                         variableName,
@@ -488,8 +495,9 @@ public class EventHandlingMethodGenerator {
                                 .addMethod(execMethod.build())
                                 .build(),
                         !(eventMetaModel.getHistoryConverter() == null || Event.NoHistoryConverter.class.getCanonicalName()
-                                                                                                      .equals(eventMetaModel.getHistoryConverter()
-                                                                                                                            .getClassName())));
+                                                                                                        .equals(eventMetaModel.getHistoryConverter()
+                                                                                                                              .getClassName())
+                        ));
   }
 
   private void createSignatureForEventCall(MethodSpec.Builder method,

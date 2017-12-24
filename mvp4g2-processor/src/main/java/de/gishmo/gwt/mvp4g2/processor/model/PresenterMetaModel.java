@@ -28,12 +28,19 @@ public class PresenterMetaModel
   }
 
   public PresenterMetaModel(Properties properties) {
-    Set<String> t = properties.stringPropertyNames();
-    t.stream()
-     .forEach(System.out::println);
-// TODO implement reading from Property-File!
-//    .getProperty(HandlerMetaModel.KEY_EVENT_HANDLER),
-//       props.getProperty(HandlerMetaModel.KEY_HANDLED_EVENTS)
+    Arrays.stream(properties.getProperty(PresenterMetaModel.KEY_PRESENTERS)
+                            .split("\\s*,\\s*"))
+          .forEach(s -> {
+            String handlerClassName = properties.getProperty(s + PresenterMetaModel.KEY_PRESENTER);
+            this.presenterDatas.put(handlerClassName,
+                                    new PresenterData(handlerClassName,
+                                                      properties.getProperty(s + PresenterMetaModel.KEY_IS_MULTIPLE),
+                                                      properties.getProperty(s + PresenterMetaModel.KEY_VIEW_CLASS),
+                                                      properties.getProperty(s + PresenterMetaModel.KEY_VIEW_INTERFACE),
+                                                      properties.getProperty(s + PresenterMetaModel.KEY_VIEW_CREATION_METHOD),
+                                                      properties.getProperty(PresenterMetaModel.KEY_HANDLED_EVENTS)
+                                                                .split("\\s*,\\s*")));
+          });
   }
 
   public void add(String presenter,
@@ -77,7 +84,8 @@ public class PresenterMetaModel
   public Properties createPropertes() {
     Properties props = new Properties();
     props.setProperty(PresenterMetaModel.KEY_PRESENTERS,
-                      String.join(",", this.presenterDatas.keySet()));
+                      String.join(",",
+                                  this.presenterDatas.keySet()));
     this.presenterDatas.values()
                        .stream()
                        .forEach(data -> {
@@ -101,7 +109,8 @@ public class PresenterMetaModel
                                            data.getViewCreationMethod());
                          props.setProperty(data.getPresenter()
                                                .getClassName() + PresenterMetaModel.KEY_HANDLED_EVENTS,
-                                           String.join(",", data.handledEvents));
+                                           String.join(",",
+                                                       data.handledEvents));
                        });
     return props;
   }
@@ -117,7 +126,7 @@ public class PresenterMetaModel
     private ClassNameModel viewClass;
     private ClassNameModel viewInterface;
     private String         viewCreationMethod;
-    private List<String>   handledEvents = new ArrayList<>();
+    private List<String> handledEvents = new ArrayList<>();
 
     public PresenterData(String presenter,
                          String isMultiple,
@@ -145,7 +154,7 @@ public class PresenterMetaModel
       this.viewInterface = new ClassNameModel(viewInterface);
       this.viewCreationMethod = viewCreationMethod;
       Arrays.stream(eventHandlers)
-            .map(event -> handledEvents.add(event));
+            .forEach(eventHandler -> handledEvents.add(eventHandler));
     }
 
     public ClassNameModel getPresenter() {

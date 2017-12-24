@@ -134,7 +134,7 @@ public class ProcessorUtils {
    */
   public Set<TypeMirror> getFlattenedSupertypeHierarchy(Types types,
                                                         TypeMirror typeMirror) {
-    List<TypeMirror>          toAdd  = new ArrayList<>();
+    List<TypeMirror> toAdd = new ArrayList<>();
     LinkedHashSet<TypeMirror> result = new LinkedHashSet<>();
     toAdd.add(typeMirror);
     for (int i = 0; i < toAdd.size(); i++) {
@@ -154,7 +154,7 @@ public class ProcessorUtils {
 
   public void createErrorMessage(String errorMessage) {
     StringWriter sw = new StringWriter();
-    PrintWriter  pw = new PrintWriter(sw);
+    PrintWriter pw = new PrintWriter(sw);
     pw.println(errorMessage);
     pw.close();
     messager.printMessage(Diagnostic.Kind.ERROR,
@@ -168,15 +168,39 @@ public class ProcessorUtils {
                                "_") + "_" + className;
   }
 
-  public String createFullClassName(String className) {
-    return className.replace(".",
-                             "_");
+  public void createNoteMessage(String errorMessage) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    pw.println(errorMessage);
+    pw.close();
+    messager.printMessage(Diagnostic.Kind.NOTE,
+                          sw.toString());
+
   }
 
-  public String setFirstCharacterToUpperCase(String className) {
-    return className.substring(0,
-                               1)
-                    .toUpperCase() + className.substring(1);
+  public String createHandledEventArray(TypeElement typeElement) {
+    List<String> eventHandlingMethods = new ArrayList<>();
+    List<Element> annotatedMethods = this.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
+                                                                                typeElement,
+                                                                                EventHandler.class);
+    annotatedMethods.stream()
+                    .map(element -> (ExecutableElement) element)
+                    .map(this::createInternalEventName)
+                    .forEach(internalEventName -> {
+                      internalEventName = internalEventName.substring(2);
+                      internalEventName = internalEventName.substring(0,
+                                                                      1)
+                                                           .toLowerCase() + internalEventName.substring(1);
+                      eventHandlingMethods.add(internalEventName);
+                    });
+    String returnValue = "";
+    for (int i = 0; i < eventHandlingMethods.size(); i++) {
+      returnValue += eventHandlingMethods.get(i);
+      if (i < eventHandlingMethods.size() - 1) {
+        returnValue += ",";
+      }
+    }
+    return returnValue;
   }
 
   //  public <T> boolean isSuperClass(Types typeUtils,
@@ -236,36 +260,6 @@ public class ProcessorUtils {
   //    return StandardLocation.CLASS_OUTPUT + "/" + "META-INF/" + ProcessorConstants.MVP4G2_FOLDER_NAME + "/" + ProcessorConstants.EVENT_BUS_FOLDER_NAME + "/EventBus";
   //  }
 
-  public void createNoteMessage(String errorMessage) {
-    StringWriter sw = new StringWriter();
-    PrintWriter  pw = new PrintWriter(sw);
-    pw.println(errorMessage);
-    pw.close();
-    messager.printMessage(Diagnostic.Kind.NOTE,
-                          sw.toString());
-
-  }
-
-  public String createHandledEventArray(TypeElement typeElement) {
-    List<String> eventHandlingMethods = new ArrayList<>();
-    List<Element> annotatedMethods = this.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
-                                                                                typeElement,
-                                                                                EventHandler.class);
-    annotatedMethods.stream()
-                    .map(element -> (ExecutableElement) element)
-                    .forEach(element -> {
-                      eventHandlingMethods.add(this.createInternalEventName(element));
-                    });
-    String returnValue = "";
-    for (int i = eventHandlingMethods.size() - 1; i >= 0; i--) {
-      returnValue += eventHandlingMethods.get(i);
-      if (i < eventHandlingMethods.size() - 1) {
-        returnValue += ",";
-      }
-    }
-    return returnValue;
-  }
-
   public <A extends Annotation> List<Element> getMethodFromTypeElementAnnotatedWith(ProcessingEnvironment processingEnvironment,
                                                                                     TypeElement element,
                                                                                     Class<A> annotation) {
@@ -299,8 +293,19 @@ public class ProcessorUtils {
     return this.setFirstCharacterToUpperCase(this.createHistoryMetaDataVariableName(historyConverterClassName)) + "_" + ProcessorConstants.META_DATA;
   }
 
+  public String setFirstCharacterToUpperCase(String className) {
+    return className.substring(0,
+                               1)
+                    .toUpperCase() + className.substring(1);
+  }
+
   public String createHistoryMetaDataVariableName(String historyConverterClassName) {
     return this.createFullClassName(historyConverterClassName);
+  }
+
+  public String createFullClassName(String className) {
+    return className.replace(".",
+                             "_");
   }
 
   public static class Builder {
