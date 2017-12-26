@@ -19,16 +19,18 @@ package de.gishmo.gwt.mvp4g2;
 import de.gishmo.gwt.mvp4g2.processor.application.ApplicationTest;
 import de.gishmo.gwt.mvp4g2.processor.event.StartEventTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.DebugTest;
-import de.gishmo.gwt.mvp4g2.processor.eventbus.EventTest;
+import de.gishmo.gwt.mvp4g2.processor.event.EventTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.EventbusTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.FilterTest;
 import de.gishmo.gwt.mvp4g2.processor.eventhandler.HandlerTest;
 import de.gishmo.gwt.mvp4g2.processor.eventhandler.PresenterTest;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModelTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ApplicationTest.class,
+                     ClassNameModelTest.class,
                      DebugTest.class,
                      EventTest.class,
                      EventbusTest.class,

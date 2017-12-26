@@ -19,15 +19,17 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventAnnotationValidator {
 
@@ -79,77 +81,47 @@ public class EventAnnotationValidator {
   public void validate(Element element)
     throws ProcessorException {
     ExecutableElement executableElement = (ExecutableElement) element;
-
-
-
-
-
-
-
-
-
-
-    // check if all historyNames are unique!
-    List<String> historyNames = new ArrayList<>();
-    // TODO test
-    for (EventMetaModel eventMetaModel : this.eventBusMetaModel.getEventMetaModels()) {
-      if (!Event.DEFAULT_HISTORY_NAME.equals(eventMetaModel.getHistoryEventName())) {
-        for (String savedHistoryEventName : historyNames) {
-          if (savedHistoryEventName.equals(eventMetaModel.getHistoryEventName())) {
-            throw new ProcessorException("EventElement: >>" + eventMetaModel.getHistoryConverter()
-                                                                            .getClassName() + "<< using a already used historyName -> >>" + eventMetaModel.getHistoryEventName() + "<<");
-          }
-        }
-        historyNames.add(eventMetaModel.getHistoryEventName());
+    // a passive event can not have bindings ...
+    if (executableElement.getAnnotation(Event.class)
+                         .passive()) {
+      List<String> bindHandlerClasses = this.getElementsFromAnnotationAsList(executableElement,
+                                                                             "bind");
+      if (bindHandlerClasses.size() > 0) {
+        throw new ProcessorException("Event: >>" + executableElement.getSimpleName() + "<< a passive event can not have a bind-attribute");
       }
     }
-
-    //    // get elements annotated with Debug annotation
-    //    Set<? extends Element> elementsWithDebugAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Debug.class);
-    //    // at least there should only one Application annotation!
-    //    if (elementsWithDebugAnnotation.size() > 1) {
-    //      throw new ProcessorException("There should be at least only one interface, that is annotated with @Debug");
-    //    }
-    //    for (Element element : elementsWithDebugAnnotation) {
-    //      if (element instanceof TypeElement) {
-    //        TypeElement typeElement = (TypeElement) element;
-    //        // @Debug can only be used on a interface
-    //        if (!typeElement.getKind()
-    //                        .isInterface()) {
-    //          throw new ProcessorException("@Debug can only be used with an interface");
-    //        }
-    //        // @Debug can only be used on a interface that extends IsEventBus
-    //        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-    //                                                         typeElement.asType(),
-    //                                                         this.processingEnvironment.getElementUtils()
-    //                                                                                   .getTypeElement(IsEventBus.class.getCanonicalName())
-    //                                                                                   .asType())) {
-    //          throw new ProcessorException("@Debug can only be used on interfaces that extends IsEventBus");
-    //        }
-    //        // the loggerinside the annotation must extends IsMvp4g2Logger!
-    //        TypeElement loggerElement = this.getLogger(typeElement.getAnnotation(Debug.class));
-    //        if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-    //                                                         loggerElement.asType(),
-    //                                                         this.processingEnvironment.getElementUtils()
-    //                                                                                   .getTypeElement(IsMvp4g2Logger.class.getCanonicalName())
-    //                                                                                   .asType())) {
-    //          throw new ProcessorException("@Debug - the logger attribute needs class that extends IsMvp4g2Logger");
-    //        }
-    //      } else {
-    //        throw new ProcessorException("@Debug can only be used on a type (interface)");
-    //      }
-    //    }
   }
 
-  //  private TypeElement getLogger(Debug debugAnnotation) {
-  //    try {
-  //      debugAnnotation.logger();
-  //    } catch (MirroredTypeException exception) {
-  //      return (TypeElement) this.processingEnvironment.getTypeUtils()
-  //                                                     .asElement(exception.getTypeMirror());
-  //    }
-  //    return null;
-  //  }
+  private List<String> getElementsFromAnnotationAsList(ExecutableElement executableElement,
+                                                       String attribute) {
+    Element eventAnnotation = this.processingEnvironment.getElementUtils()
+                                                        .getTypeElement(Event.class.getName());
+    TypeMirror eventAnnotationAsTypeMirror = eventAnnotation.asType();
+    return executableElement.getAnnotationMirrors()
+                            .stream()
+                            .filter(annotationMirror -> annotationMirror.getAnnotationType()
+                                                                        .equals(eventAnnotationAsTypeMirror))
+                            .flatMap(annotationMirror -> annotationMirror.getElementValues()
+                                                                         .entrySet()
+                                                                         .stream())
+                            .filter(entry -> attribute.equals(entry.getKey()
+                                                                   .getSimpleName()
+                                                                   .toString()))
+                            .findFirst()
+                            .map(entry -> Arrays.stream(entry.getValue()
+                                                             .toString()
+                                                             .replace("{",
+                                                                      "")
+                                                             .replace("}",
+                                                                      "")
+                                                             .replace(" ",
+                                                                      "")
+                                                             .split(","))
+                                                .map((v) -> v.substring(0,
+                                                                        v.indexOf(".class")))
+                                                .collect(Collectors.toList()))
+                            .orElse(null);
+  }
 
   public static final class Builder {
 

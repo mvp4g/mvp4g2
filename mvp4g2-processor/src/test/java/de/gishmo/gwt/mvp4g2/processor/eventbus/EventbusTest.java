@@ -78,15 +78,6 @@ public class EventbusTest {
           .withErrorContaining("@Start-annotation can only be used on zero argument methods");
   }
 
-//  @Test
-//  public void testStartEventTestWithZeroArgumentMethod() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithZeroArgumentMethod.java"))
-//          .processedWith(new Mvp4g2Processor())
-//          .compilesWithoutError();
-//  }
-
-
   /**
    * <p>Test:
    * <br>
