@@ -67,7 +67,7 @@ For example, to handle the ```goToEdit(CompanyBean company)``` event, use this c
        }
 ```
 Starting with this version there is another way to add a handler / presenter method as a event handler to the event bus. In this case you do not have to use the ```handler```-attibute of the event annotation.
-In this case you event bus looks like this:
+Using the new @EventHandler annotation (The EventHandler annotation of mvp4g version 1 now is represented with @Handler) the event bus looks like this:
 ```
 @Events(startPresenter = CompanyListPresenter.class, module = CompanyModule.class) 
 public interface CompanyEventBus extends EventBus {          
