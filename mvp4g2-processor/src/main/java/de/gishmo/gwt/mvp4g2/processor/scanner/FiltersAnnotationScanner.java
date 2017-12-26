@@ -1,20 +1,19 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.FilterAnnotationValidator;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.FilterAnnotationValidator;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -50,6 +49,7 @@ public class FiltersAnnotationScanner {
     FilterAnnotationValidator.builder()
                              .roundEnvironment(roundEnvironment)
                              .processingEnvironment(processingEnvironment)
+                             .eventBusTypeElement(this.eventBusTypeElement)
                              .build()
                              .validate();
     // handle filters-annotation

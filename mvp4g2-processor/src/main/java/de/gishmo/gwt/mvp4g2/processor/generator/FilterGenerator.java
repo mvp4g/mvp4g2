@@ -15,6 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
@@ -52,7 +53,8 @@ public class FilterGenerator {
       eventBusMetaModel.getFilters()
                        .stream()
                        .forEach(filterClassName -> loadFilterConfigurationMethod.addStatement("super.eventFilters.add(new $T())",
-                                                                                              filterClassName));
+                                                                                              ClassName.get(filterClassName.getPackage(),
+                                                                                                            filterClassName.getSimpleName())));
     } else {
       loadFilterConfigurationMethod.addStatement("super.setFiltersEnable(false)");
     }

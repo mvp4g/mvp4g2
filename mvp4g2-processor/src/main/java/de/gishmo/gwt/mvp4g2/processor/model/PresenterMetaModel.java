@@ -38,7 +38,7 @@ public class PresenterMetaModel
                                                       properties.getProperty(s + PresenterMetaModel.KEY_VIEW_CLASS),
                                                       properties.getProperty(s + PresenterMetaModel.KEY_VIEW_INTERFACE),
                                                       properties.getProperty(s + PresenterMetaModel.KEY_VIEW_CREATION_METHOD),
-                                                      properties.getProperty(PresenterMetaModel.KEY_HANDLED_EVENTS)
+                                                      properties.getProperty(s + PresenterMetaModel.KEY_HANDLED_EVENTS)
                                                                 .split("\\s*,\\s*")));
           });
   }

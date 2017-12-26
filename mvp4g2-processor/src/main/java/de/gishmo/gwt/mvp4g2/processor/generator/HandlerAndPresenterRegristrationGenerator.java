@@ -30,6 +30,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>The execution context manages all commands.<br>
@@ -75,6 +76,41 @@ public class HandlerAndPresenterRegristrationGenerator {
     List<ClassNameModel> listOfEventHandlersToCreate = this.createListOfEventHandlersToCreate();
     listOfEventHandlersToCreate.forEach(handlerClassName -> this.addHandlerToMetaList(loadEventHandlerMethod,
                                                                                       handlerClassName));
+    // search for events (@EventHandler) and add the handler to the handler list of the EventMetaData-class
+    loadEventHandlerMethod.addComment("");
+    loadEventHandlerMethod.addComment("===> add the handler to the handler list of the EventMetaData-class");
+    this.handlerMetaModel.getHandlerKeys()
+                         .stream()
+                         .filter(s -> !listOfEventHandlersToCreate.contains(s))
+                         .map(s -> this.handlerMetaModel.getHandlerData(s))
+                         .forEach(handlerData -> {
+                           handlerData.getHandledEvents()
+                                      .stream()
+                                      .map(handledEvent -> this.eventBusMetaModel.getEventMetaModel(handledEvent))
+                                      .filter(Objects::nonNull)
+                                      .filter(eventMetaModel -> !eventMetaModel.getHandlers()
+                                                                               .contains(handlerData.getHandler()))
+                                      .forEach(eventMetaModel -> loadEventHandlerMethod.addStatement("super.getEventMetaData($S).addHandler($S)",
+                                                                                                     eventMetaModel.getEventInternalName(),
+                                                                                                     handlerData.getHandler()
+                                                                                                                .getClassName()));
+                         });
+    this.presenterMetaModel.getPresenterKeys()
+                           .stream()
+                           .filter(s -> !listOfEventHandlersToCreate.contains(s))
+                           .map(s -> this.presenterMetaModel.getPresenterData(s))
+                           .forEach(presenterData -> {
+                             presenterData.getHandledEvents()
+                                          .stream()
+                                          .map(handledEvent -> this.eventBusMetaModel.getEventMetaModel(handledEvent))
+                                          .filter(Objects::nonNull)
+                                          .filter(eventMetaModel -> !eventMetaModel.getHandlers()
+                                                                                   .contains(presenterData.getPresenter()))
+                                          .forEach(eventMetaModel -> loadEventHandlerMethod.addStatement("super.getEventMetaData($S).addHandler($S)",
+                                                                                                         eventMetaModel.getEventInternalName(),
+                                                                                                         presenterData.getPresenter()
+                                                                                                                      .getClassName()));
+                           });
     typeSpec.addMethod(loadEventHandlerMethod.build());
   }
 
@@ -135,13 +171,16 @@ public class HandlerAndPresenterRegristrationGenerator {
                                   ClassName.get(handlerClassName.getPackage(),
                                                 metaDataClassName));
     if (isPresenter) {
-      // check, that multiple is false! (We can do this not here during code generation, because we don't know it ...)
-      methodToGenerate.beginControlFlow("if (!$N.isMultiple())",
-                                        metaDataVariableName);
-      this.generatePresenterBinding(methodToGenerate,
-                                    handlerClassName.getClassName(),
-                                    metaDataVariableName);
-      methodToGenerate.endControlFlow();
+      if (!this.presenterMetaModel.getPresenterData(handlerClassName.getClassName())
+                                  .isMultiple()) {
+//                                   // check, that multiple is false! (We can do this not here during code generation, because we don't know it ...)
+//                                   methodToGenerate.beginControlFlow("if (!$N.isMultiple())",
+//                                                                     metaDataVariableName);
+        this.generatePresenterBinding(methodToGenerate,
+                                      handlerClassName.getClassName(),
+                                      metaDataVariableName);
+      }
+//      methodToGenerate.endControlFlow();
     } else {
       methodToGenerate.addStatement("super.putHandlerMetaData($S, $N)",
                                     handlerClassName.getClassName(),

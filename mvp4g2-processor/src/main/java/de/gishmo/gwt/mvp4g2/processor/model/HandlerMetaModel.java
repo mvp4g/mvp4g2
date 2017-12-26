@@ -31,7 +31,7 @@ public class HandlerMetaModel
             String handlerClassName = properties.getProperty(s + HandlerMetaModel.KEY_HANDLER);
             this.handlerDatas.put(handlerClassName,
                                   new HandlerData(handlerClassName,
-                                                  properties.getProperty(HandlerMetaModel.KEY_HANDLED_EVENTS)
+                                                  properties.getProperty(s + HandlerMetaModel.KEY_HANDLED_EVENTS)
                                                             .split("\\s*,\\s*")));
           });
   }

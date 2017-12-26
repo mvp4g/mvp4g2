@@ -90,8 +90,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
     this.loadDebugConfiguration();
     this.loadFilterConfiguration();
-    this.loadEventHandlerMetaData();
     this.loadEventMetaData();
+    this.loadEventHandlerMetaData();
   }
 
   protected abstract void loadDebugConfiguration();
@@ -152,14 +152,17 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   }
 
   protected final void createAndBindView(EventMetaData<E> eventMetaData) {
+    // create and bind view for the binding entries ...
     for (String eventHandlerClassName : eventMetaData.getBindHandlerTypes()) {
       this.doCreateAndBindView(eventMetaData.getEventName(),
                                eventHandlerClassName);
     }
+    // create and bind view for the handler entries ...
     for (String eventHandlerClassName : eventMetaData.getHandlerTypes()) {
       this.doCreateAndBindView(eventMetaData.getEventName(),
                                eventHandlerClassName);
     }
+    // TODO: Hier fehlt was ... by @EventHandler wird kein createAndBindView ausgeführt, da er keine Handler findet ...
   }
 
   private void doCreateAndBindView(String eventName,

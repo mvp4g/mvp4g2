@@ -93,6 +93,10 @@ public class EventBusMetaModel
     return this.eventMetaModels.values();
   }
 
+  public EventMetaModel getEventMetaModel(String eventInternalName) {
+    return this.eventMetaModels.get(eventInternalName);
+  }
+
   public ClassNameModel getEventBus() {
     return eventBus;
   }
