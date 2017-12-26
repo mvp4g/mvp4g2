@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.eventbus.eventBusAnnotationOnAClass;
+package de.gishmo.gwt.mvp4g2.processor.eventbus.eventBusAnnotationOnAClass;
 
 import de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView;
 

@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.event.filterAnnotationOnAMethod;
+package de.gishmo.gwt.mvp4g2.processor.event.filterAnnotationOnAMethod;
 
 import de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView;
 

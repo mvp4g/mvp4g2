@@ -57,6 +57,15 @@ public class EventAnnotationScanner {
 
   public EventBusMetaModel scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
+    EventAnnotationValidator eventAnnotationValidator = EventAnnotationValidator.builder()
+                                                                                .roundEnvironment(roundEnvironment)
+                                                                                .processingEnvironment(processingEnvironment)
+                                                                                .eventBusMetaModel(this.eventBusMetaModel)
+                                                                                .eventBusTypeElement(eventBusTypeElement)
+                                                                                .build();
+    // validate event bus
+    eventAnnotationValidator.validate();
+    // handle events
     for (Element element : roundEnvironment.getElementsAnnotatedWith(Event.class)) {
       // do validation
       EventAnnotationValidator.builder()
@@ -64,9 +73,8 @@ public class EventAnnotationScanner {
                               .processingEnvironment(processingEnvironment)
                               .eventBusMetaModel(this.eventBusMetaModel)
                               .eventBusTypeElement(eventBusTypeElement)
-                              .eventElement(element)
                               .build()
-                              .validate();
+                              .validate(element);
       ExecutableElement executableElement = (ExecutableElement) element;
       System.out.println(this.processorUtils.createInternalEventName(executableElement));
       // restore meta data (if there is one)

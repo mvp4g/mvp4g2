@@ -20,8 +20,6 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
-import javax.tools.JavaFileObject;
-
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
@@ -57,13 +55,11 @@ public class HandlerTest {
 
   @Test
   public void testEventHandlerOK() {
-    JavaFileObject eventHandlerOKExpectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/De_gishmo_gwt_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java");
-
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/EventHandlerOK.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(eventHandlerOKExpectedSource);
+          .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/De_gishmo_gwt_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java"));
   }
 }

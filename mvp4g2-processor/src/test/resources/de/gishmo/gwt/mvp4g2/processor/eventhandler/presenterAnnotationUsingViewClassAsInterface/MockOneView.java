@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewClassAsInterface;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewClassAsInterface;
 
 import de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView;
 

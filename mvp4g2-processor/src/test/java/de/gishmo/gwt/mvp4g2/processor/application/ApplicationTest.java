@@ -20,8 +20,6 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
-import javax.tools.JavaFileObject;
-
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.truth0.Truth.ASSERT;
 
@@ -65,49 +63,41 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithLoader() {
-    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoaderImpl.java");
-
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoader.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(expectedSource);
+          .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoaderImpl.java"));
   }
 
   @Test
   public void testApplicationAnnotationOkWithoutLoader() {
-    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoaderImpl.java");
-
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoader.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(expectedSource);
+          .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoaderImpl.java"));
   }
 
   @Test
   public void testApplicationAnnotationOkWithoutLoaderAsInnerInterface() {
-    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/MyApplicationImpl.java");
-
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/ApplicationAnnotationOkWithoutLoaderAsInnerInterface.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(expectedSource);
+          .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/MyApplicationImpl.java"));
   }
 
   @Test
   public void testApplicationAnnotationOkWithLoaderAsInnerInterface() {
-    JavaFileObject expectedSource = JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterfaceImpl.java");
-
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterface.java"))
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
-          .generatesSources(expectedSource);
+          .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterfaceImpl.java"));
   }
 }

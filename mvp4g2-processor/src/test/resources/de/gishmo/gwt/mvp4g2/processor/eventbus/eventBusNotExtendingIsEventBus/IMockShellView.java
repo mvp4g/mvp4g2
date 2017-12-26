@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.eventbus.eventBusNotExtendingIsEventBus;
+package de.gishmo.gwt.mvp4g2.processor.eventbus.eventBusNotExtendingIsEventBus;
 
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 

@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationNotExtendingAbstractPresenter;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationNotExtendingAbstractPresenter;
 
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 

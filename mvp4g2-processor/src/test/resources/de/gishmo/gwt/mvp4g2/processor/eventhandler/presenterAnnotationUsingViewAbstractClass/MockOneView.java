@@ -1,6 +1,5 @@
-package  de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewAbstractClass;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewAbstractClass;
 
-import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView;
 
 public abstract class MockOneView

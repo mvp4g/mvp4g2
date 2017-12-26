@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
+package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
 
 import de.gishmo.gwt.mvp4g2.client.internal.ui.AbstractHandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
@@ -11,5 +11,7 @@ public final class De_gishmo_gwt_mvp4g2_processor_event_eventTestHandlerNotInBin
           AbstractHandlerMetaData.Kind.PRESENTER,
           false,
           Presenter.VIEW_CREATION_METHOD.FRAMEWORK);
+    super.presenter = new MockShellPresenter();
+    super.view = (IMockShellView) new MockShellView();
   }
 }

@@ -17,9 +17,9 @@
 
 package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOnAMethod;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
-import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
 
 
 public class MockEventBusImpl
@@ -27,7 +27,8 @@ public class MockEventBusImpl
   implements MockEventBus {
 
   public MockEventBusImpl() {
-    super("de.gishmo.gwt.example.mvp4g2.simpleapplication.client.ui.shell.ShellPresenter", true);
+    super("de.gishmo.gwt.example.mvp4g2.simpleapplication.client.ui.shell.ShellPresenter",
+          true);
   }
 
   public void oneEvent() {

@@ -24,6 +24,7 @@ import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ public class EventAnnotationValidator {
   private RoundEnvironment      roundEnvironment;
   private EventBusMetaModel     eventBusMetaModel;
   private TypeElement           eventBusTypeElement;
-  private Element               eventElement;
 
   @SuppressWarnings("unused")
   private EventAnnotationValidator() {
@@ -46,7 +46,6 @@ public class EventAnnotationValidator {
     this.roundEnvironment = builder.roundEnvironment;
     this.eventBusMetaModel = builder.eventBusMetaModel;
     this.eventBusTypeElement = builder.eventBusTypeElement;
-    this.eventElement = builder.eventElement;
     setUp();
   }
 
@@ -62,7 +61,34 @@ public class EventAnnotationValidator {
 
   public void validate()
     throws ProcessorException {
-    // TODO test
+    // check if all historyNames are unique!
+    List<String> historyNames = new ArrayList<>();
+    for (Element element : this.roundEnvironment.getElementsAnnotatedWith(Event.class)) {
+      Event eventAnnotation = element.getAnnotation(Event.class);
+      if (!Event.DEFAULT_HISTORY_NAME.equals(eventAnnotation.historyName())) {
+        if (historyNames.contains(eventAnnotation.historyName())) {
+          throw new ProcessorException("EventElement: >>" + element.getSimpleName()
+                                                                   .toString() + "<< using a already used historyName -> >>" + eventAnnotation.historyName() + "<<");
+        } else {
+          historyNames.add(eventAnnotation.historyName());
+        }
+      }
+    }
+  }
+
+  public void validate(Element element)
+    throws ProcessorException {
+    ExecutableElement executableElement = (ExecutableElement) element;
+
+
+
+
+
+
+
+
+
+
     // check if all historyNames are unique!
     List<String> historyNames = new ArrayList<>();
     // TODO test
@@ -130,7 +156,6 @@ public class EventAnnotationValidator {
     ProcessingEnvironment processingEnvironment;
     RoundEnvironment      roundEnvironment;
     TypeElement           eventBusTypeElement;
-    Element               eventElement;
     EventBusMetaModel     eventBusMetaModel;
 
     public Builder processingEnvironment(ProcessingEnvironment processingEnvironment) {
@@ -150,11 +175,6 @@ public class EventAnnotationValidator {
 
     public Builder eventBusTypeElement(TypeElement eventBusTypeElement) {
       this.eventBusTypeElement = eventBusTypeElement;
-      return this;
-    }
-
-    public Builder eventElement(Element eventElement) {
-      this.eventElement = eventElement;
       return this;
     }
 

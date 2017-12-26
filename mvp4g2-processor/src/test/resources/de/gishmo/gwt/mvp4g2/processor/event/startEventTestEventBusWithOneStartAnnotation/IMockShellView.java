@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation;
+package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation;
 
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 

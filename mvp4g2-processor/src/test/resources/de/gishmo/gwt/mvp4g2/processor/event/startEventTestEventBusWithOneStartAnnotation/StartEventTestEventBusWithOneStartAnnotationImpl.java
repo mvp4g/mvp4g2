@@ -1,4 +1,3 @@
-
 package de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
@@ -8,6 +7,8 @@ import de.gishmo.gwt.mvp4g2.client.internal.ui.HandlerMetaData;
 import de.gishmo.gwt.mvp4g2.client.internal.ui.PresenterMetaData;
 import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
 import java.lang.Override;
+import java.lang.String;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class StartEventTestEventBusWithOneStartAnnotationImpl extends AbstractEventBus<StartEventTestEventBusWithOneStartAnnotation> implements StartEventTestEventBusWithOneStartAnnotation {
@@ -36,42 +37,6 @@ public final class StartEventTestEventBusWithOneStartAnnotationImpl extends Abst
   }
 
   @Override
-  protected void loadEventHandlerMetaData() {
-    //
-    // ----------------------------------------------------------------------
-    //
-    // handle de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter (Presenter)
-    //
-    de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData = new de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData();
-    if (!de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.isMultiple()) {
-      super.putPresenterMetaData("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter", de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData);
-      de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter().setEventBus(this);
-      de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter().setView(de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getView());
-      de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getView().setPresenter(de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter());
-    }
-  }
-
-  @Override
-  public PresenterRegistration addHandler(IsPresenter<?, ?> presenter) {
-    final de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData = new de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData();
-    if (de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.isMultiple()) {
-      super.putPresenterMetaData("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter", de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData);
-      de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter().setEventBus(this);
-      de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter().setView(de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getView());
-      de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getView().setPresenter(de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter());
-      return new PresenterRegistration() {
-        @Override
-        public void remove() {
-          removePresenterHandlerMetaData("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter", de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData);
-        }
-      };
-    } else {
-      assert false : "de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter: is not annotated with @Presenter(...,multiple = true)";
-    }
-    return null;
-  }
-
-  @Override
   public final void start() {
     int startLogDepth = AbstractEventBus.logDepth;
     try {
@@ -93,26 +58,14 @@ public final class StartEventTestEventBusWithOneStartAnnotationImpl extends Abst
     super.bind(eventMetaData);
     super.activate(eventMetaData);
     super.deactivate(eventMetaData);
-    List<HandlerMetaData<?>> eventHandlers = null;
+    List<HandlerMetaData<?>> handlers = null;
     List<PresenterMetaData<?, ?>> presenters = null;
+    List<String> listOfExecutedHandlers = new ArrayList<>();
     // handling: de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter
-    eventHandlers = this.handlerMetaDataMap.get("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter");
-    super.executeHandler(eventMetaData, eventHandlers, null, new ExecHandler() {
-      @Override
-      public boolean execPass(EventMetaData<?> eventMetaData, HandlerMetaData<?> metaData) {
-        return metaData.getHandler().pass(eventMetaData.getEventName());
-      }
-
-      @Override
-      public void execEventHandlingMethod(HandlerMetaData<?> metaData) {
-        ((MockShellPresenter) metaData.getHandler()).onStart();
-      }
-    }, false);
     presenters = this.presenterMetaDataMap.get("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter");
     super.executePresenter(eventMetaData, presenters, null, new AbstractEventBus.ExecPresenter() {
       @Override
-      public boolean execPass(EventMetaData<?> eventMetaData,
-                              PresenterMetaData<?, ?> metaData) {
+      public boolean execPass(EventMetaData<?> eventMetaData, PresenterMetaData<?, ?> metaData) {
         return metaData.getPresenter().pass(eventMetaData.getEventName());
       }
 
@@ -136,5 +89,25 @@ public final class StartEventTestEventBusWithOneStartAnnotationImpl extends Abst
   @Override
   public final void fireNotFoundHistoryEvent() {
     assert false : "no @NotFoundHistory-event defined";
+  }
+
+  @Override
+  public PresenterRegistration addHandler(IsPresenter<?, ?> presenter) {
+    return null;
+  }
+
+  @Override
+  protected void loadEventHandlerMetaData() {
+    //
+    // ===>
+    // handle de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter (Presenter)
+    //
+    De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData = new De_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData();
+    super.putPresenterMetaData("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter", de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData);
+    de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter().setEventBus(this);
+    de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter().setView(de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getView());
+    de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getView().setPresenter(de_gishmo_gwt_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.getPresenter());
+    //
+    // ===> add the handler to the handler list of the EventMetaData-class
   }
 }

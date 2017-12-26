@@ -1,4 +1,4 @@
-package  de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
+package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
 
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 

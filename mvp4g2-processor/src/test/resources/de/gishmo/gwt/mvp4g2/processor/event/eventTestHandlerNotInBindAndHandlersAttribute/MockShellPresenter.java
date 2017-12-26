@@ -21,11 +21,11 @@ import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 
-@Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER)
+@Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.FRAMEWORK)
 public class MockShellPresenter
   extends AbstractPresenter<EventTestHandlerNotInBindAndHandlersAttribute, IMockShellView>
   implements IMockShellView.Presenter,
-             IsShell {
+             IsShell<EventTestHandlerNotInBindAndHandlersAttribute, IMockShellView> {
 
   public void bind() {
   }
