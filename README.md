@@ -47,21 +47,53 @@ This is all you need to create an event bus with four events:
 @Events(startPresenter = CompanyListPresenter.class, module = CompanyModule.class) 
 public interface CompanyEventBus extends EventBus {          
         @Event( handlers = CompanyEditPresenter.class )        
-        public void goToEdit( CompanyBean company );          
+        public void goToEdit(CompanyBean company);          
         
         @Event( handlers = CompanyDisplayPresenter.class )         
-        public void goToDisplay( CompanyBean company );          
+        public void goToDisplay(CompanyBean company);          
         
         @Event( handlers = { CompanyListPresenter.class, CompanyDisplayPresenter.class } )         
-        public void companyCreated( CompanyBean newBean );          
+        public void companyCreated(CompanyBean newBean);          
         
         @Event( handlers = CompanyListPresenter.class )         
-        public void companyDeleted( CompanyBean newBean ); 
+        public void companyDeleted(CompanyBean newBean); 
 }
+```
+To handle a event, just create a method in your presenter.
+For example, to handle the ```goToEdit(CompanyBean company)``` event, use this code inside the handler / presenter:
+```
+       public void onGoToEdit(CompanyBean company) {
+           .... 
+       }
+```
+Starting with this version there is another way to add a handler / presenter method as a event handler to the event bus. In this case you do not have to use the ```handler````attibute of the event annotation.
+In this case you event bus looks like this:
+```
+@Events(startPresenter = CompanyListPresenter.class, module = CompanyModule.class) 
+public interface CompanyEventBus extends EventBus {          
+        @Event        
+        public void goToEdit(CompanyBean company);          
+        
+        @Event         
+        public void goToDisplay(CompanyBean company);          
+        
+        @Event         
+        public void companyCreated(CompanyBean newBean);          
+        
+        @Event        
+        public void companyDeleted(CompanyBean newBean); 
+}
+```
+To handle the ```goToEdit(CompanyBean company)``` event, just annotate the event handling method in the handler / presenter with @EventHandler:
+```
+       @EventHandler
+       public void onGoToEdit(CompanyBean company) {
+           .... 
+       }
 ```
 Eventbus:
 - create an event bus using a few annotations and one centralized interface where you can easily manage your events
-- control your event flow thanks to event filtering, event logs, passive event (**not yet implemented, but planned**)
+- control your event flow thanks to event filtering, event logs, passive event
 - have the same control of user's navigation as the GWT Activities/Place architecture thanks to Navigation Event
 
 MVP:
