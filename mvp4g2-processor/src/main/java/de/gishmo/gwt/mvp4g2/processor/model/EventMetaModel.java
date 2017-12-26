@@ -110,7 +110,6 @@ public class EventMetaModel
                                            .collect(Collectors.toCollection(ArrayList::new));
       }
     }
-    System.out.println("test");
   }
 
   public void addParameter(String name,

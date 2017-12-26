@@ -126,7 +126,7 @@ public class EventBusGenerator {
                                                               .getPackage(),
                                          typeSpec.build())
                                 .build();
-    System.out.println(javaFile.toString());
+//    System.out.println(javaFile.toString());
     try {
       javaFile.writeTo(this.processingEnvironment.getFiler());
     } catch (IOException e) {

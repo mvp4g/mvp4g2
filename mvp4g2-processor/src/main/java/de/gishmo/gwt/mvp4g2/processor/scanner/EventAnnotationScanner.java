@@ -76,7 +76,6 @@ public class EventAnnotationScanner {
                               .build()
                               .validate(element);
       ExecutableElement executableElement = (ExecutableElement) element;
-      System.out.println(this.processorUtils.createInternalEventName(executableElement));
       // restore meta data (if there is one)
       // First we try to read an already created resource ...
       EventMetaModel model = this.restore(element);
