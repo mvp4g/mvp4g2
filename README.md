@@ -5,7 +5,7 @@ With the next version of GWT (GWT 3) and the new J2CL transpiller, there will be
 
 To prepare MVP4G for GWT 3, the GWT generator has to be replaced by an annotation processor and most of the dependencies of MVP4G have to be removed. MVP4G2 will work with GWT 2 + 3. 
 
-MVP4G 2 will be the second edition of MVP4G and will have major changes.
+Mvp4g2 will be the second edition of MVP4G and will have major changes.
 
 In opposite to the first version of MVP4G, MVP4G2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 and APT.
 
@@ -97,12 +97,12 @@ MVP:
 History Management/Place Service:
 - convert any event to history token thanks to simple history converters
 
-Not only does Mvp4g help you follow the best practices, it also provides mechanisms to build fast applications:
+Not only does Mvp4g2 help you follow the best practices, it also provides mechanisms to build fast applications:
 - support for lazy loading: build your presenters/views only when you need them. Useless presenters/views are also automatically removed.
 
 To understand how the framework works, you can look at the documentation, the [tutorials](https://github.com/mvp4g/mvp4g2/wiki/1.-Tutorials-and-Examples) or the [examples](https://github.com/mvp4g/mvp4g2-examples).
 
-Mvp4g has been successfully used on several commercial projects im the past, [take a look at a few of them](https://github.com/mvp4g/mvp4g/wiki/1.-Tutorials-and-Examples). You can also read and post feedback on the official [GWT marketplace](http://www.gwtmarketplace.com/#mvp4g) or [Mvp4g forum](https://groups.google.com/forum/#!forum/mvp4g).
+Mvp4g2 has been successfully used on several commercial projects im the past, [take a look at a few of them](https://github.com/mvp4g/mvp4g/wiki/1.-Tutorials-and-Examples). You can also read and post feedback on the official [GWT marketplace](http://www.gwtmarketplace.com/#mvp4g) or [Mvp4g forum](https://groups.google.com/forum/#!forum/mvp4g).
 
 To communicate with the developers of MVP4G2 directly feel free to use the [MVP4G Gitter room](https://gitter.im/mvp4g/mvp4g).
 
