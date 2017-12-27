@@ -85,7 +85,7 @@ public interface CompanyEventBus extends EventBus {
         public void companyDeleted(CompanyBean newBean); 
 }
 ```
-To handle the ```goToEdit(CompanyBean company)``` event, just annotate the event handling method in the handler / presenter with @EventHandler:
+To handle the ```goToEdit(CompanyBean company)``` event, just annotate the event handling method in the handler / presenter with @EventHandler, add a 'on' to the event name, change the first letter to uppercase and use the same signuture:
 ```
        @EventHandler
        public void onGoToEdit(CompanyBean company) {
