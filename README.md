@@ -74,15 +74,6 @@ Using the new @EventHandler annotation (The EventHandler annotation of mvp4g ver
 public interface CompanyEventBus extends EventBus {          
         @Event        
         public void goToEdit(CompanyBean company);          
-        
-        @Event         
-        public void goToDisplay(CompanyBean company);          
-        
-        @Event         
-        public void companyCreated(CompanyBean newBean);          
-        
-        @Event        
-        public void companyDeleted(CompanyBean newBean); 
 }
 ```
 To handle the ```goToEdit(CompanyBean company)``` event, just annotate the event handling method in the handler / presenter with @EventHandler, add a 'on' to the event name, change the first letter to uppercase and use the same signature:
