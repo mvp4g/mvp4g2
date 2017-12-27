@@ -28,6 +28,7 @@
   <!-- sources -->
   <source path="core"/>
 
+
   <!-- logging property -->
   <define-configuration-property name="mvp4g2.logging" is-multi-valued="false"/>
 
