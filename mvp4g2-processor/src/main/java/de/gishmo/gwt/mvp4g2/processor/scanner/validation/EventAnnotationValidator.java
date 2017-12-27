@@ -15,7 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;

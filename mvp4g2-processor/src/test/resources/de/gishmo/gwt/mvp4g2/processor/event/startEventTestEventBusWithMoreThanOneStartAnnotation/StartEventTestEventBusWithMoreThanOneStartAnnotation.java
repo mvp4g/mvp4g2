@@ -16,9 +16,9 @@
 
 package de.gishmo.gwt.mvp4g2.processor.input.event.startEventTestEventBusWithMoreThanOneStartAnnotation;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Start;
 
 @EventBus(shell = MockShellPresenter.class)
 public interface StartEventTestEventBusWithMoreThanOneStartAnnotation

@@ -1,9 +1,9 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Start;
-import de.gishmo.gwt.mvp4g2.client.history.annotation.InitHistory;
-import de.gishmo.gwt.mvp4g2.client.history.annotation.NotFoundHistory;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;

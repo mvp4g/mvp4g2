@@ -15,8 +15,8 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.client.application.IsApplication;
-import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.core.application.IsApplication;
+import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 

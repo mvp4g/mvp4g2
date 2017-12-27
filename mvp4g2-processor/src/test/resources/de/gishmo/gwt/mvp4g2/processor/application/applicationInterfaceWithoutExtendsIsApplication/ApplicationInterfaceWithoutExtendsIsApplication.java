@@ -16,7 +16,7 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.applicationInterfaceWithoutExtendsIsApplication;
 
-import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
 
 @Application(eventBus = MockEventBus.class)
 public interface ApplicationInterfaceWithoutExtendsIsApplication {

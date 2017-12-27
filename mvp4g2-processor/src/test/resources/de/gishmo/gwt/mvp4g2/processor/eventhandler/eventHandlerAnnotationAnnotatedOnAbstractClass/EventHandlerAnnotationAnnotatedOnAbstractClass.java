@@ -16,8 +16,8 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlerAnnotationAnnotatedOnAbstractClass;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractHandler;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
+import de.gishmo.gwt.mvp4g2.core.ui.AbstractHandler;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
 
 @Handler
 public abstract class EventHandlerAnnotationAnnotatedOnAbstractClass

@@ -16,8 +16,8 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.applicationAnnotationWithoutEventBusAttribute;
 
-import de.gishmo.gwt.mvp4g2.client.application.IsApplication;
-import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.core.application.IsApplication;
+import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
 
 @Application()
 public interface ApplicationAnnotationWithoutEventBusAttribute

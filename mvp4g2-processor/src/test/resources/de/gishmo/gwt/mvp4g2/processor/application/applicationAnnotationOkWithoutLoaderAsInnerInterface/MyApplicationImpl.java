@@ -1,8 +1,8 @@
 package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithoutLoaderAsInnerInterface;
 
-import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
-import de.gishmo.gwt.mvp4g2.client.internal.application.AbstractApplication;
-import de.gishmo.gwt.mvp4g2.client.internal.application.NoApplicationLoader;
+import de.gishmo.gwt.mvp4g2.core.application.IsApplicationLoader;
+import de.gishmo.gwt.mvp4g2.core.internal.application.AbstractApplication;
+import de.gishmo.gwt.mvp4g2.core.internal.application.NoApplicationLoader;
 import de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithoutLoaderAsInnerInterface.ApplicationAnnotationOkWithoutLoaderAsInnerInterface.MyApplication;
 import java.lang.Override;
 

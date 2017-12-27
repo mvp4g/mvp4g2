@@ -17,8 +17,8 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewAbstractClass;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 
 public interface MockEventBus
   extends IsEventBus {

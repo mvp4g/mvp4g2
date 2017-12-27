@@ -1,8 +1,8 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;

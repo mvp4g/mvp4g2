@@ -17,9 +17,9 @@
 
 package de.gishmo.gwt.mvp4g2.processor.mock;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
-import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
+import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 
 @Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER)
 public class MockShellPresenter

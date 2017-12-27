@@ -16,7 +16,7 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationAnnotatedOnAInterface;
 
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 
 @Presenter(viewClass = MockOneView.class, viewInterface = IMockOneView.class)
 public interface PresenterAnnotationAnnotatedOnAInterface {

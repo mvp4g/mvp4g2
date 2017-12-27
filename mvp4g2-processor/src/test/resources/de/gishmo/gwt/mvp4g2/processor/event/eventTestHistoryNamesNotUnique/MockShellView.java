@@ -1,6 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor.event.eventTestHistoryNamesNotUnique;
 
-import de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView;
+import de.gishmo.gwt.mvp4g2.core.ui.LazyReverseView;
 
 public class MockShellView
   extends LazyReverseView<IMockShellView.Presenter>

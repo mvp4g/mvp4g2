@@ -1,6 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 

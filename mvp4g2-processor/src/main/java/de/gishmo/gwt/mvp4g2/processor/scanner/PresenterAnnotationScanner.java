@@ -1,6 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;

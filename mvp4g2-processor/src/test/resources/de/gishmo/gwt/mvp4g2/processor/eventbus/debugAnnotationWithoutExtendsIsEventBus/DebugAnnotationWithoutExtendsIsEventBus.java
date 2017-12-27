@@ -16,7 +16,7 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventbus.debugAnnotationWithoutExtendsIsEventBus;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
 
 @Debug()
 public interface DebugAnnotationWithoutExtendsIsEventBus {

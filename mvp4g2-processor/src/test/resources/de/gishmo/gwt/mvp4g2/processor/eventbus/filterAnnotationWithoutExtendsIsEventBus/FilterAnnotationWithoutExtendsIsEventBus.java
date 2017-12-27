@@ -16,8 +16,8 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventbus.filterAnnotationWithoutExtendsIsEventBus;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
 
 @Filters(filterClasses = MockFilter.class)
 public interface FilterAnnotationWithoutExtendsIsEventBus

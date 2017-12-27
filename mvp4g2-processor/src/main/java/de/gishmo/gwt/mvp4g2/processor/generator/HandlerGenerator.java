@@ -5,7 +5,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.internal.ui.HandlerMetaData;
+import de.gishmo.gwt.mvp4g2.core.internal.ui.HandlerMetaData;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;

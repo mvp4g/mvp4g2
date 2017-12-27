@@ -8,8 +8,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;

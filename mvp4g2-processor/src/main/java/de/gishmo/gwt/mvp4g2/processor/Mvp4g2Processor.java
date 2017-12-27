@@ -2,13 +2,13 @@ package de.gishmo.gwt.mvp4g2.processor;
 
 
 import com.google.auto.service.AutoService;
-import de.gishmo.gwt.mvp4g2.client.application.annotation.Application;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Handler;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.generator.ApplicationGenerator;
 import de.gishmo.gwt.mvp4g2.processor.generator.EventBusGenerator;
 import de.gishmo.gwt.mvp4g2.processor.generator.HandlerGenerator;

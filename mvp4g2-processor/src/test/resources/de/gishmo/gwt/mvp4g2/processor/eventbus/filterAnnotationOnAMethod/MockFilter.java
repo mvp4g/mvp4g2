@@ -1,6 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor.eventbus.filterAnnotationOnAMethod;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventFilter;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
 
 public class MockFilter
   implements IsEventFilter<FilterAnnotationOnAMethod> {

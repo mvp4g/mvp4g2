@@ -25,9 +25,12 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name="elemental2.dom.Dom"/>
 
-  <!-- logging property -->
-  <define-configuration-property name="mvp4g2.logging" is-multi-valued="false" />
+  <!-- sources -->
+  <source path="core"/>
 
-  <set-configuration-property name="mvp4g2.logging" value="false" />
+  <!-- logging property -->
+  <define-configuration-property name="mvp4g2.logging" is-multi-valued="false"/>
+
+  <set-configuration-property name="mvp4g2.logging" value="false"/>
 
 </module>

@@ -17,7 +17,7 @@ package de.gishmo.gwt.mvp4g2.processor.generator;
 
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 

@@ -1,7 +1,7 @@
 package de.gishmo.gwt.mvp4g2.processor.model.intern;
 
 import com.squareup.javapoet.ClassName;
-import de.gishmo.gwt.mvp4g2.client.application.IsApplication;
+import de.gishmo.gwt.mvp4g2.core.application.IsApplication;
 import org.junit.Before;
 import org.junit.Test;
 

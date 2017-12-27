@@ -17,9 +17,9 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterOK;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
 
 @EventBus(shell = MockShellPresenter.class)
 public interface MockEventBus

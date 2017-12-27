@@ -72,7 +72,7 @@ public class PresenterTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterAnnotationUsingViewInterfaceAsClass/PresenterAnnotationUsingViewInterfaceAsClass.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("incompatible types: java.lang.Class<de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewInterfaceAsClass.MockOneView> cannot be converted to java.lang.Class<? extends de.gishmo.gwt.mvp4g2.client.ui.LazyReverseView<?>>");
+          .withErrorContaining("incompatible types: java.lang.Class<de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterAnnotationUsingViewInterfaceAsClass.MockOneView> cannot be converted to java.lang.Class<? extends de.gishmo.gwt.mvp4g2.core.ui.LazyReverseView<?>>");
   }
 
   @Test

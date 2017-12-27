@@ -17,7 +17,7 @@
 
 package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithLoader;
 
-import de.gishmo.gwt.mvp4g2.client.application.IsApplicationLoader;
+import de.gishmo.gwt.mvp4g2.core.application.IsApplicationLoader;
 
 public class MockApplicationLoader
   implements IsApplicationLoader {

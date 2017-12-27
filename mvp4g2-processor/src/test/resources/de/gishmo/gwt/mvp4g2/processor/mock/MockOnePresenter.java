@@ -17,8 +17,8 @@
 
 package de.gishmo.gwt.mvp4g2.processor.mock;
 
-import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
-import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 
 @Presenter(viewClass = MockOneView.class, viewInterface = IMockOneView.class)
 public class MockOnePresenter

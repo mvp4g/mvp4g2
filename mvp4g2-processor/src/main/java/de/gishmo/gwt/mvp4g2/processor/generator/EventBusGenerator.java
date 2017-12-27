@@ -5,7 +5,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
-import de.gishmo.gwt.mvp4g2.client.internal.eventbus.AbstractEventBus;
+import de.gishmo.gwt.mvp4g2.core.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;

@@ -20,8 +20,8 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
-import de.gishmo.gwt.mvp4g2.client.eventbus.PresenterRegistration;
-import de.gishmo.gwt.mvp4g2.client.ui.IsPresenter;
+import de.gishmo.gwt.mvp4g2.core.eventbus.PresenterRegistration;
+import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
 
 import javax.lang.model.element.Modifier;
 

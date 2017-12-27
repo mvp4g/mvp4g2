@@ -1,6 +1,6 @@
-package de.gishmo.gwt.mvp4g2.client.ui;
+package de.gishmo.gwt.mvp4g2.core.ui;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventFilter;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
 
 public class MockFilter
   extends IsEventFilter<MockEventBus> {
