@@ -20,7 +20,11 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+import java.util.ArrayList;
+
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 import static org.truth0.Truth.ASSERT;
 
 public class PresenterTest {
@@ -82,8 +86,15 @@ public class PresenterTest {
 
   @Test
   public void testPresenterOK() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/PresenterOK.java"))
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/PresenterOK.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/MockEventBus.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/MockShellPresenter.java"));
+              }
+            })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()

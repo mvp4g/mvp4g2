@@ -1,6 +1,8 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -105,6 +107,31 @@ public class EventBusAnnotationScanner {
                                     this.createRelativeFileName());
         }
       }
+    } else {
+      // @Debug annotation with no @EventBus annotation ... bad idea!
+      Optional<? extends Element> optionalDebugElement = this.roundEnvironment.getElementsAnnotatedWith(Debug.class)
+                                                                              .stream()
+                                                                              .findFirst();
+      if (optionalDebugElement.isPresent()) {
+        EventBus eventBusAnnotation = optionalDebugElement.get()
+                                                          .getAnnotation(EventBus.class);
+        if (eventBusAnnotation == null) {
+          throw new ProcessorException(((TypeElement) optionalDebugElement.get()).getQualifiedName()
+                                                                                 .toString() + " -> @Debug can only be used with an interfacea annotated with @EventBus");
+        }
+      }
+      // @Filters annotation with no @EventBus annotation ... bad idea!
+      Optional<? extends Element> optionalFiltersElement = this.roundEnvironment.getElementsAnnotatedWith(Filters.class)
+                                                                                .stream()
+                                                                                .findFirst();
+      if (optionalFiltersElement.isPresent()) {
+        EventBus eventBusAnnotation = optionalFiltersElement.get()
+                                                            .getAnnotation(EventBus.class);
+        if (eventBusAnnotation == null) {
+          throw new ProcessorException(((TypeElement) optionalFiltersElement.get()).getQualifiedName()
+                                                                                   .toString() + " -> @Filters can only be used with an interfacea annotated with @EventBus");
+        }
+      }
     }
     return model;
   }
@@ -117,7 +144,7 @@ public class EventBusAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      EventBusMetaModel    model       = new EventBusMetaModel(props);
+      EventBusMetaModel model = new EventBusMetaModel(props);
       List<EventMetaModel> eventModels = new ArrayList<>();
       for (String eventInternalName : model.getEvents()) {
         FileObject resourceEvent = this.processingEnvironment.getFiler()

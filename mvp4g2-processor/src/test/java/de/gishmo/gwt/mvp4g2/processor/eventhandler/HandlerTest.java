@@ -20,7 +20,11 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+import java.util.ArrayList;
+
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 import static org.truth0.Truth.ASSERT;
 
 public class HandlerTest {
@@ -55,8 +59,16 @@ public class HandlerTest {
 
   @Test
   public void testEventHandlerOK() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/EventHandlerOK.java"))
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/EventHandlerOK.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/MockEventBus.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/MockShellPresenter.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/MockOneEventHandler.java"));
+              }
+            })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()

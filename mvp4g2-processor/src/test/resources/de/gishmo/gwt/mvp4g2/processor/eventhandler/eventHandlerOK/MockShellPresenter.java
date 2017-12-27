@@ -15,17 +15,23 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterOK;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlerOK;
 
-import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.client.ui.AbstractPresenter;
+import de.gishmo.gwt.mvp4g2.client.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 
-@EventBus(shell = MockShellPresenter.class)
-public interface MockEventBus
-  extends IsEventBus {
+@Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.FRAMEWORK)
+public class MockShellPresenter
+  extends AbstractPresenter<MockEventBus, IMockShellView>
+  implements IMockShellView.Presenter,
+             IsShell<MockEventBus, IMockShellView> {
 
-  @Event(handlers = PresenterOK.class)
-  public void oneEvent();
+  @Override
+  public void setShell() {
+  }
+
+  public void onStart() {
+  }
 
 }

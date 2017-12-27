@@ -21,7 +21,8 @@ import de.gishmo.gwt.mvp4g2.client.ui.annotation.Presenter;
 
 @Presenter(viewClass = MockOneView.class, viewInterface = IMockOneView.class)
 public class PresenterOK
-  extends AbstractPresenter<MockEventBus, IMockOneView> {
+  extends AbstractPresenter<MockEventBus, IMockOneView>
+  implements IMockOneView.Presenter {
 
   public void onOneEvent() {
   }

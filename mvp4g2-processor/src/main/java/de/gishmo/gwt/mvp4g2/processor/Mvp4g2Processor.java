@@ -24,6 +24,7 @@ import de.gishmo.gwt.mvp4g2.processor.scanner.EventBusAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.HandlerAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.HistoryAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.PresenterAnnotationScanner;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.ModelValidator;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -85,6 +86,7 @@ public class Mvp4g2Processor
         this.generate();
       } else {
         this.scan(roundEnv);
+        this.validateModels();
       }
       return false;
     } catch (ProcessorException e) {
@@ -163,5 +165,15 @@ public class Mvp4g2Processor
     this.historyMetaModel = this.historyAnnotationScanner.scan(roundEnvironment);
     this.eventBusMetaModel = this.eventBusAnnotationScanner.scan(roundEnvironment,
                                                                  this.presenterMetaModel);
+  }
+
+  private void validateModels()
+    throws ProcessorException {
+    ModelValidator.builder()
+                  .eventBusMetaModel(this.eventBusMetaModel)
+                  .handlerMetaModel(this.handlerMetaModel)
+                  .presenterMetaModel(this.presenterMetaModel)
+                  .build()
+                  .validate();
   }
 }

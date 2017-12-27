@@ -19,7 +19,9 @@ package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlerOK;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 
+@EventBus(shell = MockShellPresenter.class)
 public interface MockEventBus
   extends IsEventBus {
 

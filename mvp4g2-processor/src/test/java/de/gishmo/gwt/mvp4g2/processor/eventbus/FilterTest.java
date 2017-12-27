@@ -39,6 +39,7 @@ public class FilterTest {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/filterAnnotationWithoutExtendsIsEventBus/FilterAnnotationWithoutExtendsIsEventBus.java"))
           .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError();
+          .failsToCompile()
+          .withErrorContaining("@Filters can only be used with an interfacea annotated with @EventBus");
   }
 }

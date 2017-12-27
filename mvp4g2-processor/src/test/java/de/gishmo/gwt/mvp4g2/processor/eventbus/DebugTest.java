@@ -48,6 +48,7 @@ public class DebugTest {
     ASSERT.about(javaSource())
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/debugAnnotationWithoutExtendsIsEventBus/DebugAnnotationWithoutExtendsIsEventBus.java"))
           .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError();
+          .failsToCompile()
+          .withErrorContaining("@Debug can only be used with an interfacea annotated with @EventBus");
   }
 }

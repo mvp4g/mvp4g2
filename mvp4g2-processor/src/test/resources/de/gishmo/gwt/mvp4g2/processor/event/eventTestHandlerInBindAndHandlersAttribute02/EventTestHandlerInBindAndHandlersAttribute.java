@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerInBindAndHandlersAttribute;
+package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerInBindAndHandlersAttribute02;
 
 import de.gishmo.gwt.mvp4g2.client.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.Event;
@@ -24,8 +24,7 @@ import de.gishmo.gwt.mvp4g2.client.eventbus.annotation.EventBus;
 public interface EventTestHandlerInBindAndHandlersAttribute
   extends IsEventBus {
 
-  @Event(bind = MockShellPresenter.class,
-    handlers = MockShellPresenter.class)
+  @Event(bind = MockShellPresenter.class)
   public void event();
 
 }

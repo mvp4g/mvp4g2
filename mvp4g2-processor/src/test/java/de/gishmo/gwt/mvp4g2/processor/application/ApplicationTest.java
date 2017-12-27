@@ -20,7 +20,11 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+import java.util.ArrayList;
+
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 import static org.truth0.Truth.ASSERT;
 
 public class ApplicationTest {
@@ -63,8 +67,17 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithLoader() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoader.java"))
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/ApplicationAnnotationOkWithLoader.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/MockApplicationLoader.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/MockEventBus.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/MockOneEventHandler.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoader/MockShellPresenter.java"));
+              }
+            })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
@@ -73,8 +86,15 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithoutLoader() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoader.java"))
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/ApplicationAnnotationOkWithoutLoader.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/MockEventBus.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/MockOneEventHandler.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoader/MockShellPresenter.java"));
+            }
+          })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
@@ -83,8 +103,15 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithoutLoaderAsInnerInterface() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/ApplicationAnnotationOkWithoutLoaderAsInnerInterface.java"))
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/ApplicationAnnotationOkWithoutLoaderAsInnerInterface.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/MockEventBus.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/MockOneEventHandler.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithoutLoaderAsInnerInterface/MockShellPresenter.java"));
+            }
+          })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()
@@ -93,8 +120,15 @@ public class ApplicationTest {
 
   @Test
   public void testApplicationAnnotationOkWithLoaderAsInnerInterface() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterface.java"))
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/ApplicationAnnotationOkWithLoaderAsInnerInterface.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/MockEventBus.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/MockOneEventHandler.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/application/applicationAnnotationOkWithLoaderAsInnerInterface/MockShellPresenter.java"));
+            }
+          })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError()
           .and()

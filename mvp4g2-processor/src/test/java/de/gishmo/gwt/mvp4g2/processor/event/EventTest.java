@@ -38,15 +38,26 @@ public class EventTest {
           .withErrorContaining("using a already used historyName");
   }
 
-// nach gelagert gegen die metadaten testen!
-//  @Test
-//  public void testEventTestHandlerInBindAndHandlersAttribute() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventTestHandlerInBindAndHandlersAttribute/EventTestHandlerInBindAndHandlersAttribute.java"))
-//          .processedWith(new Mvp4g2Processor())
-//          .failsToCompile()
-//          .withErrorContaining("can not be set in bind- and handlers-attribute");
-//  }
+  @Test
+  public void testEventTestHandlerInBindAndHandlersAttribute01() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventTestHandlerInBindAndHandlersAttribute01/EventTestHandlerInBindAndHandlersAttribute.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("can not be set in bind- and handlers-attribute");
+  }
+
+  @Test
+  public void testEventTestHandlerInBindAndHandlersAttribute02() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {{
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventTestHandlerInBindAndHandlersAttribute02/EventTestHandlerInBindAndHandlersAttribute.java"));
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventTestHandlerInBindAndHandlersAttribute02/MockShellPresenter.java"));
+          }})
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("can not be set in bind- and handlers-attribute");
+  }
 
   @Test
   public void testEventTestHandlerNotInBindAndHandlersAttribute() {

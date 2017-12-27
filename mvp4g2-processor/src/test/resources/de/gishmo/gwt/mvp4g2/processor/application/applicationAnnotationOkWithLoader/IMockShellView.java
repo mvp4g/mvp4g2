@@ -1,4 +1,4 @@
-package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerInBindAndHandlersAttribute;
+package de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithLoader;
 
 import de.gishmo.gwt.mvp4g2.client.ui.IsLazyReverseView;
 
