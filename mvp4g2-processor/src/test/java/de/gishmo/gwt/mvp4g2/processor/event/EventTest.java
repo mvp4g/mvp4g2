@@ -86,4 +86,54 @@ public class EventTest {
           .failsToCompile()
           .withErrorContaining("a passive event can not have a bind-attribute");
   }
+
+
+  @Test
+  public void testEventBusWithMoreThanOneInitHistoryAnnodation() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {{
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithMoreThanOneInitHistoryAnnodation/EventBusWithMoreThanOneInitHistoryAnnodation.java"));
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithMoreThanOneInitHistoryAnnodation/MockShellPresenter.java"));
+          }})
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@InitHistory can only be set a single time inside a event bus");
+  }
+
+  @Test
+  public void testEventBusWithMoreThanOnNotFoundHistoryAnnodation() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {{
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithMoreThanOnNotFoundHistoryAnnodation/EventBusWithMoreThanOnNotFoundHistoryAnnodation.java"));
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithMoreThanOnNotFoundHistoryAnnodation/MockShellPresenter.java"));
+          }})
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@NotFoundHistory can only be set a single time inside a event bus");
+  }
+
+  @Test
+  public void testEventBusWithOneInitHistoryAnnotationAndNonZeroArgmentsSignature() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {{
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithOneInitHistoryAnnotationAndNonZeroArgmentsSignature/EventBusWithOneInitHistoryAnnotationAndNonZeroArgmentsSignature.java"));
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithOneInitHistoryAnnotationAndNonZeroArgmentsSignature/MockShellPresenter.java"));
+          }})
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@InitHistory can only be used on a method with no arguments");
+  }
+
+  @Test
+  public void testEventBusWithOneNotFoundHistoryAnnotationAndNonZeroArgmentsSignature() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {{
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithOneNotFoundHistoryAnnotationAndNonZeroArgmentsSignature/EventBusWithOneNotFoundHistoryAnnotationAndNonZeroArgmentsSignature.java"));
+            add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventBusWithOneNotFoundHistoryAnnotationAndNonZeroArgmentsSignature/MockShellPresenter.java"));
+          }})
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@NotFoundHistory can only be used on a method with no arguments");
+  }
+
 }

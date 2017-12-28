@@ -16,6 +16,8 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
@@ -73,6 +75,34 @@ public class EventAnnotationValidator {
                                                                    .toString() + "<< using a already used historyName -> >>" + eventAnnotation.historyName() + "<<");
         } else {
           historyNames.add(eventAnnotation.historyName());
+        }
+      }
+    }
+    // check, if there are more than one InitHistory-annotation!
+    if (this.roundEnvironment.getElementsAnnotatedWith(InitHistory.class)
+                             .size() > 1) {
+      throw new ProcessorException("@InitHistory can only be set a single time inside a event bus");
+    } else if (this.roundEnvironment.getElementsAnnotatedWith(InitHistory.class)
+                                    .size() == 1) {
+      for (Element element : this.roundEnvironment.getElementsAnnotatedWith(InitHistory.class)) {
+        ExecutableElement executableElement = (ExecutableElement) element;
+        if (((ExecutableElement) element).getParameters()
+                                         .size() > 0) {
+          throw new ProcessorException("@InitHistory can only be used on a method with no arguments");
+        }
+      }
+    }
+    // check, if there are more than one NotFoundHistory-annotation!
+    if (this.roundEnvironment.getElementsAnnotatedWith(NotFoundHistory.class)
+                             .size() > 1) {
+      throw new ProcessorException("@NotFoundHistory can only be set a single time inside a event bus");
+    } else if (this.roundEnvironment.getElementsAnnotatedWith(NotFoundHistory.class)
+                                    .size() == 1) {
+      for (Element element : this.roundEnvironment.getElementsAnnotatedWith(NotFoundHistory.class)) {
+        ExecutableElement executableElement = (ExecutableElement) element;
+        if (((ExecutableElement) element).getParameters()
+                                         .size() > 0) {
+          throw new ProcessorException("@NotFoundHistory can only be used on a method with no arguments");
         }
       }
     }

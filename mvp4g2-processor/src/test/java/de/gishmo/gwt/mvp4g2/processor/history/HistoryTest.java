@@ -18,15 +18,7 @@ package de.gishmo.gwt.mvp4g2.processor.history;
 
 public class HistoryTest {
 
-//  @Test
-//  public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
-//          .processedWith(new EventBusProcessor())
-//          .failsToCompile()
-//          .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
-//  }
-//
+
 ////  @Test
 ////  public void testStartEventTestEventBusWithOneStartAnnotation() {
 ////    ASSERT.about(javaSource())

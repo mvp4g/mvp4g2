@@ -37,8 +37,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface History {
-//
-//  String name() default "";
 
   HistoryConverterType type() default HistoryConverterType.DEFAULT;
 
@@ -47,5 +45,4 @@ public @interface History {
     SIMPLE,
     NONE
   }
-
 }
