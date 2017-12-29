@@ -83,6 +83,8 @@ To handle the ```goToEdit(CompanyBean company)``` event, just annotate the event
            .... 
        }
 ```
+Mvp4g2 will call the onGotoEdit-method in case the event gets fired!
+
 Eventbus:
 - create an event bus using a few annotations and one centralized interface where you can easily manage your events
 - control your event flow thanks to event filtering, event logs, passive event
