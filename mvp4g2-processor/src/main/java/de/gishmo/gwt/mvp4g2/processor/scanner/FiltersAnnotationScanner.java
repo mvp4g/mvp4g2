@@ -58,7 +58,7 @@ public class FiltersAnnotationScanner {
       this.eventBusMetaModel.setHasFiltersAnnotation("false");
     } else {
       this.eventBusMetaModel.setHasFiltersAnnotation("true");
-      this.eventBusMetaModel.setFilters(this.getEventFiltersAsList((TypeElement) eventBusTypeElement));
+      this.eventBusMetaModel.setFilters(this.getEventFiltersAsList(eventBusTypeElement));
     }
     return this.eventBusMetaModel;
   }

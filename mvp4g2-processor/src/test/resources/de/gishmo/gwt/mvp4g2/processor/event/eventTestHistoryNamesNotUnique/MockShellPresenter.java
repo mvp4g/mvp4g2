@@ -25,7 +25,7 @@ import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 public class MockShellPresenter
   extends AbstractPresenter<EventTestHistoryNamesNotUnique, IMockShellView>
   implements IMockShellView.Presenter,
-             IsShell {
+             IsShell<EventTestHistoryNamesNotUnique, IMockShellView> {
 
   @Override
   public void setShell() {

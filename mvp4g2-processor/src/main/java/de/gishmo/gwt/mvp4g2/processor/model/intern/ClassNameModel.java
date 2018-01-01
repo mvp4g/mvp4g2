@@ -98,4 +98,10 @@ public class ClassNameModel {
     return Objects.equals(className,
                           that.className);
   }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(className);
+  }
 }

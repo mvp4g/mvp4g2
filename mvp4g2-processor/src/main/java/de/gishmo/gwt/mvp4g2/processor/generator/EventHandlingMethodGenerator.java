@@ -408,8 +408,12 @@ public class EventHandlingMethodGenerator {
         method.addCode("), false);\n");
         break;
       case DEFAULT:
-        method.addCode("super.placeService.place($S, super.placeService.getHistoryConverter($S).on$L(",
+        method.addCode("super.placeService.place($S, (($T) super.placeService.getHistoryConverter($S)).on$L(",
                        eventMetaModel.getEventName(),
+                       ClassName.get(eventMetaModel.getHistoryConverter()
+                                                   .getPackage(),
+                                     eventMetaModel.getHistoryConverter()
+                                                   .getSimpleName()),
                        eventMetaModel.getEventName(),
                        eventMetaModel.getEventName()
                                      .substring(0,

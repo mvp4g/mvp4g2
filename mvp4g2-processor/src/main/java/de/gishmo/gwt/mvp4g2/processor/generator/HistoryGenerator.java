@@ -51,7 +51,8 @@ public class HistoryGenerator {
       // constructor ...
       MethodSpec constructor = MethodSpec.constructorBuilder()
                                          .addModifiers(Modifier.PUBLIC)
-                                         .addStatement("super($T.$L)",
+                                         .addStatement("super($S, $T.$L)",
+                                                       historyConverterClassName,
                                                        ClassName.get(History.HistoryConverterType.class),
                                                        historyData.getHistoryConverterType())
                                          .build();

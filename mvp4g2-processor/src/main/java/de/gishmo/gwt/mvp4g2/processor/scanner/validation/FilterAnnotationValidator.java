@@ -84,7 +84,7 @@ public class FilterAnnotationValidator {
           throw new ProcessorException("@Filter can only be used on interfaces that extends IsEventBus");
         }
         // test, that all filters implement IsEventFilter!
-        List<String> eventFilterAsStringList = this.getEventFiltersAsList((TypeElement) eventBusTypeElement);
+        List<String> eventFilterAsStringList = this.getEventFiltersAsList(eventBusTypeElement);
         for (String eventFilterClassname : eventFilterAsStringList) {
           TypeElement filterElement = this.processingEnvironment.getElementUtils()
                                                                 .getTypeElement(eventFilterClassname);

@@ -33,7 +33,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventBus {
 
-  Class<? extends IsShell> shell();
+  Class<? extends IsShell<?, ?>> shell();
 
   boolean historyOnStart() default false;
 
