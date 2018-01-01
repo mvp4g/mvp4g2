@@ -22,6 +22,7 @@ import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsMvp4g2Logger;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
 import de.gishmo.gwt.mvp4g2.core.history.IsNavigationConfirmation;
 import de.gishmo.gwt.mvp4g2.core.history.PlaceService;
 import de.gishmo.gwt.mvp4g2.core.internal.ui.HandlerMetaData;
@@ -64,9 +65,11 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /* debug enabled? */
   private boolean debugEnable = false;
   /* logger */
-  private IsMvp4g2Logger logger;
+  private IsMvp4g2Logger                     logger;
   /* log level */
-  private Debug.LogLevel logLevel;
+  private Debug.LogLevel                     logLevel;
+  /* list history converters */
+  private Map<String, IsHistoryConverter<E>> historyConverterMap;
 
   /* Filters enabled */
   private boolean filtersEnable = false;
@@ -77,6 +80,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   public AbstractEventBus(String shellPresenterCanonialName,
                           boolean historyOnStart) {
     super();
+
+    this.historyConverterMap = new HashMap<>();
 
     this.navigationConfirmationPresenter = null;
     this.historyOnStart = historyOnStart;
@@ -98,9 +103,9 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 
   protected abstract void loadFilterConfiguration();
 
-  protected abstract void loadEventHandlerMetaData();
-
   protected abstract void loadEventMetaData();
+
+  protected abstract void loadEventHandlerMetaData();
 
   protected final void bind(EventMetaData<E> eventMetaData,
                             Object... parameters) {
@@ -392,6 +397,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                   EventMetaData<E> metaData) {
     eventMetaDataMap.put(eventName,
                          metaData);
+    metaData.setEventBus(this);
   }
 
   protected <E extends IsHandler<?>> void putHandlerMetaData(String className,
@@ -637,6 +643,17 @@ public abstract class AbstractEventBus<E extends IsEventBus>
         }
       }
     }
+  }
+
+  public void add(String historyConverterClassName,
+                  IsHistoryConverter<E> historyConverter) {
+    this.historyConverterMap.put(historyConverterClassName,
+                                 historyConverter);
+  }
+
+  public IsHistoryConverter<E> getHistoryConverter(String historyConverterClassName) {
+    return this.historyConverterMap.get(historyConverterClassName);
+
   }
 
   public interface ExecHandler {

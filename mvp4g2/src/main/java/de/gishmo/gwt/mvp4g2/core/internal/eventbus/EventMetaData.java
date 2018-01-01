@@ -42,6 +42,8 @@ public abstract class EventMetaData<E extends IsEventBus> {
   private boolean               passive;
   /* flag if event is navigation event */
   private boolean               navigationEvent;
+  /* EventBus implementation */
+  private AbstractEventBus<E>   eventBus;
 
   public EventMetaData(String internalEventName,
                        String eventName,
@@ -63,6 +65,14 @@ public abstract class EventMetaData<E extends IsEventBus> {
     this.bindHandlerTypes = new ArrayList<>();
     this.activateHandlerTypes = new ArrayList<>();
     this.deactivateHandlerTypes = new ArrayList<>();
+  }
+
+  public void setEventBus(AbstractEventBus<E> eventBus) {
+    this.eventBus = eventBus;
+    if (this.historyMetaData != null) {
+      this.eventBus.add(historyMetaData.getHistoryConverterClassName(),
+                        historyConverter);
+    }
   }
 
   public void addActivateHandler(String handler) {
@@ -130,7 +140,7 @@ public abstract class EventMetaData<E extends IsEventBus> {
   }
 
   public IsHistoryConverter<E> getHistoryConverter() {
-    return historyConverter;
+    return this.historyMetaData == null ? null : this.eventBus.getHistoryConverter(this.historyMetaData.getHistoryConverterClassName());
   }
 
   public String getInternalEventName() {
