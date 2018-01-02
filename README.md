@@ -42,48 +42,77 @@ That's why Mvp4g offers a solution to following these best practices
 
  using simple mechanisms that only need a few lines of code and a few annotations.
 
-This is all you need to create an event bus with four events:
+This is all you need to create an event bus with four events in mvp4g2:
 ```
-@Events(startPresenter = CompanyListPresenter.class, module = CompanyModule.class) 
-public interface CompanyEventBus extends EventBus {          
-        @Event( handlers = CompanyEditPresenter.class )        
-        public void goToEdit(CompanyBean company);          
-        
-        @Event( handlers = CompanyDisplayPresenter.class )         
-        public void goToDisplay(CompanyBean company);          
-        
-        @Event( handlers = { CompanyListPresenter.class, CompanyDisplayPresenter.class } )         
-        public void companyCreated(CompanyBean newBean);          
-        
-        @Event( handlers = CompanyListPresenter.class )         
-        public void companyDeleted(CompanyBean newBean); 
-}
-```
-To handle a event, just create a method in your presenter.
-For example, to handle the ```goToEdit(CompanyBean company)``` event, use this code inside the handler / presenter:
-```
-       public void onGoToEdit(CompanyBean company) {
-           .... 
-       }
-```
-**_NEW!_**
-Starting with this version there is another way to add a handler / presenter method as a event handler to the event bus. In this case you do not have to use the ```handler```-attibute of the event annotation.
-Using the new @EventHandler annotation (The EventHandler annotation of mvp4g version 1 is now represented with @Handler) the event bus looks like this:
-```
-@Events(startPresenter = CompanyListPresenter.class, module = CompanyModule.class) 
-public interface CompanyEventBus extends EventBus {          
+@EventBus(shellPresenter = ShellPresenter.class) 
+public interface CompanyEventBus
+    extends EventBus {     
+         
         @Event        
         public void goToEdit(CompanyBean company);          
+        
+        @Event        
+        public void goToDisplay(CompanyBean company);          
+        
+        @Event         
+        public void createCompany(CompanyBean newBean);          
+        
+        @Event         
+        public void deleteCompany(CompanyBean newBean); 
+        
 }
 ```
-To handle the ```goToEdit(CompanyBean company)``` event, just annotate the event handling method in the handler / presenter with @EventHandler, add a 'on' to the event name, change the first letter to uppercase and use the same signature:
+All you have to do to handle an event in your presenter / handler, is:
+* create a method annotated with @EventHandler
+* make sure that the method name looks like this: 'on' + [eventName with first letter capitalize]
+* use the same signature
+
+For example, to handle the ```goToEdit(CompanyBean company)``` event, use this code inside the handler / presenter:
 ```
        @EventHandler
        public void onGoToEdit(CompanyBean company) {
            .... 
        }
 ```
-Mvp4g2 will call the onGotoEdit-method in case the event gets fired!
+and to handle the ```deleteCompany(CompanyBean newBean)``` just create a method with this code:
+```
+       @EventHandler
+       public void onDeleteCompany(CompanyBean company) {
+           .... 
+       }
+```
+To fire an event, call ```eventBus.goToDisplay(myCompanyBean);``` inside you presenter or handler.
+
+Mvp4g2 makes sure, that all handlers / presenters, that implemet a event handler for the goToDisplay-event will be called!
+
+Of course, the old style of binding a presenter / handler to an event still works!
+Using the old style of binding an event to handlers, all you need to do is to create an event bus and use the handlers-attribute inside the @Event-annotation.
+Here an example of a event bus with four events:
+```
+@EventBus(shellPresenter = ShellPresenter.class) 
+public interface CompanyEventBus
+    extends EventBus {     
+         
+         @Event(handlers = CompanyEditPresenter.class)        
+         public void goToEdit(CompanyBean company);          
+         
+         @Event(handlers = CompanyDisplayPresenter.class)         
+         public void goToDisplay(CompanyBean company);          
+         
+         @Event(handlers = { CompanyListPresenter.class, CompanyDisplayPresenter.class })         
+         public void companyCreated(CompanyBean newBean);          
+         
+         @Event(handlers = CompanyListPresenter.class)         
+         public void companyDeleted(CompanyBean newBean);
+          
+}
+```
+To handle the ```goToEdit(CompanyBean company)``` event, just create a method in the handler / presenter that looks like this:
+```
+       public void onGoToEdit(CompanyBean company) {
+           .... 
+       }
+```
 
 Eventbus:
 - create an event bus using a few annotations and one centralized interface where you can easily manage your events
@@ -97,7 +126,7 @@ MVP:
 - easily control your presenter thanks to onBeforeEvent
 
 History Management/Place Service:
-- convert any event to history token thanks to simple history converters
+- convert any event to history token thanks to a simple history converters mechnism
 
 Not only does Mvp4g2 help you follow the best practices, it also provides mechanisms to build fast applications:
 - support for lazy loading: build your presenters/views only when you need them. Useless presenters/views are also automatically removed.
