@@ -58,7 +58,7 @@ public class PresenterAnnotationValidator {
       if (!typeElement.getKind()
                       .isClass()) {
         throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Presenter can only be used with as class!");
+                                                .toString() + ": @Presenter can only be used with a class!");
       }
       // check, that the viewClass is a class
       if (!viewClassTypeElement.getKind()

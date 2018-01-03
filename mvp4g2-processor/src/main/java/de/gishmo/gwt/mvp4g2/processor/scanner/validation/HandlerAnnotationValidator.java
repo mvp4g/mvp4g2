@@ -59,7 +59,7 @@ public class HandlerAnnotationValidator {
       if (!typeElement.getKind()
                       .isClass()) {
         throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Handler can only be used with as class!");
+                                                .toString() + ": @Handler can only be used with a class!");
       }
       // check, that the typeElement extends AbstarctEventHandler
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
