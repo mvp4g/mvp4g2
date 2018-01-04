@@ -31,7 +31,7 @@ However, following these best practices is not always easy and you can end up wi
 
 On the other hand the native GWT implementation has some drawbacks.
 
-- the navigation conformation does not allow a server call to check if a sid is vaild
+- the navigation conformation does not allow a server call to check if a side is vaild
 - Place management can be hard for complex UI
 
 That's why Mvp4g offers a solution to following these best practices
