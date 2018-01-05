@@ -116,7 +116,10 @@ To handle the ```goToEdit(CompanyBean company)``` event, just create a method in
 
 Eventbus:
 - create an event bus using a few annotations and one centralized interface where you can easily manage your events
-- control your event flow thanks to event filtering, event logs, passive event
+- control your event flow thanks to event filtering
+- see what your application does thanks to event logging
+- send events only to presenters / handlers that already handled a event thanks to passive event feature
+- activate and deactivate presenters and handlers thanks to the activate- and deactivate feature
 - have the same control of user's navigation as the GWT Activities/Place architecture thanks to Navigation Event
 
 MVP:
@@ -126,7 +129,7 @@ MVP:
 - easily control your presenter thanks to onBeforeEvent
 
 History Management/Place Service:
-- convert any event to history token thanks to a simple history converters mechnism
+- convert any event to history token thanks to a simple history converters mechanism
 
 Not only does Mvp4g2 help you follow the best practices, it also provides mechanisms to build fast applications:
 - support for lazy loading: build your presenters/views only when you need them. Useless presenters/views are also automatically removed.
