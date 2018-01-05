@@ -127,6 +127,7 @@ MVP:
 - support for multiple instances of the same presenter (**not yet implemented, but planned**)
 - easily implement the Reverse MVP (or View Delegate) pattern thanks to Reverse View feature (MVP4G2 requires the use of the view delegate pattern)
 - easily control your presenter thanks to onBeforeEvent
+- add an event handling method to the event bus with one annotation
 
 History Management/Place Service:
 - convert any event to history token thanks to a simple history converters mechanism
