@@ -120,7 +120,7 @@ Eventbus:
 - see what your application does thanks to event logging
 - send events only to presenters / handlers that already handled a event thanks to passive event feature
 - activate and deactivate presenters and handlers thanks to the activate- and deactivate feature
-- have the same control of user's navigation as the GWT Activities/Place architecture thanks to Navigation Event
+- have the same control of user's navigation as the GWT Activities/Place architecture thanks to navigation event feature
 
 MVP:
 - create a presenter and inject a view with one annotation
@@ -133,7 +133,8 @@ History Management/Place Service:
 - convert any event to history token thanks to a simple history converters mechanism
 
 Not only does Mvp4g2 help you follow the best practices, it also provides mechanisms to build fast applications:
-- support for lazy loading: build your presenters/views only when you need them. Useless presenters/views are also automatically removed.
+- support for lazy loading: build your presenters/views only when you need them.
+- Useless presenters/views are automatically removed.
 
 To understand how the framework works, you can look at the documentation, the [tutorials](https://github.com/mvp4g/mvp4g2/wiki/1.-Tutorials-and-Examples) or the [examples](https://github.com/mvp4g/mvp4g2-examples).
 
