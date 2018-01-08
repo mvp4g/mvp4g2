@@ -31,7 +31,7 @@ However, following these best practices is not always easy and you can end up wi
 
 On the other hand the native GWT implementation has some drawbacks.
 
-- the navigation conformation does not allow a server call to check if a sid is vaild
+- the navigation conformation does not allow a server call to check if a side is vaild
 - Place management can be hard for complex UI
 
 That's why Mvp4g offers a solution to following these best practices
@@ -116,20 +116,25 @@ To handle the ```goToEdit(CompanyBean company)``` event, just create a method in
 
 Eventbus:
 - create an event bus using a few annotations and one centralized interface where you can easily manage your events
-- control your event flow thanks to event filtering, event logs, passive event
-- have the same control of user's navigation as the GWT Activities/Place architecture thanks to Navigation Event
+- control your event flow thanks to event filtering
+- see what your application does thanks to event logging
+- send events only to presenters / handlers that already handled a event thanks to passive event feature
+- activate and deactivate presenters and handlers thanks to the activate- and deactivate feature
+- have the same control of user's navigation as the GWT Activities/Place architecture thanks to navigation event feature
 
 MVP:
 - create a presenter and inject a view with one annotation
 - support for multiple instances of the same presenter (**not yet implemented, but planned**)
 - easily implement the Reverse MVP (or View Delegate) pattern thanks to Reverse View feature (MVP4G2 requires the use of the view delegate pattern)
 - easily control your presenter thanks to onBeforeEvent
+- add an event handling method to the event bus with one annotation
 
 History Management/Place Service:
-- convert any event to history token thanks to a simple history converters mechnism
+- convert any event to history token thanks to a simple history converters mechanism
 
 Not only does Mvp4g2 help you follow the best practices, it also provides mechanisms to build fast applications:
-- support for lazy loading: build your presenters/views only when you need them. Useless presenters/views are also automatically removed.
+- support for lazy loading: build your presenters/views only when you need them.
+- Useless presenters/views are automatically removed.
 
 To understand how the framework works, you can look at the documentation, the [tutorials](https://github.com/mvp4g/mvp4g2/wiki/1.-Tutorials-and-Examples) or the [examples](https://github.com/mvp4g/mvp4g2-examples).
 
