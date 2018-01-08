@@ -79,24 +79,24 @@ public interface IsHandler<E extends IsEventBus> {
   void setActivated(boolean activated);
 
   /**
-   * Indicates if the presenter is binded or not. If the
+   * Indicates if the presenter is bound or not. If the
    * bind method hasn't been called yet, then the bind method should be called only if the event
    * is active.<br>
    * <br>
    * If the event is passive and the presenter hasn't been built, the presenter will be consider
    * as inactive (ie isActivated will return false).
    *
-   * @return true if the presenter is binded, false otherwise
+   * @return true if the presenter is bound, false otherwise
    */
-  boolean isBinded();
+  boolean isBound();
 
   /**
-   * Set if the event handler is binded or not. By default, an event handler should be
-   * not binded.
+   * Set if the event handler is bound or not. By default, an event handler should be
+   * not bound.
    *
-   * @param binded new binded parameter
+   * @param bound new bound parameter
    */
-  void setBinded(boolean binded);
+  void setBound(boolean bound);
 
   /**
    * This method allows to prevent handler to handle a specific event.

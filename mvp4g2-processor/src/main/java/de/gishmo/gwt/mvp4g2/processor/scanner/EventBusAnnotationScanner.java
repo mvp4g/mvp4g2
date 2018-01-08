@@ -117,7 +117,7 @@ public class EventBusAnnotationScanner {
                                                           .getAnnotation(EventBus.class);
         if (eventBusAnnotation == null) {
           throw new ProcessorException(((TypeElement) optionalDebugElement.get()).getQualifiedName()
-                                                                                 .toString() + " -> @Debug can only be used with an interfacea annotated with @EventBus");
+                                                                                 .toString() + " -> @Debug can only be used with an interfaces annotated with @EventBus");
         }
       }
       // @Filters annotation with no @EventBus annotation ... bad idea!
@@ -129,7 +129,7 @@ public class EventBusAnnotationScanner {
                                                             .getAnnotation(EventBus.class);
         if (eventBusAnnotation == null) {
           throw new ProcessorException(((TypeElement) optionalFiltersElement.get()).getQualifiedName()
-                                                                                   .toString() + " -> @Filters can only be used with an interfacea annotated with @EventBus");
+                                                                                   .toString() + " -> @Filters can only be used with an interfaces annotated with @EventBus");
         }
       }
     }

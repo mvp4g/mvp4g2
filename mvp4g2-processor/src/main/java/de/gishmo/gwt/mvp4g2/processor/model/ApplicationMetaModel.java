@@ -14,20 +14,20 @@ public class ApplicationMetaModel
 
   private ClassNameModel application;
   private ClassNameModel eventBus;
-  private ClassNameModel laoder;
+  private ClassNameModel loader;
 
   public ApplicationMetaModel(Properties properties) {
     this.application = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_APPLICATION));
     this.eventBus = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_EVENTBUS));
-    this.laoder = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_LOADER));
+    this.loader = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_LOADER));
   }
 
   public ApplicationMetaModel(String application,
                               String eventBus,
-                              String laoder) {
+                              String loader) {
     this.application = new ClassNameModel(application);
     this.eventBus = new ClassNameModel(eventBus);
-    this.laoder = new ClassNameModel(laoder);
+    this.loader = new ClassNameModel(loader);
   }
 
   public ClassNameModel getApplication() {
@@ -38,8 +38,8 @@ public class ApplicationMetaModel
     return eventBus;
   }
 
-  public ClassNameModel getLaoder() {
-    return laoder;
+  public ClassNameModel getLoader() {
+    return loader;
   }
 
   @Override
@@ -50,7 +50,7 @@ public class ApplicationMetaModel
     properties.setProperty(ApplicationMetaModel.KEY_EVENTBUS,
                            this.eventBus.getClassName());
     properties.setProperty(ApplicationMetaModel.KEY_LOADER,
-                           this.laoder.getClassName());
+                           this.loader.getClassName());
     return properties;
   }
 }

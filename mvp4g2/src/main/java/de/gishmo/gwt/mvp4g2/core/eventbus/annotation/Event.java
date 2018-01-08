@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * <br>
  * The annotation has the following attributes:
  * <p>
- * <li> bind: classes that need to be binded when this event occurs. You can have zero to several classes
+ * <li> bind: classes that need to be bound when this event occurs. You can have zero to several classes
  * for an event. </li>
  * <li>handlers: classes of the handlers of this event. You can have zero to several handlers for an
  * event.</li>
@@ -91,7 +91,7 @@ import java.lang.annotation.Target;
 public @interface Event {
 
   //default name that developers are unlikely to enter to know when method name should be used
-  public static final String DEFAULT_HISTORY_NAME = "#%!|&*+!##%$";
+  String DEFAULT_HISTORY_NAME = "#%!|&*+!##%$";
 
   String historyName() default DEFAULT_HISTORY_NAME;
 

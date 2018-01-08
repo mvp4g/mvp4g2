@@ -11,7 +11,7 @@ public abstract class AbstractHandler<E extends IsEventBus>
   implements IsHandler<E> {
 
   /* bind mehtod already called */
-  protected boolean binded    = false;
+  protected boolean bound     = false;
   /* ehather the eventhandler is enable to handle events or not ... */
   protected boolean activated = true;
   protected E eventBus;
@@ -57,12 +57,12 @@ public abstract class AbstractHandler<E extends IsEventBus>
 //                             parameters);
 //    if (activated) {
 //      if (passive) {
-//        return binded;
+//        return bound;
 //      } else {
 //        onBeforeEvent(eventName);
-//        if (!binded) {
+//        if (!bound) {
 //          bind();
-//          binded = true;
+//          bound = true;
 //        }
 //      }
 //    }
@@ -72,7 +72,7 @@ public abstract class AbstractHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.core.ui.IsHandler#setBinded(boolean)
+   * @see de.gishmo.gwt.mvp4g2.core.ui.IsHandler#setBound(boolean)
    */
   public final void setActivated(boolean activated) {
     this.activated = activated;
@@ -81,10 +81,10 @@ public abstract class AbstractHandler<E extends IsEventBus>
   /*
    * (non-Javadoc)
    *
-   * @see de.gishmo.gwt.mvp4g2.core.ui.IsHandler#isBinded()
+   * @see de.gishmo.gwt.mvp4g2.core.ui.IsHandler#isBound()
    */
-  public final boolean isBinded() {
-    return binded;
+  public final boolean isBound() {
+    return bound;
   }
 
   /*
@@ -92,8 +92,8 @@ public abstract class AbstractHandler<E extends IsEventBus>
    *
    * @see de.gishmo.gwt.mvp4g2.core.ui.IsHandler#setActivated(boolean)
    */
-  public final void setBinded(boolean binded) {
-    this.binded = binded;
+  public final void setBound(boolean bound) {
+    this.bound = bound;
   }
 
   /*

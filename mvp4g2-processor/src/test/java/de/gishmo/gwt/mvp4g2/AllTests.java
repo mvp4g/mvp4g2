@@ -17,9 +17,9 @@
 package de.gishmo.gwt.mvp4g2;
 
 import de.gishmo.gwt.mvp4g2.processor.application.ApplicationTest;
+import de.gishmo.gwt.mvp4g2.processor.event.EventTest;
 import de.gishmo.gwt.mvp4g2.processor.event.StartEventTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.DebugTest;
-import de.gishmo.gwt.mvp4g2.processor.event.EventTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.EventbusTest;
 import de.gishmo.gwt.mvp4g2.processor.eventbus.FilterTest;
 import de.gishmo.gwt.mvp4g2.processor.eventhandler.HandlerTest;
@@ -37,6 +37,10 @@ import org.junit.runners.Suite;
                      HandlerTest.class,
                      PresenterTest.class,
                      FilterTest.class,
-                     StartEventTest.class})
+                     StartEventTest.class
+//                     ImplementationTest.class,
+//                     HistoryTest.class
+
+})
 public class AllTests {
 }

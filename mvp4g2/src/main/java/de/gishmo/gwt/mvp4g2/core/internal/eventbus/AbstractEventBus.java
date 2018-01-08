@@ -120,10 +120,10 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                                         parameters);
           if (activated) {
             if (!handlerMetaData.getHandler()
-                                .isBinded()) {
+                                .isBound()) {
               if (!eventMetaData.isPassive()) {
                 handlerMetaData.getHandler()
-                               .setBinded(true);
+                               .setBound(true);
                 handlerMetaData.getHandler()
                                .bind();
               }
@@ -141,10 +141,10 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                                             parameters);
             if (activated) {
               if (!presenterMetaData.getPresenter()
-                                    .isBinded()) {
+                                    .isBound()) {
                 if (!eventMetaData.isPassive()) {
                   presenterMetaData.getPresenter()
-                                   .setBinded(true);
+                                   .setBound(true);
                   presenterMetaData.getPresenter()
                                    .bind();
                 }
@@ -213,13 +213,13 @@ public abstract class AbstractEventBus<E extends IsEventBus>
 //    if (presenters != null && presenters.size() != 0) {
 //      presenters.stream()
 //                .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
-//                                                                             .isBinded())
+//                                                                             .isBound())
 //                .forEachOrdered(presenterHandlerMetaData -> {
 //                  this.logHandlerBinding(AbstractEventBus.logDepth,
 //                                         eventName,
 //                                         eventHandlerClassName);
 //                  presenterHandlerMetaData.getView()
-//                                          .setBinded(true);
+//                                          .setBound(true);
 //                  presenterHandlerMetaData.getView()
 //                                          .createView();
 //                  presenterHandlerMetaData.getView()
@@ -340,7 +340,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     PresenterMetaData<?, ?> presenter = this.presenterMetaDataMap.get(this.shellPresenterCanonialName)
                                                                  .get(0);
     presenter.getPresenter()
-             .setBinded(true);
+             .setBound(true);
     presenter.getPresenter()
              .bind();
     doCreateAndBindView("start",

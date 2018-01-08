@@ -76,7 +76,7 @@ public class ApplicationGenerator {
                                                       .addAnnotation(Override.class)
                                                       .returns(IsApplicationLoader.class)
                                                       .addStatement("return new $T()",
-                                                                    metaModel.getLaoder()
+                                                                    metaModel.getLoader()
                                                                              .getTypeName())
                                                       .build();
     typeSpec.addMethod(getApplicaitonLaoderMethod);

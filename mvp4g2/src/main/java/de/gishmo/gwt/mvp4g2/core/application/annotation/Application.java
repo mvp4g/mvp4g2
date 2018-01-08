@@ -1,14 +1,14 @@
 package de.gishmo.gwt.mvp4g2.core.application.annotation;
 
 import de.gishmo.gwt.mvp4g2.core.application.IsApplicationLoader;
-import de.gishmo.gwt.mvp4g2.core.internal.application.NoApplicationLoader;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.internal.application.NoApplicationLoader;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * <p>This annotation is used to annotate an interface in mvp4g and mark it as mvp4g application.
+ * <p>This annotation is used to annotate an interface in mvp4g and mark it as mvp4g application.</p>
  * <br><br>
  * The annotation has the following attributes:
  * <ul>
