@@ -57,27 +57,27 @@ public class PresenterAnnotationValidator {
       // check, that the presenter annotion is only used with classes
       if (!typeElement.getKind()
                       .isClass()) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Presenter can only be used with a class!");
+        throw new ProcessorException("Mvp4g2Processor:" + typeElement.getSimpleName()
+                                                                      .toString() + ": @Presenter can only be used with a class!");
       }
       // check, that the viewClass is a class
       if (!viewClassTypeElement.getKind()
                                .isClass()) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": the viewClass-attribute of a @Presenter must be a class!");
+        throw new ProcessorException("Mvp4g2Processor:" + typeElement.getSimpleName()
+                                                                      .toString() + ": the viewClass-attribute of a @Presenter must be a class!");
       }
       // chekc if the vioewInterface is a interface
       if (!viewInterfaceTypeElement.getKind()
                                    .isInterface()) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": the viewInterface-attribute of a @Presenter must be a interface!");
+        throw new ProcessorException("Mvp4g2Processor:" + typeElement.getSimpleName()
+                                                                      .toString() + ": the viewInterface-attribute of a @Presenter must be a interface!");
       }
       // check, if viewClass is implementing viewInterface
       if (!this.processorUtils.implementsInterface(this.processingEnvironment,
                                                    viewClassTypeElement,
                                                    viewInterfaceTypeElement.asType())) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
+        throw new ProcessorException("Mvp4g2Processor:" + typeElement.getSimpleName()
+                                                                      .toString() + ": the viewClass-attribute of a @Presenter must implement the viewInterface!");
       }
       // check, that the typeElement extends AbstractHandler
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
@@ -91,8 +91,8 @@ public class PresenterAnnotationValidator {
       // check if annotated class is abstract
       if (typeElement.getModifiers()
                      .contains(Modifier.ABSTRACT)) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Presenter can not be ABSTRACT");
+        throw new ProcessorException("Mvp4g2Processor:" + typeElement.getSimpleName()
+                                                                      .toString() + ": @Presenter can not be ABSTRACT");
       }
       // check if class attribute is not abstradt
       if (viewClassTypeElement.getModifiers()
@@ -101,7 +101,7 @@ public class PresenterAnnotationValidator {
                                                 .toString() + ": class-attribute of @Presenter can not be ABSTRACT");
       }
     } else {
-      throw new ProcessorException("@Presenter can only be used on a type (class)");
+      throw new ProcessorException("Mvp4g2Processor: @Presenter can only be used on a type (class)");
     }
   }
 

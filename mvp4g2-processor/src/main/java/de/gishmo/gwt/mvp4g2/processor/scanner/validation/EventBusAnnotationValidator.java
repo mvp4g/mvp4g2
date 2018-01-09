@@ -61,11 +61,11 @@ public class EventBusAnnotationValidator {
     Set<? extends Element> elementsWithEventBusAnnotation = this.roundEnvironment.getElementsAnnotatedWith(EventBus.class);
     // at least there should exatly one Application annotation!
     if (elementsWithEventBusAnnotation.size() == 0) {
-      throw new ProcessorException("Missing Mvp4g EventBus interface");
+      throw new ProcessorException("Mvp4g2Processor: Missing Mvp4g EventBus interface");
     }
     // at least there should only one Application annotation!
     if (elementsWithEventBusAnnotation.size() > 1) {
-      throw new ProcessorException("There should be at least only one interface, that is annotated with @EventBus");
+      throw new ProcessorException("Mvp4g2Processor: There should be at least only one interface, that is annotated with @EventBus");
     }
   }
 
@@ -79,7 +79,7 @@ public class EventBusAnnotationValidator {
       // Eventbus must be an interface!
       if (!typeElement.getKind()
                       .isInterface()) {
-        throw new ProcessorException("@Eventbus can only be used with an interface");
+        throw new ProcessorException("Mvp4g2Processor: @Eventbus can only be used with an interface");
       }
       // check, that the typeElement extends IsEventBus
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
@@ -101,19 +101,19 @@ public class EventBusAnnotationValidator {
                                                                                                            typeElement,
                                                                                                            Start.class);
       if (elementsAnnotatedWithStart.size() > 1) {
-        throw new ProcessorException("@Start-annotation can only be used a single time in a eventbus interface");
+        throw new ProcessorException("Mvp4g2Processor: @Start-annotation can only be used a single time in a eventbus interface");
       } else {
         // check, that the @Start annotation is only used on zero-argument methods!
         if (elementsAnnotatedWithStart.size() == 1) {
           ExecutableElement executableElement = (ExecutableElement) elementsAnnotatedWithStart.get(0);
           if (executableElement.getParameters()
                                .size() > 0) {
-            throw new ProcessorException("@Start-annotation can only be used on zero argument methods");
+            throw new ProcessorException("Mvp4g2Processor: @Start-annotation can only be used on zero argument methods");
           }
         }
       }
     } else {
-      throw new ProcessorException("@Eventbus can only be used on a type (interface)");
+      throw new ProcessorException("Mvp4g2Processor: @Eventbus can only be used on a type (interface)");
     }
   }
 

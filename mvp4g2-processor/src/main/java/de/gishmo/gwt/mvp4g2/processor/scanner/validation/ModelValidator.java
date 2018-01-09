@@ -16,13 +16,18 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 
+import static java.util.Objects.isNull;
+
 public class ModelValidator {
+
+  private ProcessorUtils processorUtils;
 
   private EventBusMetaModel  eventBusMetaModel;
   private HandlerMetaModel   handlerMetaModel;
@@ -33,6 +38,7 @@ public class ModelValidator {
   }
 
   private ModelValidator(Builder builder) {
+    this.processorUtils = builder.processorUtils;
     this.eventBusMetaModel = builder.eventBusMetaModel;
     this.handlerMetaModel = builder.handlerMetaModel;
     this.presenterMetaModel = builder.presenterMetaModel;
@@ -50,40 +56,51 @@ public class ModelValidator {
 
   private void checkHandlerUsedAsBindAndHandler()
     throws ProcessorException {
-    for (EventMetaModel eventMetaModel : this.eventBusMetaModel.getEventMetaModels()) {
-      for (ClassNameModel bindingClass : eventMetaModel.getBindings()) {
-        for (ClassNameModel handlerClass : eventMetaModel.getHandlers()) {
-          if (bindingClass.equals(handlerClass)) {
-            throw new ProcessorException("Event: >>" + eventMetaModel.getEventName() + "<< - handler: >>" + handlerClass.getClassName() + "<< can not be set in bind- and handlers-attribute");
-          }
-        }
-        if (this.handlerMetaModel.getHandlerData(bindingClass.getClassName()) != null) {
-          for (String eventName : this.handlerMetaModel.getHandlerData(bindingClass.getClassName())
-                                                       .getHandledEvents()) {
-            if (eventMetaModel.getEventName()
-                              .equals(eventName)) {
-              throw new ProcessorException("Event: >>" + eventMetaModel.getEventName() + "<< - handler: >>" + bindingClass.getClassName() + "<< can not be set in bind- and handlers-attribute");
+    if (!isNull(this.eventBusMetaModel)) {
+      for (EventMetaModel eventMetaModel : this.eventBusMetaModel.getEventMetaModels()) {
+        for (ClassNameModel bindingClass : eventMetaModel.getBindings()) {
+          for (ClassNameModel handlerClass : eventMetaModel.getHandlers()) {
+            if (bindingClass.equals(handlerClass)) {
+              throw new ProcessorException("Mvp4g2Processor: Event: >>" + eventMetaModel.getEventName() + "<< - handler: >>" + handlerClass.getClassName() + "<< can not be set in bind- and handlers-attribute");
             }
           }
-        }
-        if (this.presenterMetaModel.getPresenterData(bindingClass.getClassName()) != null) {
-          for (String eventName : this.presenterMetaModel.getPresenterData(bindingClass.getClassName())
+          if (this.handlerMetaModel.getHandlerData(bindingClass.getClassName()) != null) {
+            for (String eventName : this.handlerMetaModel.getHandlerData(bindingClass.getClassName())
                                                          .getHandledEvents()) {
-            if (eventMetaModel.getEventName()
-                              .equals(eventName)) {
-              throw new ProcessorException("Event: >>" + eventMetaModel.getEventName() + "<< - handler: >>" + bindingClass.getClassName() + "<< can not be set in bind- and handlers-attribute");
+              if (eventMetaModel.getEventName()
+                                .equals(eventName)) {
+                throw new ProcessorException("Mvp4g2Processor: Event: >>" + eventMetaModel.getEventName() + "<< - handler: >>" + bindingClass.getClassName() + "<< can not be set in bind- and handlers-attribute");
+              }
+            }
+          }
+          if (this.presenterMetaModel.getPresenterData(bindingClass.getClassName()) != null) {
+            for (String eventName : this.presenterMetaModel.getPresenterData(bindingClass.getClassName())
+                                                           .getHandledEvents()) {
+              if (eventMetaModel.getEventName()
+                                .equals(eventName)) {
+                throw new ProcessorException("Mvp4g2Processor: Event: >>" + eventMetaModel.getEventName() + "<< - handler: >>" + bindingClass.getClassName() + "<< can not be set in bind- and handlers-attribute");
+              }
             }
           }
         }
       }
+    } else {
+      throw new ProcessorException("Mvp4g2Processor: no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2?");
     }
   }
 
   public static final class Builder {
 
+    ProcessorUtils processorUtils;
+
     EventBusMetaModel  eventBusMetaModel;
     HandlerMetaModel   handlerMetaModel;
     PresenterMetaModel presenterMetaModel;
+
+    public Builder processorUtils(ProcessorUtils processorUtils) {
+      this.processorUtils = processorUtils;
+      return this;
+    }
 
     public Builder eventBusMetaModel(EventBusMetaModel eventBusMetaModel) {
       this.eventBusMetaModel = eventBusMetaModel;

@@ -67,7 +67,7 @@ public class ProcessorUtils {
                       "");
       printWriter.close();
     } catch (IOException ex) {
-      throw new ProcessorException("Unable to write file: >>" + fileName + "<< -> exception: " + ex.getMessage());
+      throw new ProcessorException("Mvp4g2Processor: Unable to write file: >>" + fileName + "<< -> exception: " + ex.getMessage());
     }
   }
 

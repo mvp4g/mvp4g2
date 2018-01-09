@@ -15,6 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
+import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
@@ -53,22 +54,22 @@ public class HistoryAnnotationValidator {
     throws ProcessorException {
     // TODO history validation
     if (element instanceof TypeElement) {
-//      TypeElement typeElement = (TypeElement) element;
-//      // check, that the presenter annotion is only used with classes
-//      if (!typeElement.getKind()
-//                      .isClass()) {
-//        throw new ProcessorException(typeElement.getSimpleName()
-//                                                .toString() + ": @Handler can only be used with as class!");
-//      }
-//      // check, that the typeElement extends AbstarctEventHandler
-//      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-//                                                       typeElement.asType(),
-//                                                       this.processingEnvironment.getElementUtils()
-//                                                                                 .getTypeElement(AbstractHandler.class.getCanonicalName())
-//                                                                                 .asType())) {
-//        throw new ProcessorException(typeElement.getSimpleName()
-//                                                .toString() + ": @Handler must extend AbstractHandler.class!");
-//      }
+      TypeElement typeElement = (TypeElement) element;
+      // check, that the presenter annotion is only used with classes
+      if (!typeElement.getKind()
+                      .isClass()) {
+        throw new ProcessorException("Mvp4g2Processor: " + typeElement.getSimpleName()
+                                                                      .toString() + ": @History can only be used with a class!");
+      }
+      // check, that the typeElement extends IsHistory
+      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                       typeElement.asType(),
+                                                       this.processingEnvironment.getElementUtils()
+                                                                                 .getTypeElement(IsHistoryConverter.class.getCanonicalName())
+                                                                                 .asType())) {
+        throw new ProcessorException("Mvp4g2Processor: " + typeElement.getSimpleName()
+                                                                      .toString() + ": a class annotated with @History must extend IsHistoryConverter.class!");
+      }
 //      // check if annotated class is abstract
 //      if (typeElement.getModifiers()
 //                     .contains(Modifier.ABSTRACT)) {
@@ -76,7 +77,7 @@ public class HistoryAnnotationValidator {
 //                                                .toString() + ": @Handler can not be ABSTRACT");
 //      }
     } else {
-      throw new ProcessorException("@History can only be used on a type (class)");
+      throw new ProcessorException("Mvp4g2Processor:" + "@History can only be used on a type (class)");
     }
   }
 

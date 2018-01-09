@@ -71,7 +71,7 @@ public class EventAnnotationValidator {
       Event eventAnnotation = element.getAnnotation(Event.class);
       if (!Event.DEFAULT_HISTORY_NAME.equals(eventAnnotation.historyName())) {
         if (historyNames.contains(eventAnnotation.historyName())) {
-          throw new ProcessorException("EventElement: >>" + element.getSimpleName()
+          throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + element.getSimpleName()
                                                                    .toString() + "<< using a already used historyName -> >>" + eventAnnotation.historyName() + "<<");
         } else {
           historyNames.add(eventAnnotation.historyName());
@@ -81,28 +81,28 @@ public class EventAnnotationValidator {
     // check, if there are more than one InitHistory-annotation!
     if (this.roundEnvironment.getElementsAnnotatedWith(InitHistory.class)
                              .size() > 1) {
-      throw new ProcessorException("@InitHistory can only be set a single time inside a event bus");
+      throw new ProcessorException("Mvp4g2Processor: @InitHistory can only be set a single time inside a event bus");
     } else if (this.roundEnvironment.getElementsAnnotatedWith(InitHistory.class)
                                     .size() == 1) {
       for (Element element : this.roundEnvironment.getElementsAnnotatedWith(InitHistory.class)) {
         ExecutableElement executableElement = (ExecutableElement) element;
         if (((ExecutableElement) element).getParameters()
                                          .size() > 0) {
-          throw new ProcessorException("@InitHistory can only be used on a method with no arguments");
+          throw new ProcessorException("Mvp4g2Processor: @InitHistory can only be used on a method with no arguments");
         }
       }
     }
     // check, if there are more than one NotFoundHistory-annotation!
     if (this.roundEnvironment.getElementsAnnotatedWith(NotFoundHistory.class)
                              .size() > 1) {
-      throw new ProcessorException("@NotFoundHistory can only be set a single time inside a event bus");
+      throw new ProcessorException("Mvp4g2Processor: @NotFoundHistory can only be set a single time inside a event bus");
     } else if (this.roundEnvironment.getElementsAnnotatedWith(NotFoundHistory.class)
                                     .size() == 1) {
       for (Element element : this.roundEnvironment.getElementsAnnotatedWith(NotFoundHistory.class)) {
         ExecutableElement executableElement = (ExecutableElement) element;
         if (((ExecutableElement) element).getParameters()
                                          .size() > 0) {
-          throw new ProcessorException("@NotFoundHistory can only be used on a method with no arguments");
+          throw new ProcessorException("Mvp4g2Processor: @NotFoundHistory can only be used on a method with no arguments");
         }
       }
     }
@@ -117,7 +117,7 @@ public class EventAnnotationValidator {
       List<String> bindHandlerClasses = this.getElementsFromAnnotationAsList(executableElement,
                                                                              "bind");
       if (bindHandlerClasses.size() > 0) {
-        throw new ProcessorException("Event: >>" + executableElement.getSimpleName() + "<< a passive event can not have a bind-attribute");
+        throw new ProcessorException("Mvp4g2Processor: Event: >>" + executableElement.getSimpleName() + "<< a passive event can not have a bind-attribute");
       }
     }
   }

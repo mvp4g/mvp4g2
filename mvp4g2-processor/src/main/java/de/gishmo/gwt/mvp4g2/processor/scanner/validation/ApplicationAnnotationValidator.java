@@ -58,11 +58,11 @@ public class ApplicationAnnotationValidator {
     Set<? extends Element> elementsWithApplicaitonAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Application.class);
     // at least there should exatly one Application annotation!
     if (elementsWithApplicaitonAnnotation.size() == 0) {
-      throw new ProcessorException("Missing Mvp4g Application interface");
+      throw new ProcessorException("Mvp4g2Processor: Missing Mvp4g Application interface");
     }
     // at least there should only one Application annotation!
     if (elementsWithApplicaitonAnnotation.size() > 1) {
-      throw new ProcessorException("There should be at least only one interface, that is annotated with @Application");
+      throw new ProcessorException("Mvp4g2Processor: There should be at least only one interface, that is annotated with @Application");
     }
   }
 
@@ -73,7 +73,7 @@ public class ApplicationAnnotationValidator {
       // annotated element has to be a interface
       if (!typeElement.getKind()
                       .isInterface()) {
-        throw new ProcessorException("@Application annotated must be used with an interface");
+        throw new ProcessorException("Mvp4g2Processor: @Application annotated must be used with an interface");
       }
       // check, that the typeElement implements IsApplication
       if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
@@ -81,11 +81,11 @@ public class ApplicationAnnotationValidator {
                                                        this.processingEnvironment.getElementUtils()
                                                                                  .getTypeElement(IsApplication.class.getCanonicalName())
                                                                                  .asType())) {
-        throw new ProcessorException(typeElement.getSimpleName()
-                                                .toString() + ": @Application must implement IsApplication interface");
+        throw new ProcessorException("Mvp4g2Processor: " + typeElement.getSimpleName()
+                                                                       .toString() + ": @Application must implement IsApplication interface");
       }
     } else {
-      throw new ProcessorException("@Application can only be used on a type (interface)");
+      throw new ProcessorException("Mvp4g2Processor:" + "@Application can only be used on a type (interface)");
     }
   }
 

@@ -65,7 +65,7 @@ public class FilterAnnotationValidator {
     Set<? extends Element> elementsWithFilterAnnotation = this.roundEnvironment.getElementsAnnotatedWith(Filters.class);
     // at least there should only one Application annotation!
     if (elementsWithFilterAnnotation.size() > 1) {
-      throw new ProcessorException("There should be at least only one interface, that is annotated with @Filter");
+      throw new ProcessorException("Mvp4g2Processor: There should be at least only one interface, that is annotated with @Filter");
     }
     // annotated element has to be a interface
     for (Element element : elementsWithFilterAnnotation) {
@@ -73,7 +73,7 @@ public class FilterAnnotationValidator {
         TypeElement typeElement = (TypeElement) element;
         if (!typeElement.getKind()
                         .isInterface()) {
-          throw new ProcessorException("@Filter can only be used with an interface");
+          throw new ProcessorException("Mvp4g2Processor: @Filter can only be used with an interface");
         }
         // @Filter can only be used on a interface that extends IsEventBus
         if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
@@ -81,7 +81,7 @@ public class FilterAnnotationValidator {
                                                          this.processingEnvironment.getElementUtils()
                                                                                    .getTypeElement(IsEventBus.class.getCanonicalName())
                                                                                    .asType())) {
-          throw new ProcessorException("@Filter can only be used on interfaces that extends IsEventBus");
+          throw new ProcessorException("Mvp4g2Processor: @Filter can only be used on interfaces that extends IsEventBus");
         }
         // test, that all filters implement IsEventFilter!
         List<String> eventFilterAsStringList = this.getEventFiltersAsList(eventBusTypeElement);
@@ -93,11 +93,11 @@ public class FilterAnnotationValidator {
                                                            this.processingEnvironment.getElementUtils()
                                                                                      .getTypeElement(IsEventFilter.class.getCanonicalName())
                                                                                      .asType())) {
-            throw new ProcessorException("@Filter - the filters attribute needs class that implements IsEventFilter");
+            throw new ProcessorException("Mvp4g2Processor: @Filter - the filters attribute needs class that implements IsEventFilter");
           }
         }
       } else {
-        throw new ProcessorException("@Filter can only be used on a type (interface)");
+        throw new ProcessorException("Mvp4g2Processor: @Filter can only be used on a type (interface)");
       }
     }
   }

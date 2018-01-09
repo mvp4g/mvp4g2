@@ -16,60 +16,30 @@
 
 package de.gishmo.gwt.mvp4g2.processor.history;
 
+import com.google.testing.compile.JavaFileObjects;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
+import org.junit.Test;
+
+import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static org.truth0.Truth.ASSERT;
+
 public class HistoryTest {
 
+  @Test
+  public void testHistoryAnnoationOnAInterface() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/history/historyAnnotationOnAInterface/HistoryAnnoationOnAInterface.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@History can only be used with a class!");
+  }
 
-////  @Test
-////  public void testStartEventTestEventBusWithOneStartAnnotation() {
-////    ASSERT.about(javaSource())
-////          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestEventBusWithOneStartAnnotation.java"))
-////          .processedWith(new Processor())
-////          .compilesWithoutError();
-////  }
-//
-//  @Test
-//  public void testStartEventTestWithNonZeroArgumentMethod() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithNonZeroArgumentMethod.java"))
-//          .processedWith(new EventBusProcessor())
-//          .failsToCompile()
-//          .withErrorContaining("@Start-annotation can only be used on zero argument methods");
-//  }
-
-//  @Test
-//  public void testStartEventTestWithZeroArgumentMethod() {
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/StartEventTestWithZeroArgumentMethod.java"))
-//          .processedWith(new Processor())
-//          .compilesWithoutError();
-//  }
-
-
-  /**
-   * <p>Test:
-   * <br>
-   * Mvp4gInternalEvent bus with one events
-   * <br><br>
-   * Expected result:
-   * <br>
-   * error message:
-   * </p>
-   */
-//  @Test
-//  public void ApplicationOKTest() {
-//    JavaFileObject applicationOKImplOKObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/expectedResults/ApplicationOKImpl.java");
-////    JavaFileObject applicationOKDaggerModuleObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/expectedResults/ApplicationDaggerModule.java");
-////    JavaFileObject applicationOKApplicationDaggerComponentObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/expectedResults/ApplicationDaggerComponent.java");
-////    JavaFileObject twoEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/TwoEventMvp4gInternalEventHandler.java");
-////    JavaFileObject twoEventObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/TwoEventMvp4gInternalEvent.java");
-////    JavaFileObject threeEventHandlerObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/ThreeEventMvp4gInternalEventHandler.java");
-////    JavaFileObject threEveentObject = JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/eventbus/EventBusWithEvents/expectedResults/ThreeEventMvp4gInternalEvent.java");
-//
-//    ASSERT.about(javaSource())
-//          .that(JavaFileObjects.forResource("org/gwt4e/mvp4g/test/apt/application/ApplicationOK/ApplicationOK.java"))
-//          .processedWith(new Processor())
-//          .compilesWithoutError()
-//          .and()
-//          .generatesSources(applicationOKImplOKObject);
-//  }
+  @Test
+  public void testHistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/history/historyAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter/HistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("a class annotated with @History must extend IsHistoryConverter.class!");
+  }
 }

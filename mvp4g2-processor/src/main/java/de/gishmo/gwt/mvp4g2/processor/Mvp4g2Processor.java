@@ -7,6 +7,7 @@ import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.History;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.generator.ApplicationGenerator;
@@ -72,8 +73,9 @@ public class Mvp4g2Processor
               Debug.class.getCanonicalName(),
               Event.class.getCanonicalName(),
               EventBus.class.getCanonicalName(),
-              Handler.class.getCanonicalName(),
               Filters.class.getCanonicalName(),
+              Handler.class.getCanonicalName(),
+              History.class.getCanonicalName(),
               Presenter.class.getCanonicalName()).collect(toSet());
   }
 
@@ -86,7 +88,7 @@ public class Mvp4g2Processor
         this.generate();
       } else {
         this.scan(roundEnv);
-        this.validateModels();
+        this.validateModels(roundEnv);
       }
       return false;
     } catch (ProcessorException e) {
@@ -167,9 +169,10 @@ public class Mvp4g2Processor
                                                                  this.presenterMetaModel);
   }
 
-  private void validateModels()
+  private void validateModels(RoundEnvironment roundEnv)
     throws ProcessorException {
     ModelValidator.builder()
+                  .processorUtils(this.processorUtils)
                   .eventBusMetaModel(this.eventBusMetaModel)
                   .handlerMetaModel(this.handlerMetaModel)
                   .presenterMetaModel(this.presenterMetaModel)
