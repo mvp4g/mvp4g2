@@ -62,7 +62,6 @@ public final class EventTestHandlerNotInBindAndHandlersAttributeImpl extends Abs
     super.logEvent(++AbstractEventBus.logDepth, "event02");
     ++AbstractEventBus.logDepth;
     if (!super.filterEvent("event02")) {
-      super.logEventFilter(AbstractEventBus.logDepth, "event02");
       return;
     }
     EventMetaData<EventTestHandlerNotInBindAndHandlersAttribute> eventMetaData = super.getEventMetaData("event02");
@@ -102,7 +101,6 @@ public final class EventTestHandlerNotInBindAndHandlersAttributeImpl extends Abs
     super.logEvent(++AbstractEventBus.logDepth, "event03");
     ++AbstractEventBus.logDepth;
     if (!super.filterEvent("event03")) {
-      super.logEventFilter(AbstractEventBus.logDepth, "event03");
       return;
     }
     EventMetaData<EventTestHandlerNotInBindAndHandlersAttribute> eventMetaData = super.getEventMetaData("event03");
@@ -142,7 +140,6 @@ public final class EventTestHandlerNotInBindAndHandlersAttributeImpl extends Abs
     super.logEvent(++AbstractEventBus.logDepth, "event01");
     ++AbstractEventBus.logDepth;
     if (!super.filterEvent("event01")) {
-      super.logEventFilter(AbstractEventBus.logDepth, "event01");
       return;
     }
     EventMetaData<EventTestHandlerNotInBindAndHandlersAttribute> eventMetaData = super.getEventMetaData("event01");

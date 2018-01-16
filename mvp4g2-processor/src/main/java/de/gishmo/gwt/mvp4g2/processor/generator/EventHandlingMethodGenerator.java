@@ -188,9 +188,6 @@ public class EventHandlingMethodGenerator {
       eventHandlingMethod.beginControlFlow("if (!super.filterEvent($S))",
                                            eventMetaModel.getEventName());
     }
-    eventHandlingMethod.addStatement("super.logEventFilter($T.logDepth, $S)",
-                                     ClassName.get(AbstractEventBus.class),
-                                     eventMetaModel.getEventName());
     eventHandlingMethod.addStatement("return");
     eventHandlingMethod.endControlFlow();
     // get event meta data from store ...

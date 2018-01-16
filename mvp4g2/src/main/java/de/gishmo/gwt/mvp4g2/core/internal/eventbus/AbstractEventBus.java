@@ -17,6 +17,11 @@
 
 package de.gishmo.gwt.mvp4g2.core.internal.eventbus;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import de.gishmo.gwt.mvp4g2.core.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
@@ -31,11 +36,6 @@ import de.gishmo.gwt.mvp4g2.core.ui.IsHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -196,38 +196,34 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                    String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        String sb = "DEBUG - EventBus -> event: >>" +
-                    eventName +
-                    "<< binding handler: >>" +
-                    handlerClassName +
-                    "<<";
+        String sb = "DEBUG - EventBus -> event: >>" + eventName + "<< binding handler: >>" + handlerClassName + "<<";
         this.log(sb,
                  logDepth);
       }
     }
   }
 
-//  private void doCreateAndBindView(String eventName,
-//                                   String eventHandlerClassName) {
-//    List<PresenterMetaData<?, ?>> presenters = this.presenterMetaDataMap.get(eventHandlerClassName);
-//    if (presenters != null && presenters.size() != 0) {
-//      presenters.stream()
-//                .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
-//                                                                             .isBound())
-//                .forEachOrdered(presenterHandlerMetaData -> {
-//                  this.logHandlerBinding(AbstractEventBus.logDepth,
-//                                         eventName,
-//                                         eventHandlerClassName);
-//                  presenterHandlerMetaData.getView()
-//                                          .setBound(true);
-//                  presenterHandlerMetaData.getView()
-//                                          .createView();
-//                  presenterHandlerMetaData.getView()
-//                                          .bind();
-//                });
-//
-//    }
-//  }
+  //  private void doCreateAndBindView(String eventName,
+  //                                   String eventHandlerClassName) {
+  //    List<PresenterMetaData<?, ?>> presenters = this.presenterMetaDataMap.get(eventHandlerClassName);
+  //    if (presenters != null && presenters.size() != 0) {
+  //      presenters.stream()
+  //                .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
+  //                                                                             .isBound())
+  //                .forEachOrdered(presenterHandlerMetaData -> {
+  //                  this.logHandlerBinding(AbstractEventBus.logDepth,
+  //                                         eventName,
+  //                                         eventHandlerClassName);
+  //                  presenterHandlerMetaData.getView()
+  //                                          .setBound(true);
+  //                  presenterHandlerMetaData.getView()
+  //                                          .createView();
+  //                  presenterHandlerMetaData.getView()
+  //                                          .bind();
+  //                });
+  //
+  //    }
+  //  }
 
   protected void log(String message,
                      int depth) {
@@ -267,11 +263,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                       String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        String sb = "DEBUG - EventBus -> event: >>" +
-                    eventName +
-                    "<< activaiting handler: >>" +
-                    handlerClassName +
-                    "<<";
+        String sb = "DEBUG - EventBus -> event: >>" + eventName + "<< activaiting handler: >>" + handlerClassName + "<<";
         this.log(sb,
                  logDepth);
       }
@@ -310,11 +302,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                         String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        String sb = "DEBUG - EventBus -> event: >>" +
-                    eventName +
-                    "<< deactivating handler: >>" +
-                    handlerClassName +
-                    "<<";
+        String sb = "DEBUG - EventBus -> event: >>" + eventName + "<< deactivating handler: >>" + handlerClassName + "<<";
         this.log(sb,
                  logDepth);
       }
@@ -377,6 +365,9 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   @Override
   public void addEventFilter(IsEventFilter<? extends IsEventBus> filter) {
     eventFilters.add(filter);
+    // in case we do not have a @Filters annotation inside the event bus,
+    // we have to set filtersEnable!
+    filtersEnable = true;
   }
 
   /*
@@ -387,6 +378,9 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   @Override
   public void removeEventFilter(IsEventFilter<? extends IsEventBus> filter) {
     eventFilters.remove(filter);
+    // in case we doi not have a @Filters annotation inside the event bus,
+    // we have to set filtersEnable!
+    filtersEnable = eventFilters.size() > 0;
   }
 
   protected EventMetaData<E> getEventMetaData(String eventName) {
@@ -434,7 +428,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * Sets the logger
    *
-   * @param logger logger
+   * @param logger
+   *   logger
    */
   protected void setLogger(IsMvp4g2Logger logger) {
     this.logger = logger;
@@ -452,7 +447,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * Set the log level
    *
-   * @param logLevel the new log level
+   * @param logLevel
+   *   the new log level
    */
   protected void setLogLevel(Debug.LogLevel logLevel) {
     this.logLevel = logLevel;
@@ -461,7 +457,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * set the debug state
    *
-   * @param debugEnable true ->  is enable
+   * @param debugEnable
+   *   true ->  is enable
    */
   protected void setDebugEnable(boolean debugEnable) {
     this.debugEnable = debugEnable;
@@ -498,12 +495,13 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   }
 
   protected void logEventFilter(int logDepth,
-                                String eventName) {
+                                String eventName,
+                                boolean pass) {
     if (debugEnable) {
       StringBuilder sb = new StringBuilder();
       sb.append("DEBUG - EventBus -> handling event: >>")
         .append(eventName)
-        .append("<< did not pass filter(s)!");
+        .append(pass ? "<< passed filter(s)" : "<< did not pass filter(s)");
       this.log(sb.toString(),
                logDepth);
     }
@@ -526,8 +524,10 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * If filtering is enabled, executes event filters associated with this event bus.
    *
-   * @param eventName event's name
-   * @param params    event parameters for this event
+   * @param eventName
+   *   event's name
+   * @param params
+   *   event parameters for this event
    */
   protected boolean filterEvent(String eventName,
                                 Object... params) {
@@ -535,11 +535,14 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     if (filtersEnable) {
       executeEvent = doFilterEvent(eventName,
                                    params);
+      logEventFilter(AbstractEventBus.logDepth,
+                     eventName,
+                     executeEvent);
     }
-//    if (changeFilteringEnabledForNextOne) {
-//      filteringEnabled = !filteringEnabled;
-//      changeFilteringEnabledForNextOne = false;
-//    }
+    //    if (changeFilteringEnabledForNextOne) {
+    //      filteringEnabled = !filteringEnabled;
+    //      changeFilteringEnabledForNextOne = false;
+    //    }
     return executeEvent;
   }
 
@@ -547,15 +550,16 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    * Performs the actual filtering by calling each associated event filter in turn. If any event
    * filter returns false, then the event will be canceled.
    *
-   * @param eventName event's name
-   * @param params    event parameters for this event
+   * @param eventName
+   *   event's name
+   * @param params
+   *   event parameters for this event
    */
   @SuppressWarnings("unchecked")
   private boolean doFilterEvent(String eventName,
                                 Object[] params) {
-    int filterCount = eventFilters.size();
-    @SuppressWarnings("rawtypes")
-    IsEventFilter eventFilter;
+    int                                         filterCount = eventFilters.size();
+    @SuppressWarnings("rawtypes") IsEventFilter eventFilter;
     for (int i = 0; i < filterCount; i++) {
       eventFilter = eventFilters.get(i);
       if (!eventFilter.filterEvent(this,
@@ -570,7 +574,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * set the filter state
    *
-   * @param filtersEnable true ->  is enable
+   * @param filtersEnable
+   *   true ->  is enable
    */
   protected void setFiltersEnable(boolean filtersEnable) {
     this.filtersEnable = filtersEnable;

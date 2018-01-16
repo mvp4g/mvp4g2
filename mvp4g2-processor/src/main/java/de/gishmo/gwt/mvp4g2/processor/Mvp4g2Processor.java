@@ -8,6 +8,7 @@ import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
 import de.gishmo.gwt.mvp4g2.core.history.annotation.History;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.generator.ApplicationGenerator;
@@ -73,6 +74,7 @@ public class Mvp4g2Processor
               Debug.class.getCanonicalName(),
               Event.class.getCanonicalName(),
               EventBus.class.getCanonicalName(),
+              EventHandler.class.getCanonicalName(),
               Filters.class.getCanonicalName(),
               Handler.class.getCanonicalName(),
               History.class.getCanonicalName(),

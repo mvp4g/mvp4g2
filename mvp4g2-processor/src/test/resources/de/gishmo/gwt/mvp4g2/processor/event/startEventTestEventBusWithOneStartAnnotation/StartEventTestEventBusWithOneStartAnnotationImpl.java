@@ -50,7 +50,6 @@ public final class StartEventTestEventBusWithOneStartAnnotationImpl extends Abst
     super.logEvent(++AbstractEventBus.logDepth, "start");
     ++AbstractEventBus.logDepth;
     if (!super.filterEvent("start")) {
-      super.logEventFilter(AbstractEventBus.logDepth, "start");
       return;
     }
     EventMetaData<StartEventTestEventBusWithOneStartAnnotation> eventMetaData = super.getEventMetaData("start");
