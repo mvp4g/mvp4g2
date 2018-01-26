@@ -15,7 +15,7 @@ Currently, the basic event handling and place management is implemented.
 
 You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
 
-**Remember:** This is only a beta version.
+**Remember:** This is only a beta version and the documentation is still in progress.
 
 ## MVP4G2
 GWT is a very powerful framework that allows you to build efficient applications, especially if you follow the best practices described by Ray Ryan at Google IO 2009:
