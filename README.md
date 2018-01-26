@@ -42,7 +42,7 @@ That's why Mvp4g offers a solution to following these best practices
 
  using simple mechanisms that only need a few lines of code and a few annotations.
  
-And, keep in mind, mvp4g2 has not dependecy to GWT, therefore it does not know the Element- or Widget-classes To keep the framwork free of stuff to handle browser elements, these things are part of the developer job. You can use mvp4g2 with any framework you like. It will work with native GWT > 2.8, GXT, Elemental 1+2, Elemento or any other widget library. And, I think, it will work with J2CL/GWT 3. 
+And, keep in mind, mvp4g2 has not dependecy to GWT, therefore it does not know the Element- or Widget-classes. To keep the framwork free of stuff to handle browser elements, these things are part of the developer job. You can use mvp4g2 with anywidget framework you like. It will work with native GWT > 2.8, GXT, Elemental 1+2, Elemento or any other widget library. And, I think, it will work with J2CL/GWT 3. 
 
 This is all you need to create an event bus with four events in mvp4g2:
 ```
