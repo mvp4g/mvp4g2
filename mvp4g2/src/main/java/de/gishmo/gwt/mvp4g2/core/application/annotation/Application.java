@@ -14,7 +14,7 @@ import java.lang.annotation.RetentionPolicy;
  * <ul>
  * <li>eventBus: defines the eventbus of this application</li>
  * <li>loader: a loader that will be executed in case the application loads. If no loader
- * is defined, the NoApplicationLoader.class will be used</li>
+ * is defined, the NoApplicationLoader.class will be used. In this case, the loader will do nothing.</li>
  * </ul>
  *
  * @author Frank Hossfeld
