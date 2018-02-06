@@ -141,7 +141,7 @@ Not only does Mvp4g2 help you follow the best practices, it also provides mechan
 
 To understand how the framework works, you can look at the documentation, the [tutorials](https://github.com/mvp4g/mvp4g2/wiki/1.-Tutorials-and-Examples) or the [examples](https://github.com/mvp4g/mvp4g2-examples).
 
-Mvp4g has been successfully used on several commercial projects im the past, [take a look at a few of them](https://github.com/mvp4g/mvp4g/wiki/1.-Tutorials-and-Examples). You can also read and post feedback on the official [GWT marketplace](http://www.gwtmarketplace.com/#mvp4g) or [Mvp4g forum](https://groups.google.com/forum/#!forum/mvp4g).
+Mvp4g has been successfully used on several commercial projects im the past, [take a look at a few of them](https://github.com/mvp4g/mvp4g/wiki/1.-Tutorials-and-Examples). You can also read and post feedback here: [Mvp4g forum](https://groups.google.com/forum/#!forum/mvp4g).
 
 To communicate with the developers of MVP4G2 directly feel free to use the [MVP4G Gitter room](https://gitter.im/mvp4g/mvp4g).
 
