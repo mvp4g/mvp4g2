@@ -22,13 +22,6 @@ public interface IsEventBus {
   void fireNotFoundHistoryEvent();
 
   /**
-   * History on start?
-   *
-   * @return true -> look for history
-   */
-  boolean hasHistoryOnStart();
-
-  /**
    * Framework m,ethod to set the shell
    * <br/>
    * <b>Do not use!</b>

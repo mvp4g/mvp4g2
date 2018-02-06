@@ -67,6 +67,8 @@ public class ApplicationGenerator {
                                                               .getPackage(),
                                                      metaModel.getEventBus()
                                                               .getSimpleName() + ApplicationGenerator.IMPL_NAME)
+                                       .addStatement("super.historyOnStart = $L",
+                                                     metaModel.getHistoryOnStart())
                                        .build();
     typeSpec.addMethod(constructor);
 

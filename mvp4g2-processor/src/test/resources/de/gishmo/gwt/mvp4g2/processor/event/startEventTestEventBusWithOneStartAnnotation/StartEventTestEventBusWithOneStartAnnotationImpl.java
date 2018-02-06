@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class StartEventTestEventBusWithOneStartAnnotationImpl extends AbstractEventBus<StartEventTestEventBusWithOneStartAnnotation> implements StartEventTestEventBusWithOneStartAnnotation {
   public StartEventTestEventBusWithOneStartAnnotationImpl() {
-    super("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter", false);
+    super("de.gishmo.gwt.mvp4g2.processor.event.startEventTestEventBusWithOneStartAnnotation.MockShellPresenter");
   }
 
   @Override

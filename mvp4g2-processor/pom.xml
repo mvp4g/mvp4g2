@@ -8,7 +8,7 @@
   <parent>
     <groupId>de.gishmo.gwt</groupId>
     <artifactId>mvp4g2-parent</artifactId>
-    <version>1.0-beta-1</version>
+    <version>1.0-beta-2</version>
   </parent>
 
   <artifactId>mvp4g2-processor</artifactId>
@@ -18,7 +18,7 @@
   <properties>
     <autocommon.version>0.8</autocommon.version>
 
-    <mvp4g2.version>1.0-beta-1</mvp4g2.version>
+    <mvp4g2.version>1.0-beta-2</mvp4g2.version>
     <autoservice.version>1.0-rc3</autoservice.version>
     <javapoet.version>1.9.0</javapoet.version>
   </properties>

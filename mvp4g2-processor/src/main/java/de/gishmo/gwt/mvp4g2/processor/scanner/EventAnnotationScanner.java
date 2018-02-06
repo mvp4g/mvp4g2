@@ -117,7 +117,6 @@ public class EventAnnotationScanner {
       model.setNotFoundHistory(isNull(executableElement.getAnnotation(NotFoundHistory.class)) ? "false" : "true");
       // parameters
       executableElement.getParameters()
-                       .stream()
                        .forEach(v -> model.addParameter(v.getSimpleName()
                                                          .toString(),
                                                         v.asType()

@@ -167,8 +167,7 @@ public class Mvp4g2Processor
     this.handlerMetaModel = this.handlerAnnotationScanner.scan(roundEnvironment);
     this.presenterMetaModel = this.presenterAnnotationScanner.scan(roundEnvironment);
     this.historyMetaModel = this.historyAnnotationScanner.scan(roundEnvironment);
-    this.eventBusMetaModel = this.eventBusAnnotationScanner.scan(roundEnvironment,
-                                                                 this.presenterMetaModel);
+    this.eventBusMetaModel = this.eventBusAnnotationScanner.scan(roundEnvironment);
   }
 
   private void validateModels(RoundEnvironment roundEnv)

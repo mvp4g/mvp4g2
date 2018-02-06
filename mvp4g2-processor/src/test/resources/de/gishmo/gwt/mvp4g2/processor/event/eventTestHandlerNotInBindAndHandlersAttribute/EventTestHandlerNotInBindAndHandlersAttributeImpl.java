@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class EventTestHandlerNotInBindAndHandlersAttributeImpl extends AbstractEventBus<EventTestHandlerNotInBindAndHandlersAttribute> implements EventTestHandlerNotInBindAndHandlersAttribute {
   public EventTestHandlerNotInBindAndHandlersAttributeImpl() {
-    super("de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute.MockShellPresenter", false);
+    super("de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute.MockShellPresenter");
   }
 
   @Override

@@ -18,7 +18,6 @@ public class EventBusMetaModel
   implements IsMetaModel {
 
   private static final String KEY_EVENTBUS         = "eventBus";
-  private static final String KEY_HISTORY_ON_START = "historyOnStart";
   private static final String KEY_SHELL            = "shell";
   private static final String KEY_EVENTS           = "events";
 
@@ -32,7 +31,6 @@ public class EventBusMetaModel
 
   private ClassNameModel eventBus;
   private ClassNameModel shell;
-  private String         historyOnStart;
   private List<String> events = new ArrayList<>();
 
 
@@ -50,7 +48,6 @@ public class EventBusMetaModel
 
   public EventBusMetaModel(Properties properties) {
     this.eventBus = new ClassNameModel(properties.getProperty(EventBusMetaModel.KEY_EVENTBUS));
-    this.historyOnStart = properties.getProperty(EventBusMetaModel.KEY_HISTORY_ON_START);
     this.shell = new ClassNameModel(properties.getProperty(EventBusMetaModel.KEY_SHELL));
     this.events = Arrays.stream(properties.getProperty(EventBusMetaModel.KEY_EVENTS)
                                           .split("\\s*,\\s*"))
@@ -72,10 +69,8 @@ public class EventBusMetaModel
   }
 
   public EventBusMetaModel(String eventBus,
-                           String shell,
-                           String historyOnStart) {
+                           String shell) {
     this.eventBus = new ClassNameModel(eventBus);
-    this.historyOnStart = historyOnStart;
     this.shell = new ClassNameModel(shell);
   }
 
@@ -103,14 +98,6 @@ public class EventBusMetaModel
 
   public ClassNameModel getShell() {
     return shell;
-  }
-
-  public String getHistoryOnStart() {
-    return historyOnStart;
-  }
-
-  public boolean isHistoryOnStart() {
-    return "true".equals(historyOnStart);
   }
 
   public String getDebugLogLevel() {
@@ -165,9 +152,6 @@ public class EventBusMetaModel
                            this.eventBus.getClassName());
     properties.setProperty(EventBusMetaModel.KEY_SHELL,
                            this.shell.getClassName());
-    properties.setProperty(EventBusMetaModel.KEY_HISTORY_ON_START,
-                           this.historyOnStart);
-
     properties.setProperty(EventBusMetaModel.KEY_HAS_DEBUG_ANNOTATION,
                            this.hasDebugAnnotation);
     properties.setProperty(EventBusMetaModel.KEY_DEBUG_LOGGER,

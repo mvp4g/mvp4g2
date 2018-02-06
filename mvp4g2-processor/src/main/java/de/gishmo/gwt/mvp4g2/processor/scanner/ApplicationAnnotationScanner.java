@@ -72,7 +72,8 @@ public class ApplicationAnnotationScanner {
           TypeElement applicationLoaderTypeElement = this.getApplicationLoaderTypeElement(applicationAnnotation);
           model = new ApplicationMetaModel(applicationAnnotationElement.toString(),
                                            isNull(eventBusTypeElement) ? "" : eventBusTypeElement.toString(),
-                                           isNull(applicationLoaderTypeElement) ? "" : applicationLoaderTypeElement.toString());
+                                           isNull(applicationLoaderTypeElement) ? "" : applicationLoaderTypeElement.toString(),
+                                           String.valueOf(applicationAnnotation.historyOnStart()));
           // let's store the updated model
           this.processorUtils.store(model,
                                     this.createRelativeFileName());

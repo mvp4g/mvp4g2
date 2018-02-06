@@ -15,6 +15,7 @@ import java.lang.annotation.RetentionPolicy;
  * <li>eventBus: defines the eventbus of this application</li>
  * <li>loader: a loader that will be executed in case the application loads. If no loader
  * is defined, the NoApplicationLoader.class will be used. In this case, the loader will do nothing.</li>
+ * <li>historyOnStart: if true, the current history state will be fired when the application starts.</li>
  * </ul>
  *
  * @author Frank Hossfeld
@@ -25,5 +26,7 @@ public @interface Application {
   Class<? extends IsEventBus> eventBus();
 
   Class<? extends IsApplicationLoader> loader() default NoApplicationLoader.class;
+
+  boolean historyOnStart() default false;
 
 }

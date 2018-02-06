@@ -1,15 +1,10 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -18,11 +13,16 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
 
 import static java.util.Objects.isNull;
 
@@ -52,8 +52,7 @@ public class EventBusAnnotationScanner {
     return new Builder();
   }
 
-  public EventBusMetaModel scan(RoundEnvironment roundEnvironment,
-                                PresenterMetaModel presenterMetaModel)
+  public EventBusMetaModel scan(RoundEnvironment roundEnvironment)
     throws ProcessorException {
     // First we try to read an already created resource ...
     EventBusMetaModel model = this.restore();
@@ -78,8 +77,8 @@ public class EventBusAnnotationScanner {
         if (!isNull(eventBusAnnotation)) {
           TypeElement shellTypeElement = this.getShellTypeElement(eventBusAnnotation);
           model = new EventBusMetaModel(eventBusAnnotationElement.toString(),
-                                        isNull(shellTypeElement) ? "" : shellTypeElement.toString(),
-                                        String.valueOf(eventBusAnnotation.historyOnStart()));
+                                        isNull(shellTypeElement) ? ""
+                                          : shellTypeElement.toString());
           // Debug-Annotation
           model = DebugAnnotationScanner.builder()
                                         .processingEnvironment(processingEnvironment)
@@ -144,18 +143,17 @@ public class EventBusAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      EventBusMetaModel model = new EventBusMetaModel(props);
+      EventBusMetaModel    model       = new EventBusMetaModel(props);
       List<EventMetaModel> eventModels = new ArrayList<>();
       for (String eventInternalName : model.getEvents()) {
         FileObject resourceEvent = this.processingEnvironment.getFiler()
                                                              .getResource(StandardLocation.CLASS_OUTPUT,
                                                                           "",
                                                                           this.createRelativeEventModelFileName(eventInternalName));
-        props.load(resource.openInputStream());
+        props.load(resourceEvent.openInputStream());
         eventModels.add(new EventMetaModel(props));
       }
-      eventModels.stream()
-                 .forEach(m -> model.add(m));
+      eventModels.forEach(model::add);
       return model;
     } catch (IOException e) {
       this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");

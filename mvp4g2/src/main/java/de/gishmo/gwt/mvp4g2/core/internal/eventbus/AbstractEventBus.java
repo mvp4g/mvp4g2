@@ -74,17 +74,11 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /* Filters enabled */
   private boolean filtersEnable = false;
 
-  /* flag if we have to check history token at the start of the application */
-  private boolean historyOnStart;
-
-  public AbstractEventBus(String shellPresenterCanonialName,
-                          boolean historyOnStart) {
+  public AbstractEventBus(String shellPresenterCanonialName) {
     super();
 
     this.historyConverterMap = new HashMap<>();
-
     this.navigationConfirmationPresenter = null;
-    this.historyOnStart = historyOnStart;
 
     this.shellPresenterCanonialName = shellPresenterCanonialName;
 
@@ -274,24 +268,22 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     for (String eventHandlerClassName : eventMetaData.getDeactivateHandlerTypes()) {
       List<HandlerMetaData<?>> eventHandler = this.handlerMetaDataMap.get(eventHandlerClassName);
       if (!isNull(eventHandler) && eventHandler.size() != 0) {
-        eventHandler.stream()
-                    .forEachOrdered(eventHandlerMetaData -> {
-                      this.logHandlerDeactivating(AbstractEventBus.logDepth,
-                                                  eventMetaData.getEventName(),
-                                                  eventHandlerClassName);
-                      eventHandlerMetaData.getHandler()
-                                          .setActivated(false);
-                    });
+        eventHandler.forEach(eventHandlerMetaData -> {
+          this.logHandlerDeactivating(AbstractEventBus.logDepth,
+                                      eventMetaData.getEventName(),
+                                      eventHandlerClassName);
+          eventHandlerMetaData.getHandler()
+                              .setActivated(false);
+        });
         List<PresenterMetaData<?, ?>> presenters = this.presenterMetaDataMap.get(eventHandlerClassName);
         if (!isNull(presenters) && presenters.size() != 0) {
-          presenters.stream()
-                    .forEachOrdered(presenterHandlerMetaData -> {
-                      this.logHandlerDeactivating(AbstractEventBus.logDepth,
-                                                  eventMetaData.getEventName(),
-                                                  eventHandlerClassName);
-                      presenterHandlerMetaData.getPresenter()
-                                              .setActivated(false);
-                    });
+          presenters.forEach(presenterHandlerMetaData -> {
+            this.logHandlerDeactivating(AbstractEventBus.logDepth,
+                                        eventMetaData.getEventName(),
+                                        eventHandlerClassName);
+            presenterHandlerMetaData.getPresenter()
+                                    .setActivated(false);
+          });
         }
       }
     }
@@ -314,10 +306,6 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   public abstract void fireInitHistoryEvent();
 
   public abstract void fireNotFoundHistoryEvent();
-
-  public boolean hasHistoryOnStart() {
-    return historyOnStart;
-  }
 
   public void setShell() {
     // no IsShellPresenter found! ==> error

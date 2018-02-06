@@ -1,19 +1,20 @@
 package de.gishmo.gwt.mvp4g2.core.history;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.core.internal.eventbus.EventMetaData;
-import elemental2.dom.DomGlobal;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.internal.eventbus.EventMetaData;
+
+import elemental2.dom.DomGlobal;
 
 import static java.util.Objects.isNull;
 
 public class PlaceService<E extends IsEventBus> {
 
-  private static final String MODULE_SEPARATOR = "/";
-  private static final String URL_SEPARATOR    = "#";
-  private static final String CRAWLABLE        = "!";
+  //  private static final String MODULE_SEPARATOR = "/";
+  private static final String URL_SEPARATOR = "#";
+  private static final String CRAWLABLE     = "!";
 
   private IsEventBus                                       eventBus;
   private Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
@@ -21,30 +22,34 @@ public class PlaceService<E extends IsEventBus> {
 
   private boolean enabled = true;
 
-  public PlaceService(E eventBus) {
+  /* flag if we have to check history token at the start of the application */
+  protected boolean historyOnStart;
+
+  public PlaceService(E eventBus,
+                      boolean historyOnStart) {
     super();
 
     this.eventMetaDataMap = new HashMap<>();
     this.historyNameMap = new HashMap<>();
 
     this.eventBus = eventBus;
+    this.historyOnStart = historyOnStart;
 
     DomGlobal.window.addEventListener("popstate",
-                                      (e) -> {
-                                        confirmEvent(new NavigationEventCommand(eventBus) {
-                                          protected void execute() {
-                                            enabled = false;
-                                            convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
-                                            enabled = true;
-                                          }
-                                        });
-                                      });
+                                      (e) -> confirmEvent(new NavigationEventCommand(eventBus) {
+                                        protected void execute() {
+                                          enabled = false;
+                                          convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
+                                          enabled = true;
+                                        }
+                                      }));
   }
 
   /**
    * Ask for user's confirmation before firing an event
    *
-   * @param event event to confirm
+   * @param event
+   *   event to confirm
    */
   public void confirmEvent(NavigationEventCommand event) {
     if (isNull(this.eventBus.getNavigationConfirmationPresenter())) {
@@ -59,7 +64,8 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Convert the token to an event
    *
-   * @param token the token to convert
+   * @param token
+   *   the token to convert
    */
   protected void convertToken(String token) {
     boolean toContinue = false;
@@ -71,18 +77,18 @@ public class PlaceService<E extends IsEventBus> {
     }
     if (toContinue) {
       String[] result = parseToken(token);
-//      if (!forwardToChildModuleIfNeeded(result[0],
-//                                        result[1])) {
+      //      if (!forwardToChildModuleIfNeeded(result[0],
+      //                                        result[1])) {
       dispatchEvent(result[0],
                     result[1]);
-//      }
+      //      }
     } else {
       eventBus.fireInitHistoryEvent();
     }
   }
 
   private String getTokenFromUrl(String url) {
-    if (url.indexOf(PlaceService.URL_SEPARATOR) == -1) {
+    if (!url.contains(PlaceService.URL_SEPARATOR)) {
       return "";
     }
     return url.substring(url.indexOf(PlaceService.URL_SEPARATOR) + 1);
@@ -92,27 +98,27 @@ public class PlaceService<E extends IsEventBus> {
    * Parse the token and return a string array. The first element of this array contains the event
    * name whereas the second element contains the parameters associated to the event.
    *
-   * @param token token to parse
+   * @param token
+   *   token to parse
+   *
    * @return array of string
    */
   protected String[] parseToken(String token) {
     String[] result = new String[2];
-    int index = token.lastIndexOf(getParamSeparator());
-    result[0] = (index == -1) ?
-                token :
-                token.substring(0,
-                                index);
-    result[1] = (index == -1) ?
-                null :
-                token.substring(index + 1);
+    int      index  = token.lastIndexOf(getParamSeparator());
+    result[0] = (index == -1) ? token : token.substring(0,
+                                                        index);
+    result[1] = (index == -1) ? null : token.substring(index + 1);
     return result;
   }
 
   /**
    * Dispatch the event thanks to the history converter.
    *
-   * @param historyName name of the event stored in the token
-   * @param param       parameters stored in the token
+   * @param historyName
+   *   name of the event stored in the token
+   * @param param
+   *   parameters stored in the token
    */
   @SuppressWarnings("unchecked")
   protected void dispatchEvent(String historyName,
@@ -122,8 +128,7 @@ public class PlaceService<E extends IsEventBus> {
       if (!isNull(key)) {
         EventMetaData<? extends IsEventBus> metaData = this.eventMetaDataMap.get(key);
         if (!isNull(metaData)) {
-          @SuppressWarnings("rawtypes")
-          IsHistoryConverter converter = metaData.getHistoryConverter();
+          @SuppressWarnings("rawtypes") IsHistoryConverter converter = metaData.getHistoryConverter();
           if (isNull(converter)) {
             eventBus.fireNotFoundHistoryEvent();
           } else {
@@ -156,11 +161,14 @@ public class PlaceService<E extends IsEventBus> {
     eventBus.fireStartEvent();
     // do we have history?
     if (this.hasHistory()) {
-      if (eventBus.hasHistoryOnStart()) {
+      // TODO ...
+      if (this.historyOnStart) {
         convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
       } else {
         eventBus.fireInitHistoryEvent();
       }
+    } else {
+      eventBus.fireInitHistoryEvent();
     }
   }
 
@@ -173,12 +181,14 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Add a converter for an event.
    *
-   * @param eventMetaData EventMetaDAta object containing all relevant informations
+   * @param eventMetaData
+   *   EventMetaDAta object containing all relevant informations
    */
   public void addConverter(EventMetaData<? extends IsEventBus> eventMetaData) {
     String historyName = !isNull(eventMetaData.getHistoryName()) && eventMetaData.getHistoryName()
                                                                                  .trim()
-                                                                                 .length() > 0 ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
+                                                                                 .length() > 0
+      ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
     this.historyNameMap.put(historyName,
                             eventMetaData.getEventName());
     this.eventMetaDataMap.put(eventMetaData.getEventName(),
@@ -188,10 +198,14 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Convert an event and its associated parameters to a token.<br>
    *
-   * @param eventName name of the event to store
-   * @param param     string representation of the objects associated with the event that needs to be
-   *                  stored in the token
-   * @param onlyToken if true, only the token will be generated and browser history won't change
+   * @param eventName
+   *   name of the event to store
+   * @param param
+   *   string representation of the objects associated with the event that needs to be
+   *   stored in the token
+   * @param onlyToken
+   *   if true, only the token will be generated and browser history won't change
+   *
    * @return the generated token
    */
   public String place(String eventName,
@@ -203,10 +217,10 @@ public class PlaceService<E extends IsEventBus> {
     }
     String token = tokenize(metaData.getHistoryName(),
                             param);
-//    if (converters.get(eventName)
-//                  .isCrawlable()) {
-//      token = CRAWLABLE + token;
-//    }
+    //    if (converters.get(eventName)
+    //                  .isCrawlable()) {
+    //      token = CRAWLABLE + token;
+    //    }
     if (!onlyToken) {
       DomGlobal.window.history.pushState(param,
                                          "",
@@ -218,8 +232,11 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Transform an event and its parameters to a token
    *
-   * @param eventName event's name
-   * @param param     event's parameters
+   * @param eventName
+   *   event's name
+   * @param param
+   *   event's parameters
+   *
    * @return token to store in the history
    */
   private String tokenize(String eventName,

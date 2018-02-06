@@ -67,10 +67,9 @@ public class EventBusGenerator {
 
     MethodSpec constructor = MethodSpec.constructorBuilder()
                                        .addModifiers(Modifier.PUBLIC)
-                                       .addStatement("super($S, $L)",
+                                       .addStatement("super($S)",
                                                      eventBusMetaMetaModel.getShell()
-                                                                          .getClassName(),
-                                                     eventBusMetaMetaModel.getHistoryOnStart())
+                                                                          .getClassName())
                                        .build();
     typeSpec.addMethod(constructor);
 

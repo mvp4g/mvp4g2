@@ -8,6 +8,7 @@ public final class ApplicationAnnotationOkWithLoaderImpl extends AbstractApplica
   public ApplicationAnnotationOkWithLoaderImpl() {
     super();
     super.eventBus = new de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithLoader.MockEventBusImpl();
+    super.historyOnStart = false;
   }
 
   @Override

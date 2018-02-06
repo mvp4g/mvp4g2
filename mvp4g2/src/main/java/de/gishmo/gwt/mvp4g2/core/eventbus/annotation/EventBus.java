@@ -35,8 +35,6 @@ public @interface EventBus {
 
   Class<? extends IsShell<?, ?>> shell();
 
-  boolean historyOnStart() default false;
-
 //
 //  String startPresenterName() default "";
 //

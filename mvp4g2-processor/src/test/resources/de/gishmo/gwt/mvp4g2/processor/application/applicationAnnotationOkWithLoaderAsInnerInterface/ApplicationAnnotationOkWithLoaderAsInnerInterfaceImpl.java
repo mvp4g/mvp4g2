@@ -9,6 +9,7 @@ public final class ApplicationAnnotationOkWithLoaderAsInnerInterfaceImpl extends
   public ApplicationAnnotationOkWithLoaderAsInnerInterfaceImpl() {
     super();
     super.eventBus = new de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithLoaderAsInnerInterface.MockEventBusImpl();
+    super.historyOnStart = false;
   }
 
   @Override

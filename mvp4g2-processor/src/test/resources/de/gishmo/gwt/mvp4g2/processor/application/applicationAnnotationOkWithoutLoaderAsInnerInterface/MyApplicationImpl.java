@@ -10,6 +10,7 @@ public final class MyApplicationImpl extends AbstractApplication<MockEventBus> i
   public MyApplicationImpl() {
     super();
     super.eventBus = new de.gishmo.gwt.mvp4g2.processor.application.applicationAnnotationOkWithoutLoaderAsInnerInterface.MockEventBusImpl();
+    super.historyOnStart = false;
   }
 
   @Override
