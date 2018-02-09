@@ -98,6 +98,11 @@ public class ProcessorUtils {
   //    return (PackageElement) type;
   //  }
 
+
+  public Elements getElements() {
+    return this.elements;
+  }
+
   /**
    * Returns all of the superclasses and superinterfaces for a given generator
    * including the generator itself. The returned set maintains an internal
@@ -314,6 +319,12 @@ public class ProcessorUtils {
   public String createFullClassName(String className) {
     return className.replace(".",
                              "_");
+  }
+
+  public String createEventHandlingMethodName(String eventName) {
+    return "on" + eventName.substring(0,
+                                      1)
+                           .toUpperCase() + eventName.substring(2);
   }
 
   public static class Builder {
