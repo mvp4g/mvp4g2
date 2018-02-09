@@ -100,4 +100,18 @@ public class PresenterTest {
           .and()
           .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterOK/De_gishmo_gwt_mvp4g2_processor_eventhandler_presenterOK_PresenterOKMetaData.java"));
   }
+
+  @Test
+  public void testEventHandlerWithUnusedEventHandlerImplementation() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerWithUnusedEventHandlerImplementation/EventBusEventHandlerWithUnusedEventHandlerImplementation.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerWithUnusedEventHandlerImplementation/MockShellPresenter01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError();
+  }
 }

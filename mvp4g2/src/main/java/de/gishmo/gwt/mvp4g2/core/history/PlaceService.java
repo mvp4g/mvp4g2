@@ -1,12 +1,11 @@
 package de.gishmo.gwt.mvp4g2.core.history;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.internal.eventbus.EventMetaData;
-
 import elemental2.dom.DomGlobal;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -167,8 +166,6 @@ public class PlaceService<E extends IsEventBus> {
       } else {
         eventBus.fireInitHistoryEvent();
       }
-    } else {
-      eventBus.fireInitHistoryEvent();
     }
   }
 

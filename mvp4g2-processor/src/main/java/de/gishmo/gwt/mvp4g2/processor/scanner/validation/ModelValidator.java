@@ -23,6 +23,11 @@ import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import static java.util.Objects.isNull;
 
 public class ModelValidator {
@@ -54,21 +59,8 @@ public class ModelValidator {
     this.checkHandlerUsedAsBindAndHandler();
     // check weather there are more then one presenter annotated with IsShell
     this.checkNumbersOfPrensentersWhichImplementsIsShell();
-  }
-
-  private void checkNumbersOfPrensentersWhichImplementsIsShell()
-    throws ProcessorException {
-    if (!isNull(this.presenterMetaModel)) {
-      boolean isShell = false;
-      for (PresenterMetaModel.PresenterData presenterData : this.presenterMetaModel.getPresenterDatas()) {
-        if (presenterData.isShell()) {
-          if (isShell) {
-            throw new ProcessorException("Mvp4g2Processor: there can be only one presenter implementing IsShell");
-          }
-          isShell = true;
-        }
-      }
-    }
+    // check, if all event handler methods are used ...
+    this.checkIfAllEventHandlerMethodsAreUsed();
   }
 
   private void checkHandlerUsedAsBindAndHandler()
@@ -104,6 +96,58 @@ public class ModelValidator {
     } else {
       throw new ProcessorException("Mvp4g2Processor: no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2 or forget to annotate the EventBus with @EventBus?");
     }
+  }
+
+  private void checkNumbersOfPrensentersWhichImplementsIsShell()
+    throws ProcessorException {
+    if (!isNull(this.presenterMetaModel)) {
+      boolean isShell = false;
+      for (PresenterMetaModel.PresenterData presenterData : this.presenterMetaModel.getPresenterDatas()) {
+        if (presenterData.isShell()) {
+          if (isShell) {
+            throw new ProcessorException("Mvp4g2Processor: there can be only one presenter implementing IsShell");
+          }
+          isShell = true;
+        }
+      }
+    }
+  }
+
+  private void checkIfAllEventHandlerMethodsAreUsed() {
+    if (!isNull(this.presenterMetaModel)) {
+      if (!isNull(this.eventBusMetaModel)) {
+        this.presenterMetaModel.getPresenterDatas()
+                               .forEach(presenterData -> {
+                                 presenterData.getHandledEvents()
+                                              .stream()
+                                              .map(handledEvents -> Arrays.asList(handledEvents.split(",")))
+                                              .flatMap(Collection::stream)
+                                              .filter(event -> this.eventBusMetaModel.getEventMetaModel(event) == null)
+                                              .forEach(event -> processorUtils.createWarningMessage("Mvp4g2Processor: presenter >>" + presenterData.getPresenter()
+                                                                                                                                                   .getClassName() + "<< -> event >>" + createMethodName(event) + " is never called by the eventbus"));
+                               });
+      }
+    }
+  }
+
+  private String createMethodName(String eventHandlingName) {
+    List<String> tokens = Arrays.asList(eventHandlingName.split("_pPp_"));
+    StringBuilder sb = new StringBuilder();
+    sb.append(tokens.get(0))
+      .append("(");
+    int bound = tokens.size();
+    IntStream.range(1,
+                    bound)
+             .forEachOrdered(i -> {
+               sb.append(tokens.get(i)
+                               .replace("_",
+                                        "."));
+               if (i < tokens.size() - 1) {
+                 sb.append(", ");
+               }
+             });
+    sb.append(")");
+    return sb.toString();
   }
 
   public static final class Builder {

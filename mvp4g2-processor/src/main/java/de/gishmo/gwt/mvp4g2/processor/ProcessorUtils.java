@@ -168,14 +168,22 @@ public class ProcessorUtils {
                                "_") + "_" + className;
   }
 
-  public void createNoteMessage(String errorMessage) {
+  public void createNoteMessage(String noteMessage) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-    pw.println(errorMessage);
+    pw.println(noteMessage);
     pw.close();
     messager.printMessage(Diagnostic.Kind.NOTE,
                           sw.toString());
+  }
 
+  public void createWarningMessage(String warningMessage) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    pw.println(warningMessage);
+    pw.close();
+    messager.printMessage(Diagnostic.Kind.WARNING,
+                          sw.toString());
   }
 
   public String createHandledEventArray(TypeElement typeElement) {
