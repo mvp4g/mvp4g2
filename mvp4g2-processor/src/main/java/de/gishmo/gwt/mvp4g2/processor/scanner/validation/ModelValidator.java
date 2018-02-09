@@ -23,6 +23,9 @@ import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +66,8 @@ public class ModelValidator {
     this.checkIfAllEventHandlerMethodsAreUsed();
     // check, if all events got an event handling method
     this.checkIfAllEventMethodsAreHandled();
+    // check, if all events which have the handler-attribute have an implementation
+    this.checkIfAllEventMethodsOfHandlerAreHandled();
   }
 
   private void checkHandlerUsedAsBindAndHandler()
@@ -93,7 +98,6 @@ public class ModelValidator {
               }
             }
           }
-          // TODO mehtode implementiert
         }
       }
     } else {
@@ -140,27 +144,84 @@ public class ModelValidator {
           if (!isNull(this.presenterMetaModel)) {
             eventIsHandled = this.presenterMetaModel.getPresenterDatas()
                                                     .stream()
-                                                    .anyMatch(presenterData -> presenterData.handlesEvents(eventModel.getEventName()));
+                                                    .anyMatch(presenterData -> presenterData.handlesEvents(eventModel.getEventInternalName()));
           }
           if (!eventIsHandled) {
             if (!isNull(this.handlerMetaModel)) {
               eventIsHandled = this.handlerMetaModel.getHandlerDatas()
                                                     .stream()
-                                                    .anyMatch(handlerData -> handlerData.handlesEvents(eventModel.getEventName()));
+                                                    .anyMatch(handlerData -> handlerData.handlesEvents(eventModel.getEventInternalName()));
             }
           }
           if (!eventIsHandled) {
-            this.processorUtils.createErrorMessage("Mvp4g2Processor: event >>" + eventModel.getEventName() + "<< is never handled by a presenter or handler");
+            this.processorUtils.createErrorMessage("Mvp4g2Processor: event >>" + createMethodName(eventModel.getEventInternalName()) + "<< is never handled by a presenter or handler");
           }
         }
       }
     }
   }
 
-  private String createMethodName(String eventHandlingName) {
-    List<String> tokens = Arrays.asList(eventHandlingName.split("_pPp_"));
+  private void checkIfAllEventMethodsOfHandlerAreHandled() {
+    if (!isNull(this.eventBusMetaModel)) {
+      for (EventMetaModel eventMetaModel : this.eventBusMetaModel.getEventMetaModels()) {
+        for (ClassNameModel classNameModel : eventMetaModel.getHandlers()) {
+          hasEventHandlingMethodImplemented(eventMetaModel.getEventInternalName(),
+                                            classNameModel);
+        }
+      }
+    }
+  }
+
+  private String createMethodName(String eventInternalName) {
+    List<String> tokens = Arrays.asList(eventInternalName.split("_pPp_"));
     StringBuilder sb = new StringBuilder();
     sb.append(tokens.get(0))
+      .append("(");
+    int bound = tokens.size();
+    IntStream.range(1,
+                    bound)
+             .forEachOrdered(i -> {
+               sb.append(tokens.get(i)
+                               .replace("_",
+                                        "."));
+               if (i < tokens.size() - 1) {
+                 sb.append(", ");
+               }
+             });
+    sb.append(")");
+    return sb.toString();
+  }
+
+  private void hasEventHandlingMethodImplemented(String eventInternalName,
+                                                 ClassNameModel classNameModel) {
+    TypeElement typeElement = this.processorUtils.getElements()
+                                                 .getTypeElement(classNameModel.getClassName());
+    if (typeElement != null) {
+      String methodNameToLookFor = this.createEventHandlungMethodName(eventInternalName);
+      // Liste der Methoden
+      for (Element element : this.processorUtils.getElements()
+                                                .getAllMembers(typeElement)) {
+        if (element instanceof ExecutableElement) {
+          ExecutableElement executableElement = (ExecutableElement) element;
+          if (methodNameToLookFor.equals(executableElement.toString())) {
+            return;
+          }
+        }
+      }
+    }
+    this.processorUtils.createErrorMessage("Mvp4g2Processor: presenter >>" + classNameModel.getClassName() + "<< -> event >>" + createEventHandlungMethodName(eventInternalName) + "<< is not handled by presenter/handler");
+  }
+
+  private String createEventHandlungMethodName(String eventInternalName) {
+    List<String> tokens = Arrays.asList(eventInternalName.split("_pPp_"));
+    StringBuilder sb = new StringBuilder();
+    sb.append("on")
+      .append(tokens.get(0)
+                    .substring(0,
+                               1)
+                    .toUpperCase())
+      .append(tokens.get(0)
+                    .substring(1))
       .append("(");
     int bound = tokens.size();
     IntStream.range(1,

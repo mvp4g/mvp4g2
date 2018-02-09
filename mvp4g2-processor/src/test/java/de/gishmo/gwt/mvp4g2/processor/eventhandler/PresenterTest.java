@@ -131,6 +131,40 @@ public class PresenterTest {
             })
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("event >>doSomething<< is never handled by a presenter or handler");
+          .withErrorContaining("event >>doSomething()<< is never handled by a presenter or handler");
+  }
+
+  @Test
+  public void testPresenterWithWrongImplementation01() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation01/EventBusHandlerWithNotImplementedEvent.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation01/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation01/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation01/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("event >>doSomething()<< is never handled by a presenter or handler");
+  }
+
+  @Test
+  public void testHandlerWithWrongImplementation02() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation02/EventBusHandlerWithNotImplementedEvent.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation02/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation02/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation02/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("event >>doSomething(java.lang.String)<< is never handled by a presenter or handler");
   }
 }

@@ -20,7 +20,11 @@ import com.google.testing.compile.JavaFileObjects;
 import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+import java.util.ArrayList;
+
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 import static org.truth0.Truth.ASSERT;
 
 public class EventbusTest {
@@ -68,5 +72,39 @@ public class EventbusTest {
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("@Start-annotation can only be used on zero argument methods");
+  }
+
+  @Test
+  public void testEventWithHandlerAttributeNotImplemented01() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/EventBusEventWithHandlerAttributeNotImplemented.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("Mvp4g2Processor: presenter >>de.gishmo.gwt.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented01.MockShellPresenter01<< -> event >>onDoSomething()<< is not handled by presenter/handler");
+  }
+
+  @Test
+  public void testEventWithHandlerAttributeNotImplemented02() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/EventBusEventWithHandlerAttributeNotImplemented.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("Mvp4g2Processor: presenter >>de.gishmo.gwt.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented02.MockShellPresenter01<< -> event >>onDoSomething(java.lang.String)<< is not handled by presenter/handler");
   }
 }
