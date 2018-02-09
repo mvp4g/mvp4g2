@@ -1,5 +1,6 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
+import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
@@ -61,6 +62,11 @@ public class PresenterAnnotationScanner {
                                        .toString(),
                 typeElement.getAnnotation(Presenter.class)
                            .multiple() ? "true" : "false",
+                this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                        typeElement.asType(),
+                                                        this.processingEnvironment.getElementUtils()
+                                                                                  .getTypeElement(IsShell.class.getCanonicalName())
+                                                                                  .asType()) ? "true" : "false",
                 this.getViewClassTypeElement(element.getAnnotation(Presenter.class))
                     .getQualifiedName()
                     .toString(),

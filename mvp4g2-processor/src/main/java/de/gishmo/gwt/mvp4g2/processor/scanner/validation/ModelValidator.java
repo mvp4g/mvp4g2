@@ -52,6 +52,23 @@ public class ModelValidator {
     throws ProcessorException {
     // check if a handler is used inside the bind and the handler attribute for one event
     this.checkHandlerUsedAsBindAndHandler();
+    // check weather there are more then one presenter annotated with IsShell
+    this.checkNumbersOfPrensentersWhichImplementsIsShell();
+  }
+
+  private void checkNumbersOfPrensentersWhichImplementsIsShell()
+    throws ProcessorException {
+    if (!isNull(this.presenterMetaModel)) {
+      boolean isShell = false;
+      for (PresenterMetaModel.PresenterData presenterData : this.presenterMetaModel.getPresenterDatas()) {
+        if (presenterData.isShell()) {
+          if (isShell) {
+            throw new ProcessorException("Mvp4g2Processor: there can be only one presenter implementing IsShell");
+          }
+          isShell = true;
+        }
+      }
+    }
   }
 
   private void checkHandlerUsedAsBindAndHandler()
@@ -85,7 +102,7 @@ public class ModelValidator {
         }
       }
     } else {
-      throw new ProcessorException("Mvp4g2Processor: no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2?");
+      throw new ProcessorException("Mvp4g2Processor: no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2 or forget to annotate the EventBus with @EventBus?");
     }
   }
 

@@ -38,7 +38,7 @@ public class ImplementationTest {
           .that(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/implementation/testOnlyApplicationData/ApplicationAnnotation.java"))
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2?");
+          .withErrorContaining("no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2 or forget to annotate the EventBus with @EventBus?");
   }
 
   @Test

@@ -5,6 +5,7 @@ import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class PresenterMetaModel
   private static final String KEY_PRESENTERS           = "presenters";
   private static final String KEY_PRESENTER            = ".presenter";
   private static final String KEY_IS_MULTIPLE          = ".isMultiple";
+  private static final String KEY_IS_SHELL             = ".isShell";
   private static final String KEY_HANDLED_EVENTS       = ".handledEvents";
   private static final String KEY_VIEW_CLASS           = ".viewClass";
   private static final String KEY_VIEW_INTERFACE       = ".viewInterface";
@@ -35,6 +37,7 @@ public class PresenterMetaModel
             this.presenterDatas.put(handlerClassName,
                                     new PresenterData(handlerClassName,
                                                       properties.getProperty(s + PresenterMetaModel.KEY_IS_MULTIPLE),
+                                                      properties.getProperty(s + PresenterMetaModel.KEY_IS_SHELL),
                                                       properties.getProperty(s + PresenterMetaModel.KEY_VIEW_CLASS),
                                                       properties.getProperty(s + PresenterMetaModel.KEY_VIEW_INTERFACE),
                                                       properties.getProperty(s + PresenterMetaModel.KEY_VIEW_CREATION_METHOD),
@@ -43,23 +46,26 @@ public class PresenterMetaModel
           });
   }
 
-  public void add(String presenter,
-                  String isMultiple,
-                  String viewClass,
-                  String viewInterface,
-                  String viewCreationMethod,
-                  String eventHandlers) {
-    this.presenterDatas.put(presenter,
-                            new PresenterData(presenter,
-                                              isMultiple,
-                                              viewClass,
-                                              viewInterface,
-                                              viewCreationMethod,
-                                              eventHandlers));
-  }
+//  public void add(String presenter,
+//                  String isMultiple,
+//                  String isShell,
+//                  String viewClass,
+//                  String viewInterface,
+//                  String viewCreationMethod,
+//                  String eventHandlers) {
+//    this.presenterDatas.put(presenter,
+//                            new PresenterData(presenter,
+//                                              isMultiple,
+//                                              isShell,
+//                                              viewClass,
+//                                              viewInterface,
+//                                              viewCreationMethod,
+//                                              eventHandlers));
+//  }
 
   public void add(String presenter,
                   String isMultiple,
+                  String isShell,
                   String viewClass,
                   String viewInterface,
                   String viewCreationMethod,
@@ -67,6 +73,7 @@ public class PresenterMetaModel
     this.presenterDatas.put(presenter,
                             new PresenterData(presenter,
                                               isMultiple,
+                                              isShell,
                                               viewClass,
                                               viewInterface,
                                               viewCreationMethod,
@@ -79,6 +86,10 @@ public class PresenterMetaModel
 
   public PresenterData getPresenterData(String key) {
     return this.presenterDatas.get(key);
+  }
+
+  public Collection<PresenterData> getPresenterDatas() {
+    return this.presenterDatas.values();
   }
 
   public Properties createPropertes() {
@@ -96,6 +107,9 @@ public class PresenterMetaModel
                          props.setProperty(data.getPresenter()
                                                .getClassName() + PresenterMetaModel.KEY_IS_MULTIPLE,
                                            data.getIsMultiple());
+                         props.setProperty(data.getPresenter()
+                                               .getClassName() + PresenterMetaModel.KEY_IS_SHELL,
+                                           data.getIsShell());
                          props.setProperty(data.getPresenter()
                                                .getClassName() + PresenterMetaModel.KEY_VIEW_CLASS,
                                            data.getViewClass()
@@ -126,16 +140,19 @@ public class PresenterMetaModel
     private ClassNameModel viewClass;
     private ClassNameModel viewInterface;
     private String         viewCreationMethod;
+    private String         isShell;
     private List<String> handledEvents = new ArrayList<>();
 
     public PresenterData(String presenter,
                          String isMultiple,
+                         String isShell,
                          String viewClass,
                          String viewInterface,
                          String viewCreationMethod,
                          String eventHandlers) {
       this(presenter,
            isMultiple,
+           isShell,
            viewClass,
            viewInterface,
            viewCreationMethod,
@@ -144,12 +161,14 @@ public class PresenterMetaModel
 
     public PresenterData(String presenter,
                          String isMultiple,
+                         String isShell,
                          String viewClass,
                          String viewInterface,
                          String viewCreationMethod,
                          String... eventHandlers) {
       this.presenter = new ClassNameModel(presenter);
       this.isMultiple = isMultiple;
+      this.isShell = isShell;
       this.viewClass = new ClassNameModel(viewClass);
       this.viewInterface = new ClassNameModel(viewInterface);
       this.viewCreationMethod = viewCreationMethod;
@@ -183,6 +202,14 @@ public class PresenterMetaModel
 
     public String getViewCreationMethod() {
       return viewCreationMethod;
+    }
+
+    public boolean isShell() {
+      return "true".equals(isShell);
+    }
+
+    public String getIsShell() {
+      return isShell;
     }
   }
 }
