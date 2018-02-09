@@ -15,28 +15,24 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.handlerWithNotImplementedEvent;
 
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 
-@Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.FRAMEWORK)
-public class MockShellPresenter
-  extends AbstractPresenter<EventTestHandlerNotInBindAndHandlersAttribute, IMockShellView>
-  implements IMockShellView.Presenter,
-             IsShell<EventTestHandlerNotInBindAndHandlersAttribute, IMockShellView> {
-
-  public void bind() {
-  }
+@Presenter(viewClass = MockShellView01.class, viewInterface = IMockShellView01.class)
+public class MockShellPresenter01
+  extends AbstractPresenter<EventBusHandlerWithNotImplementedEvent, IMockShellView01>
+  implements IMockShellView01.Presenter,
+             IsShell<EventBusHandlerWithNotImplementedEvent, IMockShellView01> {
 
   @Override
   public void setShell() {
   }
 
-  public void onEvent02() {
-  }
-
-  public void onEvent03() {
+  @EventHandler
+  public void onDoSomething() {
   }
 }

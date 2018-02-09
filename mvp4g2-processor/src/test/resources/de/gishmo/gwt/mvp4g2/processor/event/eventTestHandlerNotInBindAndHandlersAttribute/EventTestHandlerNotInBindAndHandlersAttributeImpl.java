@@ -150,6 +150,19 @@ public final class EventTestHandlerNotInBindAndHandlersAttributeImpl extends Abs
     List<HandlerMetaData<?>> handlers = null;
     List<PresenterMetaData<?, ?>> presenters = null;
     List<String> listOfExecutedHandlers = new ArrayList<>();
+    // handling: de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute.MockOneEventHandler
+    handlers = this.handlerMetaDataMap.get("de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute.MockOneEventHandler");
+    super.executeHandler(eventMetaData, handlers, null, new AbstractEventBus.ExecHandler() {
+      @Override
+      public boolean execPass(EventMetaData<?> eventMetaData, HandlerMetaData<?> metaData) {
+        return metaData.getHandler().pass(eventMetaData.getEventName());
+      }
+
+      @Override
+      public void execEventHandlingMethod(HandlerMetaData<?> metaData) {
+        ((MockOneEventHandler) metaData.getHandler()).onEvent01();
+      }
+    }, false);
   }
 
   @Override
@@ -191,5 +204,6 @@ public final class EventTestHandlerNotInBindAndHandlersAttributeImpl extends Abs
     de_gishmo_gwt_mvp4g2_processor_event_eventTestHandlerNotInBindAndHandlersAttribute_MockOneEventHandlerMetaData.getHandler().setEventBus(this);
     //
     // ===> add the handler to the handler list of the EventMetaData-class
+    super.getEventMetaData("event01").addHandler("de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute.MockOneEventHandler");
   }
 }

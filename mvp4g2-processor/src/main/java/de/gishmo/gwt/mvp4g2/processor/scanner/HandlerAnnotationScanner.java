@@ -56,7 +56,6 @@ public class HandlerAnnotationScanner {
       // update model
       model.add(((TypeElement) element).getQualifiedName()
                                        .toString(),
-
                 this.processorUtils.createHandledEventArray(typeElement));
     }
     // let's store the updated model

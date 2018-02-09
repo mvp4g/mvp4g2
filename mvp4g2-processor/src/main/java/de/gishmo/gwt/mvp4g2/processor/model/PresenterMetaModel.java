@@ -172,8 +172,7 @@ public class PresenterMetaModel
       this.viewClass = new ClassNameModel(viewClass);
       this.viewInterface = new ClassNameModel(viewInterface);
       this.viewCreationMethod = viewCreationMethod;
-      Arrays.stream(eventHandlers)
-            .forEach(eventHandler -> handledEvents.add(eventHandler));
+      handledEvents.addAll(Arrays.asList(eventHandlers));
     }
 
     public ClassNameModel getPresenter() {
@@ -182,6 +181,10 @@ public class PresenterMetaModel
 
     public List<String> getHandledEvents() {
       return handledEvents;
+    }
+
+    public boolean handlesEvents(String eventName) {
+      return handledEvents.contains(eventName);
     }
 
     public boolean isMultiple() {

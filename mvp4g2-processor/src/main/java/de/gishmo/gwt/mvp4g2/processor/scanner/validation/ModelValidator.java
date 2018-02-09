@@ -61,6 +61,8 @@ public class ModelValidator {
     this.checkNumbersOfPrensentersWhichImplementsIsShell();
     // check, if all event handler methods are used ...
     this.checkIfAllEventHandlerMethodsAreUsed();
+    // check, if all events got an event handling method
+    this.checkIfAllEventMethodsAreHandled();
   }
 
   private void checkHandlerUsedAsBindAndHandler()
@@ -91,6 +93,7 @@ public class ModelValidator {
               }
             }
           }
+          // TODO mehtode implementiert
         }
       }
     } else {
@@ -117,15 +120,39 @@ public class ModelValidator {
     if (!isNull(this.presenterMetaModel)) {
       if (!isNull(this.eventBusMetaModel)) {
         this.presenterMetaModel.getPresenterDatas()
-                               .forEach(presenterData -> {
-                                 presenterData.getHandledEvents()
-                                              .stream()
-                                              .map(handledEvents -> Arrays.asList(handledEvents.split(",")))
-                                              .flatMap(Collection::stream)
-                                              .filter(event -> this.eventBusMetaModel.getEventMetaModel(event) == null)
-                                              .forEach(event -> processorUtils.createWarningMessage("Mvp4g2Processor: presenter >>" + presenterData.getPresenter()
-                                                                                                                                                   .getClassName() + "<< -> event >>" + createMethodName(event) + " is never called by the eventbus"));
-                               });
+                               .forEach(presenterData -> presenterData.getHandledEvents()
+                                                                      .stream()
+                                                                      .map(handledEvents -> Arrays.asList(handledEvents.split(",")))
+                                                                      .flatMap(Collection::stream)
+                                                                      .filter(event -> this.eventBusMetaModel.getEventMetaModel(event) == null)
+                                                                      .forEach(event -> processorUtils.createWarningMessage("Mvp4g2Processor: presenter >>" + presenterData.getPresenter()
+                                                                                                                                                                           .getClassName() + "<< -> event >>" + createMethodName(event) + "<< is never called by the eventbus")));
+      }
+    }
+  }
+
+  private void checkIfAllEventMethodsAreHandled() {
+    if (!isNull(this.eventBusMetaModel)) {
+      for (EventMetaModel eventModel : this.eventBusMetaModel.getEventMetaModels()) {
+        if (eventModel.getHandlers()
+                      .size() == 0) {
+          boolean eventIsHandled = false;
+          if (!isNull(this.presenterMetaModel)) {
+            eventIsHandled = this.presenterMetaModel.getPresenterDatas()
+                                                    .stream()
+                                                    .anyMatch(presenterData -> presenterData.handlesEvents(eventModel.getEventName()));
+          }
+          if (!eventIsHandled) {
+            if (!isNull(this.handlerMetaModel)) {
+              eventIsHandled = this.handlerMetaModel.getHandlerDatas()
+                                                    .stream()
+                                                    .anyMatch(handlerData -> handlerData.handlesEvents(eventModel.getEventName()));
+            }
+          }
+          if (!eventIsHandled) {
+            this.processorUtils.createErrorMessage("Mvp4g2Processor: event >>" + eventModel.getEventName() + "<< is never handled by a presenter or handler");
+          }
+        }
       }
     }
   }

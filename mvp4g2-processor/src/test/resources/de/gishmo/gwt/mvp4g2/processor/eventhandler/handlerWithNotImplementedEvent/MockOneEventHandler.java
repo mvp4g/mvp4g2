@@ -15,20 +15,12 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.handlerWithNotImplementedEvent;
 
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
-import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 
 @Handler
 public class MockOneEventHandler
-  extends AbstractHandler<EventTestHandlerNotInBindAndHandlersAttribute> {
-
-  public void bind() {
-  }
-
-  @EventHandler
-  public void onEvent01() {
-  }
+  extends AbstractHandler<EventBusHandlerWithNotImplementedEvent> {
 }

@@ -25,13 +25,13 @@ public interface EventTestHandlerNotInBindAndHandlersAttribute
   extends IsEventBus {
 
   @Event(bind = MockShellPresenter.class)
-  public void event01();
+  void event01();
 
   @Event(handlers = MockShellPresenter.class)
-  public void event02();
+  void event02();
 
   @Event(bind = MockOneEventHandler.class,
     handlers = MockShellPresenter.class)
-  public void event03();
+  void event03();
 
 }

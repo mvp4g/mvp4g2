@@ -74,4 +74,22 @@ public class HandlerTest {
           .and()
           .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerOK/De_gishmo_gwt_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java"));
   }
+
+  @Test
+  public void testEventHandlerWithNotImplementedEvent() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/EventBusHandlerWithNotImplementedEvent.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockOneEventHandler.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("event >>doSomethingInHandler<< is never handled by a presenter or handler");
+  }
 }

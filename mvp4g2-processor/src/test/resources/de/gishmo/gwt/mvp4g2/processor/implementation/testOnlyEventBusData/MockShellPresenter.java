@@ -20,6 +20,7 @@ package de.gishmo.gwt.mvp4g2.processor.implementation.testOnlyEventBusData;
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 
 @Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class, viewCreator = Presenter.VIEW_CREATION_METHOD.FRAMEWORK)
 public class MockShellPresenter
@@ -34,4 +35,7 @@ public class MockShellPresenter
   public void onStart() {
   }
 
+  @EventHandler
+  public void onOneEvent() {
+  }
 }

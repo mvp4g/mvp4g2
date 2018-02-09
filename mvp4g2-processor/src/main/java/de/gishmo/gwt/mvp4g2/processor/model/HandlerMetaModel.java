@@ -5,6 +5,7 @@ import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,10 @@ public class HandlerMetaModel
     return this.handlerDatas.get(key);
   }
 
+  public Collection<HandlerData> getHandlerDatas() {
+    return this.handlerDatas.values();
+  }
+
   public Properties createPropertes() {
     Properties props = new Properties();
     props.setProperty(HandlerMetaModel.KEY_HANDLERS,
@@ -102,6 +107,10 @@ public class HandlerMetaModel
 
     public List<String> getHandledEvents() {
       return handledEvents;
+    }
+
+    public boolean handlesEvents(String eventName) {
+      return handledEvents.contains(eventName);
     }
   }
 }

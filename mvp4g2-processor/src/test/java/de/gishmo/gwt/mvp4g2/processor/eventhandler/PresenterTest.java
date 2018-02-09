@@ -109,9 +109,28 @@ public class PresenterTest {
               {
                 add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerWithUnusedEventHandlerImplementation/EventBusEventHandlerWithUnusedEventHandlerImplementation.java"));
                 add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerWithUnusedEventHandlerImplementation/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerWithUnusedEventHandlerImplementation/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlerWithUnusedEventHandlerImplementation/MockShellView01.java"));
               }
             })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError();
+  }
+
+  @Test
+  public void testEventHandlerWithNotImplementedEvent() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithNotImplementedEvent/EventBusEventHandlerWithNotImplementedEvent.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithNotImplementedEvent/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithNotImplementedEvent/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithNotImplementedEvent/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("event >>doSomething<< is never handled by a presenter or handler");
   }
 }
