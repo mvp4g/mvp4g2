@@ -68,6 +68,7 @@ public class ModelValidator {
     this.checkIfAllEventMethodsAreHandled();
     // check, if all events which have the handler-attribute have an implementation
     this.checkIfAllEventMethodsOfHandlerAreHandled();
+    //check, if all event handling mehtod return void!
   }
 
   private void checkHandlerUsedAsBindAndHandler()
@@ -128,6 +129,8 @@ public class ModelValidator {
                                                                       .stream()
                                                                       .map(handledEvents -> Arrays.asList(handledEvents.split(",")))
                                                                       .flatMap(Collection::stream)
+                                                                      .filter(event -> event != null && event.trim().length() > 0)
+                                                                      .map(event -> processorUtils.createEventNameFromHandlingMethod(event))
                                                                       .filter(event -> this.eventBusMetaModel.getEventMetaModel(event) == null)
                                                                       .forEach(event -> processorUtils.createWarningMessage("Mvp4g2Processor: presenter >>" + presenterData.getPresenter()
                                                                                                                                                                            .getClassName() + "<< -> event >>" + createMethodName(event) + "<< is never called by the eventbus")));
@@ -144,28 +147,35 @@ public class ModelValidator {
           if (!isNull(this.presenterMetaModel)) {
             eventIsHandled = this.presenterMetaModel.getPresenterDatas()
                                                     .stream()
-                                                    .anyMatch(presenterData -> presenterData.handlesEvents(eventModel.getEventInternalName()));
+                                                    .anyMatch(presenterData -> presenterData.handlesEvents(this.processorUtils.createEventHandlingMethodName(eventModel.getEventInternalName())));
           }
           if (!eventIsHandled) {
             if (!isNull(this.handlerMetaModel)) {
               eventIsHandled = this.handlerMetaModel.getHandlerDatas()
                                                     .stream()
-                                                    .anyMatch(handlerData -> handlerData.handlesEvents(eventModel.getEventInternalName()));
+                                                    .anyMatch(handlerData -> handlerData.handlesEvents(this.processorUtils.createEventHandlingMethodName(eventModel.getEventInternalName())));
             }
           }
           if (!eventIsHandled) {
-            this.processorUtils.createErrorMessage("Mvp4g2Processor: event >>" + createMethodName(eventModel.getEventInternalName()) + "<< is never handled by a presenter or handler");
+            if (eventModel.getBindings()
+                              .size() > 0) {
+              this.processorUtils.createNoteMessage("Mvp4g2Processor: event >>" + createMethodName(eventModel.getEventInternalName()) + "<< is only used for binding");
+            } else {
+              this.processorUtils.createErrorMessage("Mvp4g2Processor: event >>" + createMethodName(eventModel.getEventInternalName()) + "<< is never handled by a presenter or handler");
+            }
           }
         }
       }
     }
   }
 
-  private void checkIfAllEventMethodsOfHandlerAreHandled() {
+  private void checkIfAllEventMethodsOfHandlerAreHandled()
+    throws ProcessorException {
     if (!isNull(this.eventBusMetaModel)) {
       for (EventMetaModel eventMetaModel : this.eventBusMetaModel.getEventMetaModels()) {
         for (ClassNameModel classNameModel : eventMetaModel.getHandlers()) {
-          hasEventHandlingMethodImplemented(eventMetaModel.getEventInternalName(),
+          hasEventHandlingMethodImplemented(eventMetaModel,
+                                            eventMetaModel.getEventInternalName(),
                                             classNameModel);
         }
       }
@@ -192,8 +202,10 @@ public class ModelValidator {
     return sb.toString();
   }
 
-  private void hasEventHandlingMethodImplemented(String eventInternalName,
-                                                 ClassNameModel classNameModel) {
+  private void hasEventHandlingMethodImplemented(EventMetaModel eventMetaModel,
+                                                 String eventInternalName,
+                                                 ClassNameModel classNameModel)
+    throws ProcessorException {
     TypeElement typeElement = this.processorUtils.getElements()
                                                  .getTypeElement(classNameModel.getClassName());
     if (typeElement != null) {
@@ -204,12 +216,21 @@ public class ModelValidator {
         if (element instanceof ExecutableElement) {
           ExecutableElement executableElement = (ExecutableElement) element;
           if (methodNameToLookFor.equals(executableElement.toString())) {
+            if (!"void".equals(executableElement.getReturnType()
+                                                .toString())) {
+              throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + eventInternalName.split(",")[0] + "<< must return 'void'");
+            }
             return;
           }
         }
       }
     }
-    this.processorUtils.createErrorMessage("Mvp4g2Processor: presenter >>" + classNameModel.getClassName() + "<< -> event >>" + createEventHandlungMethodName(eventInternalName) + "<< is not handled by presenter/handler");
+    if (eventMetaModel.getBindings()
+                      .size() > 0) {
+      this.processorUtils.createNoteMessage("Mvp4g2Processor: event >>" + eventInternalName.split(",")[0] + "<< is only used for binding");
+    } else {
+      this.processorUtils.createErrorMessage("Mvp4g2Processor: presenter >>" + classNameModel.getClassName() + "<< -> event >>" + createEventHandlungMethodName(eventInternalName) + "<< is not handled by presenter/handler and has no bindings");
+    }
   }
 
   private String createEventHandlungMethodName(String eventInternalName) {
@@ -231,7 +252,7 @@ public class ModelValidator {
                                .replace("_",
                                         "."));
                if (i < tokens.size() - 1) {
-                 sb.append(", ");
+                 sb.append(",");
                }
              });
     sb.append(")");

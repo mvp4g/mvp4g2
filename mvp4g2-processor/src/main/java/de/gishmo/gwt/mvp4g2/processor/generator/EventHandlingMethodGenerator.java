@@ -29,6 +29,7 @@ import de.gishmo.gwt.mvp4g2.core.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.core.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.core.internal.ui.HandlerMetaData;
 import de.gishmo.gwt.mvp4g2.core.internal.ui.PresenterMetaData;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
@@ -50,6 +51,8 @@ public class EventHandlingMethodGenerator {
 
   private final static String EXECUTION_METHOD_PREFIX = "exec";
 
+  private ProcessorUtils processorUtils;
+
   private TypeSpec.Builder   typeSpec;
   private EventBusMetaModel  eventBusMetaModel;
   private HistoryMetaModel   historyMetaModel;
@@ -61,6 +64,7 @@ public class EventHandlingMethodGenerator {
   }
 
   private EventHandlingMethodGenerator(Builder builder) {
+    this.processorUtils = builder.processorUtils;
     this.typeSpec = builder.typeSpec;
     this.eventBusMetaModel = builder.eventBusMetaModel;
     this.historyMetaModel = builder.historyMetaModel;
@@ -333,8 +337,7 @@ public class EventHandlingMethodGenerator {
                          .forEach(handlerData -> {
                            handlerData.getHandledEvents()
                                       .stream()
-                                      .filter(handledEvent -> eventMetaModel.getEventInternalName()
-                                                                            .equals(handledEvent))
+                                      .filter(handledEvent -> handledEvent.equals(this.processorUtils.createEventHandlingMethodName(eventMetaModel.getEventInternalName())))
                                       .map(handledEvent -> handlerData.getHandler()
                                                                       .getClassName())
                                       .forEach(listOfEventHandlers::add);
@@ -346,8 +349,7 @@ public class EventHandlingMethodGenerator {
                            .forEach(presenterData -> {
                              presenterData.getHandledEvents()
                                           .stream()
-                                          .filter(handledEvent -> eventMetaModel.getEventInternalName()
-                                                                                .equals(handledEvent))
+                                          .filter(handledEvent -> handledEvent.equals(this.processorUtils.createEventHandlingMethodName(eventMetaModel.getEventInternalName())))
                                           .map(handledEvent -> presenterData.getPresenter()
                                                                             .getClassName())
                                           .forEach(listOfEventHandlers::add);
@@ -524,11 +526,17 @@ public class EventHandlingMethodGenerator {
 
   public static final class Builder {
 
+    ProcessorUtils     processorUtils;
     TypeSpec.Builder   typeSpec;
     EventBusMetaModel  eventBusMetaModel;
     HistoryMetaModel   historyMetaModel;
     HandlerMetaModel   handlerMetaModel;
     PresenterMetaModel presenterMetaModel;
+
+    public Builder processorUtils(ProcessorUtils processorUtils) {
+      this.processorUtils = processorUtils;
+      return this;
+    }
 
     public Builder eventBusMetaModel(EventBusMetaModel eventBusMetaModel) {
       this.eventBusMetaModel = eventBusMetaModel;

@@ -27,8 +27,8 @@ public interface IsLazyReverseView<P> {
 
   void bind();
 
-  boolean isBinded();
+  boolean isBound();
 
-  void setBinded(boolean binded);
+  void setBound(boolean bound);
 
 }

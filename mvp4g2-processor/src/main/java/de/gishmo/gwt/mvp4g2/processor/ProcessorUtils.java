@@ -191,19 +191,27 @@ public class ProcessorUtils {
                           sw.toString());
   }
 
-  public String createHandledEventArray(TypeElement typeElement) {
+  public String createHandledEventArray(TypeElement typeElement)
+    throws ProcessorException {
     List<String> eventHandlingMethods = new ArrayList<>();
     List<Element> annotatedMethods = this.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,
                                                                                 typeElement,
                                                                                 EventHandler.class);
+    for (Element annotatedMethod : annotatedMethods) {
+      ExecutableElement executableElement = (ExecutableElement) annotatedMethod;
+      if (!"void".equals(executableElement.getReturnType().toString())) {
+        throw new ProcessorException("Mvp4g2Processor: >>" + typeElement.toString() + "<< -> EventElement: >>" + executableElement.toString() + "<< must return 'void'");
+      }
+    }
+
     annotatedMethods.stream()
                     .map(element -> (ExecutableElement) element)
                     .map(this::createInternalEventName)
                     .forEach(internalEventName -> {
-                      internalEventName = internalEventName.substring(2);
-                      internalEventName = internalEventName.substring(0,
-                                                                      1)
-                                                           .toLowerCase() + internalEventName.substring(1);
+//                      internalEventName = internalEventName.substring(2);
+//                      internalEventName = internalEventName.substring(0,
+//                                                                      1)
+//                                                           .toLowerCase() + internalEventName.substring(1);
                       eventHandlingMethods.add(internalEventName);
                     });
     String returnValue = "";
@@ -324,7 +332,11 @@ public class ProcessorUtils {
   public String createEventHandlingMethodName(String eventName) {
     return "on" + eventName.substring(0,
                                       1)
-                           .toUpperCase() + eventName.substring(2);
+                           .toUpperCase() + eventName.substring(1);
+  }
+
+  public String createEventNameFromHandlingMethod(String event) {
+    return event.substring(2, 3).toLowerCase() + event.substring(3);
   }
 
   public static class Builder {

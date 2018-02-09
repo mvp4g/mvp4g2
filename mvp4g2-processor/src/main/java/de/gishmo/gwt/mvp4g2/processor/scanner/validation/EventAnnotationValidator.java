@@ -72,10 +72,16 @@ public class EventAnnotationValidator {
       if (!Event.DEFAULT_HISTORY_NAME.equals(eventAnnotation.historyName())) {
         if (historyNames.contains(eventAnnotation.historyName())) {
           throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + element.getSimpleName()
-                                                                   .toString() + "<< using a already used historyName -> >>" + eventAnnotation.historyName() + "<<");
+                                                                                    .toString() + "<< using a already used historyName -> >>" + eventAnnotation.historyName() + "<<");
         } else {
           historyNames.add(eventAnnotation.historyName());
         }
+      }
+      ExecutableElement eventExecutableElement = (ExecutableElement) element;
+      if (!"void".equals(eventExecutableElement.getReturnType()
+                                               .toString())) {
+        throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + element.getSimpleName()
+                                                                                  .toString() + "<< must return 'void'");
       }
     }
     // check, if there are more than one InitHistory-annotation!

@@ -55,8 +55,7 @@ public class EventTest {
             add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventTestHandlerInBindAndHandlersAttribute02/MockShellPresenter.java"));
           }})
           .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("can not be set in bind- and handlers-attribute");
+          .compilesWithoutError();
   }
 
   @Test
@@ -136,4 +135,21 @@ public class EventTest {
           .withErrorContaining("@NotFoundHistory can only be used on a method with no arguments");
   }
 
+
+  @Test
+  public void testEventDoesNotReturnVoid() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventDoesNotReturnVoid/EventBusEventDoesNotReturnVoid.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventDoesNotReturnVoid/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventDoesNotReturnVoid/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventDoesNotReturnVoid/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("Mvp4g2Processor: EventElement: >>doSomething<< must return 'void'");
+  }
 }

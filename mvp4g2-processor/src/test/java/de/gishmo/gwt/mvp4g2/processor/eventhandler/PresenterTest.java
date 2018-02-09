@@ -167,4 +167,70 @@ public class PresenterTest {
           .failsToCompile()
           .withErrorContaining("event >>doSomething(java.lang.String)<< is never handled by a presenter or handler");
   }
+
+  @Test
+  public void testHandlerWithWrongImplementation03() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation03/EventBusHandlerWithNotImplementedEvent.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation03/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation03/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation03/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError();
+  }
+
+  @Test
+  public void testHandlerWithWrongImplementation04() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation04/EventBusHandlerWithNotImplementedEvent.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation04/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation04/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithWrongImplementation04/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError();
+  }
+
+  @Test
+  public void testEventHandlingMethodDoesNotReturnVoid03() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid03/EventBusEventHandlingMethodDoesNotReturnVoid.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid03/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid03/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid03/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("Mvp4g2Processor: >>de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid03.MockShellPresenter01<< -> EventElement: >>onDoSomething()<< must return 'void'");
+  }
+
+  @Test
+  public void testEventHandlingMethodDoesNotReturnVoid04() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid04/EventBusEventHandlingMethodDoesNotReturnVoid.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid04/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid04/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid04/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("Mvp4g2Processor: >>de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid04.MockShellPresenter01<< -> EventElement: >>onDoSomething()<< must return 'void'");
+  }
 }

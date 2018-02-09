@@ -105,6 +105,6 @@ public class EventbusTest {
             })
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
-          .withErrorContaining("Mvp4g2Processor: presenter >>de.gishmo.gwt.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented02.MockShellPresenter01<< -> event >>onDoSomething(java.lang.String)<< is not handled by presenter/handler");
+          .withErrorContaining("de.gishmo.gwt.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented02.MockShellPresenter01<< -> event >>onDoSomething(java.lang.String)<< is not handled by presenter/handler");
   }
 }

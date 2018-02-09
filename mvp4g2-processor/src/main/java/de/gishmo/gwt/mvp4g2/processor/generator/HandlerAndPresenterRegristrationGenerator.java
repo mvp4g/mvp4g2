@@ -86,7 +86,9 @@ public class HandlerAndPresenterRegristrationGenerator {
                          .forEach(handlerData -> {
                            handlerData.getHandledEvents()
                                       .stream()
-                                      .map(handledEvent -> this.eventBusMetaModel.getEventMetaModel(handledEvent))
+                                      .filter(event -> event != null && event.trim().length() > 0)
+                                      .map(handledEvent -> processorUtils.createEventNameFromHandlingMethod(handledEvent))
+                                      .map(event -> this.eventBusMetaModel.getEventMetaModel(event))
                                       .filter(Objects::nonNull)
                                       .filter(eventMetaModel -> !eventMetaModel.getHandlers()
                                                                                .contains(handlerData.getHandler()))
@@ -102,7 +104,9 @@ public class HandlerAndPresenterRegristrationGenerator {
                            .forEach(presenterData -> {
                              presenterData.getHandledEvents()
                                           .stream()
-                                          .map(handledEvent -> this.eventBusMetaModel.getEventMetaModel(handledEvent))
+                                          .filter(event -> event != null && event.trim().length() > 0)
+                                          .map(handledEvent -> processorUtils.createEventNameFromHandlingMethod(handledEvent))
+                                          .map(event -> this.eventBusMetaModel.getEventMetaModel(event))
                                           .filter(Objects::nonNull)
                                           .filter(eventMetaModel -> !eventMetaModel.getHandlers()
                                                                                    .contains(presenterData.getPresenter()))

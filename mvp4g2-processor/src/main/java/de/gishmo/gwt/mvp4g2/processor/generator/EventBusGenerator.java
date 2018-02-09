@@ -99,6 +99,7 @@ public class EventBusGenerator {
                           .generate();
 
     EventHandlingMethodGenerator.builder()
+                                .processorUtils(this.processorUtils)
                                 .typeSpec(typeSpec)
                                 .eventBusMetaModel(eventBusMetaMetaModel)
                                 .historyMetaModel(historyMetaModel)

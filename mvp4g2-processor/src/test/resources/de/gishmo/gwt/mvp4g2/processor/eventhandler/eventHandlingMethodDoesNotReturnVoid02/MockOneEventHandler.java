@@ -15,32 +15,18 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.core.ui;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid02;
 
-public abstract class LazyReverseView<P>
-  implements IsLazyReverseView<P> {
+import de.gishmo.gwt.mvp4g2.core.ui.AbstractHandler;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
 
-  protected P presenter;
+@Handler
+public class MockOneEventHandler
+  extends AbstractHandler<EventBusEventHandlingMethodDoesNotReturnVoid> {
 
-  private boolean bound = false;
-
-
-  public final P getPresenter() {
-    return presenter;
-  }
-
-  public final void setPresenter(P presenter) {
-    this.presenter = presenter;
-  }
-
-  public void bind() {
-  }
-
-  public boolean isBound() {
-    return bound;
-  }
-
-  public void setBound(boolean bound) {
-    this.bound = bound;
+  @EventHandler
+  public String onDoSomethingInHandler(String oneAttribute) {
+    return "";
   }
 }

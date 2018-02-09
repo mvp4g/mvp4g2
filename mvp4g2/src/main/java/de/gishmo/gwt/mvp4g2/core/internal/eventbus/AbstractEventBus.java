@@ -17,11 +17,6 @@
 
 package de.gishmo.gwt.mvp4g2.core.internal.eventbus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import de.gishmo.gwt.mvp4g2.core.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
@@ -36,6 +31,11 @@ import de.gishmo.gwt.mvp4g2.core.ui.IsHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -170,13 +170,13 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     if (!isNull(presenters) && presenters.size() != 0) {
       presenters.stream()
                 .filter(presenterHandlerMetaData -> !presenterHandlerMetaData.getView()
-                                                                             .isBinded())
+                                                                             .isBound())
                 .forEachOrdered(presenterHandlerMetaData -> {
                   this.logHandlerBinding(AbstractEventBus.logDepth,
                                          eventName,
                                          eventHandlerClassName);
                   presenterHandlerMetaData.getView()
-                                          .setBinded(true);
+                                          .setBound(true);
                   presenterHandlerMetaData.getView()
                                           .createView();
                   presenterHandlerMetaData.getView()

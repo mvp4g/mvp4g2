@@ -46,22 +46,22 @@ public class PresenterMetaModel
           });
   }
 
-//  public void add(String presenter,
-//                  String isMultiple,
-//                  String isShell,
-//                  String viewClass,
-//                  String viewInterface,
-//                  String viewCreationMethod,
-//                  String eventHandlers) {
-//    this.presenterDatas.put(presenter,
-//                            new PresenterData(presenter,
-//                                              isMultiple,
-//                                              isShell,
-//                                              viewClass,
-//                                              viewInterface,
-//                                              viewCreationMethod,
-//                                              eventHandlers));
-//  }
+  public void add(String presenter,
+                  String isMultiple,
+                  String isShell,
+                  String viewClass,
+                  String viewInterface,
+                  String viewCreationMethod,
+                  String eventHandlers) {
+    this.presenterDatas.put(presenter,
+                            new PresenterData(presenter,
+                                              isMultiple,
+                                              isShell,
+                                              viewClass,
+                                              viewInterface,
+                                              viewCreationMethod,
+                                              eventHandlers));
+  }
 
   public void add(String presenter,
                   String isMultiple,
