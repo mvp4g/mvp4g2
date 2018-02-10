@@ -220,10 +220,8 @@ public class ModelValidator {
                          .stream()
                          .filter(element -> element instanceof ExecutableElement)
                          .map(element -> (ExecutableElement) element)
-                         .forEach(executableElement -> {
-                           nameOfExecutableElements.put(executableElement.toString(),
-                                                        executableElement);
-                         });
+                         .forEach(executableElement -> nameOfExecutableElements.put(executableElement.toString(),
+                                                                                  executableElement));
       // method to look for
       String methodNameToLookFor = this.createEventHandlungMethodName(eventInternalName);
       // try to find in Map
