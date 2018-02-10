@@ -23,12 +23,13 @@ import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
@@ -129,7 +130,8 @@ public class ModelValidator {
                                                                       .stream()
                                                                       .map(handledEvents -> Arrays.asList(handledEvents.split(",")))
                                                                       .flatMap(Collection::stream)
-                                                                      .filter(event -> event != null && event.trim().length() > 0)
+                                                                      .filter(event -> event != null && event.trim()
+                                                                                                             .length() > 0)
                                                                       .map(event -> processorUtils.createEventNameFromHandlingMethod(event))
                                                                       .filter(event -> this.eventBusMetaModel.getEventMetaModel(event) == null)
                                                                       .forEach(event -> processorUtils.createWarningMessage("Mvp4g2Processor: presenter >>" + presenterData.getPresenter()
@@ -158,7 +160,7 @@ public class ModelValidator {
           }
           if (!eventIsHandled) {
             if (eventModel.getBindings()
-                              .size() > 0) {
+                          .size() > 0) {
               this.processorUtils.createNoteMessage("Mvp4g2Processor: event >>" + createMethodName(eventModel.getEventInternalName()) + "<< is only used for binding");
             } else {
               this.processorUtils.createErrorMessage("Mvp4g2Processor: event >>" + createMethodName(eventModel.getEventInternalName()) + "<< is never handled by a presenter or handler");
@@ -209,27 +211,39 @@ public class ModelValidator {
     TypeElement typeElement = this.processorUtils.getElements()
                                                  .getTypeElement(classNameModel.getClassName());
     if (typeElement != null) {
+      // improvement: get all ExecutabelElement of type,
+      // convert to String and add to list and use this list
+      // for the compare!
+      Map<String, ExecutableElement> nameOfExecutableElements = new HashMap<>();
+      this.processorUtils.getElements()
+                         .getAllMembers(typeElement)
+                         .stream()
+                         .filter(element -> element instanceof ExecutableElement)
+                         .map(element -> (ExecutableElement) element)
+                         .forEach(executableElement -> {
+                           nameOfExecutableElements.put(executableElement.toString(),
+                                                        executableElement);
+                         });
+      // method to look for
       String methodNameToLookFor = this.createEventHandlungMethodName(eventInternalName);
-      // Liste der Methoden
-      for (Element element : this.processorUtils.getElements()
-                                                .getAllMembers(typeElement)) {
-        if (element instanceof ExecutableElement) {
-          ExecutableElement executableElement = (ExecutableElement) element;
-          if (methodNameToLookFor.equals(executableElement.toString())) {
-            if (!"void".equals(executableElement.getReturnType()
-                                                .toString())) {
-              throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + eventInternalName.split(",")[0] + "<< must return 'void'");
-            }
-            return;
-          }
+      // try to find in Map
+      ExecutableElement handlingElement = nameOfExecutableElements.get(methodNameToLookFor);
+      if (handlingElement != null) {
+        if (!"void".equals(handlingElement.getReturnType()
+                                          .toString())) {
+          throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + eventInternalName.split(",")[0] + "<< must return 'void'");
         }
+        return;
       }
-    }
-    if (eventMetaModel.getBindings()
-                      .size() > 0) {
-      this.processorUtils.createNoteMessage("Mvp4g2Processor: event >>" + eventInternalName.split(",")[0] + "<< is only used for binding");
-    } else {
-      this.processorUtils.createErrorMessage("Mvp4g2Processor: presenter >>" + classNameModel.getClassName() + "<< -> event >>" + createEventHandlungMethodName(eventInternalName) + "<< is not handled by presenter/handler and has no bindings");
+      // if we ran into this code,we dod not find a method to handle this event.
+      // in this case we check if there are bindings, then this is ok,
+      // otherwiese we throw an excpetion!
+      if (eventMetaModel.getBindings()
+                        .size() > 0) {
+        this.processorUtils.createNoteMessage("Mvp4g2Processor: event >>" + eventInternalName.split(",")[0] + "<< is only used for binding");
+      } else {
+        this.processorUtils.createErrorMessage("Mvp4g2Processor: presenter >>" + classNameModel.getClassName() + "<< -> event >>" + createEventHandlungMethodName(eventInternalName) + "<< is not handled by presenter/handler and has no bindings");
+      }
     }
   }
 
