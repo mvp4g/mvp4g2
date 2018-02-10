@@ -36,7 +36,6 @@ import java.util.Objects;
  * <p>The execution context manages all commands.<br>
  * Use run()-method to start execution.</p>
  */
-// TODO validation
 public class HandlerAndPresenterRegristrationGenerator {
 
   private ProcessorUtils processorUtils;

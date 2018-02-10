@@ -27,7 +27,6 @@ import javax.lang.model.element.Modifier;
  * <p>The execution context manages all commands.<br>
  * Use run()-method to start execution.</p>
  */
-// TODO validation
 public class EventLoadMetaDataGenerator {
 
   private ProcessorUtils processorUtils;

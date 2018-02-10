@@ -15,6 +15,7 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
 import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
@@ -69,6 +70,16 @@ public class EventAnnotationValidator {
     List<String> historyNames = new ArrayList<>();
     for (Element element : this.roundEnvironment.getElementsAnnotatedWith(Event.class)) {
       Event eventAnnotation = element.getAnnotation(Event.class);
+      // check, that the parent element extends IsEventBus
+      if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                       element.getEnclosingElement()
+                                                              .asType(),
+                                                       this.processingEnvironment.getElementUtils()
+                                                                                 .getTypeElement(IsEventBus.class.getCanonicalName())
+                                                                                 .asType())) {
+        throw new ProcessorException("Mvp4g2Processor: @Event can only be used inside a event bus! >>" + element.getEnclosingElement()
+                                                                                                                .toString() + "<< does no implement IsEventBus");
+      }
       if (!Event.DEFAULT_HISTORY_NAME.equals(eventAnnotation.historyName())) {
         if (historyNames.contains(eventAnnotation.historyName())) {
           throw new ProcessorException("Mvp4g2Processor: EventElement: >>" + element.getSimpleName()
@@ -126,6 +137,7 @@ public class EventAnnotationValidator {
         throw new ProcessorException("Mvp4g2Processor: Event: >>" + executableElement.getSimpleName() + "<< a passive event can not have a bind-attribute");
       }
     }
+    // TODo El Hoss: check, that @Event is only used inside a EventBus
   }
 
   private List<String> getElementsFromAnnotationAsList(ExecutableElement executableElement,

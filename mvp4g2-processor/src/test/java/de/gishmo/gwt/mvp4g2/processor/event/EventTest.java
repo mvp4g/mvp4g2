@@ -135,7 +135,6 @@ public class EventTest {
           .withErrorContaining("@NotFoundHistory can only be used on a method with no arguments");
   }
 
-
   @Test
   public void testEventDoesNotReturnVoid() {
     ASSERT.about(javaSources())
@@ -151,5 +150,22 @@ public class EventTest {
           .processedWith(new Mvp4g2Processor())
           .failsToCompile()
           .withErrorContaining("Mvp4g2Processor: EventElement: >>doSomething<< must return 'void'");
+  }
+
+  @Test
+  public void testEventAnnotationInsideAOtherClassThenEventBus() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventAnnotationInsideAOtherClassThenEventBus/EventAnnotationInsideAOtherClassThenEventBus.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventAnnotationInsideAOtherClassThenEventBus/MockShellPresenter.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventAnnotationInsideAOtherClassThenEventBus/IMockShellView.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/event/eventAnnotationInsideAOtherClassThenEventBus/MockShellView.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("Mvp4g2Processor: @Event can only be used inside a event bus! >>de.gishmo.gwt.mvp4g2.processor.event.eventAnnotationInsideAOtherClassThenEventBus.MockShellPresenter<< does no implement IsEventBus");
   }
 }

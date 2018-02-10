@@ -46,7 +46,6 @@ import java.util.stream.IntStream;
  * <p>The execution context manages all commands.<br>
  * Use run()-method to start execution.</p>
  */
-// TODO validation
 public class EventHandlingMethodGenerator {
 
   private final static String EXECUTION_METHOD_PREFIX = "exec";

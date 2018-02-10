@@ -93,8 +93,6 @@ public class EventBusAnnotationValidator {
 
 
 
-      // shell-attribute validation
-
       // @Start validation
       // check, if there are more than @Start annotated method
       List<Element> elementsAnnotatedWithStart = this.processorUtils.getMethodFromTypeElementAnnotatedWith(this.processingEnvironment,

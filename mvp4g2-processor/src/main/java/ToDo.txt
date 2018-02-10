@@ -1,0 +1,7 @@
+ToDos:
+
+- validiere: @EventHandler nur in Presenter/Handler
+
+- mult-module faeture ... uiiiihhhh
+- multiple presenter feature
+- encrypt token feature

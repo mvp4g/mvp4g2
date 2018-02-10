@@ -35,7 +35,6 @@ import java.io.IOException;
  * <p>The execution context manages all commands.<br>
  * Use run()-method to start execution.</p>
  */
-// TODO validation
 public class EventMetaDataGenerator {
 
   private ProcessorUtils processorUtils;

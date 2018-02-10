@@ -1,19 +1,5 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
-import javax.tools.FileObject;
-import javax.tools.StandardLocation;
-
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
@@ -23,6 +9,19 @@ import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 import static java.util.Objects.isNull;
 
@@ -60,19 +59,19 @@ public class EventBusAnnotationScanner {
     if (!roundEnvironment.getElementsAnnotatedWith(EventBus.class)
                          .isEmpty()) {
       // create validator
-      EventBusAnnotationValidator evengtbusValidaitor = EventBusAnnotationValidator.builder()
+      EventBusAnnotationValidator eventBusValidaitor = EventBusAnnotationValidator.builder()
                                                                                    .roundEnvironment(roundEnvironment)
                                                                                    .processingEnvironment(processingEnvironment)
                                                                                    .build();
       // check, whether we have o do something ...
-      evengtbusValidaitor.validate();
+      eventBusValidaitor.validate();
       // should only be one, so we can search for the first! ...
       Optional<? extends Element> optionalElement = this.roundEnvironment.getElementsAnnotatedWith(EventBus.class)
                                                                          .stream()
                                                                          .findFirst();
       if (optionalElement.isPresent()) {
         Element eventBusAnnotationElement = optionalElement.get();
-        evengtbusValidaitor.validate(eventBusAnnotationElement);
+        eventBusValidaitor.validate(eventBusAnnotationElement);
         EventBus eventBusAnnotation = eventBusAnnotationElement.getAnnotation(EventBus.class);
         if (!isNull(eventBusAnnotation)) {
           TypeElement shellTypeElement = this.getShellTypeElement(eventBusAnnotation);

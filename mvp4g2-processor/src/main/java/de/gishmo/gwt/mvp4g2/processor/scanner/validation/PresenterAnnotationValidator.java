@@ -103,6 +103,7 @@ public class PresenterAnnotationValidator {
     } else {
       throw new ProcessorException("Mvp4g2Processor: @Presenter can only be used on a type (class)");
     }
+    // TODo El Hoss: check, that @Event is only used inside a EventBus
   }
 
   public static final class Builder {

@@ -160,7 +160,6 @@ public class PlaceService<E extends IsEventBus> {
     eventBus.fireStartEvent();
     // do we have history?
     if (this.hasHistory()) {
-      // TODO ...
       if (this.historyOnStart) {
         convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
       } else {
