@@ -139,7 +139,9 @@ Not only does Mvp4g2 help you follow the best practices, it also provides mechan
 - support for lazy loading: build your presenters/views only when you need them.
 - Useless presenters/views are automatically removed.
 
-To understand how the framework works, you can look at the documentation, the [tutorials](https://github.com/mvp4g/mvp4g2/wiki/1.-Tutorials-and-Examples) or the [examples](https://github.com/mvp4g/mvp4g2-examples).
+To understand how the framework works, you can look at the documentation, the [tutorials](https://github.com/mvp4g/mvp4g2/wiki/1.-Tutorials-and-Examples), the [examples](https://github.com/mvp4g/mvp4g2-examples) or the [mvp4g blog](http://mvp4g.blogspot.de/). 
+
+
 
 Mvp4g has been successfully used on several commercial projects im the past, [take a look at a few of them](https://github.com/mvp4g/mvp4g/wiki/1.-Tutorials-and-Examples). You can also read and post feedback here: [Mvp4g forum](https://groups.google.com/forum/#!forum/mvp4g).
 
