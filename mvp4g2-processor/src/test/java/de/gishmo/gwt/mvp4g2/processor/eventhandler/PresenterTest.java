@@ -233,4 +233,66 @@ public class PresenterTest {
           .failsToCompile()
           .withErrorContaining("Mvp4g2Processor: >>de.gishmo.gwt.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid04.MockShellPresenter01<< -> EventElement: >>onDoSomething()<< must return 'void'");
   }
+
+  /**
+   * Check, that compilation works, if handler-attribute and EventHandler annotation is used for one event
+   */
+  @Test
+  public void testEventBusEventhandlerWithHanderlsAttributeAndEventHandlerAnnotation() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventhandlerWithHanderlsAttributeAndEventHandlerAnnotation/EventBusEventhandlerWithHanderlsAttributeAndEventHandlerAnnotation.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventhandlerWithHanderlsAttributeAndEventHandlerAnnotation/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventhandlerWithHanderlsAttributeAndEventHandlerAnnotation/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventhandlerWithHanderlsAttributeAndEventHandlerAnnotation/MockShellView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError()
+          .and()
+          .generatesSources(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/eventhandlerWithHanderlsAttributeAndEventHandlerAnnotation/EventBusEventhandlerWithHanderlsAttributeAndEventHandlerAnnotationImpl.java"));
+  }
+
+  @Test
+  public void testPresenterWithMultipleAttribute01() {
+    ASSERT.about(javaSources())
+          .that(
+            new ArrayList<JavaFileObject>() {
+              {
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/EventBusPresenterWithMultipleAttibute01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/MockShellPresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/IMockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/MockShellView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/MockMultiplePresenter01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/IMockMultipleView01.java"));
+                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute01/MockMultipleView01.java"));
+              }
+            })
+          .processedWith(new Mvp4g2Processor())
+          .compilesWithoutError();
+  }
+
+//  @Test
+//  public void testPresenterWithMultipleAttribute02() {
+//    ASSERT.about(javaSources())
+//          .that(
+//            new ArrayList<JavaFileObject>() {
+//              {
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/EventBusPresenterWithMultipleAttibute02.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/MockShellPresenter01.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/IMockShellView01.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/MockShellView01.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/MockMultiplePresenter01.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/IMockMultipleView01.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/MockMultipleView01.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/MockMultiplePresenter02.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/IMockMultipleView02.java"));
+//                add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithMultipleAttribute02/MockMultipleView02.java"));
+//              }
+//            })
+//          .processedWith(new Mvp4g2Processor())
+//          .compilesWithoutError();
+//  }
 }

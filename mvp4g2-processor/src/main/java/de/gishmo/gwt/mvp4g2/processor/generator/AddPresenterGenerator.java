@@ -22,8 +22,13 @@ import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
 import de.gishmo.gwt.mvp4g2.core.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 
 import javax.lang.model.element.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>The execution context manages all commands.<br>
@@ -34,10 +39,10 @@ public class AddPresenterGenerator {
 //  private ProcessorUtils processorUtils;
 
   //  private ProcessingEnvironment processingEnvironment;
-  private TypeSpec.Builder typeSpec;
-//  private EventBusMetaModel     eventBusMetaModel;
-//  private HandlerMetaModel      handlerMetaModel;
-//  private PresenterMetaModel    presenterMetaModel;
+  private TypeSpec.Builder   typeSpec;
+  private EventBusMetaModel  eventBusMetaModel;
+  //  private HandlerMetaModel      handlerMetaModel;
+  private PresenterMetaModel presenterMetaModel;
 
   @SuppressWarnings("unused")
   private AddPresenterGenerator() {
@@ -46,10 +51,10 @@ public class AddPresenterGenerator {
   private AddPresenterGenerator(Builder builder) {
 //    this.processingEnvironment = builder.processingEnvironment;
     this.typeSpec = builder.typeSpec;
-//    this.eventBusMetaModel = builder.eventBusMetaModel;
+    this.eventBusMetaModel = builder.eventBusMetaModel;
 //    this.handlerMetaModel = builder.handlerMetaModel;
-//    this.presenterMetaModel = builder.presenterMetaModel;
-//
+    this.presenterMetaModel = builder.presenterMetaModel;
+
 //    this.processorUtils = ProcessorUtils.builder()
 //                                        .processingEnvironment(this.processingEnvironment)
 //                                        .build();
@@ -68,17 +73,43 @@ public class AddPresenterGenerator {
                                                                                             WildcardTypeName.subtypeOf(Object.class)),
                                                                   "presenter")
                                                     .returns(ClassName.get(PresenterRegistration.class));
-    // TODO implementing addHandler feature ...
+    // search presenters (multiple = true)
+    List<PresenterMetaModel.PresenterData> multiPresenters = createPresenterTypeMultipleList();
+    if (multiPresenters.size() > 0) {
+      multiPresenters.forEach(presenterData -> generateCodeBlockForPresenter(addHandlerMethod,
+                                                           presenterData));
+    }
+
 //    // List of already created EventHandler used to avoid a second create ...
 //    List<ClassNameModel> listOfEventHandlersToCreate = this.createListOfEventHandlersToCreate();
 //    listOfEventHandlersToCreate.forEach(handlerClassName -> this.addHandlerToMetaList(loadEventHandlerMethod,
 //                                                                                      handlerClassName));
 
 
-
-
     addHandlerMethod.addStatement("return null");
     typeSpec.addMethod(addHandlerMethod.build());
+  }
+
+  private List<PresenterMetaModel.PresenterData> createPresenterTypeMultipleList() {
+    return presenterMetaModel.getPresenterDatas()
+                             .stream()
+                             .filter((data) -> data.isMultiple())
+                             .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  private void generateCodeBlockForPresenter(MethodSpec.Builder addHandlerMethod,
+                                             PresenterMetaModel.PresenterData presenterData) {
+      addHandlerMethod.beginControlFlow("if (presenter instanceof $T)",
+                                        ClassName.get(presenterData.getPresenter()
+                                                                   .getPackage(),
+                                                      presenterData.getPresenter()
+                                                                   .getSimpleName()));
+
+
+// TODO
+
+
+      addHandlerMethod.endControlFlow();
   }
 
 //
@@ -172,11 +203,10 @@ public class AddPresenterGenerator {
   public static final class Builder {
 
     //    ProcessingEnvironment processingEnvironment;
-    TypeSpec.Builder typeSpec;
-//    EventBusMetaModel     eventBusMetaModel;
-//    HandlerMetaModel      handlerMetaModel;
-//    PresenterMetaModel    presenterMetaModel;
-//
+    TypeSpec.Builder   typeSpec;
+    EventBusMetaModel  eventBusMetaModel;
+    PresenterMetaModel presenterMetaModel;
+
 //    /**
 //     * Set the processing envirement
 //     *
@@ -187,21 +217,21 @@ public class AddPresenterGenerator {
 //      this.processingEnvironment = processingEnvirement;
 //      return this;
 //    }
-//
-//    public Builder eventBusMetaModel(EventBusMetaModel eventBusMetaModel) {
-//      this.eventBusMetaModel = eventBusMetaModel;
-//      return this;
-//    }
-//
+
+    public Builder eventBusMetaModel(EventBusMetaModel eventBusMetaModel) {
+      this.eventBusMetaModel = eventBusMetaModel;
+      return this;
+    }
+
 //    public Builder handlerMetaModel(HandlerMetaModel handlerMetaModel) {
 //      this.handlerMetaModel = handlerMetaModel;
 //      return this;
 //    }
-//
-//    public Builder presenterMetaModel(PresenterMetaModel presenterMetaModel) {
-//      this.presenterMetaModel = presenterMetaModel;
-//      return this;
-//    }
+
+    public Builder presenterMetaModel(PresenterMetaModel presenterMetaModel) {
+      this.presenterMetaModel = presenterMetaModel;
+      return this;
+    }
 
     /**
      * Set the typeSpec of the currently generated eventBus

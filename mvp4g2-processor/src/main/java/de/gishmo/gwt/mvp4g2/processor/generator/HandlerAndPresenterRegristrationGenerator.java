@@ -100,6 +100,7 @@ public class HandlerAndPresenterRegristrationGenerator {
                            .stream()
                            .filter(s -> !listOfEventHandlersToCreate.contains(s))
                            .map(s -> this.presenterMetaModel.getPresenterData(s))
+                           .filter(presenterData -> !presenterData.isMultiple())
                            .forEach(presenterData -> {
                              presenterData.getHandledEvents()
                                           .stream()
@@ -117,7 +118,7 @@ public class HandlerAndPresenterRegristrationGenerator {
     typeSpec.addMethod(loadEventHandlerMethod.build());
   }
 
-
+  // TODO multiple presenters filtern!
   private List<ClassNameModel> createListOfEventHandlersToCreate() {
     // List of already created EventHandler used to avoid a second create ...
     List<ClassNameModel> listOfHandlersToCreate = new ArrayList<>();
@@ -130,6 +131,7 @@ public class HandlerAndPresenterRegristrationGenerator {
                           .forEach(eventMetaModel -> {
                             eventMetaModel.getBindings()
                                           .stream()
+                                          .filter(handlerClassName -> this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()) != null && !this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()).isMultiple())
                                           .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
                                           .forEach(listOfHandlersToCreate::add);
                           });
@@ -138,6 +140,7 @@ public class HandlerAndPresenterRegristrationGenerator {
                           .forEach(eventMetaModel -> {
                             eventMetaModel.getHandlers()
                                           .stream()
+                                          .filter(handlerClassName -> this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()) != null && !this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()).isMultiple())
                                           .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
                                           .forEach(listOfHandlersToCreate::add);
                           });
@@ -147,6 +150,7 @@ public class HandlerAndPresenterRegristrationGenerator {
                          .forEach(handlerClassName -> listOfHandlersToCreate.add(new ClassNameModel(handlerClassName)));
     this.presenterMetaModel.getPresenterKeys()
                            .stream()
+                           .filter(handlerClassName -> !this.presenterMetaModel.getPresenterData(handlerClassName).isMultiple())
                            .filter(handlerClassName -> !listOfHandlersToCreate.contains(new ClassNameModel(handlerClassName)))
                            .forEach(handlerClassName -> listOfHandlersToCreate.add(new ClassNameModel(handlerClassName)));
     return listOfHandlersToCreate;
