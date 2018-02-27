@@ -15,25 +15,22 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventBusWithMoreThanOneInitHistoryAnnodation;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterWithViewCreationMethodPresenter01;
 
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
-import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 
-@Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class)
-public class MockShellPresenter
-  extends AbstractPresenter<EventBusWithMoreThanOneInitHistoryAnnodation, IMockShellView>
-  implements IMockShellView.Presenter,
-             IsShell<EventBusWithMoreThanOneInitHistoryAnnodation, IMockShellView> {
+@Presenter(viewClass = MockView01.class, viewInterface = IMockView01.class, viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER)
+public class MockPresenter01
+  extends AbstractPresenter<EventBusPresenterWithViewCreationMethodPresenter01, IMockView01>
+  implements IMockView01.Presenter {
 
   @Override
-  public void setShell() {
+  public void set() {
   }
 
-  public void onEvent01() {
-  }
-
-  public void onEvent02() {
+  @EventHandler
+  public void onDoSomething(String oneAttribute) {
   }
 }

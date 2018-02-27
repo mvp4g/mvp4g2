@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Frank Hossfeld <frank.hossfeld@googlemail.com>
+ * Copyright (C) 2026 Frank Hossfeld <frank.hossfeld@googlemail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,25 +15,24 @@
  *
  */
 
-package de.gishmo.gwt.mvp4g2.processor.event.eventBusWithMoreThanOneInitHistoryAnnodation;
+package de.gishmo.gwt.mvp4g2.processor.eventhandler.presenterWithViewCreationMethodPresenter02;
 
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 
-@Presenter(viewClass = MockShellView.class, viewInterface = IMockShellView.class)
-public class MockShellPresenter
-  extends AbstractPresenter<EventBusWithMoreThanOneInitHistoryAnnodation, IMockShellView>
-  implements IMockShellView.Presenter,
-             IsShell<EventBusWithMoreThanOneInitHistoryAnnodation, IMockShellView> {
+@Presenter(viewClass = MockShellView02.class, viewInterface = IMockShellView02.class)
+public class MockShellPresenter02
+  extends AbstractPresenter<EventBusPresenterWithViewCreationMethodPresenter02, IMockShellView02>
+  implements IMockShellView02.Presenter,
+             IsShell<EventBusPresenterWithViewCreationMethodPresenter02, IMockShellView02> {
 
   @Override
   public void setShell() {
   }
 
-  public void onEvent01() {
-  }
-
-  public void onEvent02() {
+  @EventHandler
+  public void onDoSomething(String oneAttribute) {
   }
 }
