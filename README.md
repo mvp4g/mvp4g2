@@ -3,13 +3,15 @@
 ## Preface
 With the next version of GWT (GWT 3) and the new J2CL transpiller, there will be major changes. For example: JSNI and generators, besides other things, will be gone. Removing generators will cause the current implementation of mvp4g to stop working.
 
-To prepare MVP4G for GWT 3, the GWT generator has to be replaced by an annotation processor and most of the dependencies of MVP4G have to be removed. MVP4G2 will work with GWT 2 + 3. 
+To prepare MVP4G for GWT 3, the GWT generator has to be replaced by an annotation processor and most of the dependencies of MVP4G have to be removed. 
 
-Mvp4g2 will be the second edition of MVP4G and will have major changes.
+MVP4G2 will work with GWT 2 + 3 and will bring major changes.
 
 In opposite to the first version of MVP4G, MVP4G2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 and APT.
 
 Moving to APT will cause changes, related to the options offered by APT. Using the ideas of MVP4G, MVP4G 2 will try to take as much as possible of the principles and features to the next version.
+
+Keep in mind, MVP4G2 helps you to structure your application. It does not offer a widget system nor does it force you to use a particular one. MVP4G2 will work with native GWT widgets, GXT, Elemental, Elemeto, etc.  
 
 Currently, the basic event handling and place management is implemented.
 
