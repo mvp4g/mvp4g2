@@ -15,18 +15,18 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsViewCreator;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 
 public class PresenterAnnotationValidator {
 
@@ -123,15 +123,16 @@ public class PresenterAnnotationValidator {
                                                                                .getTypeElement(IsViewCreator.class.getCanonicalName())
                                                                                .asType())) {
           throw new ProcessorException(typeElement.getSimpleName()
-                                                  .toString() + ": IsViewCreator interface needs a generic parameter (" + viewInterfaceTypeElement.toString() + ")");
+                                                  .toString() + ": IsViewCreator interface needs " + "a generic parameter (add: >>" + viewInterfaceTypeElement.toString() + "<< as generic to IsViewCreator)");
         } else {
           TypeMirror isViewCreatorTypeMirror = this.processorUtils.getFlattenedSupertype(this.processingEnvironment.getTypeUtils(),
-                                                                                       typeElement.asType(),
-                                                                                       this.processingEnvironment.getElementUtils()
-                                                                                                                 .getTypeElement(IsViewCreator.class.getCanonicalName())
-                                                                                                                 .asType());
+                                                                                         typeElement.asType(),
+                                                                                         this.processingEnvironment.getElementUtils()
+                                                                                                                   .getTypeElement(IsViewCreator.class.getCanonicalName())
+                                                                                                                   .asType());
           ClassNameModel classNameModel = new ClassNameModel(viewInterfaceTypeElement.toString());
-          if (!isViewCreatorTypeMirror.toString().contains(classNameModel.getSimpleName())) {
+          if (!isViewCreatorTypeMirror.toString()
+                                      .contains(classNameModel.getSimpleName())) {
             throw new ProcessorException(typeElement.getSimpleName()
                                                     .toString() + ": IsViewCreator interface only allows the generic parameter -> " + viewInterfaceTypeElement.toString());
           }
