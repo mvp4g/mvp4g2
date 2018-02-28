@@ -16,15 +16,12 @@
 
 package de.gishmo.gwt.mvp4g2.processor.eventhandler;
 
-import java.util.ArrayList;
-
-import javax.tools.JavaFileObject;
-
+import com.google.testing.compile.JavaFileObjects;
+import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
 import org.junit.Test;
 
-import com.google.testing.compile.JavaFileObjects;
-
-import de.gishmo.gwt.mvp4g2.processor.Mvp4g2Processor;
+import javax.tools.JavaFileObject;
+import java.util.ArrayList;
 
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
@@ -265,6 +262,7 @@ public class PresenterTest {
           .compilesWithoutError();
   }
 
+  // missng IsViewCerator-interface
   @Test
   public void testPresenterWithViewCreationMethodPresenter01() {
     ASSERT.about(javaSources())
@@ -284,6 +282,7 @@ public class PresenterTest {
           .withErrorContaining("@Presenter must implement the IsViewCreator interface");
   }
 
+  // ok
   @Test
   public void testPresenterWithViewCreationMethodPresenter02() {
     ASSERT.about(javaSources())
@@ -300,6 +299,66 @@ public class PresenterTest {
           })
           .processedWith(new Mvp4g2Processor())
           .compilesWithoutError();
+  }
+
+  // IsViewCreator interface without generic
+  @Test
+  public void testPresenterWithViewCreationMethodPresenter03() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/EventBusPresenterWithViewCreationMethodPresenter03.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/MockShellPresenter03.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/IMockShellView03.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/MockShellView03.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/MockPresenter03.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/IMockView03.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter03/MockView03.java"));
+            }
+          })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("IsViewCreator interface needs a generic parameter");
+  }
+
+  // IsViewCreator interface used without generic viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER
+  @Test
+  public void testPresenterWithViewCreationMethodPresenter04() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/EventBusPresenterWithViewCreationMethodPresenter04.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/MockShellPresenter04.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/IMockShellView04.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/MockShellView04.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/MockPresenter04.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/IMockView04.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter04/MockView04.java"));
+            }
+          })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("the IsViewCreator interface can only be used in case of viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER");
+  }
+
+  // IsViewCreator: check that the generic parameter is the view interface
+  @Test
+  public void testPresenterWithViewCreationMethodPresenter05() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/EventBusPresenterWithViewCreationMethodPresenter05.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/MockShellPresenter05.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/IMockShellView05.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/MockShellView05.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/MockPresenter05.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/IMockView05.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterWithViewCreationMethodPresenter05/MockView05.java"));
+            }
+          })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("IsViewCreator interface only allows the generic parameter ->");
   }
 
   //  @Test

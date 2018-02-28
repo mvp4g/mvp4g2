@@ -151,6 +151,34 @@ public class ProcessorUtils {
     return result;
   }
 
+  public boolean supertypeHasGeneric(Types types,
+                                     TypeMirror typeMirror,
+                                     TypeMirror implementsMirror) {
+    TypeMirror superTypeMirror = this.getFlattenedSupertype(types,
+                                                            typeMirror,
+                                                            implementsMirror);
+    if (superTypeMirror == null) {
+      return false;
+    }
+    return superTypeMirror.toString()
+                          .contains("<");
+  }
+
+  public TypeMirror getFlattenedSupertype(Types types,
+                                          TypeMirror typeMirror,
+                                          TypeMirror implementsMirror) {
+    String implementsMirrorWihoutGeneric = this.removeGenericsFromClassName(implementsMirror.toString());
+    Set<TypeMirror> implementedSuperTypes = this.getFlattenedSupertypeHierarchy(types,
+                                                                                typeMirror);
+    for (TypeMirror typeMirrorSuperType : implementedSuperTypes) {
+      String tn1WithoutGenric = this.removeGenericsFromClassName(typeMirrorSuperType.toString());
+      if (implementsMirrorWihoutGeneric.equals(tn1WithoutGenric)) {
+        return typeMirrorSuperType;
+      }
+    }
+    return null;
+  }
+
   //  public String createNameWithleadingUpperCase(String name) {
   //    return name.substring(0,
   //                          1)
@@ -199,7 +227,8 @@ public class ProcessorUtils {
                                                                                 EventHandler.class);
     for (Element annotatedMethod : annotatedMethods) {
       ExecutableElement executableElement = (ExecutableElement) annotatedMethod;
-      if (!"void".equals(executableElement.getReturnType().toString())) {
+      if (!"void".equals(executableElement.getReturnType()
+                                          .toString())) {
         throw new ProcessorException("Mvp4g2Processor: >>" + typeElement.toString() + "<< -> EventElement: >>" + executableElement.toString() + "<< must return 'void'");
       }
     }
@@ -336,7 +365,9 @@ public class ProcessorUtils {
   }
 
   public String createEventNameFromHandlingMethod(String event) {
-    return event.substring(2, 3).toLowerCase() + event.substring(3);
+    return event.substring(2,
+                           3)
+                .toLowerCase() + event.substring(3);
   }
 
   public static class Builder {

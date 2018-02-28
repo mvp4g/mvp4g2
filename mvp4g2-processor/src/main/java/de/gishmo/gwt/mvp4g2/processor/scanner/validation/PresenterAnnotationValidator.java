@@ -15,16 +15,18 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-
 import de.gishmo.gwt.mvp4g2.core.ui.AbstractPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsViewCreator;
 import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 
 public class PresenterAnnotationValidator {
 
@@ -102,10 +104,10 @@ public class PresenterAnnotationValidator {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": class-attribute of @Presenter can not be ABSTRACT");
       }
-      // check, if the viewCreator is set to presenter, the presenter has to implement the
-      // IsViewCreator interface!
       Presenter presenterAnnotation = typeElement.getAnnotation(Presenter.class);
       if (Presenter.VIEW_CREATION_METHOD.PRESENTER.equals(presenterAnnotation.viewCreator())) {
+        // check, if the viewCreator is set to presenter, the presenter has to implement the
+        // IsViewCreator interface!
         if (!this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
                                                          typeElement.asType(),
                                                          this.processingEnvironment.getElementUtils()
@@ -114,6 +116,37 @@ public class PresenterAnnotationValidator {
           throw new ProcessorException(typeElement.getSimpleName()
                                                   .toString() + ": @Presenter must implement the IsViewCreator interface");
         }
+        // check, if the viewCreator has a generic parameter
+        if (!this.processorUtils.supertypeHasGeneric(this.processingEnvironment.getTypeUtils(),
+                                                     typeElement.asType(),
+                                                     this.processingEnvironment.getElementUtils()
+                                                                               .getTypeElement(IsViewCreator.class.getCanonicalName())
+                                                                               .asType())) {
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": IsViewCreator interface needs a generic parameter (" + viewInterfaceTypeElement.toString() + ")");
+        } else {
+          TypeMirror isViewCreatorTypeMirror = this.processorUtils.getFlattenedSupertype(this.processingEnvironment.getTypeUtils(),
+                                                                                       typeElement.asType(),
+                                                                                       this.processingEnvironment.getElementUtils()
+                                                                                                                 .getTypeElement(IsViewCreator.class.getCanonicalName())
+                                                                                                                 .asType());
+          ClassNameModel classNameModel = new ClassNameModel(viewInterfaceTypeElement.toString());
+          if (!isViewCreatorTypeMirror.toString().contains(classNameModel.getSimpleName())) {
+            throw new ProcessorException(typeElement.getSimpleName()
+                                                    .toString() + ": IsViewCreator interface only allows the generic parameter -> " + viewInterfaceTypeElement.toString());
+          }
+        }
+      } else if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.equals(presenterAnnotation.viewCreator())) {
+        // check, if a presenter implements IsViewCreator, that the viewCreation method is set to PRESENTER!
+        if (this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
+                                                        typeElement.asType(),
+                                                        this.processingEnvironment.getElementUtils()
+                                                                                  .getTypeElement(IsViewCreator.class.getCanonicalName())
+                                                                                  .asType())) {
+          throw new ProcessorException(typeElement.getSimpleName()
+                                                  .toString() + ": the IsViewCreator interface can only be used in case of viewCreator = Presenter.VIEW_CREATION_METHOD.PRESENTER");
+        }
+
       }
     } else {
       throw new ProcessorException("Mvp4g2Processor: @Presenter can only be used on a type (class)");
