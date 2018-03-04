@@ -100,7 +100,8 @@ public class HandlerAndPresenterRegristrationGenerator {
                            .stream()
                            .filter(s -> !listOfEventHandlersToCreate.contains(s))
                            .map(s -> this.presenterMetaModel.getPresenterData(s))
-                           .filter(presenterData -> !presenterData.isMultiple())
+                           // TODO rausnehmen ok?
+//                           .filter(presenterData -> !presenterData.isMultiple())
                            .forEach(presenterData -> {
                              presenterData.getHandledEvents()
                                           .stream()
@@ -170,7 +171,7 @@ public class HandlerAndPresenterRegristrationGenerator {
                                 handlerClassName.getClassName(),
                                 isPresenter ? "Presenter" : "EventHandler");
     methodToGenerate.addComment("");
-    // code ...
+    // create instance of meta data ...
     methodToGenerate.addStatement("$T $N = new $T()",
                                   ClassName.get(handlerClassName.getPackage(),
                                                 metaDataClassName),
@@ -180,14 +181,10 @@ public class HandlerAndPresenterRegristrationGenerator {
     if (isPresenter) {
       if (!this.presenterMetaModel.getPresenterData(handlerClassName.getClassName())
                                   .isMultiple()) {
-//                                   // check, that multiple is false! (We can do this not here during code generation, because we don't know it ...)
-//                                   methodToGenerate.beginControlFlow("if (!$N.isMultiple())",
-//                                                                     metaDataVariableName);
         this.generatePresenterBinding(methodToGenerate,
                                       handlerClassName.getClassName(),
                                       metaDataVariableName);
       }
-//      methodToGenerate.endControlFlow();
     } else {
       methodToGenerate.addStatement("super.putHandlerMetaData($S, $N)",
                                     handlerClassName.getClassName(),

@@ -1,6 +1,7 @@
 package de.gishmo.gwt.mvp4g2.processor.eventhandler.eventhandlerWithHanderlsAttributeAndEventHandlerAnnotation;
 
 import de.gishmo.gwt.mvp4g2.core.eventbus.PresenterRegistration;
+import de.gishmo.gwt.mvp4g2.core.internal.Mvp4g2RuntimeException;
 import de.gishmo.gwt.mvp4g2.core.internal.eventbus.AbstractEventBus;
 import de.gishmo.gwt.mvp4g2.core.internal.eventbus.EventMetaData;
 import de.gishmo.gwt.mvp4g2.core.internal.ui.HandlerMetaData;
@@ -90,8 +91,9 @@ public final class EventBusEventhandlerWithHanderlsAttributeAndEventHandlerAnnot
   }
 
   @Override
-  public PresenterRegistration addHandler(IsPresenter<?, ?> presenter) {
-    return null;
+  public PresenterRegistration addHandler(IsPresenter<?, ?> presenter, boolean bind) throws
+                                                                                     Mvp4g2RuntimeException {
+    throw new Mvp4g2RuntimeException(presenter.getClass().getCanonicalName() + ": can not be used with the addHandler()-method, because it is not defined as multiple presenter!");
   }
 
   @Override

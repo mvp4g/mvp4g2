@@ -55,6 +55,18 @@ public class MockEventBusImpl
   public void fireNotFoundHistoryEvent() {
   }
 
+  @Override
+  public PresenterRegistration addHandler(IsPresenter<?, ?> presenter) throws
+                                                                       Mvp4g2RuntimeException {
+    List<PresenterMetaData<?, ?>> presenters = super.presenterMetaDataMap.get(presenter.class.getCanonialName());
+    for (PresenterMetaData presenterMetaData : presenters.values()) {
+      if (!presenterMetaData.isMultiple()) {
+        throw new Mvp4g2RuntimeException(presenter.class.getCanonialName() + ": can not be used with the addHandler()-method, because it is not defined as multiple presenter!");
+      }
+    }
+    return null;
+  }
+
   public PresenterRegistration addHandler(IsPresenter<?, ?> presenter) {
     return new PresenterRegistration() {
       public void remove() {

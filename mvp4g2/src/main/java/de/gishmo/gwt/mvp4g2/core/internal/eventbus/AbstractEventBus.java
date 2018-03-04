@@ -21,12 +21,14 @@ import de.gishmo.gwt.mvp4g2.core.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsMvp4g2Logger;
+import de.gishmo.gwt.mvp4g2.core.eventbus.PresenterRegistration;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
 import de.gishmo.gwt.mvp4g2.core.history.IsNavigationConfirmation;
 import de.gishmo.gwt.mvp4g2.core.history.PlaceService;
 import de.gishmo.gwt.mvp4g2.core.internal.ui.HandlerMetaData;
 import de.gishmo.gwt.mvp4g2.core.internal.ui.PresenterMetaData;
+import de.gishmo.gwt.mvp4g2.core.internal.ui.PresenterMetaDataRegistration;
 import de.gishmo.gwt.mvp4g2.core.ui.IsHandler;
 import de.gishmo.gwt.mvp4g2.core.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
@@ -324,6 +326,12 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     ((IsShell) presenter.getPresenter()).setShell();
   }
 
+  @Override
+  public PresenterRegistration addHandler(IsPresenter<?, ?> presenter) {
+    return addHandler(presenter,
+                      true);
+  }
+
   public IsNavigationConfirmation getNavigationConfirmationPresenter() {
     return navigationConfirmationPresenter;
   }
@@ -389,19 +397,12 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     handlerMetaDataList.add(metaData);
   }
 
-  protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> void putPresenterMetaData(String className,
-                                                                                                    PresenterMetaData<E, V> metaData) {
+  protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> PresenterMetaDataRegistration putPresenterMetaData(String className,
+                                                                                                                             PresenterMetaData<E, V> metaData) {
     List<PresenterMetaData<?, ?>> presenterMetaDataList = this.presenterMetaDataMap.computeIfAbsent(className,
                                                                                                     k -> new ArrayList<>());
     presenterMetaDataList.add(metaData);
-  }
-
-  protected <E extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>> void removePresenterHandlerMetaData(String className,
-                                                                                                              PresenterMetaData<E, V> metaData) {
-    List<HandlerMetaData<?>> handlerMetaDataList = this.handlerMetaDataMap.get(className);
-    if (!isNull(handlerMetaDataList)) {
-      handlerMetaDataList.remove(metaData);
-    }
+    return () -> presenterMetaDataList.remove(metaData);
   }
 
   /**
@@ -416,8 +417,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * Sets the logger
    *
-   * @param logger
-   *   logger
+   * @param logger logger
    */
   protected void setLogger(IsMvp4g2Logger logger) {
     this.logger = logger;
@@ -435,8 +435,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * Set the log level
    *
-   * @param logLevel
-   *   the new log level
+   * @param logLevel the new log level
    */
   protected void setLogLevel(Debug.LogLevel logLevel) {
     this.logLevel = logLevel;
@@ -445,8 +444,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * set the debug state
    *
-   * @param debugEnable
-   *   true ->  is enable
+   * @param debugEnable true ->  is enable
    */
   protected void setDebugEnable(boolean debugEnable) {
     this.debugEnable = debugEnable;
@@ -482,19 +480,6 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     }
   }
 
-  protected void logEventFilter(int logDepth,
-                                String eventName,
-                                boolean pass) {
-    if (debugEnable) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("DEBUG - EventBus -> handling event: >>")
-        .append(eventName)
-        .append(pass ? "<< passed filter(s)" : "<< did not pass filter(s)");
-      this.log(sb.toString(),
-               logDepth);
-    }
-  }
-
   protected void logAskingForConfirmation(int logDepth,
                                           String eventName,
                                           Object... parameters) {
@@ -512,10 +497,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * If filtering is enabled, executes event filters associated with this event bus.
    *
-   * @param eventName
-   *   event's name
-   * @param params
-   *   event parameters for this event
+   * @param eventName event's name
+   * @param params    event parameters for this event
    */
   protected boolean filterEvent(String eventName,
                                 Object... params) {
@@ -538,15 +521,13 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    * Performs the actual filtering by calling each associated event filter in turn. If any event
    * filter returns false, then the event will be canceled.
    *
-   * @param eventName
-   *   event's name
-   * @param params
-   *   event parameters for this event
+   * @param eventName event's name
+   * @param params    event parameters for this event
    */
   @SuppressWarnings("unchecked")
   private boolean doFilterEvent(String eventName,
                                 Object[] params) {
-    int                                         filterCount = eventFilters.size();
+    int filterCount = eventFilters.size();
     @SuppressWarnings("rawtypes") IsEventFilter eventFilter;
     for (int i = 0; i < filterCount; i++) {
       eventFilter = eventFilters.get(i);
@@ -559,11 +540,23 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     return true;
   }
 
+  protected void logEventFilter(int logDepth,
+                                String eventName,
+                                boolean pass) {
+    if (debugEnable) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("DEBUG - EventBus -> handling event: >>")
+        .append(eventName)
+        .append(pass ? "<< passed filter(s)" : "<< did not pass filter(s)");
+      this.log(sb.toString(),
+               logDepth);
+    }
+  }
+
   /**
    * set the filter state
    *
-   * @param filtersEnable
-   *   true ->  is enable
+   * @param filtersEnable true ->  is enable
    */
   protected void setFiltersEnable(boolean filtersEnable) {
     this.filtersEnable = filtersEnable;
@@ -606,6 +599,26 @@ public abstract class AbstractEventBus<E extends IsEventBus>
           .append("<< handled by: >>")
           .append(handlerClassName)
           .append("<<");
+        this.log(sb.toString(),
+                 logDepth);
+      }
+    }
+  }
+
+  protected void logAddHandler(int logDepth,
+                               String presenterClass,
+                               boolean bind) {
+    if (debugEnable) {
+      if (Debug.LogLevel.DETAILED.equals(logLevel)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DEBUG - EventBus -> add presenter: >>")
+          .append(presenterClass)
+          .append("<< to event bus!");
+        if (bind) {
+          sb.append("  ==> view is created and bound");
+        } else {
+          sb.append("  ==> view is not created and not bound");
+        }
         this.log(sb.toString(),
                  logDepth);
       }

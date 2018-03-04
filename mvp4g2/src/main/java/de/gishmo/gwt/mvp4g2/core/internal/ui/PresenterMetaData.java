@@ -32,8 +32,16 @@ public abstract class PresenterMetaData<P extends IsPresenter<?, ?>, V extends I
     return presenter;
   }
 
+  public void setPresenter(P presenter) {
+    this.presenter = presenter;
+  }
+
   public V getView() {
     return view;
+  }
+
+  public void setView(V view) {
+    this.view = view;
   }
 
   public boolean isMultiple() {

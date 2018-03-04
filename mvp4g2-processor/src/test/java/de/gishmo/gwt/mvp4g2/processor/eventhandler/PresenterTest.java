@@ -361,6 +361,23 @@ public class PresenterTest {
           .withErrorContaining("IsViewCreator interface only allows the generic parameter ->");
   }
 
+  // a shell presenter can not implement is multiple!
+  @Test
+  public void testPresenterIsShellAndIsMultipleNotOk() {
+    ASSERT.about(javaSources())
+          .that(new ArrayList<JavaFileObject>() {
+            {
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterIsShellAndIsMultipleNotOk/EventBusPresenterIsShellAndIsMultipleNotOk.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterIsShellAndIsMultipleNotOk/MockShellPresenter01.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterIsShellAndIsMultipleNotOk/IMockShellView01.java"));
+              add(JavaFileObjects.forResource("de/gishmo/gwt/mvp4g2/processor/eventhandler/presenterIsShellAndIsMultipleNotOk/MockShellView01.java"));
+            }
+          })
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("IsShell interface can not be used on a presenter which is defiend as multiple = true");
+  }
+
   //  @Test
   //  public void testPresenterWithMultipleAttribute02() {
   //    ASSERT.about(javaSources())

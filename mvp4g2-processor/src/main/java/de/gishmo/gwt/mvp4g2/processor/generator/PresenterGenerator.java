@@ -74,18 +74,21 @@ public class PresenterGenerator {
                                                                  data.getIsMultiple(),
                                                                  presenterViewCreationMethodClassName,
                                                                  data.getViewCreationMethod());
-        constructor.addStatement("super.presenter = new $T()",
-                                 data.getPresenter()
-                                     .getTypeName());
-        if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.toString()
-                                                    .equals(data.getViewCreationMethod())) {
-          constructor.addStatement("super.view = ($T) new $T()",
-                                   data.getViewInterface()
-                                       .getTypeName(),
-                                   data.getViewClass()
+        if (!metaModel.getPresenterData(presenter)
+                      .isMultiple()) {
+          constructor.addStatement("super.presenter = new $T()",
+                                   data.getPresenter()
                                        .getTypeName());
-        } else {
-          constructor.addStatement("super.view = presenter.createView()");
+          if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.toString()
+                                                      .equals(data.getViewCreationMethod())) {
+            constructor.addStatement("super.view = ($T) new $T()",
+                                     data.getViewInterface()
+                                         .getTypeName(),
+                                     data.getViewClass()
+                                         .getTypeName());
+          } else {
+            constructor.addStatement("super.view = presenter.createView()");
+          }
         }
         typeSpec.addMethod(constructor.build());
 

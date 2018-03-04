@@ -129,7 +129,7 @@ Eventbus:
 
 MVP:
 - create a presenter and inject a view with one annotation
-- support for multiple instances of the same presenter (**not yet implemented, but planned**)
+- support for multiple instances of the same presenter
 - easily implement the Reverse MVP (or View Delegate) pattern thanks to Reverse View feature (MVP4G2 requires the use of the view delegate pattern)
 - easily control your presenter thanks to onBeforeEvent
 - add an event handling method to the event bus with one annotation

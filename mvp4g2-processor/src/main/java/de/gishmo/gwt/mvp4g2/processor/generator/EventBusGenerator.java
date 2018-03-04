@@ -110,7 +110,7 @@ public class EventBusGenerator {
 
     AddPresenterGenerator.builder()
                          .typeSpec(typeSpec)
-                         .eventBusMetaModel(eventBusMetaMetaModel)
+                         .processingEnvironment(this.processingEnvironment)
                          .presenterMetaModel(presenterMetaModel)
                          .build()
                          .generate();

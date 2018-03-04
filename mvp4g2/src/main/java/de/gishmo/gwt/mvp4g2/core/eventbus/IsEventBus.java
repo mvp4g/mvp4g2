@@ -29,20 +29,35 @@ public interface IsEventBus {
   void setShell();
 
   /**
-   * Adds a presetner instance to the eventBis.<br>
-   * <br>
-   * Using this feature requires setting "multiple = true"  in the
+   * Adds a presenter instance to the eventBus and using the bind-parameter <b>true</b>.
+   * <br><br>
+   * Using this feature requires that the presetner has set "multiple" to true!
+   * <br><br>
    *
    * @param presenter instance of the new presenter to add to the eventbus
-   * @return returns a PresenterRegistration to remove the registration!
+   * @return returns a PresenterRegistration - to remove the presenter registration from the eventbus
    */
   PresenterRegistration addHandler(IsPresenter<?, ?> presenter);
 
   /**
-   * Method to manually ask if an action can occur
+   * Adds a presenter instance to the eventBus.
+   * <br><br>
+   * Using this feature requires that the presetner has set "multiple" to true!
+   * <br><br>
    *
-   * @param event event to be executed in case the presenter does not interrupt navigation
+   * @param presenter instance of the new presenter to add to the eventbus
+   * @param bind      true -> the bind- and createView-method of the view will be called in case the presenter is added to the eventbus
+   *                  false -> the bind- and createView-method of the view will be called in case first event is fired!
+   * @return returns a PresenterRegistration - to remove the presenter registration from the eventbus
    */
+  PresenterRegistration addHandler(IsPresenter<?, ?> presenter,
+                                   boolean bind);
+
+//  /**
+//   * Method to manually ask if an action can occur
+//   *
+//   * @param event event to be executed in case the presenter does not interrupt navigation
+//   */
   //  void confirmNavigation(NavigationEventCommand event);
 
   IsNavigationConfirmation getNavigationConfirmationPresenter();

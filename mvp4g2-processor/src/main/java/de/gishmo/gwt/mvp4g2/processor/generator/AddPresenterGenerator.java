@@ -18,46 +18,45 @@ package de.gishmo.gwt.mvp4g2.processor.generator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
 import de.gishmo.gwt.mvp4g2.core.eventbus.PresenterRegistration;
+import de.gishmo.gwt.mvp4g2.core.internal.Mvp4g2RuntimeException;
+import de.gishmo.gwt.mvp4g2.core.internal.eventbus.AbstractEventBus;
+import de.gishmo.gwt.mvp4g2.core.internal.ui.PresenterMetaDataRegistration;
 import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * <p>The execution context manages all commands.<br>
- * Use run()-method to start execution.</p>
- */
 public class AddPresenterGenerator {
 
-//  private ProcessorUtils processorUtils;
+  private ProcessorUtils processorUtils;
 
-  //  private ProcessingEnvironment processingEnvironment;
-  private TypeSpec.Builder   typeSpec;
-  private EventBusMetaModel  eventBusMetaModel;
-  //  private HandlerMetaModel      handlerMetaModel;
-  private PresenterMetaModel presenterMetaModel;
+  private ProcessingEnvironment processingEnvironment;
+  private TypeSpec.Builder      typeSpec;
+  private PresenterMetaModel    presenterMetaModel;
 
   @SuppressWarnings("unused")
   private AddPresenterGenerator() {
   }
 
   private AddPresenterGenerator(Builder builder) {
-//    this.processingEnvironment = builder.processingEnvironment;
+    this.processingEnvironment = builder.processingEnvironment;
     this.typeSpec = builder.typeSpec;
-    this.eventBusMetaModel = builder.eventBusMetaModel;
-//    this.handlerMetaModel = builder.handlerMetaModel;
     this.presenterMetaModel = builder.presenterMetaModel;
 
-//    this.processorUtils = ProcessorUtils.builder()
-//                                        .processingEnvironment(this.processingEnvironment)
-//                                        .build();
+    this.processorUtils = ProcessorUtils.builder()
+                                        .processingEnvironment(this.processingEnvironment)
+                                        .build();
   }
 
   public static Builder builder() {
@@ -72,161 +71,140 @@ public class AddPresenterGenerator {
                                                                                             WildcardTypeName.subtypeOf(Object.class),
                                                                                             WildcardTypeName.subtypeOf(Object.class)),
                                                                   "presenter")
-                                                    .returns(ClassName.get(PresenterRegistration.class));
+                                                    .addParameter(TypeName.BOOLEAN,
+                                                                  "bind")
+                                                    .returns(ClassName.get(PresenterRegistration.class))
+                                                    .addException(Mvp4g2RuntimeException.class);
     // search presenters (multiple = true)
     List<PresenterMetaModel.PresenterData> multiPresenters = createPresenterTypeMultipleList();
     if (multiPresenters.size() > 0) {
       multiPresenters.forEach(presenterData -> generateCodeBlockForPresenter(addHandlerMethod,
-                                                           presenterData));
+                                                                             presenterData));
     }
-
-//    // List of already created EventHandler used to avoid a second create ...
-//    List<ClassNameModel> listOfEventHandlersToCreate = this.createListOfEventHandlersToCreate();
-//    listOfEventHandlersToCreate.forEach(handlerClassName -> this.addHandlerToMetaList(loadEventHandlerMethod,
-//                                                                                      handlerClassName));
-
-
-    addHandlerMethod.addStatement("return null");
+    addHandlerMethod.addStatement("throw new $T(presenter.getClass().getCanonicalName() + \": can not be used with the addHandler()-method, because it is not defined as multiple presenter!\")",
+                                  Mvp4g2RuntimeException.class);
     typeSpec.addMethod(addHandlerMethod.build());
   }
 
   private List<PresenterMetaModel.PresenterData> createPresenterTypeMultipleList() {
     return presenterMetaModel.getPresenterDatas()
                              .stream()
-                             .filter((data) -> data.isMultiple())
+                             .filter(PresenterMetaModel.PresenterData::isMultiple)
                              .collect(Collectors.toCollection(ArrayList::new));
   }
 
   private void generateCodeBlockForPresenter(MethodSpec.Builder addHandlerMethod,
                                              PresenterMetaModel.PresenterData presenterData) {
-      addHandlerMethod.beginControlFlow("if (presenter instanceof $T)",
-                                        ClassName.get(presenterData.getPresenter()
-                                                                   .getPackage(),
-                                                      presenterData.getPresenter()
-                                                                   .getSimpleName()));
-
-
-// TODO
-
-
-      addHandlerMethod.endControlFlow();
+    addHandlerMethod.beginControlFlow("if (presenter instanceof $T)",
+                                      ClassName.get(presenterData.getPresenter()
+                                                                 .getPackage(),
+                                                    presenterData.getPresenter()
+                                                                 .getSimpleName()));
+    // Name of the variable , class name
+    String metaDataVariableName = this.processorUtils.createFullClassName(presenterData.getPresenter()
+                                                                                       .getClassName() + ProcessorConstants.META_DATA);
+    String metaDataClassName = this.processorUtils.setFirstCharacterToUpperCase(metaDataVariableName);
+    addHandlerMethod.addStatement("super.logAddHandler(++$T.logDepth, presenter.getClass().getCanonicalName(), bind)",
+                                  ClassName.get(AbstractEventBus.class));
+    // comment
+    addHandlerMethod.addComment("");
+    addHandlerMethod.addComment("===> ");
+    addHandlerMethod.addComment("add $N to eventbus",
+                                presenterData.getPresenter()
+                                             .getClassName());
+    addHandlerMethod.addComment("");
+    // create instance of presenter meta data ...
+    addHandlerMethod.addStatement("$T $N = new $T()",
+                                  ClassName.get(presenterData.getPresenter()
+                                                             .getPackage(),
+                                                metaDataClassName),
+                                  metaDataVariableName,
+                                  ClassName.get(presenterData.getPresenter()
+                                                             .getPackage(),
+                                                metaDataClassName));
+    addHandlerMethod.addStatement("final $T metaDataRegistration = super.putPresenterMetaData($S, $N)",
+                                  PresenterMetaDataRegistration.class,
+                                  presenterData.getPresenter()
+                                               .getClassName(),
+                                  metaDataVariableName);
+    // set presenter
+    addHandlerMethod.addStatement("$N.setPresenter(($T) presenter)",
+                                  metaDataVariableName,
+                                  ClassName.get(presenterData.getPresenter()
+                                                             .getPackage(),
+                                                presenterData.getPresenter()
+                                                             .getSimpleName()));
+    // set eventbus
+    addHandlerMethod.addStatement("$N.getPresenter().setEventBus(this)",
+                                  metaDataVariableName);
+    // create view
+    if (Presenter.VIEW_CREATION_METHOD.FRAMEWORK.toString()
+                                                .equals(presenterData.getViewCreationMethod())) {
+      addHandlerMethod.addStatement("$N.setView(new $T())",
+                                    metaDataVariableName,
+                                    ClassName.get(presenterData.getViewClass()
+                                                               .getPackage(),
+                                                  presenterData.getViewClass()
+                                                               .getSimpleName()));
+    } else {
+      addHandlerMethod.addStatement("$N.setView(presenter.createView())",
+                                    metaDataVariableName);
+    }
+    // set view in presenter
+    addHandlerMethod.addStatement("$N.getPresenter().setView($N.getView())",
+                                  metaDataVariableName,
+                                  metaDataVariableName);
+    // set presenter in view
+    addHandlerMethod.addStatement("$N.getView().setPresenter(($T) presenter)",
+                                  metaDataVariableName,
+                                  ClassName.get(presenterData.getPresenter()
+                                                             .getPackage(),
+                                                presenterData.getPresenter()
+                                                             .getSimpleName()));
+    // not sure, if this is the best solution ...
+    addHandlerMethod.beginControlFlow("if (bind)");
+    addHandlerMethod.addStatement("$N.getPresenter().getView().setBound(true)",
+                                  metaDataVariableName);
+    addHandlerMethod.addStatement("$N.getPresenter().getView().createView()",
+                                  metaDataVariableName);
+    addHandlerMethod.addStatement("$N.getPresenter().getView().bind()",
+                                  metaDataVariableName);
+    addHandlerMethod.endControlFlow();
+    // create retun statement ...
+    StringBuilder sb = new StringBuilder();
+    addHandlerMethod.addStatement(sb.append("return new $T() {")
+                                    .append("\n")
+                                    .append("@$T")
+                                    .append("\n")
+                                    .append("  public void remove() {")
+                                    .append("\n")
+                                    .append("    metaDataRegistration.remove();")
+                                    .append("\n")
+                                    .append("  }")
+                                    .append("\n")
+                                    .append("}")
+                                    .toString(),
+                                  PresenterRegistration.class,
+                                  Override.class);
+    addHandlerMethod.endControlFlow();
   }
-
-//
-//
-//
-//  private List<ClassNameModel> createListOfEventHandlersToCreate() {
-//    // List of already created EventHandler used to avoid a second create ...
-//    List<ClassNameModel> listOfHandlersToCreate = new ArrayList<>();
-//    // add the ShellPresenter to the list!
-//    if (eventBusMetaModel.getShell() != null) {
-//      listOfHandlersToCreate.add(eventBusMetaModel.getShell());
-//    }
-//    eventBusMetaModel.getEventMetaModels()
-//                     .stream()
-//                     .forEach(eventMetaModel -> {
-//                       eventMetaModel.getBindings()
-//                                     .stream()
-//                                     .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
-//                                     .forEach(listOfHandlersToCreate::add);
-//                     });
-//    eventBusMetaModel.getEventMetaModels()
-//                     .stream()
-//                     .forEach(eventMetaModel -> {
-//                       eventMetaModel.getHandlers()
-//                                     .stream()
-//                                     .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
-//                                     .forEach(listOfHandlersToCreate::add);
-//                     });
-//    // TODO evventHandler annotated with @EventHandler
-//    return listOfHandlersToCreate;
-//  }
-//
-//  private void addHandlerToMetaList(MethodSpec.Builder methodToGenerate,
-//                                    ClassNameModel handlerClassName) {
-//    // check if we deal with a presenter
-//    boolean isPresenter = this.presenterMetaModel.isPresenter(handlerClassName.getClassName());
-//    // Name of the variable , class name
-//    String metaDataVariableName = this.processorUtils.createFullClassName(handlerClassName.getClassName() + ProcessorConstants.META_DATA);
-//    String metaDataClassName = this.processorUtils.setFirstCharacterToUpperCase(metaDataVariableName);
-//    // comment
-//    methodToGenerate.addComment("");
-//    methodToGenerate.addComment("===> ");
-//    methodToGenerate.addComment("handle $N ($N)",
-//                                handlerClassName.getClassName(),
-//                                isPresenter ? "Presenter" : "EventHandler");
-//    methodToGenerate.addComment("");
-//    // code ...
-//    methodToGenerate.addStatement("$T $N = new $T()",
-//                                  ClassName.get(handlerClassName.getPackage(),
-//                                                metaDataClassName),
-//                                  metaDataVariableName,
-//                                  ClassName.get(handlerClassName.getPackage(),
-//                                                metaDataClassName));
-//    if (isPresenter) {
-//      // check, that multiple is false! (We can do this not here during code generation, because we don't know it ...)
-//      methodToGenerate.beginControlFlow("if (!$N.isMultiple())",
-//                                        metaDataVariableName);
-//      this.generatePresenterBinding(methodToGenerate,
-//                                    handlerClassName.getClassName(),
-//                                    metaDataVariableName);
-//      methodToGenerate.endControlFlow();
-//    } else {
-//      methodToGenerate.addStatement("super.putHandlerMetaData($S, $N)",
-//                                    handlerClassName,
-//                                    metaDataVariableName);
-//      // set eventbus statement
-//      methodToGenerate.addStatement("$N.getHandler().setEventBus(this)",
-//                                    metaDataVariableName);
-//    }
-//  }
-//
-//  private void generatePresenterBinding(MethodSpec.Builder methodToGenerate,
-//                                        String eventHandlerClassName,
-//                                        String metaDataVariableName) {
-//    methodToGenerate.addStatement("super.putPresenterMetaData($S, $N)",
-//                                  eventHandlerClassName,
-//                                  metaDataVariableName);
-//    // set eventbus statement
-//    methodToGenerate.addStatement("$N.getPresenter().setEventBus(this)",
-//                                  metaDataVariableName);
-//    // set view statement in presenter
-//    methodToGenerate.addStatement("$N.getPresenter().setView($N.getView())",
-//                                  metaDataVariableName,
-//                                  metaDataVariableName);
-//    // set presenter statement in view
-//    methodToGenerate.addStatement("$N.getView().setPresenter($N.getPresenter())",
-//                                  metaDataVariableName,
-//                                  metaDataVariableName);
-//  }
 
   public static final class Builder {
 
-    //    ProcessingEnvironment processingEnvironment;
-    TypeSpec.Builder   typeSpec;
-    EventBusMetaModel  eventBusMetaModel;
-    PresenterMetaModel presenterMetaModel;
+    ProcessingEnvironment processingEnvironment;
+    TypeSpec.Builder      typeSpec;
+    PresenterMetaModel    presenterMetaModel;
 
-//    /**
-//     * Set the processing envirement
-//     *
-//     * @param processingEnvirement the processing envirement
-//     * @return the Builder
-//     */
-//    public Builder processingEnvironment(ProcessingEnvironment processingEnvirement) {
-//      this.processingEnvironment = processingEnvirement;
-//      return this;
-//    }
-
-    public Builder eventBusMetaModel(EventBusMetaModel eventBusMetaModel) {
-      this.eventBusMetaModel = eventBusMetaModel;
+    /**
+     * Set the processing envirement
+     *
+     * @param processingEnvirement the processing envirement
+     * @return the Builder
+     */
+    public Builder processingEnvironment(ProcessingEnvironment processingEnvirement) {
+      this.processingEnvironment = processingEnvirement;
       return this;
     }
-
-//    public Builder handlerMetaModel(HandlerMetaModel handlerMetaModel) {
-//      this.handlerMetaModel = handlerMetaModel;
-//      return this;
-//    }
 
     public Builder presenterMetaModel(PresenterMetaModel presenterMetaModel) {
       this.presenterMetaModel = presenterMetaModel;
