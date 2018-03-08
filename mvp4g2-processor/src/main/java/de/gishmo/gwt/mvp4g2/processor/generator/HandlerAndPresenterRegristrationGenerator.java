@@ -100,8 +100,6 @@ public class HandlerAndPresenterRegristrationGenerator {
                            .stream()
                            .filter(s -> !listOfEventHandlersToCreate.contains(s))
                            .map(s -> this.presenterMetaModel.getPresenterData(s))
-                           // TODO rausnehmen ok?
-//                           .filter(presenterData -> !presenterData.isMultiple())
                            .forEach(presenterData -> {
                              presenterData.getHandledEvents()
                                           .stream()
