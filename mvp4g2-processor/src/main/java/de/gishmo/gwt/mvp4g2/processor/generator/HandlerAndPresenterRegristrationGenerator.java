@@ -15,9 +15,17 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -25,12 +33,6 @@ import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * <p>The execution context manages all commands.<br>
@@ -85,7 +87,8 @@ public class HandlerAndPresenterRegristrationGenerator {
                          .forEach(handlerData -> {
                            handlerData.getHandledEvents()
                                       .stream()
-                                      .filter(event -> event != null && event.trim().length() > 0)
+                                      .filter(event -> event != null && event.trim()
+                                                                             .length() > 0)
                                       .map(handledEvent -> processorUtils.createEventNameFromHandlingMethod(handledEvent))
                                       .map(event -> this.eventBusMetaModel.getEventMetaModel(event))
                                       .filter(Objects::nonNull)
@@ -103,7 +106,8 @@ public class HandlerAndPresenterRegristrationGenerator {
                            .forEach(presenterData -> {
                              presenterData.getHandledEvents()
                                           .stream()
-                                          .filter(event -> event != null && event.trim().length() > 0)
+                                          .filter(event -> event != null && event.trim()
+                                                                                 .length() > 0)
                                           .map(handledEvent -> processorUtils.createEventNameFromHandlingMethod(handledEvent))
                                           .map(event -> this.eventBusMetaModel.getEventMetaModel(event))
                                           .filter(Objects::nonNull)
@@ -130,7 +134,8 @@ public class HandlerAndPresenterRegristrationGenerator {
                           .forEach(eventMetaModel -> {
                             eventMetaModel.getBindings()
                                           .stream()
-                                          .filter(handlerClassName -> this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()) != null && !this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()).isMultiple())
+                                          .filter(handlerClassName -> this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()) != null && !this.presenterMetaModel.getPresenterData(handlerClassName.getClassName())
+                                                                                                                                                                                   .isMultiple())
                                           .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
                                           .forEach(listOfHandlersToCreate::add);
                           });
@@ -139,7 +144,8 @@ public class HandlerAndPresenterRegristrationGenerator {
                           .forEach(eventMetaModel -> {
                             eventMetaModel.getHandlers()
                                           .stream()
-                                          .filter(handlerClassName -> this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()) != null && !this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()).isMultiple())
+                                          .filter(handlerClassName -> this.presenterMetaModel.getPresenterData(handlerClassName.getClassName()) != null && !this.presenterMetaModel.getPresenterData(handlerClassName.getClassName())
+                                                                                                                                                                                   .isMultiple())
                                           .filter(handlerClassName -> !listOfHandlersToCreate.contains(handlerClassName))
                                           .forEach(listOfHandlersToCreate::add);
                           });
@@ -149,7 +155,8 @@ public class HandlerAndPresenterRegristrationGenerator {
                          .forEach(handlerClassName -> listOfHandlersToCreate.add(new ClassNameModel(handlerClassName)));
     this.presenterMetaModel.getPresenterKeys()
                            .stream()
-                           .filter(handlerClassName -> !this.presenterMetaModel.getPresenterData(handlerClassName).isMultiple())
+                           .filter(handlerClassName -> !this.presenterMetaModel.getPresenterData(handlerClassName)
+                                                                               .isMultiple())
                            .filter(handlerClassName -> !listOfHandlersToCreate.contains(new ClassNameModel(handlerClassName)))
                            .forEach(handlerClassName -> listOfHandlersToCreate.add(new ClassNameModel(handlerClassName)));
     return listOfHandlersToCreate;
@@ -161,7 +168,7 @@ public class HandlerAndPresenterRegristrationGenerator {
     boolean isPresenter = this.presenterMetaModel.isPresenter(handlerClassName.getClassName());
     // Name of the variable , class name
     String metaDataVariableName = this.processorUtils.createFullClassName(handlerClassName.getClassName() + ProcessorConstants.META_DATA);
-    String metaDataClassName = this.processorUtils.setFirstCharacterToUpperCase(metaDataVariableName);
+    String metaDataClassName    = this.processorUtils.setFirstCharacterToUpperCase(metaDataVariableName);
     // comment
     methodToGenerate.addComment("");
     methodToGenerate.addComment("===> ");
@@ -223,7 +230,9 @@ public class HandlerAndPresenterRegristrationGenerator {
     /**
      * Set the processing envirement
      *
-     * @param processingEnvirement the processing envirement
+     * @param processingEnvirement
+     *   the processing envirement
+     *
      * @return the Builder
      */
     public Builder processingEnvironment(ProcessingEnvironment processingEnvirement) {
@@ -249,7 +258,9 @@ public class HandlerAndPresenterRegristrationGenerator {
     /**
      * Set the typeSpec of the currently generated eventBus
      *
-     * @param typeSpec ttype spec of the crruent eventbus
+     * @param typeSpec
+     *   type spec of the current eventbus
+     *
      * @return the Builder
      */
     public Builder typeSpec(TypeSpec.Builder typeSpec) {
