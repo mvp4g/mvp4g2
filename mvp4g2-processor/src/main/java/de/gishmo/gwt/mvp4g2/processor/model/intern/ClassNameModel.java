@@ -10,7 +10,7 @@ public class ClassNameModel {
   private String className;
 
   public ClassNameModel(String className) {
-    this.className = className;
+    this.className = Objects.requireNonNull(className);
   }
 
   public String getClassName() {

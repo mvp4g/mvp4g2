@@ -29,6 +29,7 @@ import de.gishmo.gwt.mvp4g2.processor.scanner.PresenterAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.validation.ModelValidator;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
@@ -40,7 +41,7 @@ import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.of;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@AutoService(Mvp4g2Processor.class)
+@AutoService(Processor.class)
 public class Mvp4g2Processor
   extends AbstractProcessor {
 
