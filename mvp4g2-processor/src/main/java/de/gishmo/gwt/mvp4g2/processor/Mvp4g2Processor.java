@@ -86,6 +86,7 @@ public class Mvp4g2Processor
   public boolean process(Set<? extends TypeElement> annotations,
                          RoundEnvironment roundEnv) {
     setUp(roundEnv);
+    processorUtils.createNoteMessage("Mvp4g2-Processor triggered: " + System.currentTimeMillis());
     try {
       if (roundEnv.processingOver()) {
         this.generate();

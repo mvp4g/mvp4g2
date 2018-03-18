@@ -74,7 +74,7 @@ public class HandlerAnnotationScanner {
       props.load(resource.openInputStream());
       return new HandlerMetaModel(props);
     } catch (IOException e) {
-      this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
+      // every thing is ok -> no operation
     }
     return new HandlerMetaModel();
   }

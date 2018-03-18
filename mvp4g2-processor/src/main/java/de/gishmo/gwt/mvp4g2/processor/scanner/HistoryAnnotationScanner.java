@@ -86,7 +86,7 @@ public class HistoryAnnotationScanner {
       props.load(resource.openInputStream());
       return new HistoryMetaModel(props);
     } catch (IOException e) {
-      this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
+      // every thing is ok -> no operation
     }
     return new HistoryMetaModel();
   }

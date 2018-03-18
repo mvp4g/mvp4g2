@@ -93,7 +93,7 @@ public class ApplicationAnnotationScanner {
       props.load(resource.openInputStream());
       return new ApplicationMetaModel(props);
     } catch (IOException e) {
-      this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
+      // every thing is ok -> no operation
     }
     return null;
   }

@@ -140,7 +140,7 @@ public class EventAnnotationScanner {
       props.load(resource.openInputStream());
       return new EventMetaModel(props);
     } catch (IOException e) {
-      this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName(element) + "<<");
+      // every thing is ok -> no operation
     }
     return new EventMetaModel();
   }
