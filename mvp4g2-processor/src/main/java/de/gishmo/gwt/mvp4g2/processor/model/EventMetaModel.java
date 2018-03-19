@@ -279,8 +279,8 @@ public class EventMetaModel
                            this.eventName);
     properties.setProperty(EventMetaModel.KEY_HISTORY_EVENT_NAME,
                            this.historyEventName);
-    properties.setProperty(EventMetaModel.KEY_HISTORY_EVENT_NAME,
-                           this.historyEventName);
+    properties.setProperty(EventMetaModel.KEY_HISTORY_CONVERTER,
+                           this.historyConverter.getClassName());
     properties.setProperty(EventMetaModel.KEY_START_EVENT,
                            this.startEvent);
     properties.setProperty(EventMetaModel.KEY_INIT_HISTORY,
