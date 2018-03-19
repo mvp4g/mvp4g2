@@ -13,7 +13,7 @@ public class ClassNameModelTest {
   private ClassNameModel classNameModel;
 
   @Before
-  public void befiore() {
+  public void before() {
     classNameModel = new ClassNameModel(IsApplication.class.getCanonicalName());
   }
 

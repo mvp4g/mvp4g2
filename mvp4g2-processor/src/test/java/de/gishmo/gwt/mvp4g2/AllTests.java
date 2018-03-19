@@ -27,6 +27,7 @@ import de.gishmo.gwt.mvp4g2.processor.eventhandler.PresenterTest;
 import de.gishmo.gwt.mvp4g2.processor.history.HistoryTest;
 import de.gishmo.gwt.mvp4g2.processor.implementation.ImplementationTest;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModelTest;
+import de.gishmo.gwt.mvp4g2.processor.model.property.PropertiesTest;
 import de.gishmo.gwt.mvp4g2.processor.shell.ShellTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -43,6 +44,7 @@ import org.junit.runners.Suite;
                      StartEventTest.class,
                      ImplementationTest.class,
                      HistoryTest.class,
+                     PropertiesTest.class,
                      ShellTest.class})
 public class AllTests {
 }

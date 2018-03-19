@@ -17,9 +17,9 @@ import static java.util.Objects.isNull;
 public class EventBusMetaModel
   implements IsMetaModel {
 
-  private static final String KEY_EVENTBUS         = "eventBus";
-  private static final String KEY_SHELL            = "shell";
-  private static final String KEY_EVENTS           = "events";
+  private static final String KEY_EVENTBUS = "eventBus";
+  private static final String KEY_SHELL    = "shell";
+  private static final String KEY_EVENTS   = "events";
 
   private static final String KEY_HAS_DEBUG_ANNOTATION = "hasDebugAnnotation";
   private static final String KEY_DEBUG_LOG_LEVEL      = "debugLogLevel";
@@ -63,7 +63,7 @@ public class EventBusMetaModel
     } else {
       this.filters = Arrays.stream(properties.getProperty(EventBusMetaModel.KEY_FILTERS)
                                              .split("\\s*,\\s*"))
-                           .map(s -> new ClassNameModel(s))
+                           .map(ClassNameModel::new)
                            .collect(Collectors.toCollection(ArrayList::new));
     }
   }
@@ -77,7 +77,9 @@ public class EventBusMetaModel
   public void add(EventMetaModel eventMetaModel) {
     this.eventMetaModels.put(eventMetaModel.getEventInternalName(),
                              eventMetaModel);
-    this.events.add(eventMetaModel.getEventInternalName());
+    if (!this.events.contains(eventMetaModel.getEventInternalName())) {
+      this.events.add(eventMetaModel.getEventInternalName());
+    }
   }
 
   public Collection<String> getEventMetaModelKeys() {
@@ -152,6 +154,12 @@ public class EventBusMetaModel
                            this.eventBus.getClassName());
     properties.setProperty(EventBusMetaModel.KEY_SHELL,
                            this.shell.getClassName());
+    properties.setProperty(EventBusMetaModel.KEY_EVENTS,
+                           String.join(",",
+                                       String.join(",",
+                                                   this.eventMetaModels.keySet()
+                                                                       .stream()
+                                                                       .collect(Collectors.toCollection(ArrayList::new)))));
     properties.setProperty(EventBusMetaModel.KEY_HAS_DEBUG_ANNOTATION,
                            this.hasDebugAnnotation);
     properties.setProperty(EventBusMetaModel.KEY_DEBUG_LOGGER,
@@ -166,12 +174,6 @@ public class EventBusMetaModel
                                        filters.stream()
                                               .map(c -> c.getClassName())
                                               .collect(Collectors.toCollection(ArrayList::new))));
-    properties.setProperty(EventBusMetaModel.KEY_EVENTS,
-                           String.join(",",
-                                       String.join(",",
-                                                   this.eventMetaModels.keySet()
-                                                                       .stream()
-                                                                       .collect(Collectors.toCollection(ArrayList::new)))));
     return properties;
   }
 }
