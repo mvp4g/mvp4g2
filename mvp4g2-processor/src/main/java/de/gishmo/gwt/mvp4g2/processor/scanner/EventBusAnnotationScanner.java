@@ -156,6 +156,7 @@ public class EventBusAnnotationScanner {
       return model;
     } catch (IOException e) {
       // every thing is ok -> no operation
+//      this.processorUtils.createNoteMessage("no resource found for : >>" + this.createRelativeFileName() + "<<");
     }
     return null;
   }

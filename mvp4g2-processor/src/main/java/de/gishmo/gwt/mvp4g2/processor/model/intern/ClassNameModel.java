@@ -101,7 +101,6 @@ public class ClassNameModel {
 
   @Override
   public int hashCode() {
-
     return Objects.hash(className);
   }
 }
