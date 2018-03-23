@@ -15,6 +15,16 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
@@ -22,15 +32,6 @@ import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
 
@@ -221,7 +222,7 @@ public class ModelValidator {
                          .filter(element -> element instanceof ExecutableElement)
                          .map(element -> (ExecutableElement) element)
                          .forEach(executableElement -> nameOfExecutableElements.put(executableElement.toString(),
-                                                                                  executableElement));
+                                                                                    executableElement));
       // method to look for
       String methodNameToLookFor = this.createEventHandlungMethodName(eventInternalName);
       // try to find in Map

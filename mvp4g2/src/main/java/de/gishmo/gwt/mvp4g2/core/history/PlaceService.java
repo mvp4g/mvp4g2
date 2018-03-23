@@ -1,11 +1,11 @@
 package de.gishmo.gwt.mvp4g2.core.history;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.internal.eventbus.EventMetaData;
 import elemental2.dom.DomGlobal;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -14,15 +14,12 @@ public class PlaceService<E extends IsEventBus> {
   //  private static final String MODULE_SEPARATOR = "/";
   private static final String URL_SEPARATOR = "#";
   private static final String CRAWLABLE     = "!";
-
-  private IsEventBus                                       eventBus;
-  private Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
-  private Map<String, String>                              historyNameMap;
-
-  private boolean enabled = true;
-
   /* flag if we have to check history token at the start of the application */
-  protected boolean historyOnStart;
+  protected boolean                                          historyOnStart;
+  private   IsEventBus                                       eventBus;
+  private   Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
+  private   Map<String, String>                              historyNameMap;
+  private boolean enabled = true;
 
   public PlaceService(E eventBus,
                       boolean historyOnStart) {
@@ -47,8 +44,7 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Ask for user's confirmation before firing an event
    *
-   * @param event
-   *   event to confirm
+   * @param event event to confirm
    */
   public void confirmEvent(NavigationEventCommand event) {
     if (isNull(this.eventBus.getNavigationConfirmationPresenter())) {
@@ -63,8 +59,7 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Convert the token to an event
    *
-   * @param token
-   *   the token to convert
+   * @param token the token to convert
    */
   protected void convertToken(String token) {
     boolean toContinue = false;
@@ -97,14 +92,12 @@ public class PlaceService<E extends IsEventBus> {
    * Parse the token and return a string array. The first element of this array contains the event
    * name whereas the second element contains the parameters associated to the event.
    *
-   * @param token
-   *   token to parse
-   *
+   * @param token token to parse
    * @return array of string
    */
   protected String[] parseToken(String token) {
     String[] result = new String[2];
-    int      index  = token.lastIndexOf(getParamSeparator());
+    int index = token.lastIndexOf(getParamSeparator());
     result[0] = (index == -1) ? token : token.substring(0,
                                                         index);
     result[1] = (index == -1) ? null : token.substring(index + 1);
@@ -114,10 +107,8 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Dispatch the event thanks to the history converter.
    *
-   * @param historyName
-   *   name of the event stored in the token
-   * @param param
-   *   parameters stored in the token
+   * @param historyName name of the event stored in the token
+   * @param param       parameters stored in the token
    */
   @SuppressWarnings("unchecked")
   protected void dispatchEvent(String historyName,
@@ -177,14 +168,13 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Add a converter for an event.
    *
-   * @param eventMetaData
-   *   EventMetaDAta object containing all relevant informations
+   * @param eventMetaData EventMetaDAta object containing all relevant informations
    */
   public void addConverter(EventMetaData<? extends IsEventBus> eventMetaData) {
     String historyName = !isNull(eventMetaData.getHistoryName()) && eventMetaData.getHistoryName()
                                                                                  .trim()
                                                                                  .length() > 0
-      ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
+                         ? eventMetaData.getHistoryName() : eventMetaData.getEventName();
     this.historyNameMap.put(historyName,
                             eventMetaData.getEventName());
     this.eventMetaDataMap.put(eventMetaData.getEventName(),
@@ -194,14 +184,10 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Convert an event and its associated parameters to a token.<br>
    *
-   * @param eventName
-   *   name of the event to store
-   * @param param
-   *   string representation of the objects associated with the event that needs to be
-   *   stored in the token
-   * @param onlyToken
-   *   if true, only the token will be generated and browser history won't change
-   *
+   * @param eventName name of the event to store
+   * @param param     string representation of the objects associated with the event that needs to be
+   *                  stored in the token
+   * @param onlyToken if true, only the token will be generated and browser history won't change
    * @return the generated token
    */
   public String place(String eventName,
@@ -228,11 +214,8 @@ public class PlaceService<E extends IsEventBus> {
   /**
    * Transform an event and its parameters to a token
    *
-   * @param eventName
-   *   event's name
-   * @param param
-   *   event's parameters
-   *
+   * @param eventName event's name
+   * @param param     event's parameters
    * @return token to store in the history
    */
   private String tokenize(String eventName,

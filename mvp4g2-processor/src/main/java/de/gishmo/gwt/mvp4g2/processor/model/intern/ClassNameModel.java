@@ -1,9 +1,9 @@
 package de.gishmo.gwt.mvp4g2.processor.model.intern;
 
+import java.util.Objects;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
-
-import java.util.Objects;
 
 public class ClassNameModel {
 
@@ -87,6 +87,11 @@ public class ClassNameModel {
   }
 
   @Override
+  public int hashCode() {
+    return Objects.hash(className);
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -97,10 +102,5 @@ public class ClassNameModel {
     ClassNameModel that = (ClassNameModel) o;
     return Objects.equals(className,
                           that.className);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(className);
   }
 }

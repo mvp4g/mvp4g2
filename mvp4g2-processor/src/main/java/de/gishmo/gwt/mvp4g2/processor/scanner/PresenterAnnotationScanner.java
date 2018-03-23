@@ -1,12 +1,7 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
-import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.PresenterAnnotationValidator;
+import java.io.IOException;
+import java.util.Properties;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -15,8 +10,14 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.Properties;
+
+import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.PresenterAnnotationValidator;
 
 public class PresenterAnnotationScanner {
 
@@ -63,10 +64,10 @@ public class PresenterAnnotationScanner {
                 typeElement.getAnnotation(Presenter.class)
                            .multiple() ? "true" : "false",
                 this.processorUtils.extendsClassOrInterface(this.processingEnvironment.getTypeUtils(),
-                                                        typeElement.asType(),
-                                                        this.processingEnvironment.getElementUtils()
-                                                                                  .getTypeElement(IsShell.class.getCanonicalName())
-                                                                                  .asType()) ? "true" : "false",
+                                                            typeElement.asType(),
+                                                            this.processingEnvironment.getElementUtils()
+                                                                                      .getTypeElement(IsShell.class.getCanonicalName())
+                                                                                      .asType()) ? "true" : "false",
                 this.getViewClassTypeElement(element.getAnnotation(Presenter.class))
                     .getQualifiedName()
                     .toString(),

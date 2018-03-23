@@ -15,6 +15,13 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+import javax.lang.model.element.Modifier;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -35,12 +42,6 @@ import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HistoryMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
-
-import javax.lang.model.element.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 /**
  * <p>The execution context manages all commands.<br>

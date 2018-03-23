@@ -15,28 +15,29 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
 public class FilterAnnotationValidator {
 
   private ProcessorUtils        processorUtils;
   private ProcessingEnvironment processingEnvironment;
   private RoundEnvironment      roundEnvironment;
-  private TypeElement eventBusTypeElement;
+  private TypeElement           eventBusTypeElement;
 
   @SuppressWarnings("unused")
   private FilterAnnotationValidator() {
@@ -131,7 +132,7 @@ public class FilterAnnotationValidator {
 
     ProcessingEnvironment processingEnvironment;
     RoundEnvironment      roundEnvironment;
-    TypeElement eventBusTypeElement;
+    TypeElement           eventBusTypeElement;
 
     public Builder processingEnvironment(ProcessingEnvironment processingEnvironment) {
       this.processingEnvironment = processingEnvironment;

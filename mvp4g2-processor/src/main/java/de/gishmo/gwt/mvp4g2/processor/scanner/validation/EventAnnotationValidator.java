@@ -15,13 +15,10 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
-import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -29,10 +26,14 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 
 public class EventAnnotationValidator {
 

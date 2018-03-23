@@ -17,6 +17,12 @@
 
 package de.gishmo.gwt.mvp4g2.core.internal.eventbus;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
 import de.gishmo.gwt.mvp4g2.core.annotation.internal.ForInternalUseOnly;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
@@ -34,16 +40,14 @@ import de.gishmo.gwt.mvp4g2.core.ui.IsLazyReverseView;
 import de.gishmo.gwt.mvp4g2.core.ui.IsPresenter;
 import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static java.util.Objects.isNull;
 
 @ForInternalUseOnly
 public abstract class AbstractEventBus<E extends IsEventBus>
   implements IsEventBus {
+
+  private static final String DEBUG_EVENT = "DEBUG - EventBus -> event: >>";
+  private static final String CLOSING     = "<<";
 
   public static int logDepth = -1;
   /* Map od EventMedaData (key: canonical class name, EventMetaData */
@@ -192,7 +196,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                    String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        String sb = "DEBUG - EventBus -> event: >>" + eventName + "<< binding handler: >>" + handlerClassName + "<<";
+        String sb = AbstractEventBus.DEBUG_EVENT + eventName + AbstractEventBus.CLOSING + " binding handler: >>" + handlerClassName + AbstractEventBus.CLOSING;
         this.log(sb,
                  logDepth);
       }
@@ -259,7 +263,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                       String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        String sb = "DEBUG - EventBus -> event: >>" + eventName + "<< activaiting handler: >>" + handlerClassName + "<<";
+        String sb = AbstractEventBus.DEBUG_EVENT + eventName + AbstractEventBus.CLOSING + " activaiting handler: >>" + handlerClassName + AbstractEventBus.CLOSING;
         this.log(sb,
                  logDepth);
       }
@@ -296,7 +300,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
                                         String handlerClassName) {
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
-        String sb = "DEBUG - EventBus -> event: >>" + eventName + "<< deactivating handler: >>" + handlerClassName + "<<";
+        String sb = AbstractEventBus.DEBUG_EVENT + eventName + AbstractEventBus.CLOSING + " deactivating handler: >>" + handlerClassName + AbstractEventBus.CLOSING;
         this.log(sb,
                  logDepth);
       }
@@ -467,16 +471,20 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   private void prepareParametersForLog(StringBuilder sb,
                                        Object... parameters) {
     if (parameters.length > 0) {
-      sb.append("<< with parameters: ");
-      for (int i = 0; i < parameters.length; i++) {
-        sb.append(">>");
-        sb.append(isNull(parameters[i]) ? "null" : parameters[i].toString());
-        if (i < parameters.length - 1) {
-          sb.append("<<, ");
-        } else {
-          sb.append("<<");
-        }
-      }
+      sb.append(AbstractEventBus.CLOSING)
+        .append(" with parameters: ");
+      IntStream.range(0,
+                      parameters.length)
+               .forEach(i -> {
+                 sb.append(">>");
+                 sb.append(isNull(parameters[i]) ? "null" : parameters[i].toString());
+                 if (i < parameters.length - 1) {
+                   sb.append(AbstractEventBus.CLOSING)
+                     .append(", ");
+                 } else {
+                   sb.append(AbstractEventBus.CLOSING);
+                 }
+               });
     }
   }
 
@@ -547,7 +555,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
       StringBuilder sb = new StringBuilder();
       sb.append("DEBUG - EventBus -> handling event: >>")
         .append(eventName)
-        .append(pass ? "<< passed filter(s)" : "<< did not pass filter(s)");
+        .append(pass ? AbstractEventBus.CLOSING + " passed filter(s)" : AbstractEventBus.CLOSING + "  did not pass filter(s)");
       this.log(sb.toString(),
                logDepth);
     }
@@ -594,11 +602,12 @@ public abstract class AbstractEventBus<E extends IsEventBus>
     if (debugEnable) {
       if (Debug.LogLevel.DETAILED.equals(logLevel)) {
         StringBuilder sb = new StringBuilder();
-        sb.append("DEBUG - EventBus -> event: >>")
+        sb.append(AbstractEventBus.DEBUG_EVENT)
           .append(eventName)
-          .append("<< handled by: >>")
+          .append(AbstractEventBus.CLOSING)
+          .append(" handled by: >>")
           .append(handlerClassName)
-          .append("<<");
+          .append(AbstractEventBus.CLOSING);
         this.log(sb.toString(),
                  logDepth);
       }
@@ -613,7 +622,8 @@ public abstract class AbstractEventBus<E extends IsEventBus>
         StringBuilder sb = new StringBuilder();
         sb.append("DEBUG - EventBus -> add presenter: >>")
           .append(presenterClass)
-          .append("<< to event bus!");
+          .append(AbstractEventBus.CLOSING)
+          .append(" to event bus!");
         if (bind) {
           sb.append("  ==> view is created and bound");
         } else {

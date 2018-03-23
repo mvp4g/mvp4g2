@@ -1,15 +1,11 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import java.util.Set;
-
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
@@ -56,10 +52,10 @@ public class DebugAnnotationScanner {
     if (!isNull(debugAnnotation)) {
       this.eventBusMetaModel.setHasDebugAnnotation("true");
       this.eventBusMetaModel.setDebugLogLevel(debugAnnotation.logLevel()
-                                            .toString());
+                                                             .toString());
       if (!isNull(getLogger(debugAnnotation))) {
         this.eventBusMetaModel.setDebugLogger(getLogger(debugAnnotation).getQualifiedName()
-                                                       .toString());
+                                                                        .toString());
       }
     } else {
       this.eventBusMetaModel.setHasDebugAnnotation("false");

@@ -28,11 +28,23 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <name>Frank Hossfeld</name>
+      <id>frankhossfeld</id>
+      <email>hossfeld@hossfeld-solutions.de</email>
+      <organization>Hossfeld Solutions GmbH</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
   <scm>
-    <connection>scm:git:https://github.com/mvp4g/mvp4g2</connection>
-    <developerConnection>scm:git:https://github.com/mvp4g/mvp4g2</developerConnection>
+    <connection>scm:git@github.com:mvp4g/mvp4g2.git</connection>
+    <developerConnection>scm:git:git@github.com:mvp4g/mvp4g2.git</developerConnection>
     <url>scm:git:https://github.com/mvp4g/mvp4g2</url>
-    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
@@ -40,138 +52,235 @@
     <url>https://github.com/mvp4g/mvp4g2/issues</url>
   </issueManagement>
 
-  <developers>
-    <developer>
-      <name>Frank Hossfeld</name>
-      <id>frankhossfeld</id>
-      <email>hossfeld@hossfeld-solutions.de</email>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
-
-  <prerequisites>
-    <maven>3</maven>
-  </prerequisites>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
+    <github.global.server>github</github.global.server>
+
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <plugin.version.github.site>0.12</plugin.version.github.site>
+    <plugin.version.gwt.maven>1.0-rc-9</plugin.version.gwt.maven>
+    <plugin.version.project.info.report>2.8</plugin.version.project.info.report>
+    <plugin.version.sonatype>1.6.3</plugin.version.sonatype>
 
-  <dependencies>
-    <!--<dependency>-->
-    <!--<groupId>com.google.auto</groupId>-->
-    <!--<artifactId>auto-common</artifactId>-->
-    <!--<version>${autocommon.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>com.google.auto.service</groupId>-->
-    <!--<artifactId>auto-service</artifactId>-->
-    <!--<version>${autoservice.version}</version>-->
-    <!--<optional>true</optional>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>com.google.elemental2</groupId>-->
-    <!--<artifactId>elemental2-dom</artifactId>-->
-    <!--<version>${elemental2.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>com.squareup</groupId>-->
-    <!--<artifactId>javapoet</artifactId>-->
-    <!--<version>${javapoet.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>junit</groupId>-->
-    <!--<artifactId>junit</artifactId>-->
-    <!--<version>4.12</version>-->
-    <!--<scope>test</scope>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>com.google.testing.compile</groupId>-->
-    <!--<artifactId>compile-testing</artifactId>-->
-    <!--<version>0.7</version>-->
-    <!--<scope>test</scope>-->
-    <!--</dependency>-->
-    <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
-    <!--&lt;!&ndash;<groupId>org.mockito</groupId>&ndash;&gt;-->
-    <!--&lt;!&ndash;<artifactId>mockito-core</artifactId>&ndash;&gt;-->
-    <!--&lt;!&ndash;<version>1.10.19</version>&ndash;&gt;-->
-    <!--&lt;!&ndash;<scope>test</scope>&ndash;&gt;-->
-    <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
-  </dependencies>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
 
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>net.ltgt.gwt.maven</groupId>
+          <artifactId>gwt-maven-plugin</artifactId>
+          <version>${plugin.version.gwt.maven}</version>
+          <extensions>true</extensions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>${plugin.version.project.info.report}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>${plugin.version.sonatype}</version>
+        </plugin>
+        <plugin>
+          <groupId>com.github.github</groupId>
+          <artifactId>site-maven-plugin</artifactId>
+          <version>${plugin.version.github.site}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <!--<plugin>-->
         <!--<groupId>org.apache.maven.plugins</groupId>-->
         <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
-        <!--<version>2.17</version>-->
         <!--<executions>-->
           <!--<execution>-->
-            <!--<id>validate</id>-->
+            <!--<id>checkstyle</id>-->
             <!--<phase>validate</phase>-->
-            <!--<configuration>-->
-              <!--<encoding>UTF-8</encoding>-->
-              <!--<consoleOutput>true</consoleOutput>-->
-              <!--<failsOnError>true</failsOnError>-->
-              <!--<configLocation>gwt-checkstyle.xml</configLocation>-->
-            <!--</configuration>-->
             <!--<goals>-->
               <!--<goal>check</goal>-->
             <!--</goals>-->
+            <!--<configuration>-->
+              <!--<configLocation>build/checkstyle.xml</configLocation>-->
+              <!--<encoding>UTF-8</encoding>-->
+              <!--<consoleOutput>true</consoleOutput>-->
+            <!--</configuration>-->
           <!--</execution>-->
         <!--</executions>-->
       <!--</plugin>-->
-
-      <!--<plugin>-->
-      <!--<groupId>org.apache.maven.plugins</groupId>-->
-      <!--<artifactId>maven-compiler-plugin</artifactId>-->
-      <!--<version>3.6.1</version>-->
-      <!--<configuration>-->
-      <!--<source>${maven.compiler.source}</source>-->
-      <!--<target>${maven.compiler.target}</target>-->
-      <!--<showWarnings>true</showWarnings>-->
-      <!--<showDeprecation>true</showDeprecation>-->
-      <!--<meminitial>128m</meminitial>-->
-      <!--<maxmem>1024m</maxmem>-->
-      <!--<encoding>${project.build.sourceEncoding}</encoding>-->
-      <!--<compilerArgs>-->
-      <!--<compilerArgument>-Xlint:all</compilerArgument>-->
-      <!--</compilerArgs>-->
-      <!--</configuration>-->
-      <!--<executions>-->
-      <!--<execution>-->
-      <!--<id>process-annotations</id>-->
-      <!--<phase>generate-sources</phase>-->
-      <!--<goals>-->
-      <!--<goal>compile</goal>-->
-      <!--</goals>-->
-      <!--<configuration>-->
-      <!--<proc>only</proc>-->
-      <!--<annotationProcessors>-->
-      <!--<annotationProcessor>com.google.auto.service.processor.AutoServiceProcessor</annotationProcessor>-->
-      <!--</annotationProcessors>-->
-      <!--</configuration>-->
-      <!--</execution>-->
-      <!--<execution>-->
-      <!--<id>default-compile</id> &lt;!&ndash; using an id of default-compile will override the default execution &ndash;&gt;-->
-      <!--<phase>compile</phase>-->
-      <!--<goals>-->
-      <!--<goal>compile</goal>-->
-      <!--</goals>-->
-      <!--<configuration>-->
-      <!--<compilerArgs>-->
-      <!--<arg>-proc:none</arg>-->
-      <!--</compilerArgs>-->
-      <!--</configuration>-->
-      <!--</execution>-->
-      <!--</executions>-->
-      <!--</plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unit-tests</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <phase>test</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>site</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <configuration>
+              <branch>refs/heads/site</branch>
+              <message>Creating site for ${project.name} ${project.version}</message>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>site</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>index</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <detectLinks>true</detectLinks>
+              <links>
+                <link>http://www.gwtproject.org/javadoc/latest/</link>
+              </links>
+              <!--<excludePackageNames>-->
+              <!--org.jboss.gwt.elemento.processor:org.jboss.gwt.elemento.processor.context-->
+              <!--</excludePackageNames>-->
+            </configuration>
+            <reportSets>
+              <reportSet>
+                <id>aggregate</id>
+                <reports>
+                  <report>aggregate</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+  </profiles>
+
+  <repositories>
+    <repository>
+      <id>oss-sonatype</id>
+      <name>oss-sonatype</name>
+      <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-plugins</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

@@ -24,22 +24,21 @@ import java.lang.annotation.Target;
  * This method should be used to annotate a event handling method inside a Handler/Presenter.
  * The Handler/Presenter has to have a @Handler/@Presenter annotation in order to get the
  * event handling processed.
- *
+ * <p>
  * The name of a event handling method must be the event name with a leading 'on' and needs to
  * have the signutare as the event!
- *
+ * <p>
  * For example:
- *
+ * <p>
  * To handle the event:
- *
+ * <p>
  * void oneEvent(String arg0);
- *
+ * <p>
  * the name of the event handling method should be:
- *
+ * <p>
  * public void onOneEvent(String arg0);
- *
+ * <p>
  * This annotation has no attributes.
- *
  *
  * @author Frank Hossfeld
  */

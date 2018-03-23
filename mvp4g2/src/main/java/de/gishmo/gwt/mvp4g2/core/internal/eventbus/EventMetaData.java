@@ -1,14 +1,14 @@
 package de.gishmo.gwt.mvp4g2.core.internal.eventbus;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
-import de.gishmo.gwt.mvp4g2.core.internal.history.HistoryMetaData;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
+import de.gishmo.gwt.mvp4g2.core.internal.history.HistoryMetaData;
 
 import static java.util.Objects.isNull;
 

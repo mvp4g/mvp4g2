@@ -15,16 +15,17 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.core.application.IsApplication;
-import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import java.util.Set;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import java.util.Set;
+
+import de.gishmo.gwt.mvp4g2.core.application.IsApplication;
+import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
 public class ApplicationAnnotationValidator {
 
@@ -82,7 +83,7 @@ public class ApplicationAnnotationValidator {
                                                                                  .getTypeElement(IsApplication.class.getCanonicalName())
                                                                                  .asType())) {
         throw new ProcessorException("Mvp4g2Processor: " + typeElement.getSimpleName()
-                                                                       .toString() + ": @Application must implement IsApplication interface");
+                                                                      .toString() + ": @Application must implement IsApplication interface");
       }
     } else {
       throw new ProcessorException("Mvp4g2Processor:" + "@Application can only be used on a type (interface)");

@@ -25,7 +25,6 @@ import javax.lang.model.element.Modifier;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-
 import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
@@ -168,7 +167,7 @@ public class HandlerAndPresenterRegristrationGenerator {
     boolean isPresenter = this.presenterMetaModel.isPresenter(handlerClassName.getClassName());
     // Name of the variable , class name
     String metaDataVariableName = this.processorUtils.createFullClassName(handlerClassName.getClassName() + ProcessorConstants.META_DATA);
-    String metaDataClassName    = this.processorUtils.setFirstCharacterToUpperCase(metaDataVariableName);
+    String metaDataClassName = this.processorUtils.setFirstCharacterToUpperCase(metaDataVariableName);
     // comment
     methodToGenerate.addComment("");
     methodToGenerate.addComment("===> ");
@@ -230,9 +229,7 @@ public class HandlerAndPresenterRegristrationGenerator {
     /**
      * Set the processing envirement
      *
-     * @param processingEnvirement
-     *   the processing envirement
-     *
+     * @param processingEnvirement the processing envirement
      * @return the Builder
      */
     public Builder processingEnvironment(ProcessingEnvironment processingEnvirement) {
@@ -258,9 +255,7 @@ public class HandlerAndPresenterRegristrationGenerator {
     /**
      * Set the typeSpec of the currently generated eventBus
      *
-     * @param typeSpec
-     *   type spec of the current eventbus
-     *
+     * @param typeSpec type spec of the current eventbus
      * @return the Builder
      */
     public Builder typeSpec(TypeSpec.Builder typeSpec) {

@@ -1,11 +1,8 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.ApplicationMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.ApplicationAnnotationValidator;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Properties;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -14,9 +11,13 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Properties;
+
+import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.ApplicationMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.ApplicationAnnotationValidator;
 
 import static java.util.Objects.isNull;
 

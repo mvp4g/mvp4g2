@@ -15,13 +15,13 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
 
 /**
  * <p>The execution context manages all commands.<br>
@@ -33,7 +33,7 @@ public class EventLoadMetaDataGenerator {
 
   private ProcessingEnvironment processingEnvironment;
   private EventBusMetaModel     eventBusMetaModel;
-  private TypeSpec.Builder  typeSpec;
+  private TypeSpec.Builder      typeSpec;
 
   @SuppressWarnings("unused")
   private EventLoadMetaDataGenerator() {
@@ -81,19 +81,19 @@ public class EventLoadMetaDataGenerator {
                                                                                                  eventName));
   }
 
-  private void generateLoadEventMetaDataMethod(TypeSpec.Builder typeSpec) {
-  }
-
   private String createEventMetaDataVariableName(String eventBusClassName,
                                                  String eventName) {
     return this.processorUtils.createFullClassName(eventBusClassName + "_" + eventName);
+  }
+
+  private void generateLoadEventMetaDataMethod(TypeSpec.Builder typeSpec) {
   }
 
   public static final class Builder {
 
     ProcessingEnvironment processingEnvironment;
     EventBusMetaModel     eventBusMetaModel;
-    TypeSpec.Builder  typeSpec;
+    TypeSpec.Builder      typeSpec;
 
     /**
      * Set the processing envirement

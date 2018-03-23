@@ -1,13 +1,13 @@
 package de.gishmo.gwt.mvp4g2.processor.model;
 
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 import static java.util.Objects.isNull;
 

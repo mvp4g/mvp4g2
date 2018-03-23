@@ -1,10 +1,10 @@
 package de.gishmo.gwt.mvp4g2.core.ui.annotation;
 
-import de.gishmo.gwt.mvp4g2.core.ui.IsLazyReverseView;
-import de.gishmo.gwt.mvp4g2.core.ui.LazyReverseView;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import de.gishmo.gwt.mvp4g2.core.ui.IsLazyReverseView;
+import de.gishmo.gwt.mvp4g2.core.ui.LazyReverseView;
 
 /**
  * This annotation allows to define a presenter for the framework.<br>

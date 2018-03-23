@@ -1,8 +1,15 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
-import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -17,16 +24,10 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.EventHandler;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 public class ProcessorUtils {
 

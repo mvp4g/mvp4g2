@@ -1,6 +1,15 @@
 package de.gishmo.gwt.mvp4g2.processor;
 
 
+import java.util.Set;
+
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.TypeElement;
+
 import com.google.auto.service.AutoService;
 import de.gishmo.gwt.mvp4g2.core.application.annotation.Application;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
@@ -27,14 +36,6 @@ import de.gishmo.gwt.mvp4g2.processor.scanner.HandlerAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.HistoryAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.PresenterAnnotationScanner;
 import de.gishmo.gwt.mvp4g2.processor.scanner.validation.ModelValidator;
-
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.SourceVersion;
-import javax.lang.model.element.TypeElement;
-import java.util.Set;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;

@@ -14,7 +14,7 @@ public abstract class AbstractApplication<E extends IsEventBus>
   /* the eventbus */
   protected E                                  eventBus;
   /* flag if we have to check history token at the start of the application */
-  protected    boolean                            historyOnStart;
+  protected boolean                            historyOnStart;
   /* the PlaceService */
   private   PlaceService<? extends IsEventBus> placeService;
 
@@ -23,6 +23,8 @@ public abstract class AbstractApplication<E extends IsEventBus>
     // execute the loader (if one is present)
     getApplicationLoader().load(() -> onFinishLaoding());
   }
+
+  protected abstract IsApplicationLoader getApplicationLoader();
 
   /**
    * Once the loader did his job, we will continue
@@ -35,7 +37,5 @@ public abstract class AbstractApplication<E extends IsEventBus>
     // start the application
     placeService.startApplication();
   }
-
-  protected abstract IsApplicationLoader getApplicationLoader();
 
 }

@@ -1,19 +1,20 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.FilterAnnotationValidator;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.FilterAnnotationValidator;
 
 import static java.util.Objects.isNull;
 

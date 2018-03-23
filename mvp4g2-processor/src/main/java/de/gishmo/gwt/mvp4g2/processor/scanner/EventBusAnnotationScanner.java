@@ -1,5 +1,19 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
+
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Debug;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
 import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Filters;
@@ -9,19 +23,6 @@ import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventBusAnnotationValidator;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
-import javax.tools.FileObject;
-import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
 
 import static java.util.Objects.isNull;
 
@@ -60,9 +61,9 @@ public class EventBusAnnotationScanner {
                          .isEmpty()) {
       // create validator
       EventBusAnnotationValidator eventBusValidaitor = EventBusAnnotationValidator.builder()
-                                                                                   .roundEnvironment(roundEnvironment)
-                                                                                   .processingEnvironment(processingEnvironment)
-                                                                                   .build();
+                                                                                  .roundEnvironment(roundEnvironment)
+                                                                                  .processingEnvironment(processingEnvironment)
+                                                                                  .build();
       // check, whether we have o do something ...
       eventBusValidaitor.validate();
       // should only be one, so we can search for the first! ...
@@ -77,7 +78,7 @@ public class EventBusAnnotationScanner {
           TypeElement shellTypeElement = this.getShellTypeElement(eventBusAnnotation);
           model = new EventBusMetaModel(eventBusAnnotationElement.toString(),
                                         isNull(shellTypeElement) ? ""
-                                          : shellTypeElement.toString());
+                                                                 : shellTypeElement.toString());
           // Debug-Annotation
           model = DebugAnnotationScanner.builder()
                                         .processingEnvironment(processingEnvironment)
@@ -142,7 +143,7 @@ public class EventBusAnnotationScanner {
                                                                    "",
                                                                    this.createRelativeFileName());
       props.load(resource.openInputStream());
-      EventBusMetaModel    model       = new EventBusMetaModel(props);
+      EventBusMetaModel model = new EventBusMetaModel(props);
       List<EventMetaModel> eventModels = new ArrayList<>();
       for (String eventInternalName : model.getEvents()) {
         FileObject resourceEvent = this.processingEnvironment.getFiler()

@@ -1,14 +1,14 @@
 package de.gishmo.gwt.mvp4g2.processor.model;
 
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 import static java.util.Objects.isNull;
 
@@ -21,14 +21,14 @@ public class EventMetaModel
   private static final String KEY_HISTORY_CONVERTER         = "historyConverter";
   private static final String KEY_BINDINGS                  = "bindings";
   private static final String KEY_HANDLERS                  = "handlers";
-  private static final String KEY_NAVIGATION_EVENT    = "navigationEvent";
-  private static final String KEY_PASSIVE             = "passive";
-  private static final String KEY_ACTIVATE_HANDELRS   = "activateHandlers";
-  private static final String KEY_DEACTIVATE_HANDELRS = "deactivateHandlers";
-  private static final String KEY_PARAMETERS          = "parameters";
-  private static final String KEY_START_EVENT         = "startEvent";
-  private static final String KEY_INIT_HISTORY        = "initHistory";
-  private static final String KEY_NOT_FOUND_HISTORY   = "notFoundHistory";
+  private static final String KEY_NAVIGATION_EVENT          = "navigationEvent";
+  private static final String KEY_PASSIVE                   = "passive";
+  private static final String KEY_ACTIVATE_HANDELRS         = "activateHandlers";
+  private static final String KEY_DEACTIVATE_HANDELRS       = "deactivateHandlers";
+  private static final String KEY_PARAMETERS                = "parameters";
+  private static final String KEY_START_EVENT               = "startEvent";
+  private static final String KEY_INIT_HISTORY              = "initHistory";
+  private static final String KEY_NOT_FOUND_HISTORY         = "notFoundHistory";
 
   private String               eventInternalName;
   private String               eventName;
@@ -250,12 +250,12 @@ public class EventMetaModel
     return initHistory;
   }
 
-  public void setInitHistory(String initHistory) {
-    this.initHistory = initHistory;
-  }
-
   public boolean isInitHistory() {
     return "true".equals(initHistory);
+  }
+
+  public void setInitHistory(String initHistory) {
+    this.initHistory = initHistory;
   }
 
   public String getNotFoundHistory() {

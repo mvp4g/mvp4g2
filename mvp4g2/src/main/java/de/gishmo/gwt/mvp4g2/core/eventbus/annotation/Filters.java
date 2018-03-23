@@ -16,10 +16,10 @@
 
 package de.gishmo.gwt.mvp4g2.core.eventbus.annotation;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventFilter;
 
 // TODO update documentation
 

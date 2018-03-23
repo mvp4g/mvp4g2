@@ -1,16 +1,16 @@
 package de.gishmo.gwt.mvp4g2.processor.model;
 
+import java.util.Properties;
+
 import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
 import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
-
-import java.util.Properties;
 
 public class ApplicationMetaModel
   implements IsMetaModel {
 
-  private static final String KEY_APPLICATION = "application";
-  private static final String KEY_EVENTBUS    = "eventBus";
-  private static final String KEY_LOADER      = "loader";
+  private static final String KEY_APPLICATION      = "application";
+  private static final String KEY_EVENTBUS         = "eventBus";
+  private static final String KEY_LOADER           = "loader";
   private static final String KEY_HISTORY_ON_START = "historyOnStart";
 
   private ClassNameModel application;

@@ -15,19 +15,20 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.scanner.validation;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Start;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import java.util.List;
-import java.util.Set;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.EventBus;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
 
 public class EventBusAnnotationValidator {
 
@@ -90,7 +91,6 @@ public class EventBusAnnotationValidator {
         throw new ProcessorException(typeElement.getSimpleName()
                                                 .toString() + ": @Eventbus must extend IsEventBus.class!");
       }
-
 
 
       // @Start validation

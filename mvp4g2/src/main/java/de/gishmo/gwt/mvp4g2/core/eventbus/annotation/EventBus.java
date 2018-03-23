@@ -17,10 +17,10 @@
 
 package de.gishmo.gwt.mvp4g2.core.eventbus.annotation;
 
-import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import de.gishmo.gwt.mvp4g2.core.ui.IsShell;
 
 /**
  * <p>This annotation is used to annotate an interface in mvp4g and mark it as mvp4g eventbus.

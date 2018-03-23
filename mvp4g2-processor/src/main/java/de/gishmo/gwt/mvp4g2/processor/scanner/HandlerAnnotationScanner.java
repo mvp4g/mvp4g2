@@ -1,11 +1,7 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.HandlerAnnotationValidator;
+import java.io.IOException;
+import java.util.Properties;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -13,8 +9,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.Properties;
+
+import de.gishmo.gwt.mvp4g2.core.ui.annotation.Handler;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.HandlerAnnotationValidator;
 
 public class HandlerAnnotationScanner {
 

@@ -1,15 +1,11 @@
 package de.gishmo.gwt.mvp4g2.processor.scanner;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
-import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Start;
-import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
-import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
-import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
-import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
-import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventAnnotationValidator;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -20,12 +16,17 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.stream.Collectors;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Event;
+import de.gishmo.gwt.mvp4g2.core.eventbus.annotation.Start;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.InitHistory;
+import de.gishmo.gwt.mvp4g2.core.history.annotation.NotFoundHistory;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorConstants;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
+import de.gishmo.gwt.mvp4g2.processor.ProcessorUtils;
+import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.model.EventMetaModel;
+import de.gishmo.gwt.mvp4g2.processor.scanner.validation.EventAnnotationValidator;
 
 import static java.util.Objects.isNull;
 

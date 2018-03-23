@@ -15,11 +15,11 @@
  */
 package de.gishmo.gwt.mvp4g2.core.eventbus.annotation;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsMvp4g2Logger;
-import de.gishmo.gwt.mvp4g2.core.internal.eventbus.DefaultMvp4g2Logger;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsMvp4g2Logger;
+import de.gishmo.gwt.mvp4g2.core.internal.eventbus.DefaultMvp4g2Logger;
 
 /**
  * This annotation should be used to activate the logs. It has the following attributes:

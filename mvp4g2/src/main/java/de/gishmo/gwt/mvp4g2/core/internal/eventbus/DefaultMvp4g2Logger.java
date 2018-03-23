@@ -15,11 +15,11 @@
  */
 package de.gishmo.gwt.mvp4g2.core.internal.eventbus;
 
-import de.gishmo.gwt.mvp4g2.core.Mvp4g2;
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsMvp4g2Logger;
-
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import de.gishmo.gwt.mvp4g2.core.Mvp4g2;
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsMvp4g2Logger;
 
 /**
  * Default implementation of Mvp4gLogger.

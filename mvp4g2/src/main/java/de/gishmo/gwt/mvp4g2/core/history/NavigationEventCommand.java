@@ -55,6 +55,6 @@ public abstract class NavigationEventCommand {
   /**
    * Action to do when the event is fired.
    */
-  abstract protected void execute();
+  protected abstract void execute();
 
 }

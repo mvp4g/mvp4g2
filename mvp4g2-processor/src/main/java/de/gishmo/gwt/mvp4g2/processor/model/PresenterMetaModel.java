@@ -1,8 +1,5 @@
 package de.gishmo.gwt.mvp4g2.processor.model;
 
-import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
-import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import de.gishmo.gwt.mvp4g2.processor.model.intern.ClassNameModel;
+import de.gishmo.gwt.mvp4g2.processor.model.intern.IsMetaModel;
 
 public class PresenterMetaModel
   implements IsMetaModel {

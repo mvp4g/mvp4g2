@@ -10,11 +10,11 @@ import de.gishmo.gwt.mvp4g2.core.ui.annotation.Presenter;
  * set to Presenter.viewCerator.VIEW_CREATION_METHOD
  * <br><br>
  * In case using this interface, there must be createView method, that looks like that:
- <code>
- public void createView() {
-   view = GWT.create(IMyView.class);
- }
- </code>
+ * <code>
+ * public void createView() {
+ * view = GWT.create(IMyView.class);
+ * }
+ * </code>
  *
  * @param <V> generator of view
  * @see Presenter#viewCreator() is set to

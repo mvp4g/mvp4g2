@@ -15,14 +15,14 @@
  */
 package de.gishmo.gwt.mvp4g2.core.eventbus.annotation;
 
-import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
-import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
-import de.gishmo.gwt.mvp4g2.core.ui.IsHandler;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import de.gishmo.gwt.mvp4g2.core.eventbus.IsEventBus;
+import de.gishmo.gwt.mvp4g2.core.history.IsHistoryConverter;
+import de.gishmo.gwt.mvp4g2.core.ui.IsHandler;
 
 /**
  * This annotation should be used to annotate methods of interfaces that extends

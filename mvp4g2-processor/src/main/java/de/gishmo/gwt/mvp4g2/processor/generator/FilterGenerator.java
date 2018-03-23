@@ -15,13 +15,13 @@
  */
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import javax.lang.model.element.Modifier;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import de.gishmo.gwt.mvp4g2.processor.ProcessorException;
 import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
-
-import javax.lang.model.element.Modifier;
 
 // TODO check, that @Filter is annoted at a interface that extends IsEventBus! and other tests ...
 public class FilterGenerator {

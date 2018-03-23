@@ -1,5 +1,11 @@
 package de.gishmo.gwt.mvp4g2.processor.generator;
 
+import java.io.IOException;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -12,11 +18,6 @@ import de.gishmo.gwt.mvp4g2.processor.model.EventBusMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HandlerMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.HistoryMetaModel;
 import de.gishmo.gwt.mvp4g2.processor.model.PresenterMetaModel;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import java.io.IOException;
 
 public class EventBusGenerator {
 
