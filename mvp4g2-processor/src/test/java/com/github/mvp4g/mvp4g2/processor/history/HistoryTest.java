@@ -1,0 +1,45 @@
+/*
+ * Copyright (C) 2016 Frank Hossfeld
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.github.mvp4g.mvp4g2.processor.history;
+
+import com.google.testing.compile.JavaFileObjects;
+import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import org.junit.Test;
+
+import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static org.truth0.Truth.ASSERT;
+
+public class HistoryTest {
+
+  @Test
+  public void testHistoryAnnoationOnAInterface() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/history/historyAnnotationOnAInterface/HistoryAnnoationOnAInterface.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("@History can only be used with a class!");
+  }
+
+  @Test
+  public void testHistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter() {
+    ASSERT.about(javaSource())
+          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/history/historyAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter/HistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter.java"))
+          .processedWith(new Mvp4g2Processor())
+          .failsToCompile()
+          .withErrorContaining("a class annotated with @History must extend IsHistoryConverter.class!");
+  }
+}

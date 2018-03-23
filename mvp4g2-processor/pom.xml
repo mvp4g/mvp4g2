@@ -6,9 +6,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>de.gishmo.gwt</groupId>
+    <groupId>com.github.mvp4g</groupId>
     <artifactId>mvp4g2-parent</artifactId>
-    <version>1.0-beta-3</version>
+    <version>1.0-beta-4</version>
   </parent>
 
   <artifactId>mvp4g2-processor</artifactId>
@@ -18,14 +18,14 @@
   <properties>
     <autocommon.version>0.8</autocommon.version>
 
-    <mvp4g2.version>1.0-beta-3</mvp4g2.version>
+    <mvp4g2.version>1.0-beta-4</mvp4g2.version>
     <autoservice.version>1.0-rc3</autoservice.version>
     <javapoet.version>1.10.0</javapoet.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>de.gishmo.gwt</groupId>
+      <groupId>com.github.mvp4g</groupId>
       <artifactId>mvp4g2</artifactId>
       <version>${mvp4g2.version}</version>
     </dependency>
@@ -59,12 +59,6 @@
       <version>1.2.0</version>
       <scope>test</scope>
     </dependency>
-    <!--<dependency>-->
-    <!--<groupId>org.mockito</groupId>-->
-    <!--<artifactId>mockito-core</artifactId>-->
-    <!--<version>1.10.19</version>-->
-    <!--<scope>test</scope>-->
-    <!--</dependency>-->
   </dependencies>
 
 
