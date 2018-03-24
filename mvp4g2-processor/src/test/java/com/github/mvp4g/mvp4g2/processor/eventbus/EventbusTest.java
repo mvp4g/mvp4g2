@@ -21,91 +21,116 @@ import java.util.ArrayList;
 import javax.tools.JavaFileObject;
 
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
 import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 public class EventbusTest {
 
   @Test
   public void testEventBusAnnotationOnAMethod() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventBusAnnotationOnAMethod/EventBusAnnotationOnAMethod.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Eventbus can only be used on a type (interface)");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventBusAnnotationOnAMethod/EventBusAnnotationOnAMethod.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Eventbus can only be used on a type (interface)");
   }
 
   @Test
   public void testEventBusAnnotationOnAClass() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventBusAnnotationOnAClass/EventBusAnnotationOnAClass.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Eventbus can only be used with an interface");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventBusAnnotationOnAClass/EventBusAnnotationOnAClass.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Eventbus can only be used with an interface");
   }
 
   @Test
   public void testEventBusNotExtendingAbstractEventHandlerd() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventBusNotExtendingIsEventBus/EventBusNotExtendingIsEventBus.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Eventbus must extend IsEventBus.class!");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventBusNotExtendingIsEventBus/EventBusNotExtendingIsEventBus.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Eventbus must extend IsEventBus.class!");
   }
 
   @Test
   public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithMoreThanOneStartAnnotation/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithMoreThanOneStartAnnotation/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
   }
 
   @Test
   public void testStartEventTestWithNonZeroArgumentMethod() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestWithNonZeroArgumentMethod/StartEventTestWithNonZeroArgumentMethod.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Start-annotation can only be used on zero argument methods");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestWithNonZeroArgumentMethod/StartEventTestWithNonZeroArgumentMethod.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Start-annotation can only be used on zero argument methods");
   }
 
   @Test
   public void testEventWithHandlerAttributeNotImplemented01() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/EventBusEventWithHandlerAttributeNotImplemented.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("Mvp4g2Processor: presenter >>com.github.mvp4g.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented01.MockShellPresenter01<< -> event >>onDoSomething()<< is not handled by presenter/handler");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/EventBusEventWithHandlerAttributeNotImplemented.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented01/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("Mvp4g2Processor: presenter >>com.github.mvp4g.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented01.MockShellPresenter01<< -> event >>onDoSomething()<< is not handled by presenter/handler");
   }
 
   @Test
   public void testEventWithHandlerAttributeNotImplemented02() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/EventBusEventWithHandlerAttributeNotImplemented.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("com.github.mvp4g.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented02.MockShellPresenter01<< -> event >>onDoSomething(java.lang.String)<< is not handled by presenter/handler");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/EventBusEventWithHandlerAttributeNotImplemented.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/eventWithHandlerAttributeNotImplemented02/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("com.github.mvp4g.mvp4g2.processor.eventbus.eventWithHandlerAttributeNotImplemented02.MockShellPresenter01<< -> event >>onDoSomething(java.lang.String)<< is not handled by presenter/handler");
   }
 }

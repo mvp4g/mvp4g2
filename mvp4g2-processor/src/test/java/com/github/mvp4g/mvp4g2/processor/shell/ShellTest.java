@@ -21,49 +21,50 @@ import java.util.ArrayList;
 import javax.tools.JavaFileObject;
 
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
 import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 public class ShellTest {
+
   @Test
   public void eventBusWithOneShells() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/EventBusWithOneShell.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/IMockShellView02.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellView02.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellPresenter02.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError();
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/EventBusWithOneShell.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/IMockShellView02.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellView02.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithOneShell/MockShellPresenter02.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .succeeded();
   }
 
   @Test
   public void eventBusWithTwoShells() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/EventBusWithTwoShells.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/IMockShellView02.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellView02.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellPresenter02.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("Mvp4g2Processor: there can be only one presenter implementing IsShell");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/EventBusWithTwoShells.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/IMockShellView02.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellView02.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/shell/eventBusWithTwoShells/MockShellPresenter02.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("Mvp4g2Processor: there can be only one presenter implementing IsShell");
   }
 }

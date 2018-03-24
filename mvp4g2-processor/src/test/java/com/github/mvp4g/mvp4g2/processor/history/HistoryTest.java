@@ -16,30 +16,45 @@
 
 package com.github.mvp4g.mvp4g2.processor.history;
 
-import com.google.testing.compile.JavaFileObjects;
+import java.util.ArrayList;
+
+import javax.tools.JavaFileObject;
+
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
+import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 public class HistoryTest {
 
   @Test
   public void testHistoryAnnoationOnAInterface() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/history/historyAnnotationOnAInterface/HistoryAnnoationOnAInterface.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@History can only be used with a class!");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/history/historyAnnotationOnAInterface/HistoryAnnoationOnAInterface.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@History can only be used with a class!");
   }
 
   @Test
   public void testHistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/history/historyAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter/HistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("a class annotated with @History must extend IsHistoryConverter.class!");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/history/historyAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter/HistoryAnnotationOnAClassWhichDoesNotExtendsIsHistoryConverter.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("a class annotated with @History must extend IsHistoryConverter.class!");
   }
 }

@@ -21,47 +21,60 @@ import java.util.ArrayList;
 import javax.tools.JavaFileObject;
 
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
+import com.google.testing.compile.JavaFileObjectSubject;
 import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 public class StartEventTest {
 
   @Test
   public void testStartEventTestEventBusWithMoreThanOneStartAnnotation() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithMoreThanOneStartAnnotation/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithMoreThanOneStartAnnotation/StartEventTestEventBusWithMoreThanOneStartAnnotation.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Start-annotation can only be used a single time in a eventbus interface");
   }
 
   @Test
   public void testStartEventTestWithNonZeroArgumentMethod() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestWithNonZeroArgumentMethod/StartEventTestWithNonZeroArgumentMethod.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Start-annotation can only be used on zero argument methods");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestWithNonZeroArgumentMethod/StartEventTestWithNonZeroArgumentMethod.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Start-annotation can only be used on zero argument methods");
   }
 
   @Test
   public void testStartEventTestEventBusWithOneStartAnnotation() {
-    ASSERT.about(javaSources())
-          .that(new ArrayList<JavaFileObject>() {
-            {
-              add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/StartEventTestEventBusWithOneStartAnnotation.java"));
-              add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/MockShellPresenter.java"));
-            }
-          })
-          .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError()
-          .and()
-          .generatesSources(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/StartEventTestEventBusWithOneStartAnnotationImpl.java"),
-                            JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/Com_github_mvp4g_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.java"),
-                            JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/Com_github_mvp4g_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_StartEventTestEventBusWithOneStartAnnotation_start.java"));
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/StartEventTestEventBusWithOneStartAnnotation.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/MockShellPresenter.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .succeeded();
+    JavaFileObjectSubject.assertThat(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/StartEventTestEventBusWithOneStartAnnotationImpl.java"))
+                         .hasSourceEquivalentTo(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/StartEventTestEventBusWithOneStartAnnotationImpl.java"));
+    JavaFileObjectSubject.assertThat(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/Com_github_mvp4g_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.java"))
+                         .hasSourceEquivalentTo(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/Com_github_mvp4g_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_MockShellPresenterMetaData.java"));
+    JavaFileObjectSubject.assertThat(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/Com_github_mvp4g_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_StartEventTestEventBusWithOneStartAnnotation_start.java"))
+                         .hasSourceEquivalentTo(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/event/startEventTestEventBusWithOneStartAnnotation/Com_github_mvp4g_mvp4g2_processor_event_startEventTestEventBusWithOneStartAnnotation_StartEventTestEventBusWithOneStartAnnotation_start.java"));
   }
 }

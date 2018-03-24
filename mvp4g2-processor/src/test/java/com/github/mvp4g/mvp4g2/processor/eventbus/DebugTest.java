@@ -16,39 +16,59 @@
 
 package com.github.mvp4g.mvp4g2.processor.eventbus;
 
-import com.google.testing.compile.JavaFileObjects;
+import java.util.ArrayList;
+
+import javax.tools.JavaFileObject;
+
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
+import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 public class DebugTest {
 
   @Test
   public void testDebugAnnotationOnAMethod() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/debugAnnotationOnAMethod/DebugAnnotationOnAMethod.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Debug can only be used on a type (interface)");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/debugAnnotationOnAMethod/DebugAnnotationOnAMethod.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Debug can only be used on a type (interface)");
   }
 
   @Test
   public void testDebugAnnotationOnAClass() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/debugAnnotationOnAClass/DebugAnnotationOnAClass.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Debug can only be used on a type (interface)");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/debugAnnotationOnAClass/DebugAnnotationOnAClass.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Debug can only be used on a type (interface)");
   }
 
   @Test
   public void testDebugAnnotationWithoutExtendsIsEventBus() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/debugAnnotationWithoutExtendsIsEventBus/DebugAnnotationWithoutExtendsIsEventBus.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Debug can only be used with an interfaces annotated with @EventBus");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventbus/debugAnnotationWithoutExtendsIsEventBus/DebugAnnotationWithoutExtendsIsEventBus.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Debug can only be used with an interfaces annotated with @EventBus");
   }
 }

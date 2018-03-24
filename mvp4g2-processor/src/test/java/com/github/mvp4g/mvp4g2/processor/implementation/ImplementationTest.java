@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import javax.tools.JavaFileObject;
 
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
 import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 /**
  * create tests to check if the processor runs with incomplete data!
@@ -35,21 +35,28 @@ public class ImplementationTest {
 
   @Test
   public void testOnlyApplicationData() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/implementation/testOnlyApplicationData/ApplicationAnnotation.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2 or forget to annotate the EventBus with @EventBus?");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/implementation/testOnlyApplicationData/ApplicationAnnotation.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("no EventBusMetaModel found! Did you forget to create an EventBus for mvp4g2 or forget to annotate the EventBus with @EventBus?");
   }
 
   @Test
   public void testOnlyEventBusAndHandlerData() {
-    ASSERT.about(javaSources())
-          .that(new ArrayList<JavaFileObject>(){{
-            add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/implementation/testOnlyEventBusData/MockEventBus.java"));
-            add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/implementation/testOnlyEventBusData/MockShellPresenter.java"));
-          }})
-          .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError();
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/implementation/testOnlyEventBusData/MockEventBus.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/implementation/testOnlyEventBusData/MockShellPresenter.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .succeeded();
   }
 }

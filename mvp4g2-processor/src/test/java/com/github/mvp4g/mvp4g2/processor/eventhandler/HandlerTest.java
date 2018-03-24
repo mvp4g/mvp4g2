@@ -21,165 +21,167 @@ import java.util.ArrayList;
 import javax.tools.JavaFileObject;
 
 import com.github.mvp4g.mvp4g2.processor.Mvp4g2Processor;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
+import com.google.testing.compile.JavaFileObjectSubject;
 import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
-import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
-import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
-import static org.truth0.Truth.ASSERT;
+import static com.google.testing.compile.Compiler.javac;
 
 public class HandlerTest {
 
   @Test
   public void testEventHandlerAnnotationAnnotatedAbstractClass() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAbstractClass/EventHandlerAnnotationAnnotatedOnAbstractClass.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Handler can not be ABSTRACT");
-  }
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAbstractClass/EventHandlerAnnotationAnnotatedOnAbstractClass.java"));
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Handler can not be ABSTRACT");
 
+  }
 
   @Test
   public void testEventHandlerAnnotationAnnotatedOnAInterface() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAInterface/EventHandlerAnnotationAnnotatedOnAInterface.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Handler can only be used with a class");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerAnnotationAnnotatedOnAInterface/EventHandlerAnnotationAnnotatedOnAInterface.java"));
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Handler can only be used with a class");
   }
 
   @Test
   public void testEventHandlerNotExtendingAbstractEventHandlerd() {
-    ASSERT.about(javaSource())
-          .that(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerNotExtendingAbstractEventHandler/EventHandlerNotExtendingAbstractEventHandler.java"))
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("@Handler must extend AbstractHandler.class!");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerNotExtendingAbstractEventHandler/EventHandlerNotExtendingAbstractEventHandler.java"));
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("@Handler must extend AbstractHandler.class!");
   }
 
   @Test
   public void testEventHandlerOK() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/EventHandlerOK.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/MockEventBus.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/MockShellPresenter.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/MockOneEventHandler.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError()
-          .and()
-          .generatesSources(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/Com_github_mvp4g_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java"));
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/EventHandlerOK.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/MockEventBus.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/MockShellPresenter.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/MockOneEventHandler.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .succeeded();
+    JavaFileObjectSubject.assertThat(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/Com_github_mvp4g_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java"))
+                         .hasSourceEquivalentTo(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlerOK/Com_github_mvp4g_mvp4g2_processor_eventhandler_eventHandlerOK_EventHandlerOKMetaData.java"));
   }
 
   @Test
   public void testEventHandlerWithNotImplementedEvent() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/EventBusHandlerWithNotImplementedEvent.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockOneEventHandler.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("event >>doSomethingInHandler()<< is never handled by a presenter or handler");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/EventBusHandlerWithNotImplementedEvent.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockOneEventHandler.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithNotImplementedEvent/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("event >>doSomethingInHandler()<< is never handled by a presenter or handler");
   }
 
   @Test
   public void testHandlerWithWrongImplementation01() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/EventBusHandlerWithNotImplementedEvent.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/MockOneEventHandler.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("event >>doSomethingInHandler(java.lang.String)<< is never handled by a presenter or handler");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/EventBusHandlerWithNotImplementedEvent.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/MockOneEventHandler.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation01/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("event >>doSomethingInHandler(java.lang.String)<< is never handled by a presenter or handler");
   }
 
   @Test
   public void testHandlerWithWrongImplementation02() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/EventBusHandlerWithNotImplementedEvent.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/MockOneEventHandler.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("event >>doSomethingInHandler()<< is never handled by a presenter or handler");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/EventBusHandlerWithNotImplementedEvent.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/MockOneEventHandler.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation02/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("event >>doSomethingInHandler()<< is never handled by a presenter or handler");
   }
 
   @Test
   public void testEventHandlingMethodDoesNotReturnVoid01() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/EventBusEventHandlingMethodDoesNotReturnVoid.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/MockOneEventHandler.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("Mvp4g2Processor: >>com.github.mvp4g.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid01.MockOneEventHandler<< -> EventElement: >>onDoSomethingInHandler(java.lang.String)<< must return 'void'");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/EventBusEventHandlingMethodDoesNotReturnVoid.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/MockOneEventHandler.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid01/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("Mvp4g2Processor: >>com.github.mvp4g.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid01.MockOneEventHandler<< -> EventElement: >>onDoSomethingInHandler(java.lang.String)<< must return 'void'");
   }
 
   @Test
   public void testEventHandlingMethodDoesNotReturnVoid02() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/EventBusEventHandlingMethodDoesNotReturnVoid.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/MockOneEventHandler.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .failsToCompile()
-          .withErrorContaining("Mvp4g2Processor: >>com.github.mvp4g.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid02.MockOneEventHandler<< -> EventElement: >>onDoSomethingInHandler(java.lang.String)<< must return 'void'");
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/EventBusEventHandlingMethodDoesNotReturnVoid.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/MockOneEventHandler.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/eventHandlingMethodDoesNotReturnVoid02/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .failed();
+    CompilationSubject.assertThat(compilation)
+                      .hadErrorContaining("Mvp4g2Processor: >>com.github.mvp4g.mvp4g2.processor.eventhandler.eventHandlingMethodDoesNotReturnVoid02.MockOneEventHandler<< -> EventElement: >>onDoSomethingInHandler(java.lang.String)<< must return 'void'");
   }
 
   @Test
   public void testHandlerWithWrongImplementation03() {
-    ASSERT.about(javaSources())
-          .that(
-            new ArrayList<JavaFileObject>() {
-              {
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/EventBusHandlerWithNotImplementedEvent.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/MockOneEventHandler.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/MockShellPresenter01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/IMockShellView01.java"));
-                add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/MockShellView01.java"));
-              }
-            })
-          .processedWith(new Mvp4g2Processor())
-          .compilesWithoutError();
+    Compilation compilation = javac().withProcessors(new Mvp4g2Processor())
+                                     .compile(new ArrayList<JavaFileObject>() {
+                                       {
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/EventBusHandlerWithNotImplementedEvent.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/MockOneEventHandler.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/MockShellPresenter01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/IMockShellView01.java"));
+                                         add(JavaFileObjects.forResource("com/github/mvp4g/mvp4g2/processor/eventhandler/handlerWithWrongImplementation03/MockShellView01.java"));
+                                       }
+                                     });
+    CompilationSubject.assertThat(compilation)
+                      .succeeded();
   }
 }
