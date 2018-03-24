@@ -33,7 +33,7 @@ public interface IsHistoryConverter<E extends IsEventBus> {
    * @param historyName event's name
    * @param param       string that was stored in the token, used to retrieve event's object (can be null
    *                    if no information was stored in the URI)
-   * @param eventBus
+   * @param eventBus    the event bus
    */
   void convertFromToken(String historyName,
                         String param,

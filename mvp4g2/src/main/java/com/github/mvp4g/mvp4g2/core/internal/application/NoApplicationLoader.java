@@ -5,9 +5,7 @@ import com.github.mvp4g.mvp4g2.core.internal.ForInternalUseOnly;
 
 /**
  * Default applilcation loader
- * <p>
  * <p>does nothing</p>
- * <p>
  * <p>Used by the framework</p>
  */
 @ForInternalUseOnly

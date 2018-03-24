@@ -23,7 +23,7 @@ public interface IsEventBus {
 
   /**
    * Framework m,ethod to set the shell
-   * <br/>
+   * <br>
    * <b>Do not use!</b>
    */
   void setShell();
@@ -46,8 +46,8 @@ public interface IsEventBus {
    * <br><br>
    *
    * @param presenter instance of the new presenter to add to the eventbus
-   * @param bind      true -> the bind- and createView-method of the view will be called in case the presenter is added to the eventbus
-   *                  false -> the bind- and createView-method of the view will be called in case first event is fired!
+   * @param bind      true - the bind- and createView-method of the view will be called in case the presenter is added to the eventbus
+   *                  false - the bind- and createView-method of the view will be called in case first event is fired!
    * @return returns a PresenterRegistration - to remove the presenter registration from the eventbus
    */
   PresenterRegistration addHandler(IsPresenter<?, ?> presenter,
@@ -71,7 +71,12 @@ public interface IsEventBus {
    */
   void setNavigationConfirmation(IsNavigationConfirmation navigationConfirmationPresenter);
 
-  // interne MEthode nicht benutzen!
+  /**
+   * <p><b>Internal method!<br><br> DO NOT USE!</b></p>
+   * <p>Sets the place service</p>
+   *
+   * @param placeService the new palce service
+   */
   void setPlaceService(PlaceService<? extends IsEventBus> placeService);
 
   /**

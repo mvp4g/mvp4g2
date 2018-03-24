@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Annotation to mark classes, which will used by the framework.
- * <p>
+ * <br>
  * <p>Do not use lasses annotated with internalFrameworkClass!</p>
  *
  * @author Frank Hossfeld

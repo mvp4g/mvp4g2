@@ -29,7 +29,8 @@ import com.github.mvp4g.mvp4g2.core.ui.IsHandler;
  * <code>IsEventBus</code> in order to define event.<br>
  * <br>
  * The annotation has the following attributes:
- * <p>
+ * <br>
+ * <ul>
  * <li> bind: classes that need to be bound when this event occurs. You can have zero to several classes
  * for an event. </li>
  * <li>handlers: classes of the handlers of this event. You can have zero to several handlers for an
@@ -44,44 +45,10 @@ import com.github.mvp4g.mvp4g2.core.ui.IsHandler;
  * displayed screen.</li>
  * <li>passive: when an event is fired, it will build any handlers not built yet and/or load any
  * child modules not loaded yet expect if the event is passive.</li>
- * <ul>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p> TODO
  * <li>activate: classes of handlers that should be activated with this event. You can activate zero
  * to several handlers. Handlers to activate don't have to handle the event.</li>
  * <li>deactivate: classes of handlers that should be deactivated with this event. You can activate
  * zero to several handlers. Handlers to deactivate must not handle the event.</li>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <li>handlerNames: instead of using their classes, you can define handlers thanks to their name
- * (in case you have given names to your handlers). Not recommended because this method tends to
- * create typo errors.</li>
- * <li> bindNames: instead of using their classes, you can define binds thanks to their name. Not recommended.
- * <li>modulesToLoad: child modules that should be loaded if necessary and to which the event should
- * be forwarded. Child modules to which the event is forwarded must be one of the child modules of
- * the <code>EventBus</code> interface's module (ie one of the modules defined inside
- * <code>ChildModules</code> annotation). If object(s) are associated to the event, they will also
- * be forwarded. An event can be forwarded to zero to several child modules.</li>
- * <li>forwardToParent: if true, event will be forwarded to the parent module. In this case, the
- * module must have a parent.</li>
- * <li>calledMethod: name of the method that handlers should define and that will be called when the
- * event is fired. By default it's equal to "on" + event's method name.</li>
- * <li>historyConverterName: instead of using its class, you can define the history converter thanks
- * to his name (in case you have given names to your history converter). Not recommended because
- * this method tends to create typo errors.</li>
- * <li>activateNames: instead of using their classes, you can activate handlers thanks to their name
- * (in case you have given names to your handlers). Not recommended because this method tends to
- * create typo errors.</li>
- * <li>deactivateNames: instead of using their classes, you can activate handlers thanks to their
- * name (in case you have given names to your handlers). Not recommended because this method tends
- * to create typo errors.</li>
  * </ul>
  *
  * @author Frank Hossfeld
@@ -126,11 +93,4 @@ public @interface Event {
       return false;
     }
   }
-//
-//  String historyConverterName() default "";
-
-//  Class<? extends Mvp4gModule>[] forwardToModules() default {};
-//
-//  boolean forwardToParent() default false;
-
 }

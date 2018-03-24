@@ -105,10 +105,12 @@ public class ProcessorUtils {
   }
 
   /**
-   * Returns all of the superclasses and superinterfaces for a given generator
-   * including the generator itself. The returned set maintains an internal
-   * breadth-first ordering of the generator, followed by its interfaces (and their
-   * super-interfaces), then the supertype and its interfaces, and so on.
+   * checks if a class or interface is implemented.
+   *
+   * @param types       types
+   * @param typeMirror  of the class to check
+   * @param toImplement the type mirror to implement
+   * @return true - class is implemented
    */
   public boolean extendsClassOrInterface(Types types,
                                          TypeMirror typeMirror,
@@ -137,6 +139,10 @@ public class ProcessorUtils {
    * including the generator itself. The returned set maintains an internal
    * breadth-first ordering of the generator, followed by its interfaces (and their
    * super-interfaces), then the supertype and its interfaces, and so on.
+   *
+   * @param types      types
+   * @param typeMirror of the class to check
+   * @return Set of implemented super types
    */
   public Set<TypeMirror> getFlattenedSupertypeHierarchy(Types types,
                                                         TypeMirror typeMirror) {

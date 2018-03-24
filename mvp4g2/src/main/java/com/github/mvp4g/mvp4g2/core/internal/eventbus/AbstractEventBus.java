@@ -31,13 +31,13 @@ import com.github.mvp4g.mvp4g2.core.eventbus.annotation.Debug;
 import com.github.mvp4g.mvp4g2.core.history.IsHistoryConverter;
 import com.github.mvp4g.mvp4g2.core.history.IsNavigationConfirmation;
 import com.github.mvp4g.mvp4g2.core.history.PlaceService;
+import com.github.mvp4g.mvp4g2.core.internal.ForInternalUseOnly;
+import com.github.mvp4g.mvp4g2.core.internal.ui.HandlerMetaData;
 import com.github.mvp4g.mvp4g2.core.internal.ui.PresenterMetaData;
+import com.github.mvp4g.mvp4g2.core.internal.ui.PresenterMetaDataRegistration;
 import com.github.mvp4g.mvp4g2.core.ui.IsHandler;
 import com.github.mvp4g.mvp4g2.core.ui.IsLazyReverseView;
 import com.github.mvp4g.mvp4g2.core.ui.IsPresenter;
-import com.github.mvp4g.mvp4g2.core.internal.ForInternalUseOnly;
-import com.github.mvp4g.mvp4g2.core.internal.ui.HandlerMetaData;
-import com.github.mvp4g.mvp4g2.core.internal.ui.PresenterMetaDataRegistration;
 import com.github.mvp4g.mvp4g2.core.ui.IsShell;
 
 import static java.util.Objects.isNull;
@@ -448,7 +448,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * set the debug state
    *
-   * @param debugEnable true ->  is enable
+   * @param debugEnable true - is enable
    */
   protected void setDebugEnable(boolean debugEnable) {
     this.debugEnable = debugEnable;
@@ -507,6 +507,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
    *
    * @param eventName event's name
    * @param params    event parameters for this event
+   * @return true - event can be executed
    */
   protected boolean filterEvent(String eventName,
                                 Object... params) {
@@ -564,7 +565,7 @@ public abstract class AbstractEventBus<E extends IsEventBus>
   /**
    * set the filter state
    *
-   * @param filtersEnable true ->  is enable
+   * @param filtersEnable true - is enable
    */
   protected void setFiltersEnable(boolean filtersEnable) {
     this.filtersEnable = filtersEnable;
