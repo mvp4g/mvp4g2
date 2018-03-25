@@ -15,6 +15,38 @@
   <packaging>jar</packaging>
   <description>Model View Presenter with Event Bus For GWT 2 + 3 based on APT</description>
 
+  <inceptionYear>2018</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Frank Hossfeld</name>
+      <id>frankhossfeld</id>
+      <email>hossfeld@hossfeld-solutions.de</email>
+      <organization>Hossfeld Solutions GmbH</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git@github.com:mvp4g/mvp4g2.git</connection>
+    <developerConnection>scm:git:git@github.com:mvp4g/mvp4g2.git</developerConnection>
+    <url>scm:git:https://github.com/mvp4g/mvp4g2</url>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mvp4g/mvp4g2/issues</url>
+  </issueManagement>
   <properties>
     <autocommon.version>0.8</autocommon.version>
 
