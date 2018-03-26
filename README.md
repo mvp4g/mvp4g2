@@ -13,7 +13,7 @@ Moving to APT will cause changes, related to the options offered by APT. Using t
 
 Keep in mind, MVP4G2 helps you to structure your application. It does not offer a widget system nor does it force you to use a particular one. MVP4G2 will work with native GWT widgets, GXT, Elemental, Elemeto, etc.  
 
-Currently, most of the features of mvp4g, which can be used with APT, are implemented (except the mult module feature).
+Currently, most of the features of mvp4g, which can be used with APT, are implemented (except the multi module feature).
 
 You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
 
