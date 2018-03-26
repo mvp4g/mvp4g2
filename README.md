@@ -7,7 +7,7 @@ To prepare MVP4G for GWT 3, the GWT generator has to be replaced by an annotatio
 
 MVP4G2 will work with GWT 2 + 3 and will bring major changes.
 
-In opposite to the first version of MVP4G, MVP4G2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 and APT.
+In opposite to the first version of MVP4G, MVP4G2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 (only for the history implementation) and APT.
 
 Moving to APT will cause changes, related to the options offered by APT. Using the ideas of MVP4G, MVP4G 2 will try to take as much as possible of the principles and features to the next version.
 
