@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 import com.github.mvp4g.mvp4g2.processor.model.intern.ClassNameModel;
 import com.github.mvp4g.mvp4g2.processor.model.intern.IsMetaModel;
 
-import static java.util.Objects.isNull;
-
 public class EventBusMetaModel
   implements IsMetaModel {
 
@@ -51,20 +49,20 @@ public class EventBusMetaModel
     this.shell = new ClassNameModel(properties.getProperty(EventBusMetaModel.KEY_SHELL));
     this.events = Arrays.stream(properties.getProperty(EventBusMetaModel.KEY_EVENTS)
                                           .split("\\s*,\\s*"))
-                        .collect(Collectors.toCollection(ArrayList::new));
+                        .collect(Collectors.toList());
 
     this.hasDebugAnnotation = properties.getProperty(EventBusMetaModel.KEY_HAS_DEBUG_ANNOTATION);
     this.debugLogger = new ClassNameModel(properties.getProperty(EventBusMetaModel.KEY_DEBUG_LOGGER));
     this.debugLogLevel = properties.getProperty(EventBusMetaModel.KEY_DEBUG_LOG_LEVEL);
 
     this.hasFiltersAnnotation = properties.getProperty(EventBusMetaModel.KEY_HAS_FILTERS_ANNOTATION);
-    if (isNull(properties.getProperty(EventBusMetaModel.KEY_FILTERS))) {
+    if (isEmptyOrNull(properties.getProperty(EventBusMetaModel.KEY_FILTERS))) {
       this.filters = new ArrayList<>();
     } else {
       this.filters = Arrays.stream(properties.getProperty(EventBusMetaModel.KEY_FILTERS)
                                              .split("\\s*,\\s*"))
                            .map(ClassNameModel::new)
-                           .collect(Collectors.toCollection(ArrayList::new));
+                           .collect(Collectors.toList());
     }
   }
 
@@ -80,6 +78,10 @@ public class EventBusMetaModel
     if (!this.events.contains(eventMetaModel.getEventInternalName())) {
       this.events.add(eventMetaModel.getEventInternalName());
     }
+  }
+
+  private boolean isEmptyOrNull(String value) {
+    return value == null || value.isEmpty();
   }
 
   public Collection<String> getEventMetaModelKeys() {
