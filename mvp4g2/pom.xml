@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.github.mvp4g</groupId>
     <artifactId>mvp4g2-parent</artifactId>
-    <version>1.0-beta-5</version>
+    <version>1.0-rc-2</version>
   </parent>
 
   <artifactId>mvp4g2</artifactId>
