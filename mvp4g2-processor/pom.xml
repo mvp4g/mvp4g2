@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.github.mvp4g</groupId>
     <artifactId>mvp4g2-parent</artifactId>
-    <version>1.0-rc-2</version>
+    <version>1.0-rc-3</version>
   </parent>
 
   <artifactId>mvp4g2-processor</artifactId>
@@ -50,7 +50,7 @@
   <properties>
     <autocommon.version>0.8</autocommon.version>
 
-    <mvp4g2.version>1.0-rc-2</mvp4g2.version>
+    <mvp4g2.version>1.0-rc-3</mvp4g2.version>
     <autoservice.version>1.0-rc4</autoservice.version>
     <javapoet.version>1.10.0</javapoet.version>
     <truth.version>0.39</truth.version>
