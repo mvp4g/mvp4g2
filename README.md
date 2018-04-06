@@ -15,10 +15,10 @@ Currently, most of the features of mvp4g, which can be used with APT, are implem
 
 There are already a lot of exsiting esamples. You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
 
+**Remember:** This is a beta version and the documentation is still in progress.
+
 ### Project Generator
 To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html). The project generator will generate a Maven Project, which can be imported to your preferred IDE and is ready to use. Here you find some notes about the project generator: [Mvp4g2 Project Generator](https://github.com/mvp4g/mvp4g2/wiki/Mvp4g2-Project-Generator).
-
-**Remember:** This is a beta version and the documentation is still in progress.
 
 ## MVP4G2
 GWT is a very powerful framework that allows you to build efficient applications, especially if you follow the best practices described by Ray Ryan at Google IO 2009:
