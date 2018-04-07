@@ -52,7 +52,7 @@ The widget library that will be used for the code generation. At the moment the 
 
 - GXT GPL 4.0.0
 
-**Note: The native GWT and the GXT GPL 4.0.0 widget sets will not work with J2CL / GWT 3!**
+**Note:** The native GWT and the GXT GPL 4.0.0 widget sets will not work with J2CL / GWT 3!
 
 ### Application Meta Data
 
@@ -93,14 +93,14 @@ There are three buttons:
 
 - the third button removes the selected screen.
 
-In case you add or edit a screen, a window will open.
+In case you add or edit a screen, a window will open:
 
-![Add or edit screen data] (https://github.com/mvp4g/mvp4g2/blob/master/etc/wiki/images/PresenterDataWindow.png)
+![Add or edit screen data](https://github.com/mvp4g/mvp4g2/blob/master/etc/wiki/images/PresenterDataWindow.png)
 
 Using this window, you can:
 
-* name the screen: this name will be used as package name, the goto event, the Presenter- and view-name
-* history name: if entered, this name will be used as token instead the event name
+* name the screen: this name will be used as package name, the goto event, the presenter- and view-name, etc
+* history name (optional): if entered, this name will be used as token instead the event name
 * view creation method:
   * view is created by framework: the instance of the view will be created by the framwork (using 'new')
   * view is created by presenter: the instance of the view has to be created by the developer
