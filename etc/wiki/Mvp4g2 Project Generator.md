@@ -99,9 +99,9 @@ In case you add or edit a screen, a window will open.
 
 Using this window, you can:
 
-1. name the screen: this name will be used as package name, the goto event, the Presenter- and view-name
-2. history name: if entered, this name will be used as token instead the event name
-3. view creation method:
-  - view is created by framework: the instance of the view will be created by the framwork (using 'new')
-  - view is created by presenter: the instance of the view has to be created by the developer
-6. enable navigation confirmation
+* name the screen: this name will be used as package name, the goto event, the Presenter- and view-name
+* history name: if entered, this name will be used as token instead the event name
+* view creation method:
+  * view is created by framework: the instance of the view will be created by the framwork (using 'new')
+  * view is created by presenter: the instance of the view has to be created by the developer
+* enable navigation confirmation
