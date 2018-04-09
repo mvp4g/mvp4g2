@@ -5,20 +5,20 @@ With the next version of GWT (GWT 3) and the new J2CL transpiller, there will be
 
 To prepare MVP4G for GWT 3, the GWT generator has to be replaced by an annotation processor and most of the dependencies of MVP4G have to be removed.
 
-So we started a new project, calles MVP4G2 and rewrite MVP4G from scratch. MVP4G2 will work with GWT 2 + 3 and will bring major changes. In opposite to the first version of MVP4G, MVP4G2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 (only for the history implementation) and APT.
+So, we started a new project, calles MVP4G2 and rewrite MVP4G from scratch. MVP4G2 will work with GWT 2 + 3 and will bring major changes. In opposite to the first version of MVP4G, MVP4G2 will not use generators, JSNI or the widget system. Instead it will use Elemental 2 (only for the history implementation) and APT.
 
 Moving to APT will cause changes, related to the options offered by APT. Using the ideas of MVP4G, MVP4G 2 will try to take as much as possible of the principles and features to the next version.
 
 Keep in mind, MVP4G2 helps you to structure your application. It does not offer a widget system nor does it force you to use a particular one. MVP4G2 will work with native GWT widgets, GXT, Elemental (1 + 2), Elemeto, etc.
 
-Currently, most of the features of mvp4g, which can be used with APT, are implemented (except the multi module feature). A complete list of the things already added in MVP4G2 can be found [here](https://github.com/mvp4g/mvp4g2/wiki/Comparision:-Mvp4g-vs.-Mvp4g2).
+At the moment most of the features of mvp4g, which can be used with APT, are implemented (except the multi module feature). A complete list of the things already added in MVP4G2 can be found [here](https://github.com/mvp4g/mvp4g2/wiki/Comparision:-Mvp4g-vs.-Mvp4g2).
 
-There are already a lot of exsiting esamples. You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
+There are a lot of esamples. You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
 
 **Remember:** This is a beta version and the documentation is still in progress.
 
 ### Project Generator
-To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html). The project generator will generate a Maven Project, which can be imported to your preferred IDE and is ready to use. Here you find some notes about the project generator: [Mvp4g2 Project Generator](https://github.com/mvp4g/mvp4g2/wiki/Mvp4g2-Project-Generator).
+To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html) ()also based on MVP4G2). The project generator will generate a Maven Project, which can be imported to your preferred IDE and is ready to use. Here you find some notes about the project generator: [Mvp4g2 Project Generator](https://github.com/mvp4g/mvp4g2/wiki/Mvp4g2-Project-Generator).
 
 ## MVP4G2
 GWT is a very powerful framework that allows you to build efficient applications, especially if you follow the best practices described by Ray Ryan at Google IO 2009:
@@ -34,7 +34,7 @@ However, following these best practices is not always easy and you can end up wi
 
 On the other hand the native GWT implementation has some drawbacks.
 
-- the navigation conformation does not allow a server call to check if a side is vaild
+- the navigation confirmation does not allow a server call to check if a side is vaild
 - Place management can be hard for complex UI
 
 That's why Mvp4g offers a solution following these best practices
@@ -42,6 +42,8 @@ That's why Mvp4g offers a solution following these best practices
  - Event Bus
  - Model View Presenter
  - Place Service
+ - synchronous confirmation
+ - event based place manangement
 
  using simple mechanisms that only need a few lines of code and a few annotations.
 
