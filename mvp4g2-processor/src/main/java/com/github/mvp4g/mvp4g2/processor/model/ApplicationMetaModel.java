@@ -29,18 +29,15 @@ public class ApplicationMetaModel
   private static final String KEY_EVENTBUS         = "eventBus";
   private static final String KEY_LOADER           = "loader";
   private static final String KEY_HISTORY_ON_START = "historyOnStart";
-  private static final String KEY_ENCODE_TOKEN     = "encodeToken";
 
   private ClassNameModel application;
   private ClassNameModel eventBus;
   private ClassNameModel loader;
   private String         historyOnStart;
-  private String         encodeToken;
 
   public ApplicationMetaModel(Properties properties) {
     this.application = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_APPLICATION));
     this.historyOnStart = properties.getProperty(ApplicationMetaModel.KEY_HISTORY_ON_START);
-    this.encodeToken = properties.getProperty(ApplicationMetaModel.KEY_ENCODE_TOKEN);
     this.eventBus = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_EVENTBUS));
     this.loader = new ClassNameModel(properties.getProperty(ApplicationMetaModel.KEY_LOADER));
   }
@@ -48,13 +45,11 @@ public class ApplicationMetaModel
   public ApplicationMetaModel(String application,
                               String eventBus,
                               String loader,
-                              String historyOnStart,
-                              String encodeToken) {
+                              String historyOnStart) {
     this.application = new ClassNameModel(application);
     this.eventBus = new ClassNameModel(eventBus);
     this.loader = new ClassNameModel(loader);
     this.historyOnStart = historyOnStart;
-    this.encodeToken = encodeToken;
   }
 
   public ClassNameModel getApplication() {
@@ -77,14 +72,6 @@ public class ApplicationMetaModel
     return "true".equals(historyOnStart);
   }
 
-  public String getEncodeToken() {
-    return encodeToken;
-  }
-
-  public boolean isEncodeToken() {
-    return "true".equals(encodeToken);
-  }
-
   @Override
   public Properties createPropertes() {
     Properties properties = new Properties();
@@ -96,8 +83,6 @@ public class ApplicationMetaModel
                            this.loader.getClassName());
     properties.setProperty(ApplicationMetaModel.KEY_HISTORY_ON_START,
                            this.historyOnStart);
-    properties.setProperty(ApplicationMetaModel.KEY_ENCODE_TOKEN,
-                           this.encodeToken);
     return properties;
   }
 }

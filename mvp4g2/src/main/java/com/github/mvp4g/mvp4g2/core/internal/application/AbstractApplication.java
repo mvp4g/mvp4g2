@@ -32,8 +32,6 @@ public abstract class AbstractApplication<E extends IsEventBus>
   protected E                                  eventBus;
   /* flag if we have to check history token at the start of the application */
   protected boolean                            historyOnStart;
-  /* flag if we have to enode the history token */
-  protected boolean                            encodeToken;
   /* the PlaceService */
   private   PlaceService<? extends IsEventBus> placeService;
 
@@ -51,8 +49,7 @@ public abstract class AbstractApplication<E extends IsEventBus>
   private void onFinishLaoding() {
     // create place service and bind
     this.placeService = new PlaceService<E>(this.eventBus,
-                                            historyOnStart,
-                                            encodeToken);
+                                            historyOnStart);
     this.eventBus.setPlaceService(this.placeService);
     // start the application
     placeService.startApplication();
