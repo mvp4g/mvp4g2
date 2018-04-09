@@ -22,16 +22,16 @@ import java.io.IOException;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeSpec;
 import com.github.mvp4g.mvp4g2.core.application.IsApplicationLoader;
 import com.github.mvp4g.mvp4g2.core.internal.application.AbstractApplication;
 import com.github.mvp4g.mvp4g2.processor.ProcessorException;
 import com.github.mvp4g.mvp4g2.processor.ProcessorUtils;
 import com.github.mvp4g.mvp4g2.processor.model.ApplicationMetaModel;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeSpec;
 
 public class ApplicationGenerator {
 
@@ -87,6 +87,8 @@ public class ApplicationGenerator {
                                                               .getSimpleName() + ApplicationGenerator.IMPL_NAME)
                                        .addStatement("super.historyOnStart = $L",
                                                      metaModel.getHistoryOnStart())
+                                       .addStatement("super.encodeToken = $L",
+                                                     metaModel.getEncodeToken())
                                        .build();
     typeSpec.addMethod(constructor);
 

@@ -33,13 +33,16 @@ public class PlaceService<E extends IsEventBus> {
   private static final String CRAWLABLE     = "!";
   /* flag if we have to check history token at the start of the application */
   protected boolean                                          historyOnStart;
+  /* flag if we have to encode the token */
+  protected boolean                                          encodeToken;
   private   IsEventBus                                       eventBus;
   private   Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
   private   Map<String, String>                              historyNameMap;
   private boolean enabled = true;
 
   public PlaceService(E eventBus,
-                      boolean historyOnStart) {
+                      boolean historyOnStart,
+                      boolean encodeToken) {
     super();
 
     this.eventMetaDataMap = new HashMap<>();
@@ -47,6 +50,7 @@ public class PlaceService<E extends IsEventBus> {
 
     this.eventBus = eventBus;
     this.historyOnStart = historyOnStart;
+    this.encodeToken = encodeToken;
 
     DomGlobal.window.addEventListener("popstate",
                                       (e) -> confirmEvent(new NavigationEventCommand(eventBus) {
