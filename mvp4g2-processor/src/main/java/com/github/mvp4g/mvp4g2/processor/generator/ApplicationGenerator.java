@@ -87,6 +87,8 @@ public class ApplicationGenerator {
                                                               .getSimpleName() + ApplicationGenerator.IMPL_NAME)
                                        .addStatement("super.historyOnStart = $L",
                                                      metaModel.getHistoryOnStart())
+                                       .addStatement("super.encodeToken = $L",
+                                                     metaModel.getEncodeToken())
                                        .build();
     typeSpec.addMethod(constructor);
 
