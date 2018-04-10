@@ -1,3 +1,5 @@
+<a title="Gitter" href="https://gitter.im/mvp4g/mvp4g"><img src="https://badges.gitter.im/Join%20Chat.svg"></a>
+
 # MVP4G 2 (Beta)
 
 ## Preface
