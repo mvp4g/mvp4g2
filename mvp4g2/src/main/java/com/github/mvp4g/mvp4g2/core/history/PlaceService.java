@@ -17,10 +17,12 @@
 
 package com.github.mvp4g.mvp4g2.core.history;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
+import com.github.mvp4g.mvp4g2.core.internal.Base64Utils;
 import com.github.mvp4g.mvp4g2.core.internal.eventbus.EventMetaData;
 import elemental2.dom.DomGlobal;
 
@@ -29,16 +31,16 @@ import static java.util.Objects.isNull;
 public class PlaceService<E extends IsEventBus> {
 
   //  private static final String MODULE_SEPARATOR = "/";
-  private static final String URL_SEPARATOR = "#";
-  private static final String CRAWLABLE     = "!";
+  private static final String                                           URL_SEPARATOR = "#";
+  private static final String                                           CRAWLABLE     = "!";
   /* flag if we have to check history token at the start of the application */
-  protected boolean                                          historyOnStart;
+  protected            boolean                                          historyOnStart;
   /* flag if we have to encode the token */
-  protected boolean                                          encodeToken;
-  private   IsEventBus                                       eventBus;
-  private   Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
-  private   Map<String, String>                              historyNameMap;
-  private boolean enabled = true;
+  protected            boolean                                          encodeToken;
+  private              IsEventBus                                       eventBus;
+  private              Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
+  private              Map<String, String>                              historyNameMap;
+  private              boolean                                          enabled       = true;
 
   public PlaceService(E eventBus,
                       boolean historyOnStart,
@@ -85,6 +87,7 @@ public class PlaceService<E extends IsEventBus> {
   protected void convertToken(String token) {
     boolean toContinue = false;
     if (!isNull(token)) {
+      // encoding ...
       if (token.startsWith(CRAWLABLE)) {
         token = token.substring(1);
       }
@@ -122,6 +125,15 @@ public class PlaceService<E extends IsEventBus> {
     result[0] = (index == -1) ? token : token.substring(0,
                                                         index);
     result[1] = (index == -1) ? null : token.substring(index + 1);
+    if (this.encodeToken) {
+      if (result[1] != null) {
+        if (this.encodeToken) {
+          byte[] encodedBytes = Base64Utils.fromBase64(result[1]);
+          result[1] = new String(encodedBytes,
+                                 StandardCharsets.UTF_8);
+        }
+      }
+    }
     return result;
   }
 
@@ -218,8 +230,14 @@ public class PlaceService<E extends IsEventBus> {
     if (!enabled && !onlyToken) {
       return null;
     }
+    // encoding
+    String encodedParam = param;
+    if (this.encodeToken) {
+      byte[] decodeBytes = encodedParam.getBytes(StandardCharsets.UTF_8);
+      encodedParam = Base64Utils.toBase64(decodeBytes);
+    }
     String token = tokenize(metaData.getHistoryName(),
-                            param);
+                            encodedParam);
     //    if (converters.get(eventName)
     //                  .isCrawlable()) {
     //      token = CRAWLABLE + token;
