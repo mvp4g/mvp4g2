@@ -19,6 +19,9 @@ There are a lot of esamples. You can take a look at the mvp4g2 example, that use
 
 **Remember:** This is a beta version and the documentation is still in progress.
 
+### J2CL / GWT3
+MVP4G2 has ++no++ dependency to gwt-user! This means, MVP4G2 ready to use with J2CL / GWT3.  
+
 ### Project Generator
 To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html) ()also based on MVP4G2). The project generator will generate a Maven Project, which can be imported to your preferred IDE and is ready to use. Here you find some notes about the project generator: [Mvp4g2 Project Generator](https://github.com/mvp4g/mvp4g2/wiki/Mvp4g2-Project-Generator).
 
