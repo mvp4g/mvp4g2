@@ -24,7 +24,7 @@
 
   <groupId>com.github.mvp4g</groupId>
   <artifactId>mvp4g2-parent</artifactId>
-  <version>1.0-rc-3</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
 
   <name>MVP4G 2 parent - Implementation of mvp4g for GWT 2 + 3</name>

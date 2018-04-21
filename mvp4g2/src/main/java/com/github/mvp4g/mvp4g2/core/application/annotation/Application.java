@@ -20,8 +20,8 @@ package com.github.mvp4g.mvp4g2.core.application.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
 import com.github.mvp4g.mvp4g2.core.application.IsApplicationLoader;
+import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
 import com.github.mvp4g.mvp4g2.core.internal.application.NoApplicationLoader;
 
 /**
@@ -33,7 +33,7 @@ import com.github.mvp4g.mvp4g2.core.internal.application.NoApplicationLoader;
  * <li>loader: a loader that will be executed in case the application loads. If no loader
  * is defined, the NoApplicationLoader.class will be used. In this case, the loader will do nothing.</li>
  * <li>historyOnStart: if true, the current history state will be fired when the application starts.</li>
- * <li>encodeToken: if true, the token will be encoded (very simple).</li>
+ * <li>encodeToken: if true, the token will be encoded (very simple). (Experimental, may be, it will be removed ...)</li>
  * </ul>
  *
  * @author Frank Hossfeld
