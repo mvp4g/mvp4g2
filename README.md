@@ -17,8 +17,6 @@ At the moment most of the features of mvp4g, which can be used with APT, are imp
 
 There are a lot of esamples. You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
 
-**Remember:** This is a beta version and the documentation is still in progress.
-
 ## J2CL / GWT3
 MVP4G2 has **no** dependency to gwt-user! This means, MVP4G2 is ready to use with J2CL / GWT3.  
 
