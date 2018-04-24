@@ -1,6 +1,6 @@
 <a title="Gitter" href="https://gitter.im/mvp4g/mvp4g"><img src="https://badges.gitter.im/Join%20Chat.svg"></a>
 
-# MVP4G 2 (Beta)
+# MVP4G 2
 
 ## Preface
 With the next version of GWT (GWT 3) and the new J2CL transpiller, there will be major changes in the GWT developmemt. For example: JSNI and generators, besides other things, will be gone. Removing generators will cause the current implementation of mvp4g to stop working.
