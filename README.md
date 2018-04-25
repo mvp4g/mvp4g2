@@ -18,7 +18,7 @@ At the moment most of the features of mvp4g, which can be used with APT, are imp
 There are a lot of esamples. You can take a look at the mvp4g2 example, that uses APT instead of generators: [https://github.com/mvp4g/mvp4g2-examples](https://github.com/mvp4g/mvp4g2-examples)
 
 ## J2CL / GWT3
-MVP4G2 has **no** dependency to gwt-user! This means, MVP4G2 is ready to use with J2CL / GWT3.  
+MVP4G2 has **no** dependency to gwt-user! This means, MVP4G2 is ready to use with J2CL / GWT 3.  
 
 ## Project Generator
 To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html) (which is also based on MVP4G2). The project generator will generate a Maven project, which can be imported to your preferred IDE and is ready to use. Run **mvn:devmode:** to start the generated project. 
