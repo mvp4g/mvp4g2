@@ -238,10 +238,13 @@ public class PlaceService<E extends IsEventBus> {
     }
     String token = tokenize(metaData.getHistoryName(),
                             encodedParam);
-    //    if (converters.get(eventName)
-    //                  .isCrawlable()) {
-    //      token = CRAWLABLE + token;
-    //    }
+    // crawable event
+    IsHistoryConverter historyConverter = this.getHistoryConverter(eventName);
+    if (historyConverter != null) {
+      if (historyConverter.isCrawlable()) {
+        token = CRAWLABLE + token;
+      }
+    }
     if (!onlyToken) {
       DomGlobal.window.history.pushState(param,
                                          "",
