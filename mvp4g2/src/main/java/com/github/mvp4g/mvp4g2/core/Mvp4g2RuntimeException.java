@@ -15,7 +15,7 @@
  *
  */
 
-package com.github.mvp4g.mvp4g2.core.internal;
+package com.github.mvp4g.mvp4g2.core;
 
 @SuppressWarnings("serial")
 public class Mvp4g2RuntimeException

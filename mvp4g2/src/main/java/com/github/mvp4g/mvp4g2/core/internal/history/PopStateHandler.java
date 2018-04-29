@@ -15,22 +15,15 @@
  *
  */
 
-package com.github.mvp4g.mvp4g2.core.internal.application;
+package com.github.mvp4g.mvp4g2.core.internal.history;
 
-import com.github.mvp4g.mvp4g2.core.application.IsApplicationLoader;
 import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
+import elemental2.dom.PopStateEvent;
 
-/**
- * Default applilcation loader
- * <p>does nothing</p>
- * <p>Used by the framework</p>
- */
 @Mvp4g2InternalUse
-public final class NoApplicationLoader
-  implements IsApplicationLoader {
+@FunctionalInterface
+public interface PopStateHandler {
 
-  @Override
-  public void load(FinishLoadCommand finishLoadCommand) {
-    finishLoadCommand.finishLoading();
-  }
+  void onPopState(PopStateEvent event);
+
 }

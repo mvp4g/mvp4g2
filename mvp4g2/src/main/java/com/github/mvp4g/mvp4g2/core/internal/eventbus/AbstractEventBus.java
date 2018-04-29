@@ -30,8 +30,8 @@ import com.github.mvp4g.mvp4g2.core.eventbus.PresenterRegistration;
 import com.github.mvp4g.mvp4g2.core.eventbus.annotation.Debug;
 import com.github.mvp4g.mvp4g2.core.history.IsHistoryConverter;
 import com.github.mvp4g.mvp4g2.core.history.IsNavigationConfirmation;
-import com.github.mvp4g.mvp4g2.core.history.PlaceService;
-import com.github.mvp4g.mvp4g2.core.internal.ForInternalUseOnly;
+import com.github.mvp4g.mvp4g2.core.internal.history.PlaceService;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 import com.github.mvp4g.mvp4g2.core.internal.ui.HandlerMetaData;
 import com.github.mvp4g.mvp4g2.core.internal.ui.PresenterMetaData;
 import com.github.mvp4g.mvp4g2.core.internal.ui.PresenterMetaDataRegistration;
@@ -42,7 +42,7 @@ import com.github.mvp4g.mvp4g2.core.ui.IsShell;
 
 import static java.util.Objects.isNull;
 
-@ForInternalUseOnly
+@Mvp4g2InternalUse
 public abstract class AbstractEventBus<E extends IsEventBus>
   implements IsEventBus {
 

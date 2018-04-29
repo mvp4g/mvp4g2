@@ -30,7 +30,7 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.WildcardTypeName;
 import com.github.mvp4g.mvp4g2.core.eventbus.PresenterRegistration;
-import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2RuntimeException;
+import com.github.mvp4g.mvp4g2.core.Mvp4g2RuntimeException;
 import com.github.mvp4g.mvp4g2.core.internal.eventbus.AbstractEventBus;
 import com.github.mvp4g.mvp4g2.core.internal.ui.PresenterMetaDataRegistration;
 import com.github.mvp4g.mvp4g2.core.ui.IsPresenter;

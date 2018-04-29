@@ -17,6 +17,9 @@
 
 package com.github.mvp4g.mvp4g2.core.internal.ui;
 
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
+
+@Mvp4g2InternalUse
 public interface PresenterMetaDataRegistration {
 
   void remove();
