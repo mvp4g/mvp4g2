@@ -17,14 +17,17 @@
 
 package com.github.mvp4g.mvp4g2.core.internal.application;
 
-import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
-import com.github.mvp4g.mvp4g2.core.history.PlaceService;
 import com.github.mvp4g.mvp4g2.core.application.IsApplication;
 import com.github.mvp4g.mvp4g2.core.application.IsApplicationLoader;
+import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
+import com.github.mvp4g.mvp4g2.core.internal.history.PlaceService;
+import com.github.mvp4g.mvp4g2.core.internal.history.impl.DefaultHistoryProxyImpl;
 
 /**
  * generator of the eventBus
  */
+@Mvp4g2InternalUse
 public abstract class AbstractApplication<E extends IsEventBus>
   implements IsApplication {
 
@@ -51,6 +54,7 @@ public abstract class AbstractApplication<E extends IsEventBus>
   private void onFinishLaoding() {
     // create place service and bind
     this.placeService = new PlaceService<E>(this.eventBus,
+                                            new DefaultHistoryProxyImpl(),
                                             historyOnStart,
                                             encodeToken);
     this.eventBus.setPlaceService(this.placeService);

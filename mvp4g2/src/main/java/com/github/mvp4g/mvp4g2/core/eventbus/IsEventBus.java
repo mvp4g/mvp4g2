@@ -18,7 +18,7 @@
 package com.github.mvp4g.mvp4g2.core.eventbus;
 
 import com.github.mvp4g.mvp4g2.core.history.IsNavigationConfirmation;
-import com.github.mvp4g.mvp4g2.core.history.PlaceService;
+import com.github.mvp4g.mvp4g2.core.internal.history.PlaceService;
 import com.github.mvp4g.mvp4g2.core.ui.IsPresenter;
 
 public interface IsEventBus {
@@ -39,7 +39,7 @@ public interface IsEventBus {
   void fireNotFoundHistoryEvent();
 
   /**
-   * Framework m,ethod to set the shell
+   * Framework method to set the shell
    * <br>
    * <b>Do not use!</b>
    */

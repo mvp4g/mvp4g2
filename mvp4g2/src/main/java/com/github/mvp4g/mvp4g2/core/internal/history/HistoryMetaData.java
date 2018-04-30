@@ -18,10 +18,12 @@
 package com.github.mvp4g.mvp4g2.core.internal.history;
 
 import com.github.mvp4g.mvp4g2.core.history.annotation.History;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 
 /**
  * meta data history annotation
  */
+@Mvp4g2InternalUse
 public abstract class HistoryMetaData {
 
   /* class name of the history converter */

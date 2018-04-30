@@ -17,6 +17,7 @@
 
 package com.github.mvp4g.mvp4g2.core.internal.ui;
 
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 import com.github.mvp4g.mvp4g2.core.ui.IsLazyReverseView;
 import com.github.mvp4g.mvp4g2.core.ui.IsPresenter;
 import com.github.mvp4g.mvp4g2.core.ui.annotation.Presenter;
@@ -27,6 +28,7 @@ import com.github.mvp4g.mvp4g2.core.ui.annotation.Presenter;
  * @param <P> the meta data presenter
  * @param <P> the meta data view
  */
+@Mvp4g2InternalUse
 public abstract class PresenterMetaData<P extends IsPresenter<?, ?>, V extends IsLazyReverseView<?>>
   extends AbstractHandlerMetaData {
 

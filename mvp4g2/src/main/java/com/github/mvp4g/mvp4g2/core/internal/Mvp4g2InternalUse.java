@@ -15,22 +15,19 @@
  *
  */
 
-package com.github.mvp4g.mvp4g2.core.internal.application;
+package com.github.mvp4g.mvp4g2.core.internal;
 
-import com.github.mvp4g.mvp4g2.core.application.IsApplicationLoader;
-import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * Default applilcation loader
- * <p>does nothing</p>
- * <p>Used by the framework</p>
+ * Annotation to mark classes, which will used by the framework.
+ * <br>
+ * <p>Do not use classes annotated with Mvp4g2InternalUse! This
+ * classes can change without any announcement.</p>
+ *
+ * @author Frank Hossfeld
  */
-@Mvp4g2InternalUse
-public final class NoApplicationLoader
-  implements IsApplicationLoader {
-
-  @Override
-  public void load(FinishLoadCommand finishLoadCommand) {
-    finishLoadCommand.finishLoading();
-  }
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Mvp4g2InternalUse {
 }

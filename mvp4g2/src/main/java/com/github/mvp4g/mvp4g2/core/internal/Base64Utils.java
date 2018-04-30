@@ -21,6 +21,7 @@ package com.github.mvp4g.mvp4g2.core.internal;
  * A utility to decode and encode byte arrays as Strings, using only "safe"
  * characters.
  */
+@Mvp4g2InternalUse
 public class Base64Utils {
   /**
    * An array mapping size but values to the characters that will be used to
