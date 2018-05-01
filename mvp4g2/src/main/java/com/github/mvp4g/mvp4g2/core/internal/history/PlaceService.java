@@ -44,7 +44,7 @@ public class PlaceService<E extends IsEventBus> {
   private              Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
   private              Map<String, String>                              historyNameMap;
   private              boolean                                          enabled       = true;
-  /* history proxy */
+  /* history proxy - we use this proxy here, to avoid using Elemental 2 feature directly in this class! */
   private              IsHistoryProxy                                   historyProxy;
 
   public PlaceService(E eventBus,

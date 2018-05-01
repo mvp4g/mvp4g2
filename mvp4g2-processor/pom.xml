@@ -65,11 +65,11 @@
     <url>https://github.com/mvp4g/mvp4g2/issues</url>
   </issueManagement>
   <properties>
-    <autocommon.version>0.8</autocommon.version>
+    <autocommon.version>0.10</autocommon.version>
 
     <autoservice.version>1.0-rc4</autoservice.version>
-    <javapoet.version>1.10.0</javapoet.version>
-    <truth.version>0.39</truth.version>
+    <javapoet.version>1.11.0</javapoet.version>
+    <truth.version>0.40</truth.version>
   </properties>
 
   <dependencies>
