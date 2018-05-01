@@ -17,6 +17,7 @@
 
 package com.github.mvp4g.mvp4g2.core.internal.ui;
 
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 import com.github.mvp4g.mvp4g2.core.ui.IsHandler;
 
 /**
@@ -24,6 +25,7 @@ import com.github.mvp4g.mvp4g2.core.ui.IsHandler;
  *
  * @param <P> the meta data event handler
  */
+@Mvp4g2InternalUse
 public abstract class HandlerMetaData<P extends IsHandler<?>>
   extends AbstractHandlerMetaData {
 

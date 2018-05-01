@@ -15,22 +15,31 @@
  *
  */
 
-package com.github.mvp4g.mvp4g2.core.internal.application;
+package com.github.mvp4g.junit.test.core.stub;
 
-import com.github.mvp4g.mvp4g2.core.application.IsApplicationLoader;
 import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
+import com.github.mvp4g.mvp4g2.core.internal.history.IsHistoryProxy;
+import com.github.mvp4g.mvp4g2.core.internal.history.PopStateHandler;
 
-/**
- * Default applilcation loader
- * <p>does nothing</p>
- * <p>Used by the framework</p>
- */
 @Mvp4g2InternalUse
-public final class NoApplicationLoader
-  implements IsApplicationLoader {
+public class DefaultHistoryProxyStubImpl
+  implements IsHistoryProxy {
 
   @Override
-  public void load(FinishLoadCommand finishLoadCommand) {
-    finishLoadCommand.finishLoading();
+  public void addPopStateListener(PopStateHandler handler) {
+    // do nothing ... it's JUnit ... no History ...
   }
+
+  @Override
+  public String getLocation() {
+    return "JunitTest";
+  }
+
+  @Override
+  public void pushState(String param,
+                        String title,
+                        String url) {
+    // do nothing ... it's JUnit ... no History ...
+  }
+
 }

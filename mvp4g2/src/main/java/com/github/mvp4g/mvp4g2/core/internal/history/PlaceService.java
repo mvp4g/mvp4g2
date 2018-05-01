@@ -15,19 +15,22 @@
  *
  */
 
-package com.github.mvp4g.mvp4g2.core.history;
+package com.github.mvp4g.mvp4g2.core.internal.history;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
+import com.github.mvp4g.mvp4g2.core.history.IsHistoryConverter;
+import com.github.mvp4g.mvp4g2.core.history.NavigationEventCommand;
 import com.github.mvp4g.mvp4g2.core.internal.Base64Utils;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 import com.github.mvp4g.mvp4g2.core.internal.eventbus.EventMetaData;
-import elemental2.dom.DomGlobal;
 
 import static java.util.Objects.isNull;
 
+@Mvp4g2InternalUse
 public class PlaceService<E extends IsEventBus> {
 
   //  private static final String MODULE_SEPARATOR = "/";
@@ -41,8 +44,11 @@ public class PlaceService<E extends IsEventBus> {
   private              Map<String, EventMetaData<? extends IsEventBus>> eventMetaDataMap;
   private              Map<String, String>                              historyNameMap;
   private              boolean                                          enabled       = true;
+  /* history proxy - we use this proxy here, to avoid using Elemental 2 feature directly in this class! */
+  private              IsHistoryProxy                                   historyProxy;
 
   public PlaceService(E eventBus,
+                      IsHistoryProxy historyProxy,
                       boolean historyOnStart,
                       boolean encodeToken) {
     super();
@@ -51,32 +57,15 @@ public class PlaceService<E extends IsEventBus> {
     this.historyNameMap = new HashMap<>();
 
     this.eventBus = eventBus;
+    this.historyProxy = historyProxy;
     this.historyOnStart = historyOnStart;
     this.encodeToken = encodeToken;
 
-    DomGlobal.window.addEventListener("popstate",
-                                      (e) -> confirmEvent(new NavigationEventCommand(eventBus) {
-                                        protected void execute() {
-                                          enabled = false;
-                                          convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
-                                          enabled = true;
-                                        }
-                                      }));
-  }
-
-  /**
-   * Ask for user's confirmation before firing an event
-   *
-   * @param event event to confirm
-   */
-  public void confirmEvent(NavigationEventCommand event) {
-    if (isNull(this.eventBus.getNavigationConfirmationPresenter())) {
-      //no need to remove the confirmation, there is none
-      event.fireEvent(false);
-    } else {
-      eventBus.getNavigationConfirmationPresenter()
-              .confirm(event);
-    }
+    this.historyProxy.addPopStateListener(event -> {
+      enabled = false;
+      convertToken(getTokenFromUrl(this.historyProxy.getLocation()));
+      enabled = true;
+    });
   }
 
   /**
@@ -177,6 +166,21 @@ public class PlaceService<E extends IsEventBus> {
     return "?";
   }
 
+  /**
+   * Ask for user's confirmation before firing an event
+   *
+   * @param event event to confirm
+   */
+  public void confirmEvent(NavigationEventCommand event) {
+    if (isNull(this.eventBus.getNavigationConfirmationPresenter())) {
+      //no need to remove the confirmation, there is none
+      event.fireEvent(false);
+    } else {
+      eventBus.getNavigationConfirmationPresenter()
+              .confirm(event);
+    }
+  }
+
   public void startApplication() {
     // the last thing we do, is to add the shell to the viewport
     eventBus.setShell();
@@ -185,7 +189,7 @@ public class PlaceService<E extends IsEventBus> {
     // do we have history?
     if (this.hasHistory()) {
       if (this.historyOnStart) {
-        convertToken(getTokenFromUrl(DomGlobal.window.location.toString()));
+        convertToken(getTokenFromUrl(this.historyProxy.getLocation()));
       } else {
         eventBus.fireInitHistoryEvent();
       }
@@ -238,14 +242,18 @@ public class PlaceService<E extends IsEventBus> {
     }
     String token = tokenize(metaData.getHistoryName(),
                             encodedParam);
-    //    if (converters.get(eventName)
-    //                  .isCrawlable()) {
-    //      token = CRAWLABLE + token;
-    //    }
+    // crawable event
+    IsHistoryConverter<? extends IsEventBus> historyConverter = this.getHistoryConverter(eventName);
+    if (historyConverter != null) {
+      if (historyConverter.isCrawlable()) {
+        token = CRAWLABLE + token;
+      }
+    }
+    // push history ...
     if (!onlyToken) {
-      DomGlobal.window.history.pushState(param,
-                                         "",
-                                         PlaceService.URL_SEPARATOR + token);
+      this.historyProxy.pushState(param,
+                                  "",
+                                  PlaceService.URL_SEPARATOR + token);
     }
     return token;
   }

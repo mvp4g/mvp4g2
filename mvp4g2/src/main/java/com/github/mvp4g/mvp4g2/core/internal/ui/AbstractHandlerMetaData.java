@@ -17,9 +17,12 @@
 
 package com.github.mvp4g.mvp4g2.core.internal.ui;
 
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
+
 /**
  * generator of the eventbus
  */
+@Mvp4g2InternalUse
 public abstract class AbstractHandlerMetaData {
 
   private String                       canonicalName;

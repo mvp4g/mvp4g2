@@ -25,7 +25,7 @@
   <parent>
     <groupId>com.github.mvp4g</groupId>
     <artifactId>mvp4g2-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <artifactId>mvp4g2-processor</artifactId>
@@ -65,19 +65,18 @@
     <url>https://github.com/mvp4g/mvp4g2/issues</url>
   </issueManagement>
   <properties>
-    <autocommon.version>0.8</autocommon.version>
+    <autocommon.version>0.10</autocommon.version>
 
-    <mvp4g2.version>1.0.0</mvp4g2.version>
     <autoservice.version>1.0-rc4</autoservice.version>
-    <javapoet.version>1.10.0</javapoet.version>
-    <truth.version>0.39</truth.version>
+    <javapoet.version>1.11.0</javapoet.version>
+    <truth.version>0.40</truth.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.github.mvp4g</groupId>
       <artifactId>mvp4g2</artifactId>
-      <version>${mvp4g2.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -94,7 +93,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

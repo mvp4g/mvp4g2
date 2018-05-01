@@ -25,6 +25,7 @@ import java.util.Map;
 import com.github.mvp4g.mvp4g2.core.eventbus.IsEventBus;
 import com.github.mvp4g.mvp4g2.core.eventbus.annotation.Event;
 import com.github.mvp4g.mvp4g2.core.history.IsHistoryConverter;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 import com.github.mvp4g.mvp4g2.core.internal.history.HistoryMetaData;
 
 import static java.util.Objects.isNull;
@@ -32,6 +33,7 @@ import static java.util.Objects.isNull;
 /**
  * generator of the eventbus
  */
+@Mvp4g2InternalUse
 public abstract class EventMetaData<E extends IsEventBus> {
 
   /* name of the event */

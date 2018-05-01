@@ -1,7 +1,7 @@
 package com.github.mvp4g.mvp4g2.processor.event.eventTestHandlerNotInBindAndHandlersAttribute;
 
 import com.github.mvp4g.mvp4g2.core.eventbus.PresenterRegistration;
-import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2RuntimeException;
+import com.github.mvp4g.mvp4g2.core.Mvp4g2RuntimeException;
 import com.github.mvp4g.mvp4g2.core.internal.eventbus.AbstractEventBus;
 import com.github.mvp4g.mvp4g2.core.internal.eventbus.EventMetaData;
 import com.github.mvp4g.mvp4g2.core.internal.ui.HandlerMetaData;

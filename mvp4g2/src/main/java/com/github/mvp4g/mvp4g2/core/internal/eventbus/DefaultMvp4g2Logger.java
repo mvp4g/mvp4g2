@@ -21,12 +21,14 @@ import java.util.stream.IntStream;
 
 import com.github.mvp4g.mvp4g2.core.Mvp4g2;
 import com.github.mvp4g.mvp4g2.core.eventbus.IsMvp4g2Logger;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 
 /**
  * Default implementation of Mvp4gLogger.
  *
  * @author plcoirier
  */
+@Mvp4g2InternalUse
 public class DefaultMvp4g2Logger
   implements IsMvp4g2Logger {
 

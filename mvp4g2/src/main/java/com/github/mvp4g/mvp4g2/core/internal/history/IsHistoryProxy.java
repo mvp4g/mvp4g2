@@ -15,18 +15,19 @@
  *
  */
 
-package com.github.mvp4g.mvp4g2.core.internal;
+package com.github.mvp4g.mvp4g2.core.internal.history;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import com.github.mvp4g.mvp4g2.core.internal.Mvp4g2InternalUse;
 
-/**
- * Annotation to mark classes, which will used by the framework.
- * <br>
- * <p>Do not use lasses annotated with internalFrameworkClass!</p>
- *
- * @author Frank Hossfeld
- */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ForInternalUseOnly {
+@Mvp4g2InternalUse
+public interface IsHistoryProxy {
+
+  void addPopStateListener(PopStateHandler handler);
+
+  String getLocation();
+
+  void pushState(String param,
+                 String title,
+                 String url);
+
 }
