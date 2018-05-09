@@ -25,7 +25,7 @@ MVP4G2 has **no** dependency to gwt-user! This means, MVP4G2 is ready to use wit
 ## Project Generator
 To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html) (which is also based on MVP4G2). The project generator will generate a Maven project, which can be imported to your preferred IDE and is ready to use. Run **mvn:devmode:** to start the generated project. 
 
-Here you find some notes about the project generator: [Mvp4g2 Project Generator](https://github.com/mvp4g/mvp4g2/wiki/Mvp4g2-Project-Generator).
+Here you find some notes about the project generator: [Mvp4g2 Project Generator](https://github.com/mvp4g/gwt-boot-starter-mvp4g2).
 
 ## MVP4G2
 GWT is a very powerful framework that allows you to build efficient applications, especially if you follow the best practices described by Ray Ryan at Google IO 2009:
