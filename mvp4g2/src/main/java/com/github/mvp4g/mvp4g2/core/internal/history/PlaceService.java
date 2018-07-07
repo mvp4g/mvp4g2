@@ -189,7 +189,12 @@ public class PlaceService<E extends IsEventBus> {
     // do we have history?
     if (this.hasHistory()) {
       if (this.historyOnStart) {
-        convertToken(getTokenFromUrl(this.historyProxy.getLocation()));
+        String token = getTokenFromUrl(this.historyProxy.getLocation());
+        if (token.length() == 0) {
+          eventBus.fireInitHistoryEvent();
+        } else {
+          convertToken(token);
+        }
       } else {
         eventBus.fireInitHistoryEvent();
       }
