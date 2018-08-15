@@ -109,14 +109,17 @@ public class Mvp4g2Processor
       if (roundEnv.processingOver()) {
         this.generate();
       } else {
+        if (annotations.size() == 0) {
+          return false;
+        }
         this.scan(roundEnv);
         this.validateModels(roundEnv);
       }
-      return false;
+      return true;
     } catch (ProcessorException e) {
       this.processorUtils.createErrorMessage(e.getMessage());
     }
-    return false;
+    return true;
   }
 
   private void setUp(RoundEnvironment roundEnv) {
