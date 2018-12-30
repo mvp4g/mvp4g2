@@ -23,7 +23,7 @@ There are a lot of esamples. You can take a look at the mvp4g2 example, that use
 MVP4G2 has **no** dependency to gwt-user! This means, MVP4G2 is ready to use with J2CL / GWT 3.  
 
 ## Note 
-In case you are thinking about creating a new project based on mvp4g2, you should take a look at [Nalu](https://github.com/NaluKit/nalu).
+In case you are thinking about creating a new project based on mvp4g2, you should take a look at [Nalu](https://github.com/NaluKit/nalu) first.
 
 ## Project Generator
 To speed up creating a MVP4G2 project, you can use the [MVP4G2 Boot Starter Project Generator](http://www.mvp4g.org/gwt-boot-starter-mvp4g2/GwtBootStarterMvp4g2.html) (which is also based on MVP4G2). The project generator will generate a Maven project, which can be imported to your preferred IDE and is ready to use. Run **mvn:devmode:** to start the generated project. 
